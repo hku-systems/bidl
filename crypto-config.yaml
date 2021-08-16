@@ -1,0 +1,14 @@
+# Copyright IBM Corp. All Rights Reserved.
+OrdererOrgs:
+  - Name: Orderer
+    Domain: example.com
+    Specs:
+      - Hostname: orderer
+PeerOrgs:
+  - Name: Org1
+    Domain: org1.example.com
+    EnableNodeOUs: true
+    Template:
+      Count: 15
+    Users:
+      Count: 5

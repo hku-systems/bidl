@@ -1,0 +1,46 @@
+project: fabric
+
+logging: INFO
+network: HLF
+tls: 'false'
+crypto: fastfabric_exp/organizations
+artifacts: fastfabric_exp/channel-artifacts
+
+peers: 
+  image: hyperledger/fabric-peer:mvcc
+  template: peer
+  count: 10
+  bootstrap: 0
+
+orderer:
+  name: orderer
+  image: hyperledger/fabric-orderer:mvcc
+  host: heming-rdma2
+
+cli:
+  name: cli
+  image: hyperledger/fabric-tools:mvcc
+  host: heming-rdma8
+  chaincode: fastfabric_exp/chaincode
+  scripts: fastfabric_exp/scripts
+
+tape:
+  name: tape
+  image: tape:latest
+  host: heming-rdma8
+  config: fastfabric_exp/tape.yaml
+  organizations: fastfabric_exp/organizations
+
+hosts:
+  - heming-rdma4
+  - heming-rdma6
+  - heming-rdma8
+  - heming-rdma9
+  - heming-rdma9
+  - heming-rdma14
+  - heming-rdma20
+  - heming-rdma20
+  - heming-rdma18
+  - heming-rdma19
+  
+  
