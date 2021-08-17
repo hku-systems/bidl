@@ -10,15 +10,15 @@ export GOPATH=$HOME/go
 bash runall.sh "docker pull hyperledger/fabric-ccenv:1.3.0; docker tag hyperledger/fabric-ccenv:latest"
 
 ## deploy fastfabric
-git clone XXXfabric
+git clone yunpeng?
 git checkout 4ece3dd
 cd $GOPATH/src/github.com/hyperledger/fabric
 make peer-docker orderer-docker tools-docker
 bash deploy.sh fastfabric
 
 ## deploy fabric
-git clone XXX 
-git checkout ???
+git clone yunpeng?
+git checkout bbfaf92
 cd $GOPATH/src/github.com/hyperledger/fabric
 make peer-docker orderer-docker tools-docker
 bash deploy.sh fabric
@@ -37,10 +37,9 @@ done
 ## deploy hotstuff
 git clone yunpeng@10.22.1.1:~/hotstuff 
 cd hotstuff
-
 cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED=ON 
 make -j
-# Please setup related configuration following the README.md
+    ## Please setup related configuration following the README.md
 bash docker/deploy.sh hotstuff1.0
 
 ## deploy SBFT

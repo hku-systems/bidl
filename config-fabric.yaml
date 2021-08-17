@@ -3,33 +3,33 @@ project: fabric
 logging: INFO
 network: HLF
 tls: 'false'
-crypto: fastfabric_exp/organizations
-artifacts: fastfabric_exp/channel-artifacts
+crypto: fabric_exp/organizations
+artifacts: fabric_exp/channel-artifacts
 
 peers: 
-  image: hyperledger/fabric-peer:mvcc
+  image: hyperledger/fabric-peer:fastfabric
   template: peer
   count: 10
   bootstrap: 0
 
 orderer:
   name: orderer
-  image: hyperledger/fabric-orderer:mvcc
+  image: hyperledger/fabric-orderer:fastfabric
   host: heming-rdma2
 
 cli:
   name: cli
-  image: hyperledger/fabric-tools:mvcc
+  image: hyperledger/fabric-tools:fastfabric
   host: heming-rdma8
-  chaincode: fastfabric_exp/chaincode
-  scripts: fastfabric_exp/scripts
+  chaincode: fabric_exp/chaincode
+  scripts: fabric_exp/scripts
 
 tape:
   name: tape
   image: tape:latest
   host: heming-rdma8
   config: fastfabric_exp/tape.yaml
-  organizations: fastfabric_exp/organizations
+  organizations: fabric_exp/organizations
 
 hosts:
   - heming-rdma4
