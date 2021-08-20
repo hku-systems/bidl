@@ -6,6 +6,7 @@ import (
 	"io"
 	"sync/atomic"
 	"time"
+	"math/rand"
 
 	"github.com/hyperledger/fabric-protos-go/common"
 	"github.com/hyperledger/fabric-protos-go/orderer"
@@ -94,8 +95,19 @@ func (p *Proposer) Start(signed, processed chan *Elements, done <-chan struct{},
 				// todo
 				st := time.Now().UnixNano()
 				buffer_proposal <- fmt.Sprintf("proposal: %d %s", st, s.Txid)
+				if g_ndrate > 1e-6 {
+					// g_ndrate != 0, nondeterministic behavior
+					pr := rand.Float64()
+					if pr < g_ndrate {
+						// drop 
+						atomic.AddInt32(&p.assm.Abort, 1)
+						continue
+					}
+
+				}
 				env, err := CreateSignedTx(s.Proposal, p.assm.Signer, s.Responses, p.assm.Conf.Check_rwset)
 				if err != nil {
+					// will not be here
 					atomic.AddInt32(&p.assm.Abort, 1)
 					continue
 				}
