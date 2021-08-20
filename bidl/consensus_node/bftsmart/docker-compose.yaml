@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+
+  smart0:
+    container_name: smart0
+    image: smart:latest
+    command: bash /home/runscripts/smartrun.sh bftsmart.demo.microbenchmarks.ThroughputLatencyServer 0 10 0 0 false nosig rwd
+    network_mode: "host"
+    ports:
+      - "11000:11000"
+      - "11001:11001"
+
+  smart1:
+    container_name: smart1
+    image: smart:latest
+    command: bash /home/runscripts/smartrun.sh bftsmart.demo.microbenchmarks.ThroughputLatencyServer 1 10 0 0 false nosig rwd
+    network_mode: "host"
+    ports:
+      - "11010:11010"
+      - "11011:11011"
+
+  smart2:
+    container_name: smart2
+    image: smart:latest
+    command: bash /home/runscripts/smartrun.sh bftsmart.demo.microbenchmarks.ThroughputLatencyServer 2 10 0 0 false nosig rwd
+    network_mode: "host"
+    ports:
+      - "11020:11020"
+      - "11021:11021"
+
+  smart3:
+    container_name: smart3
+    image: smart:latest
+    command: bash /home/runscripts/smartrun.sh bftsmart.demo.microbenchmarks.ThroughputLatencyServer 3 10 0 0 false nosig rwd
+    network_mode: "host"
+    ports:
+      - "11030:11030"
+      - "11031:11031"
