@@ -1,0 +1,6 @@
+bin/bftsmart
+config/currentView
+test
+logs
+*.tar
+*.out

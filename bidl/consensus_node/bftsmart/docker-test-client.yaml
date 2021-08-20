@@ -1,0 +1,13 @@
+version: "3"
+
+networks:
+  HLF:
+    external: true
+
+services:
+  multicast-client:
+    container_name: multicast-client
+    image: smart:latest
+    command: bash ./runscripts/smartrun.sh bftsmart.demo.bidl.MulticastClient
+    networks:
+      - HLF
