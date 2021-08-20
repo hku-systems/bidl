@@ -1,0 +1,96 @@
+# Go
+# Build your Go project.
+# Add steps that test, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/go
+
+trigger:
+  - master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+jobs:
+  - job: ut
+    strategy:
+      matrix:
+        linux:
+          imageName: 'ubuntu-latest'
+        mac:
+          imageName: 'macOS-latest'
+#        windows:
+#          imageName: 'windows-latest'
+    displayName: ut
+    pool:
+      vmImage: $(imageName)
+    steps:
+      - task: GoTool@0
+        inputs:
+          version: '1.14'
+      - task: Go@0
+        displayName: install
+        inputs:
+          command: 'get'
+          arguments: '-d ./...'
+          workingDirectory: '$(System.DefaultWorkingDirectory)'
+      - task: Go@0
+        displayName: build
+        inputs:
+          command: 'build'
+          arguments: './...'
+          workingDirectory: '$(System.DefaultWorkingDirectory)'
+      - task: Go@0
+        displayName: test
+        inputs:
+          command: 'test'
+          # for any benchmark testing should run locally to avoid impacts from random vm on azp pipeline.
+          arguments: '-v ./... --bench=. -cover'
+          workingDirectory: '$(System.DefaultWorkingDirectory)'
+
+  - job: dockerbuild
+    displayName: dockerbuild
+    steps:
+    - task: Docker@2
+      inputs:
+        repository: 'tape'
+        command: 'build'
+        Dockerfile: '**/Dockerfile'
+
+  - job: integrationTest
+    displayName: integrationTest
+    dependsOn:
+    - ut
+    - dockerbuild
+    strategy:
+      matrix:
+        FABRIC_2_2:
+          FABRIC_VERSION: '2_2'
+          INTERGATION_CASE: 'ANDLogic'
+        FABRIC_2_2_ORLogic:
+          FABRIC_VERSION: '2_2'
+          INTERGATION_CASE: 'ORLogic'
+        FABRIC_1_4:
+          FABRIC_VERSION: '1_4'
+          INTERGATION_CASE: 'ANDLogic'
+        LATEST:
+          FABRIC_VERSION: 'latest'
+          INTERGATION_CASE: 'ANDLogic'
+    steps:
+      - script: ./test/integration-test.sh $(FABRIC_VERSION) $(INTERGATION_CASE)
+
+  - job: BuildAndReleaseBinaries
+    displayName: BuildAndReleaseBinaries
+    dependsOn:
+      - integrationTest
+    steps:
+      - script: GOOS=linux GOARCH=amd64 go build -o linux-amd64/tape ./cmd/tape && cp config.yaml linux-amd64 && tar -czvf "tape-linux-amd64.tar.gz" linux-amd64 && GOOS=darwin GOARCH=amd64 go build -o darwin-amd64/tape ./cmd/tape && cp config.yaml darwin-amd64 && tar -czvf "tape-darwin-amd64.tar.gz" darwin-amd64 && GOOS=windows GOARCH=amd64 go build -o windows-amd64/tape ./cmd/tape && cp config.yaml windows-amd64 && tar -czvf "tape-windows-amd64.tar.gz" windows-amd64
+        displayName: Compile Binary and Create Tarball
+      - task: GithubRelease@0
+        displayName: 'Create GitHub Release'
+        inputs:
+          repositoryName: '$(Build.Repository.Name)'
+          gitHubConnection: github.com_stone-ch
+          action: 'create'
+          tagSource: 'auto'
+          tagPattern: 'v.*'
+          assets: |
+            ./*.tar.gz
