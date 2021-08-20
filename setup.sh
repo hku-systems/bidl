@@ -43,18 +43,15 @@ bash reconfigure.sh
 # done 
 
 
-# ## deploy hotstuff
-# git clone yunpeng@10.22.1.1:~/hotstuff 
-# cd hotstuff
-# cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED=ON 
-# make -j
-#     ## Please setup related configuration following the README.md
-# bash docker/deploy.sh hotstuff1.0
-# 
-# ## deploy SBFT
-# git clone yunpeng@10.22.1.6:~/code/SBFT
-# cd SBFT
-# docker build -f Dockerfile_base -t sbft:base .
+## deploy hotstuff
+cd hotstuff
+# Please setup related configuration following the README.md
+bash docker/deploy.sh hotstuff1.0
+
+## deploy SBFT
+scp -r yunpeng@10.22.1.6:~/code/SBFT SBFT
+cd SBFT
+docker build -f Dockerfile_base -t sbft:base .
 
 ## tape
 

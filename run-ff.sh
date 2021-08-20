@@ -3,6 +3,9 @@
 bash create_artifact.sh fastfabric
 all=9
 
+# tput calculation interval
+interval=500
+
 if [ $1 == "performance" ]; then 
     rm -rf logs/ff/performance
     mkdir -p logs/ff/performance
@@ -48,7 +51,7 @@ if [ $1 == "performance" ]; then
                 echo latency conn=$i client=$j orderer_client=$k >> log.log
                 bash process-latency.sh logs/ff/performance $round >> log.log
                 echo "tps: " >> log.log
-                cat $phase2 | python3 tput.py 500 VALID >> log.log
+                cat $phase2 | python3 tput.py $interval VALID >> log.log
                 # TODO latency breakdown 
                 mv $phase1 logs/ff/performance/
                 mv $phase2 logs/ff/performance/
@@ -82,12 +85,12 @@ elif [ $1 == "nd" ]; then
         sleep 2
         docker exec $(docker ps | grep fabric_cli | awk '{print $1}') bash scripts/script.sh
         # create $accounts accounts
-        docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --e2e -n $accounts --orderer_client 20 --burst 1000 --txtype create_random --groups 2 --ndrate $nondeterminism_rate --config config.yaml > $nondeterminism 2>&1
+        docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --e2e -n $accounts --orderer_client 40 --burst 1000 --txtype create_random --groups 5 --ndrate $nondeterminism_rate --config config.yaml > $nondeterminism 2>&1
         sleep 2
 
         echo "nondeterminism_rate=$nondeterminism_rate, accounts=$accounts" >> log.log
         echo -n "tps: " >> log.log
-        cat $nondeterminism | python3 tput.py 500 VALID >> log.log
+        cat $nondeterminism | python3 tput.py $interval VALID >> log.log
         for id in 0 1 2 3 4 5; do 
             docker service logs fabric_peer$id > logs/ff/nondeterminism/round${round}_peer$id.log 2>&1
         done
@@ -104,7 +107,7 @@ elif [ $1 == "contention" ]; then
     rm  -rf logs/ff/contention
     mkdir -p logs/ff/contention
     hot_rate=0.01
-    accounts=100000
+    accounts=50000
     round=0
     for contention_rate in 0.1 0.2 0.3 0.4 0.5; do 
         let round=round+1
@@ -121,14 +124,14 @@ elif [ $1 == "contention" ]; then
         # create $accounts accounts
         log=round${round}_${contention_rate}_e2e.log 
         contention=round${round}_${contention_rate}_contention.log 
-        docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --e2e -n $accounts --burst 50000 --groups 5 --orderer_client 20 --config config.yaml > $log 2>&1
+        docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --e2e -n $accounts --burst 50000 --groups 5 --orderer_client 40 --config config.yaml > $log 2>&1
         sleep 2
         # transfer money with contention rate = $i
-        docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --e2e -n 50000 --burst 50000 --groups 5 --orderer_client 20 --hrate $hot_rate --crate $contention_rate --config config.yaml > $contention 2>&1
+        docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --e2e -n 50000 --burst 50000 --groups 5 --orderer_client 40 --hrate $hot_rate --crate $contention_rate --config config.yaml > $contention 2>&1
 
         echo "contention_rate=$contention_rate, accounts=$accounts, hot_rate=$hot_rate" >> log.log
         echo -n "tps: " >> log.log
-        cat $contention | python3 tput.py 500 VALID >> log.log
+        cat $contention | python3 tput.py $interval VALID >> log.log
 
         for id in 0 1 2 3 4 5; do 
             docker service logs fabric_peer$id > logs/ff/contention/round${round}_peer$id.log 2>&1
