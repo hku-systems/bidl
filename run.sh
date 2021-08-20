@@ -2,17 +2,13 @@
 
 SYS=$1
 OP=$2
-dst=log/log_${SYS}_${OP}_$(date | tr " " "_" | tr ":" "_")
-mkdir -p dst
 ## fastfabric
 if [ $SYS = "fastfabric" ]; then 
     bash run-ff.sh $OP
 elif [ $SYS = "fabric" ]; then 
     bash run-fabric.sh 
 elif [ $SYS = "streamchain" ]; then 
-    cd streamchain/setup
-    bash run_main.sh 
-    cp -r logs/processed $dst/
+    bash run-streamchain.sh
 elif [ $SYS = "hotstuff" ]; then 
     cd hotstuff
     bash docker/run.sh hotstuff1.0

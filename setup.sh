@@ -34,12 +34,13 @@ bash deploy.sh fabric
 ## deploy streamchain
 cd $cur
 echo "clone streamchain "
-git clone yunpeng@10.22.1.6:~/code/streamchain-benchmarks streamchain
+scp -r yunpeng@10.22.1.6:~/code/streamchain-benchmarks streamchain
 cd streamchain/setup
-. config.sh
-for host in $peers; do
-    ssh -tt $USER@$host "mkdir -p $bm_path; sudo mount -t tmpfs -o size=8G $bm_path"
-done 
+bash reconfigure.sh 
+# . config.sh
+# for host in $peers; do
+#     ssh -tt $USER@$host "mkdir -p $bm_path; sudo mount -t tmpfs -o size=8G $bm_path"
+# done 
 
 
 # ## deploy hotstuff
