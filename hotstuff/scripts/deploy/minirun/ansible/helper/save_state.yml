@@ -1,0 +1,7 @@
+---
+- name: save the state to state.json
+  hosts: localhost
+  tasks:
+    - copy:
+        content="{{ cur_state }}"
+        dest="{{ (workdir, 'state.json') | path_join }}"

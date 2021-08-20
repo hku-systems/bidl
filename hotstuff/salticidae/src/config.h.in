@@ -1,0 +1,11 @@
+#ifndef _SALTICIDAE_CONFIG_H
+#define _SALTICIDAE_CONFIG_H
+
+#cmakedefine SALTICIDAE_DEBUG_LOG
+#cmakedefine SALTICIDAE_NORMAL_LOG
+#cmakedefine SALTICIDAE_MSG_STAT
+#cmakedefine SALTICIDAE_NOCHECK
+#cmakedefine SALTICIDAE_NOCHECKSUM
+#cmakedefine SALTICIDAE_CBINDINGS
+
+#endif

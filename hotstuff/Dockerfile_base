@@ -1,0 +1,15 @@
+FROM ubuntu:18.04
+# FROM openjdk:11
+
+# install and source ansible
+RUN apt-get update && apt-get install -y \
+    libssl-dev libuv1-dev net-tools \
+    autoconf libtool ssh rsync tcpdump \
+    git cmake make vim build-essential \
+    python3-pip && \
+    pip3 install ansible numpy matplotlib
+    # software-properties-common && \
+    # apt-add-repository --yes --update ppa:ansible/ansible && \ 
+    # apt install -y ansible
+
+

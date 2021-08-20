@@ -1,0 +1,2 @@
+---
+- command: kill {{ last_state['spawn_results'][inventory_hostname]['pid'] }}

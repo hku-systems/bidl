@@ -1,0 +1,15 @@
+---
+- name: load the state from state.json
+  hosts: localhost
+  tasks:
+    - stat:
+        path: "{{ state_file }}"
+      register: state_file_stat
+    - set_fact:
+        last_state: "{{ lookup('file', (workdir, 'state.json') | path_join) }}"
+      when: state_file_stat.stat.exists == True
+    - set_fact:
+        last_state: "{{ dict(status='new') }}"
+      when: state_file_stat.stat.exists == False
+  vars:
+    state_file: "{{ (workdir, 'state.json') | path_join }}"

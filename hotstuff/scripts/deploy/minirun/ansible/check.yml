@@ -1,0 +1,34 @@
+---
+- import_playbook: helper/env.yml
+- import_playbook: helper/load_state.yml
+
+- name: check if nodes are still running
+  hosts: "{{ ngroup }}"
+  tasks:
+    - import_tasks: helper/check.yml
+  vars:
+    last_state: "{{ hostvars['localhost']['last_state'] }}"
+    nid: "{{ host_idx | default(0) }}"
+    ngroup: "{{ node_group | default('nodes') }}"
+    testbed: "{{ (testbed_prefix, run_id, nid, '') | path_join }}"
+
+- hosts: localhost
+  tasks:
+    - set_fact:
+        cur_state: "{{ last_state }}"
+- import_playbook: helper/update_check_state.yml
+  vars:
+    ngroup: "{{ node_group | default('nodes') }}"
+- import_playbook: helper/save_state.yml
+- hosts: localhost
+  vars:
+    ok: "{{ cur_state['check_results'].values() | all }}"
+  tasks:
+    - debug:
+        msg: "all nodes are ok"
+      tags: [print_action]
+      when: ok
+    - fail:
+        msg: "some nodes are not running"
+      tags: [print_action]
+      when: not ok

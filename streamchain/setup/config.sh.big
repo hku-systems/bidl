@@ -1,0 +1,22 @@
+# Setup-related parameters
+export event="apollo-1-1"
+export add_events="apollo-1-2 apollo-1-3"
+export peers="apollo-1-1 apollo-1-2 apollo-1-3 apollo-1-4 apollo-1-5 apollo-1-6"
+export orderers="apollo-1-7 apollo-1-8 apollo-1-9"
+export user=$USER
+export goexec="$HOME/bin/go/bin"
+export bm_path="$HOME/benchmark"
+export event_dir="$user@$event:$bm_path"
+export run_event="ssh $user@$event cd $bm_path;"
+export streamchain=true
+export orderer_data="/mnt/ramdisk/$user"
+export peer_data="/mnt/ramdisk/$user"
+export statedb_data="/mnt/ramdisk/$user"
+export raft="true"
+
+# Streamchain related variables
+export STREAMCHAIN_ADDBLOCK=''
+export STREAMCHAIN_PIPELINE='16'
+export STREAMCHAIN_VSCC=''
+export STREAMCHAIN_SYNCDB='true'
+export STREAMCHAIN_WRITEBATCH='20'

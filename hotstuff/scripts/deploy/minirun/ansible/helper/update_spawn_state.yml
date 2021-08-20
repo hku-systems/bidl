@@ -1,0 +1,16 @@
+---
+- name: save the state to state.json
+  hosts: localhost
+  tasks:
+    - set_fact:
+        all_results: "{{ dict(groups[ngroup] | zip(results)) | default({}) }}"
+      vars:
+        results: >-
+            {{
+              groups[ngroup]
+              | map("extract", hostvars)
+              | map(attribute="spawn_results")
+              | list
+            }}
+    - set_fact:
+        cur_state: "{{ cur_state | combine({'spawn_results':all_results}) }}"

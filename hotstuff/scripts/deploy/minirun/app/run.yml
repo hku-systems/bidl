@@ -1,0 +1,28 @@
+---
+# available vars:
+# last_state -- the content of state.json
+# nid -- host_idx (with 0 as default)
+# ngroup -- the group of nodes involved in the build
+# testbed -- the remote path of run_id
+
+- vars:
+    log_dir: "{{ (testbed, json_server_log_dir) | path_join }}"
+  block:
+    - name: create testbed dirs
+      file:
+        path: "{{ log_dir }}"
+        state: directory
+    - name: start node
+      json_server:
+        bin: "{{ json_server_bin | default('/usr/bin/json-server') }}"
+        cwd: "{{ json_server_cwd | default('~/') }}"
+        port: "{{ json_server_port | default((base_http_port | default(20000)) + (nid | int)) }}"
+        config: "{{ json_server_config | default('') }}"
+        db: "{{ json_server_db | default('~/db.json') }}"
+        host: "{{ listen_ip | default(ansible_default_ipv4.address) }}"
+        logdir: "{{ log_dir }}"
+      vars:
+        ansible_python_interpreter: /usr/bin/python3
+      environment:
+        PATH: /sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin:/snap/bin
+      register: spawn_results

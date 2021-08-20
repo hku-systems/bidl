@@ -1,0 +1,1 @@
+CREATE VIEW `currentInventory` AS (select idInventory,productId,vendorId,quantity,inventoryDate from Inventory join (select max(idInventory) as inventoryId from Inventory group by productId,vendorId) ti on Inventory.idInventory = ti.inventoryId);

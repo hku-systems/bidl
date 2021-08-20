@@ -1,0 +1,5 @@
+---
+- name: check if it is running
+  command: kill -0 {{ last_state['spawn_results'][inventory_hostname]['pid'] }}
+  ignore_errors: true
+  register: check_results

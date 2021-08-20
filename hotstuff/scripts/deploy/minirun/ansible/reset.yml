@@ -1,0 +1,20 @@
+---
+- import_playbook: helper/env.yml
+- import_playbook: helper/load_state.yml
+
+- name: kill all nodes and reset their states
+  hosts: "{{ ngroup }}"
+  tasks:
+    - import_tasks: helper/kill.yml
+    - import_tasks: "{{ reset_tasks | default('../app/reset.yml') }}"
+  vars:
+    last_state: "{{ hostvars['localhost']['last_state'] }}"
+    nid: "{{ host_idx | default(0) }}"
+    ngroup: "{{ node_group | default('nodes') }}"
+    testbed: "{{ (testbed_prefix, run_id, nid, '') | path_join }}"
+
+- hosts: localhost
+  tasks:
+    - set_fact:
+        cur_state: "{{ last_state | combine({'status': 'stopped'}) }}"
+- import_playbook: helper/save_state.yml

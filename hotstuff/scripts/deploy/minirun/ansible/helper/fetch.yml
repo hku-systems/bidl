@@ -1,0 +1,10 @@
+---
+- name: fetch the remote files
+  block:
+    - synchronize:
+        archive: true
+        src: "{{ testbed }}"
+        dest: "{{ local_dir }}"
+        mode: pull
+  vars:
+    local_dir: "{{ (workdir, 'remote', nid) | path_join }}"

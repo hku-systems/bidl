@@ -1,0 +1,39 @@
+---
+# available vars:
+# workdir -- the local directory of run_id
+
+- name: setup json-server binaries
+  block:
+    - block:
+        - apt:
+            pkg:
+              - curl
+              - dirmngr
+              - apt-transport-https
+              - lsb-release
+              - ca-certificates
+            update_cache: true
+            state:
+              latest
+        - shell:
+            cmd: curl -sL https://deb.nodesource.com/setup_10.x | bash
+        - apt:
+            pkg:
+              - gcc
+              - g++
+              - make
+              - nodejs
+            state:
+              latest
+      become: true
+      become_user: root
+    - synchronize:
+        archive: true
+        src: "{{ (workdir, 'db.json') | path_join }}"
+        dest: ~/
+        mode: push
+    - synchronize:
+        archive: true
+        src: "{{ (workdir, 'db2.json') | path_join }}"
+        dest: ~/
+        mode: push

@@ -1,0 +1,22 @@
+---
+## basic config
+
+ansible_connection: ssh
+ansible_user: root
+# change to your aws ec2 key file here
+ansible_ssh_private_key_file: /root/.ssh/id_rsa
+# process name that is used by killall in reset
+bin_name: node
+# remote directory that keeps the work directory for the running app
+testbed_prefix: ~/testbed
+build_tasks: ../app/build.yml
+reset_tasks: ../app/reset.yml
+run_tasks: ../app/run.yml
+setup_tasks: ../app/_setup.yml
+
+## app specific config
+
+json_server_bin: json-server
+json_server_db: ~/db.json
+json_server_log_dir: log
+base_http_port: 20000

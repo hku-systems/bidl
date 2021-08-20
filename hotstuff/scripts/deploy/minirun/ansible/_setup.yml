@@ -1,0 +1,9 @@
+---
+
+- name: setup the basic environment
+  hosts: "{{ node_setup_group | default('nodes_setup') }}"
+  tasks:
+    - import_tasks: "{{ setup_tasks | default('../app/_setup.yml') }}"
+      vars:
+        workdir: "{{ lookup('env', 'PWD') }}"
+    - import_tasks: "{{ build_tasks | default('../app/build.yml') }}"
