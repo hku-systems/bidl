@@ -1,0 +1,74 @@
+# Definition of nodes
+peer0: &peer0
+  addr: peer0:7051
+peer1: &peer1
+  addr: peer1:7051
+peer2: &peer2
+  addr: peer2:7051
+peer3: &peer3
+  addr: peer3:7051
+peer4: &peer4
+  addr: peer4:7051
+peer5: &peer5
+  addr: peer5:7051
+peer6: &peer6
+  addr: peer6:7051
+peer7: &peer7
+  addr: peer7:7051
+peer8: &peer8
+  addr: peer8:7051
+peer9: &peer9
+  addr: peer9:7051
+peer10: &peer10
+  addr: peer10:7051
+peer11: &peer11
+  addr: peer11:7051
+peer12: &peer12
+  addr: peer12:7051
+peer13: &peer13
+  addr: peer13:7051
+peer14: &peer14
+  addr: peer14:7051
+
+orderer1: &orderer1
+  addr: orderer:7050
+
+# Nodes to interact with
+endorsers:
+  - *peer0
+  #- *peer1
+  - *peer2
+  - *peer3
+  - *peer4
+  #- *peer5
+  #- *peer6
+  #- *peer7
+  - *peer8
+  #- *peer9
+#  - *peer10
+#  - *peer11
+#  - *peer12
+#  - *peer13
+#  - *peer14
+# we might support multi-committer in the future for more complex test scenario,
+# i.e. consider tx committed only if it's done on >50% of nodes. But for now,
+# it seems sufficient to support single committer.
+committer: *peer1
+orderer: *orderer1
+
+# Invocation configs
+channel: mychannel
+chaincode: smlbank
+args:
+  - GetAllAssets
+mspid: Org1MSP
+private_key: ./crypto/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/key.pem
+sign_cert: ./crypto/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/signcerts/User1@org1.example.com-cert.pem
+num_of_conn: 15
+client_per_conn: 1
+TXs: 151000
+endorsementOnly: false
+num_of_conn_for_orderer: 8
+num_of_assembler: 2
+raw_routine: 1
+buffer: 50000
