@@ -9,7 +9,7 @@ artifacts: fastfabric_exp/channel-artifacts
 peers: 
   image: hyperledger/fabric-peer:fastfabric
   template: peer
-  count: 10
+  count: 6
   bootstrap: 0
 
 orderer:
@@ -36,11 +36,50 @@ hosts:
   - heming-rdma6
   - heming-rdma8
   - heming-rdma9
-  - heming-rdma9
-  - heming-rdma14
-  - heming-rdma20
-  - heming-rdma20
-  - heming-rdma18
+  - heming-rdma3
   - heming-rdma19
-  
-  
+  - heming-rdma9
+  - heming-rdma3
+  - heming-rdma4
+  - heming-rdma6
+  - heming-rdma3
+  - heming-rdma4
+  - heming-rdma9
+  - heming-rdma6
+  - heming-rdma3
+  - heming-rdma4
+  - heming-rdma9
+  - heming-rdma6
+  - heming-rdma3
+  - heming-rdma4
+  - heming-rdma9
+  - heming-rdma6
+  - heming-rdma3
+  - heming-rdma4
+  - heming-rdma9
+  - heming-rdma6
+  - heming-rdma3
+  - heming-rdma4
+  - heming-rdma9
+  - heming-rdma6
+  - heming-rdma3
+  - heming-rdma4
+  - heming-rdma9
+  - heming-rdma6
+  - heming-rdma3
+  - heming-rdma4
+  - heming-rdma9
+  - heming-rdma6
+  - heming-rdma3
+  - heming-rdma4
+  - heming-rdma9
+  - heming-rdma6
+  - heming-rdma3
+  - heming-rdma4
+  - heming-rdma9
+  - heming-rdma6
+  - heming-rdma3
+  - heming-rdma4
+  - heming-rdma9
+  - heming-rdma6
+  - heming-rdma19

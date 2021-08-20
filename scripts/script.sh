@@ -51,7 +51,7 @@ createChannel() {
 
 joinChannel () {
 	for org in 1; do
-	    for peer in `seq 0 9`; do
+	    for peer in `seq 0 5`; do
 			joinChannelWithRetry peer$peer $org
 			echo "===================== peer${peer}.org${org} joined channel '$CHANNEL_NAME' ===================== "
 			# sleep $DELAY
@@ -73,7 +73,7 @@ sleep 2
 #
 ### Install chaincode on peer0.org1 and peer0.org2
 #echo "Installing chaincode on peer0.org1..."
-for peer in `seq 0 9`; do
+for peer in `seq 0 5`; do
 	echo "install chaincode on peer$peer"
 	installChaincode peer$peer 1
 done
@@ -85,7 +85,7 @@ instantiateChaincode peer0 1
 sleep 2
 createAccount 0 1 
 sleep 2
-for i in `seq 0 9`; do
+for i in `seq 0 5`; do
 	# setup chaincode container 
 	chaincodeQuery $i 1 a
 done

@@ -13,10 +13,6 @@ services:
     - peer3
     - peer4
     - peer5
-    - peer6
-    - peer7
-    - peer8
-    - peer9
     deploy:
       placement:
         constraints:
@@ -27,7 +23,7 @@ services:
     - CORE_PEER_ID=cli
     - CORE_PEER_ADDRESS=0.0.0.0:7051
     - CORE_PEER_LOCALMSPID=Org1MSP
-    - CORE_PEER_TLS_ENABLED=/home/yunpeng/false
+    - CORE_PEER_TLS_ENABLED=false
     - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.crt
     - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.key
     - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
@@ -61,7 +57,7 @@ services:
     - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
     - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
     - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
-    - ORDERER_GENERAL_TLS_ENABLED=/home/yunpeng/false
+    - ORDERER_GENERAL_TLS_ENABLED=false
     - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
     - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
     - ORDERER_GENERAL_TLS_ROOTCAS=/var/hyperledger/orderer/tls/ca.crt
@@ -91,7 +87,7 @@ services:
     - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
     - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=HLF
     - FABRIC_LOGGING_SPEC=INFO
-    - CORE_PEER_TLS_ENABLED=/home/yunpeng/false
+    - CORE_PEER_TLS_ENABLED=false
     - CORE_PEER_GOSSIP_USELEADERELECTION=false
     - CORE_PEER_GOSSIP_ORGLEADER=true
     - CORE_PEER_PROFILE_ENABLED=false
@@ -124,7 +120,7 @@ services:
     - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
     - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=HLF
     - FABRIC_LOGGING_SPEC=INFO
-    - CORE_PEER_TLS_ENABLED=/home/yunpeng/false
+    - CORE_PEER_TLS_ENABLED=false
     - CORE_PEER_GOSSIP_USELEADERELECTION=false
     - CORE_PEER_GOSSIP_ORGLEADER=true
     - CORE_PEER_PROFILE_ENABLED=false
@@ -157,7 +153,7 @@ services:
     - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
     - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=HLF
     - FABRIC_LOGGING_SPEC=INFO
-    - CORE_PEER_TLS_ENABLED=/home/yunpeng/false
+    - CORE_PEER_TLS_ENABLED=false
     - CORE_PEER_GOSSIP_USELEADERELECTION=false
     - CORE_PEER_GOSSIP_ORGLEADER=true
     - CORE_PEER_PROFILE_ENABLED=false
@@ -190,7 +186,7 @@ services:
     - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
     - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=HLF
     - FABRIC_LOGGING_SPEC=INFO
-    - CORE_PEER_TLS_ENABLED=/home/yunpeng/false
+    - CORE_PEER_TLS_ENABLED=false
     - CORE_PEER_GOSSIP_USELEADERELECTION=false
     - CORE_PEER_GOSSIP_ORGLEADER=true
     - CORE_PEER_PROFILE_ENABLED=false
@@ -211,7 +207,7 @@ services:
     deploy:
       placement:
         constraints:
-        - node.hostname==heming-rdma9
+        - node.hostname==heming-rdma3
     environment:
     - GOPATH=/opt/gopath
     - CORE_PEER_ID=fabric_peer4
@@ -223,7 +219,7 @@ services:
     - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
     - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=HLF
     - FABRIC_LOGGING_SPEC=INFO
-    - CORE_PEER_TLS_ENABLED=/home/yunpeng/false
+    - CORE_PEER_TLS_ENABLED=false
     - CORE_PEER_GOSSIP_USELEADERELECTION=false
     - CORE_PEER_GOSSIP_ORGLEADER=true
     - CORE_PEER_PROFILE_ENABLED=false
@@ -244,7 +240,7 @@ services:
     deploy:
       placement:
         constraints:
-        - node.hostname==heming-rdma14
+        - node.hostname==heming-rdma19
     environment:
     - GOPATH=/opt/gopath
     - CORE_PEER_ID=fabric_peer5
@@ -256,7 +252,7 @@ services:
     - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
     - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=HLF
     - FABRIC_LOGGING_SPEC=INFO
-    - CORE_PEER_TLS_ENABLED=/home/yunpeng/false
+    - CORE_PEER_TLS_ENABLED=false
     - CORE_PEER_GOSSIP_USELEADERELECTION=false
     - CORE_PEER_GOSSIP_ORGLEADER=true
     - CORE_PEER_PROFILE_ENABLED=false
@@ -270,138 +266,6 @@ services:
     - /var/run/:/host/var/run/
     - /home/yunpeng/fastfabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer5.org1.example.com/msp:/etc/hyperledger/fabric/msp
     - /home/yunpeng/fastfabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer5.org1.example.com/tls:/etc/hyperledger/fabric/tls
-    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
-  peer6:
-    command: bash -c "mkdir -p /var/hyperledger/production && peer node start"
-    container_name: peer6
-    deploy:
-      placement:
-        constraints:
-        - node.hostname==heming-rdma20
-    environment:
-    - GOPATH=/opt/gopath
-    - CORE_PEER_ID=fabric_peer6
-    - CORE_LOGGING_LEVEL=INFO
-    - CORE_PEER_ADDRESS=0.0.0.0:7051
-    - CORE_PEER_GOSSIP_BOOTSTRAP=fabric_peer0:7051
-    - CORE_PEER_GOSSIP_EXTERNALENDPOINT=fabric_peer6:7051
-    - CORE_PEER_LOCALMSPID=Org1MSP
-    - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-    - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=HLF
-    - FABRIC_LOGGING_SPEC=INFO
-    - CORE_PEER_TLS_ENABLED=/home/yunpeng/false
-    - CORE_PEER_GOSSIP_USELEADERELECTION=false
-    - CORE_PEER_GOSSIP_ORGLEADER=true
-    - CORE_PEER_PROFILE_ENABLED=false
-    - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
-    - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
-    - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
-    image: hyperledger/fabric-peer:fastfabric
-    networks:
-    - HLF
-    volumes:
-    - /var/run/:/host/var/run/
-    - /home/yunpeng/fastfabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer6.org1.example.com/msp:/etc/hyperledger/fabric/msp
-    - /home/yunpeng/fastfabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer6.org1.example.com/tls:/etc/hyperledger/fabric/tls
-    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
-  peer7:
-    command: bash -c "mkdir -p /var/hyperledger/production && peer node start"
-    container_name: peer7
-    deploy:
-      placement:
-        constraints:
-        - node.hostname==heming-rdma20
-    environment:
-    - GOPATH=/opt/gopath
-    - CORE_PEER_ID=fabric_peer7
-    - CORE_LOGGING_LEVEL=INFO
-    - CORE_PEER_ADDRESS=0.0.0.0:7051
-    - CORE_PEER_GOSSIP_BOOTSTRAP=fabric_peer0:7051
-    - CORE_PEER_GOSSIP_EXTERNALENDPOINT=fabric_peer7:7051
-    - CORE_PEER_LOCALMSPID=Org1MSP
-    - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-    - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=HLF
-    - FABRIC_LOGGING_SPEC=INFO
-    - CORE_PEER_TLS_ENABLED=/home/yunpeng/false
-    - CORE_PEER_GOSSIP_USELEADERELECTION=false
-    - CORE_PEER_GOSSIP_ORGLEADER=true
-    - CORE_PEER_PROFILE_ENABLED=false
-    - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
-    - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
-    - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
-    image: hyperledger/fabric-peer:fastfabric
-    networks:
-    - HLF
-    volumes:
-    - /var/run/:/host/var/run/
-    - /home/yunpeng/fastfabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer7.org1.example.com/msp:/etc/hyperledger/fabric/msp
-    - /home/yunpeng/fastfabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer7.org1.example.com/tls:/etc/hyperledger/fabric/tls
-    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
-  peer8:
-    command: bash -c "mkdir -p /var/hyperledger/production && peer node start"
-    container_name: peer8
-    deploy:
-      placement:
-        constraints:
-        - node.hostname==heming-rdma18
-    environment:
-    - GOPATH=/opt/gopath
-    - CORE_PEER_ID=fabric_peer8
-    - CORE_LOGGING_LEVEL=INFO
-    - CORE_PEER_ADDRESS=0.0.0.0:7051
-    - CORE_PEER_GOSSIP_BOOTSTRAP=fabric_peer0:7051
-    - CORE_PEER_GOSSIP_EXTERNALENDPOINT=fabric_peer8:7051
-    - CORE_PEER_LOCALMSPID=Org1MSP
-    - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-    - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=HLF
-    - FABRIC_LOGGING_SPEC=INFO
-    - CORE_PEER_TLS_ENABLED=/home/yunpeng/false
-    - CORE_PEER_GOSSIP_USELEADERELECTION=false
-    - CORE_PEER_GOSSIP_ORGLEADER=true
-    - CORE_PEER_PROFILE_ENABLED=false
-    - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
-    - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
-    - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
-    image: hyperledger/fabric-peer:fastfabric
-    networks:
-    - HLF
-    volumes:
-    - /var/run/:/host/var/run/
-    - /home/yunpeng/fastfabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer8.org1.example.com/msp:/etc/hyperledger/fabric/msp
-    - /home/yunpeng/fastfabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer8.org1.example.com/tls:/etc/hyperledger/fabric/tls
-    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
-  peer9:
-    command: bash -c "mkdir -p /var/hyperledger/production && peer node start"
-    container_name: peer9
-    deploy:
-      placement:
-        constraints:
-        - node.hostname==heming-rdma19
-    environment:
-    - GOPATH=/opt/gopath
-    - CORE_PEER_ID=fabric_peer9
-    - CORE_LOGGING_LEVEL=INFO
-    - CORE_PEER_ADDRESS=0.0.0.0:7051
-    - CORE_PEER_GOSSIP_BOOTSTRAP=fabric_peer0:7051
-    - CORE_PEER_GOSSIP_EXTERNALENDPOINT=fabric_peer9:7051
-    - CORE_PEER_LOCALMSPID=Org1MSP
-    - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-    - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=HLF
-    - FABRIC_LOGGING_SPEC=INFO
-    - CORE_PEER_TLS_ENABLED=/home/yunpeng/false
-    - CORE_PEER_GOSSIP_USELEADERELECTION=false
-    - CORE_PEER_GOSSIP_ORGLEADER=true
-    - CORE_PEER_PROFILE_ENABLED=false
-    - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
-    - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
-    - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
-    image: hyperledger/fabric-peer:fastfabric
-    networks:
-    - HLF
-    volumes:
-    - /var/run/:/host/var/run/
-    - /home/yunpeng/fastfabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer9.org1.example.com/msp:/etc/hyperledger/fabric/msp
-    - /home/yunpeng/fastfabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer9.org1.example.com/tls:/etc/hyperledger/fabric/tls
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
   tape:
     command: /bin/sh

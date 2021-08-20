@@ -3,7 +3,8 @@ import sys
 import os
 
 def LOG_ERROR(msg):
-    print('\33[40;31m\33[7mERROR: ' + msg)
+    pass
+    # print('\33[40;31m\33[7mERROR: ' + msg)
 
 
 with open('config-' + sys.argv[1] + '.yaml', 'r') as f:
@@ -19,7 +20,7 @@ logging = config['logging']
 port = '7051'
 bootstrap = project + '_' + template + str(config['peers']['bootstrap']) + ':' + port
 network = config['network']
-tls = home + config['tls']
+tls = config['tls']
 crypto = home + config['crypto']
 orderer = config['orderer']
 cli = config['cli']
@@ -42,7 +43,7 @@ fabric = {
 
 if peers != len(hosts): 
     LOG_ERROR("config.yaml: peers != len(host)")
-    sys.exit(1)
+    # sys.exit(1)
 
 
 # orderer

@@ -6,32 +6,9 @@ dst=log/log_${SYS}_${OP}_$(date | tr " " "_" | tr ":" "_")
 mkdir -p dst
 ## fastfabric
 if [ $SYS = "fastfabric" ]; then 
-    docker stack deploy --compose-file docker-compose-${SYS}.yaml fabric
-    sleep 2
-    doker exec $(docker ps | grep fabric_cli | awk '{print $1}') bash scripts/script.sh
-    tape=$(docker ps | grep fabric_tape | awk '{print $`}')
-    docker exec $tape rm ACCOUNTS ENDORSEMENT
-    if [ $OP = "performance" ]; then;
-        docker exec $tape tape --no-e2e -n 80000 --config config.yaml > $dst/simulate.log 2>&1
-        docker exec $tape tape --no-e2e -n 80000 --config config.yaml > $dst/order_validation.log 2>&1
-    elif [ $OP = "mvcc" ]; then 
-        docker exec $tape tape --e2e -n 50000 --config config.yaml > $dst/log.log 2>&1 # create accounts
-        docker exec $tape tape --e2e -n 50000 --config config.yaml > $dst/mvcc.log 2>&1 # transactions
-        cat $dst/mvcc.log | python3 conflict.py
-    elif [ $OP = "nondeterminism" ]; then 
-        docker exec $tape tape --no-e2e -n 50000 --txtype create_random --config config.yaml > $dst/random.log 2>&1  # create random account
-    fi
-    docker stack rm fabric
+    bash run-ff.sh $OP
 elif [ $SYS = "fabric" ]; then 
-    docker stack deploy --compose-file docker-compose-${SYS}.yaml fabric
-    sleep 2
-    doker exec $(docker ps | grep fabric_cli | awk '{print $1}') bash scripts/script.sh
-    tape=$(docker ps | grep fabric_tape | awk '{print $`}')
-    docker exec $tape rm ACCOUNTS ENDORSEMENT
-    docker exec $tape tape --no-e2e -n 80000 --config config.yaml > $dst/simulate.log 2>&1
-    docker exec $tape tape --no-e2e -n 80000 --config config.yaml > $dst/order_validation.log 2>&1
-    docker stack rm fastfabric
-
+    bash run-fabric.sh 
 elif [ $SYS = "streamchain" ]; then 
     cd streamchain/setup
     bash run_main.sh 

@@ -1,0 +1,10 @@
+contention_rate=0.1, accounts=100000, hot_rate=0.01
+tps: [4952.0, 7394.0, 10492.0, 4360.0, 17114.0, 14354.0]
+contention_rate=0.2, accounts=100000, hot_rate=0.01
+tps: [4602.0, 6834.0, 7986.0, 9748.0, 18054.0, 13802.0]
+contention_rate=0.3, accounts=100000, hot_rate=0.01
+tps: [7014.0, 4142.0, 8572.0, 9332.0, 13582.0, 9388.0]
+contention_rate=0.4, accounts=100000, hot_rate=0.01
+tps: [5618.0, 3496.0, 6860.0, 9462.0, 10586.0, 9360.0]
+contention_rate=0.5, accounts=100000, hot_rate=0.01
+tps: [7084.0, 2834.0, 5714.0, 6548.0, 8778.0, 6598.0]

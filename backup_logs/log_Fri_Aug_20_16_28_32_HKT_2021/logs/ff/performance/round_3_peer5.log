@@ -1,0 +1,913 @@
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.262 UTC [nodeCmd] serve -> INFO 001[0m Starting peer:
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    |  Version: 1.3.0
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    |  Commit SHA: 4ece33d
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    |  Go version: go1.10.4
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    |  OS/Arch: linux/amd64
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    |  Experimental features: false
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    |  Chaincode:
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    |   Base Image Version: 0.4.13
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    |   Base Docker Namespace: hyperledger
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    |   Base Docker Label: org.hyperledger.fabric
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    |   Docker Namespace: hyperledger
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.868 UTC [nodeCmd] serve -> INFO 001[0m Starting peer:
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.262 UTC [ledgermgmt] initialize -> INFO 002[0m Initializing ledger mgmt
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    |  Version: 1.3.0
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.262 UTC [kvledger] NewProvider -> INFO 003[0m Initializing ledger provider
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    |  Commit SHA: 4ece33d
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.262 UTC [kvledger] NewProvider -> INFO 004[0m ledger provider Initialized
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.263 UTC [ledgermgmt] initialize -> INFO 005[0m ledger mgmt initialized
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    |  Go version: go1.10.4
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.263 UTC [peer] func1 -> INFO 006[0m Auto-detected peer address: 10.0.2.128:7051
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    |  OS/Arch: linux/amd64
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.263 UTC [peer] func1 -> INFO 007[0m Host is 0.0.0.0 , falling back to auto-detected address: 10.0.2.128:7051
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    |  Experimental features: false
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    |  Chaincode:
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    |   Base Image Version: 0.4.13
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    |   Base Docker Namespace: hyperledger
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    |   Base Docker Label: org.hyperledger.fabric
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    |   Docker Namespace: hyperledger
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.868 UTC [ledgermgmt] initialize -> INFO 002[0m Initializing ledger mgmt
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.868 UTC [kvledger] NewProvider -> INFO 003[0m Initializing ledger provider
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.868 UTC [kvledger] NewProvider -> INFO 004[0m ledger provider Initialized
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.869 UTC [ledgermgmt] initialize -> INFO 005[0m ledger mgmt initialized
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.869 UTC [peer] func1 -> INFO 006[0m Auto-detected peer address: 10.0.2.105:7051
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.869 UTC [peer] func1 -> INFO 007[0m Host is 0.0.0.0 , falling back to auto-detected address: 10.0.2.105:7051
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.869 UTC [peer] func1 -> INFO 008[0m Auto-detected peer address: 10.0.2.105:7051
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.869 UTC [peer] func1 -> INFO 009[0m Host is 0.0.0.0 , falling back to auto-detected address: 10.0.2.105:7051
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | jyp: listenAddr= 0.0.0.0:7051 /opt/gopath/src/github.com/hyperledger/fabric/peer/node/start.go 195 2021-08-20 07:03:46.869280
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | jyp: register grpc deliver server
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.869 UTC [nodeCmd] computeChaincodeEndpoint -> INFO 00a[0m Entering computeChaincodeEndpoint with peerHostname: 10.0.2.105
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.870 UTC [nodeCmd] computeChaincodeEndpoint -> INFO 00b[0m Exit with ccEndpoint: 10.0.2.105:7052
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [33m2021-08-20 07:03:46.870 UTC [nodeCmd] createChaincodeServer -> WARN 00c[0m peer.chaincodeListenAddress is not set, using 10.0.2.105:7052
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.870 UTC [sccapi] registerSysCC -> INFO 00d[0m system chaincode lscc(github.com/hyperledger/fabric/core/scc/lscc) registered
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.870 UTC [sccapi] registerSysCC -> INFO 00e[0m system chaincode cscc(github.com/hyperledger/fabric/core/scc/cscc) registered
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.870 UTC [sccapi] registerSysCC -> INFO 00f[0m system chaincode qscc(github.com/hyperledger/fabric/core/scc/qscc) registered
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.870 UTC [sccapi] registerSysCC -> INFO 010[0m system chaincode +lifecycle(github.com/hyperledger/fabric/core/chaincode/lifecycle) registered
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | jyp: register grpc Admin server
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | jyp: TOOD: how to init plugin
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | jyp: register grpc Endorser server
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.871 UTC [gossip/service] func1 -> INFO 011[0m Initialize gossip with endpoint 10.0.2.105:7051 and bootstrap set [fabric_peer0:7051]
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.876 UTC [gossip/gossip] NewGossipService -> INFO 012[0m Creating gossip service with self membership of {fabric_peer5:7051 [] [235 111 141 74 128 96 188 253 221 18 42 210 110 40 38 56 208 235 8 29 238 126 44 138 207 74 9 62 181 25 175 52] 10.0.2.105:7051 <nil> <nil>}
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.876 UTC [gossip/gossip] start -> INFO 013[0m Gossip instance 10.0.2.105:7051 started
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.876 UTC [sccapi] deploySysCC -> INFO 014[0m system chaincode lscc/(github.com/hyperledger/fabric/core/scc/lscc) deployed
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.876 UTC [cscc] Init -> INFO 015[0m Init CSCC
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.876 UTC [sccapi] deploySysCC -> INFO 016[0m system chaincode cscc/(github.com/hyperledger/fabric/core/scc/cscc) deployed
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.876 UTC [qscc] Init -> INFO 017[0m Init QSCC
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.876 UTC [sccapi] deploySysCC -> INFO 018[0m system chaincode qscc/(github.com/hyperledger/fabric/core/scc/qscc) deployed
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.877 UTC [sccapi] deploySysCC -> INFO 019[0m system chaincode +lifecycle/(github.com/hyperledger/fabric/core/chaincode/lifecycle) deployed
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.877 UTC [nodeCmd] serve -> INFO 01a[0m Deployed system chaincodes
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.886 UTC [discovery] NewService -> INFO 01b[0m Created with config TLS: false, authCacheMaxSize: 1000, authCachePurgeRatio: 0.750000
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.886 UTC [nodeCmd] registerDiscoveryService -> INFO 01c[0m Discovery service activated
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.887 UTC [nodeCmd] serve -> INFO 01d[0m Starting peer with ID=[name:"fabric_peer5" ], network ID=[dev], address=[10.0.2.105:7051]
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:03:46.887 UTC [nodeCmd] serve -> INFO 01e[0m Started peer with ID=[name:"fabric_peer5" ], network ID=[dev], address=[10.0.2.105:7051]
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [33m2021-08-20 07:03:55.878 UTC [gossip/comm] func1 -> WARN 01f[0m 10.0.2.112:7051, PKIid:[182 26 118 107 3 164 123 25 216 237 172 25 245 12 213 106 187 235 82 89 45 236 254 73 36 21 74 243 83 67 24 20] isn't responsive: EOF
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [33m2021-08-20 07:03:55.879 UTC [gossip/discovery] expireDeadMembers -> WARN 020[0m Entering [[182 26 118 107 3 164 123 25 216 237 172 25 245 12 213 106 187 235 82 89 45 236 254 73 36 21 74 243 83 67 24 20]]
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [33m2021-08-20 07:03:55.879 UTC [gossip/discovery] expireDeadMembers -> WARN 021[0m Closing connection to Endpoint: fabric_peer2:7051, InternalEndpoint: 10.0.2.112:7051, PKI-ID: [182 26 118 107 3 164 123 25 216 237 172 25 245 12 213 106 187 235 82 89 45 236 254 73 36 21 74 243 83 67 24 20], Metadata: []
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [33m2021-08-20 07:03:55.879 UTC [gossip/discovery] expireDeadMembers -> WARN 022[0m Exiting
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:04:09.167 UTC [endorser] callChaincode -> INFO 023[0m [][04fd731d] Entry chaincode: name:"cscc" 
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:04:09.168 UTC [ledgermgmt] CreateLedger -> INFO 024[0m Creating ledger [mychannel] with genesis block
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:04:09.169 UTC [fsblkstorage] newBlockfileMgr -> INFO 025[0m Getting block information from block storage
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:04:09.170 UTC [kvledger] CommitWithPvtData -> INFO 026[0m [mychannel] Committed block [0] with 1 transaction(s) in 0ms (state_validation=0ms block_commit=0ms state_commit=0ms)
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:04:09.170 UTC [ledgermgmt] CreateLedger -> INFO 027[0m Created ledger [mychannel] with genesis block
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:04:09.173 UTC [gossip/gossip] JoinChan -> INFO 028[0m Joining gossip network of channel mychannel with 1 organizations
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [34m2021-08-20 07:04:09.173 UTC [gossip/gossip] learnAnchorPeers -> INFO 029[0m No configured anchor peers of Org1MSP for channel mychannel to learn about
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [35m2021-08-20 07:04:09.174 UTC [gossip/state] NewGossipStateProvider -> PANI 02a[0m Committer height cannot be zero, ledger should include at least one block (genesis).
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | panic: Committer height cannot be zero, ledger should include at least one block (genesis).
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | 	panic: runtime error: invalid memory address or nil pointer dereference
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | [signal SIGSEGV: segmentation violation code=0x1 addr=0x30 pc=0xc46096]
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | 
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | goroutine 383 [running]:
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | github.com/hyperledger/fabric/core/chaincode/shim.(*Handler).triggerNextState(0xc4203f8180, 0x0, 0xc4202ec000)
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/core/chaincode/shim/handler.go:35 +0x26
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | github.com/hyperledger/fabric/core/chaincode/shim.(*Handler).handleTransaction.func1.1(0xc4203f8180, 0xc420a43ea8, 0xc4202ec000)
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/core/chaincode/shim/handler.go:256 +0x42
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | panic(0xed4480, 0xc420382e10)
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | 	/opt/go/src/runtime/panic.go:502 +0x229
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | github.com/hyperledger/fabric/vendor/go.uber.org/zap/zapcore.(*CheckedEntry).Write(0xc420be2370, 0x0, 0x0, 0x0)
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/vendor/go.uber.org/zap/zapcore/entry.go:229 +0x4f4
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | github.com/hyperledger/fabric/vendor/go.uber.org/zap.(*SugaredLogger).log(0xc42017c488, 0xc420a42904, 0xc420d270e0, 0x54, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0)
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/vendor/go.uber.org/zap/sugar.go:234 +0xf6
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | github.com/hyperledger/fabric/vendor/go.uber.org/zap.(*SugaredLogger).Panicf(0xc42017c488, 0xc420d270e0, 0x54, 0x0, 0x0, 0x0)
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/vendor/go.uber.org/zap/sugar.go:159 +0x79
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | github.com/hyperledger/fabric/common/flogging.(*FabricLogger).Panic(0xc42017c490, 0xc420382d60, 0x1, 0x1)
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/common/flogging/zap.go:73 +0x75
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | github.com/hyperledger/fabric/gossip/state.NewGossipStateProvider(0xc4203bcd81, 0x9, 0xc420352be0, 0x7f5d703ed620, 0xc420be2a50, 0xc420107c50, 0x11d5d40)
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/gossip/state/state.go:190 +0x871
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | github.com/hyperledger/fabric/gossip/service.(*gossipServiceImpl).InitializeChannel(0xc42027f290, 0xc4203bcd81, 0x9, 0xc42058a660, 0x1, 0x1, 0x11b86e0, 0xc420107c50, 0x11d5d40, 0xc420352940, ...)
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/gossip/service/gossip_service.go:257 +0x7da
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | github.com/hyperledger/fabric/core/peer.createChain(0xc4203bcd81, 0x9, 0x11da3a0, 0xc4203a35e0, 0xc4205e6ec0, 0x11ca220, 0xc42017ce68, 0x11d33a0, 0xc4205d0960, 0x11baf20, ...)
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/core/peer/peer.go:407 +0x746
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | github.com/hyperledger/fabric/core/peer.CreateChainFromBlock(0xc4205e6ec0, 0x11ca220, 0xc42017ce68, 0x11d33a0, 0xc4205d0960, 0x0, 0xc4203bcd7c)
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/core/peer/peer.go:438 +0x1c2
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | github.com/hyperledger/fabric/core/scc/cscc.joinChain(0xc4203bc910, 0x9, 0xc4205e6ec0, 0x11ca220, 0xc42017ce68, 0x11d33a0, 0xc4205d0960, 0x0, 0x0, 0x0, ...)
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/core/scc/cscc/configure.go:238 +0x99
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | github.com/hyperledger/fabric/core/scc/cscc.(*PeerConfiger).InvokeNoShim(0xc4205d0d70, 0xc420d1b7d0, 0x2, 0x2, 0xc420d16d20, 0x0, 0x0, 0x0, 0x0, 0x0, ...)
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/core/scc/cscc/configure.go:166 +0x5fd
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | github.com/hyperledger/fabric/core/scc/cscc.(*PeerConfiger).Invoke(0xc4205d0d70, 0x11dbb00, 0xc420be2420, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, ...)
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/core/scc/cscc/configure.go:120 +0x30c
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | github.com/hyperledger/fabric/core/chaincode/shim.(*Handler).handleTransaction.func1(0xc4203f8180, 0xc4202ec000, 0xc420278700)
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/core/chaincode/shim/handler.go:282 +0x508
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | created by github.com/hyperledger/fabric/core/chaincode/shim.(*Handler).handleTransaction
+fabric_peer5.1.y74eiittdn5v@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/core/chaincode/shim/handler.go:251 +0x53
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.189 UTC [nodeCmd] serve -> INFO 001[0m Starting peer:
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    |  Version: 1.3.0
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    |  Commit SHA: 4ece33d
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    |  Go version: go1.10.4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    |  OS/Arch: linux/amd64
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    |  Experimental features: false
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    |  Chaincode:
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    |   Base Image Version: 0.4.13
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    |   Base Docker Namespace: hyperledger
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    |   Base Docker Label: org.hyperledger.fabric
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    |   Docker Namespace: hyperledger
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.189 UTC [ledgermgmt] initialize -> INFO 002[0m Initializing ledger mgmt
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.189 UTC [kvledger] NewProvider -> INFO 003[0m Initializing ledger provider
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.190 UTC [kvledger] NewProvider -> INFO 004[0m ledger provider Initialized
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.190 UTC [ledgermgmt] initialize -> INFO 005[0m ledger mgmt initialized
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.190 UTC [peer] func1 -> INFO 006[0m Auto-detected peer address: 10.0.2.130:7051
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.190 UTC [peer] func1 -> INFO 007[0m Host is 0.0.0.0 , falling back to auto-detected address: 10.0.2.130:7051
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.190 UTC [peer] func1 -> INFO 008[0m Auto-detected peer address: 10.0.2.130:7051
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.190 UTC [peer] func1 -> INFO 009[0m Host is 0.0.0.0 , falling back to auto-detected address: 10.0.2.130:7051
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | jyp: listenAddr= 0.0.0.0:7051 /opt/gopath/src/github.com/hyperledger/fabric/peer/node/start.go 195 2021-08-20 07:04:23.190566
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | jyp: register grpc deliver server
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.191 UTC [nodeCmd] computeChaincodeEndpoint -> INFO 00a[0m Entering computeChaincodeEndpoint with peerHostname: 10.0.2.130
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.191 UTC [nodeCmd] computeChaincodeEndpoint -> INFO 00b[0m Exit with ccEndpoint: 10.0.2.130:7052
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [33m2021-08-20 07:04:23.191 UTC [nodeCmd] createChaincodeServer -> WARN 00c[0m peer.chaincodeListenAddress is not set, using 10.0.2.130:7052
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.191 UTC [sccapi] registerSysCC -> INFO 00d[0m system chaincode lscc(github.com/hyperledger/fabric/core/scc/lscc) registered
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.191 UTC [sccapi] registerSysCC -> INFO 00e[0m system chaincode cscc(github.com/hyperledger/fabric/core/scc/cscc) registered
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.191 UTC [sccapi] registerSysCC -> INFO 00f[0m system chaincode qscc(github.com/hyperledger/fabric/core/scc/qscc) registered
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.191 UTC [sccapi] registerSysCC -> INFO 010[0m system chaincode +lifecycle(github.com/hyperledger/fabric/core/chaincode/lifecycle) registered
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | jyp: register grpc Admin server
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | jyp: TOOD: how to init plugin
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | jyp: register grpc Endorser server
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.193 UTC [gossip/service] func1 -> INFO 011[0m Initialize gossip with endpoint 10.0.2.130:7051 and bootstrap set [fabric_peer0:7051]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.195 UTC [gossip/gossip] NewGossipService -> INFO 012[0m Creating gossip service with self membership of {fabric_peer5:7051 [] [235 111 141 74 128 96 188 253 221 18 42 210 110 40 38 56 208 235 8 29 238 126 44 138 207 74 9 62 181 25 175 52] 10.0.2.130:7051 <nil> <nil>}
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.196 UTC [gossip/gossip] start -> INFO 013[0m Gossip instance 10.0.2.130:7051 started
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.196 UTC [sccapi] deploySysCC -> INFO 014[0m system chaincode lscc/(github.com/hyperledger/fabric/core/scc/lscc) deployed
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.196 UTC [cscc] Init -> INFO 015[0m Init CSCC
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.196 UTC [sccapi] deploySysCC -> INFO 016[0m system chaincode cscc/(github.com/hyperledger/fabric/core/scc/cscc) deployed
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.196 UTC [qscc] Init -> INFO 017[0m Init QSCC
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.196 UTC [sccapi] deploySysCC -> INFO 018[0m system chaincode qscc/(github.com/hyperledger/fabric/core/scc/qscc) deployed
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.196 UTC [sccapi] deploySysCC -> INFO 019[0m system chaincode +lifecycle/(github.com/hyperledger/fabric/core/chaincode/lifecycle) deployed
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.196 UTC [nodeCmd] serve -> INFO 01a[0m Deployed system chaincodes
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.203 UTC [discovery] NewService -> INFO 01b[0m Created with config TLS: false, authCacheMaxSize: 1000, authCachePurgeRatio: 0.750000
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.203 UTC [nodeCmd] registerDiscoveryService -> INFO 01c[0m Discovery service activated
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.204 UTC [nodeCmd] serve -> INFO 01d[0m Starting peer with ID=[name:"fabric_peer5" ], network ID=[dev], address=[10.0.2.130:7051]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:23.204 UTC [nodeCmd] serve -> INFO 01e[0m Started peer with ID=[name:"fabric_peer5" ], network ID=[dev], address=[10.0.2.130:7051]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [33m2021-08-20 07:04:23.269 UTC [gossip/gossip] handleMessage -> WARN 01f[0m Message GossipMessage: tag:EMPTY alive_msg:<membership:<endpoint:"fabric_peer3:7051" pki_id:"\252\257\324\312Y\357$0\342-\037\257\005\3176\362\357s\006\237\003\200\241\035c\245C\374\360\260\226A" > timestamp:<inc_num:1629443027954024116 seq_num:29 > > , Envelope: 73 bytes, Signature: 70 bytes Secret payload: 17 bytes, Secret Signature: 70 bytes isn't valid
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [33m2021-08-20 07:04:24.213 UTC [gossip/gossip] handleMessage -> WARN 020[0m Message GossipMessage: tag:EMPTY alive_msg:<membership:<endpoint:"fabric_peer3:7051" pki_id:"\252\257\324\312Y\357$0\342-\037\257\005\3176\362\357s\006\237\003\200\241\035c\245C\374\360\260\226A" > timestamp:<inc_num:1629443027954024116 seq_num:29 > > , Envelope: 73 bytes, Signature: 70 bytes Secret payload: 17 bytes, Secret Signature: 70 bytes isn't valid
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [33m2021-08-20 07:04:24.213 UTC [gossip/gossip] validateMsg -> WARN 021[0m StateInfo message GossipMessage: tag:CHAN_OR_ORG state_info:<timestamp:<inc_num:1629443049032424102 seq_num:1629443049038090278 > pki_id:"\252\257\324\312Y\357$0\342-\037\257\005\3176\362\357s\006\237\003\200\241\035c\245C\374\360\260\226A" channel_MAC:"+\315I\367`\363\277\013\306Glqi[\271\363\205\227HD\332\013A\006~Q/\n\261\361\r\252" properties:<ledger_height:1 > > , Envelope: 98 bytes, Signature: 70 bytes is found invalid: PKIID wasn't found
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [33m2021-08-20 07:04:24.213 UTC [gossip/gossip] handleMessage -> WARN 022[0m Message GossipMessage: tag:CHAN_OR_ORG state_info:<timestamp:<inc_num:1629443049032424102 seq_num:1629443049038090278 > pki_id:"\252\257\324\312Y\357$0\342-\037\257\005\3176\362\357s\006\237\003\200\241\035c\245C\374\360\260\226A" channel_MAC:"+\315I\367`\363\277\013\306Glqi[\271\363\205\227HD\332\013A\006~Q/\n\261\361\r\252" properties:<ledger_height:1 > > , Envelope: 98 bytes, Signature: 70 bytes isn't valid
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:24.625 UTC [endorser] callChaincode -> INFO 023[0m [][a211a927] Entry chaincode: name:"cscc" 
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:24.626 UTC [ledgermgmt] CreateLedger -> INFO 024[0m Creating ledger [mychannel] with genesis block
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:24.627 UTC [fsblkstorage] newBlockfileMgr -> INFO 025[0m Getting block information from block storage
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:24.629 UTC [kvledger] CommitWithPvtData -> INFO 026[0m [mychannel] Committed block [0] with 1 transaction(s) in 0ms (state_validation=0ms block_commit=0ms state_commit=0ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:24.629 UTC [ledgermgmt] CreateLedger -> INFO 027[0m Created ledger [mychannel] with genesis block
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:24.633 UTC [gossip/gossip] JoinChan -> INFO 028[0m Joining gossip network of channel mychannel with 1 organizations
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:24.633 UTC [gossip/gossip] learnAnchorPeers -> INFO 029[0m No configured anchor peers of Org1MSP for channel mychannel to learn about
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:24.634 UTC [gossip/state] NewGossipStateProvider -> INFO 02a[0m Updating metadata information, current ledger sequence is at = 0, next expected block is = 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:24.634 UTC [sccapi] deploySysCC -> INFO 02c[0m system chaincode lscc/mychannel(github.com/hyperledger/fabric/core/scc/lscc) deployed
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:24.634 UTC [blocksProvider] DeliverBlocks -> INFO 02b[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:24.634 UTC [cscc] Init -> INFO 02d[0m Init CSCC
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:24.634 UTC [sccapi] deploySysCC -> INFO 02e[0m system chaincode cscc/mychannel(github.com/hyperledger/fabric/core/scc/cscc) deployed
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:24.634 UTC [qscc] Init -> INFO 02f[0m Init QSCC
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:24.634 UTC [sccapi] deploySysCC -> INFO 030[0m system chaincode qscc/mychannel(github.com/hyperledger/fabric/core/scc/qscc) deployed
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:24.634 UTC [sccapi] deploySysCC -> INFO 031[0m system chaincode +lifecycle/mychannel(github.com/hyperledger/fabric/core/chaincode/lifecycle) deployed
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:24.635 UTC [endorser] callChaincode -> INFO 032[0m [][a211a927] Exit chaincode: name:"cscc"  (9ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:26.766 UTC [blocksProvider] DeliverBlocks -> INFO 033[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:26.767 UTC [blocksProvider] DeliverBlocks -> INFO 034[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:26.767 UTC [blocksProvider] DeliverBlocks -> INFO 035[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:26.767 UTC [blocksProvider] DeliverBlocks -> INFO 036[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:26.767 UTC [blocksProvider] DeliverBlocks -> INFO 037[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:26.767 UTC [blocksProvider] DeliverBlocks -> INFO 038[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:26.767 UTC [gossip/state] deliverPayloads -> INFO 039[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:26.768 UTC [blocksProvider] DeliverBlocks -> INFO 03a[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:26.768 UTC [gossip/state] deliverPayloads -> INFO 03b[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:26.768 UTC [gossip/state] deliverPayloads -> INFO 03c[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:26.768 UTC [gossip/privdata] StoreBlock -> INFO 03d[0m [mychannel] Validating block [1]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:26.768 UTC [committer/txvalidator] Validate -> INFO 03e[0m [mychannel] Validated block [1] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:26.769 UTC [kvledger] CommitWithPvtData -> INFO 03f[0m [mychannel] Committed block [1] with 1 transaction(s) in 0ms (state_validation=0ms block_commit=0ms state_commit=0ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:26.769 UTC [gossip/state] deliverPayloads -> INFO 040[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:35.222 UTC [endorser] callChaincode -> INFO 041[0m [][4c5790bd] Entry chaincode: name:"lscc" 
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:35.222 UTC [lscc] executeInstall -> INFO 042[0m Installed Chaincode [smallbank] Version [1.0] to peer
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:35.222 UTC [endorser] callChaincode -> INFO 043[0m [][4c5790bd] Exit chaincode: name:"lscc"  (1ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:41.384 UTC [blocksProvider] DeliverBlocks -> INFO 044[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:41.385 UTC [blocksProvider] DeliverBlocks -> INFO 045[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:41.385 UTC [blocksProvider] DeliverBlocks -> INFO 046[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:41.385 UTC [blocksProvider] DeliverBlocks -> INFO 047[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:41.386 UTC [blocksProvider] DeliverBlocks -> INFO 048[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:41.386 UTC [gossip/state] deliverPayloads -> INFO 049[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:41.386 UTC [gossip/state] deliverPayloads -> INFO 04a[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:41.386 UTC [blocksProvider] DeliverBlocks -> INFO 04b[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:41.386 UTC [gossip/state] deliverPayloads -> INFO 04c[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:41.386 UTC [blocksProvider] DeliverBlocks -> INFO 04d[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:41.386 UTC [gossip/privdata] StoreBlock -> INFO 04e[0m [mychannel] Validating block [2]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:41.386 UTC [committer/txvalidator] Validate -> INFO 04f[0m [mychannel] Validated block [2] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:41.386 UTC [cceventmgmt] HandleStateUpdates -> INFO 050[0m Channel [mychannel]: Handling LSCC state update for chaincode [smallbank]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:41.387 UTC [kvledger] CommitWithPvtData -> INFO 051[0m [mychannel] Committed block [2] with 1 transaction(s) in 1ms (state_validation=1ms block_commit=0ms state_commit=0ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:41.388 UTC [gossip/state] deliverPayloads -> INFO 052[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.509 UTC [blocksProvider] DeliverBlocks -> INFO 053[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.509 UTC [blocksProvider] DeliverBlocks -> INFO 054[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.509 UTC [blocksProvider] DeliverBlocks -> INFO 055[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.510 UTC [blocksProvider] DeliverBlocks -> INFO 056[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.510 UTC [blocksProvider] DeliverBlocks -> INFO 057[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.510 UTC [blocksProvider] DeliverBlocks -> INFO 058[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.510 UTC [blocksProvider] DeliverBlocks -> INFO 059[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.510 UTC [gossip/state] deliverPayloads -> INFO 05a[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.510 UTC [gossip/state] deliverPayloads -> INFO 05b[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.511 UTC [gossip/state] deliverPayloads -> INFO 05c[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.511 UTC [gossip/privdata] StoreBlock -> INFO 05d[0m [mychannel] Validating block [3]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.511 UTC [committer/txvalidator] Validate -> INFO 05e[0m [mychannel] Validated block [3] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.511 UTC [kvledger] CommitWithPvtData -> INFO 05f[0m [mychannel] Committed block [3] with 1 transaction(s) in 0ms (state_validation=0ms block_commit=0ms state_commit=0ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.511 UTC [gossip/state] deliverPayloads -> INFO 060[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.608 UTC [blocksProvider] DeliverBlocks -> INFO 061[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.608 UTC [blocksProvider] DeliverBlocks -> INFO 062[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.608 UTC [blocksProvider] DeliverBlocks -> INFO 063[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.608 UTC [blocksProvider] DeliverBlocks -> INFO 064[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.608 UTC [blocksProvider] DeliverBlocks -> INFO 065[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.609 UTC [blocksProvider] DeliverBlocks -> INFO 066[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.609 UTC [blocksProvider] DeliverBlocks -> INFO 067[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.609 UTC [gossip/state] deliverPayloads -> INFO 068[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.609 UTC [gossip/state] deliverPayloads -> INFO 069[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.609 UTC [gossip/state] deliverPayloads -> INFO 06a[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.609 UTC [gossip/privdata] StoreBlock -> INFO 06b[0m [mychannel] Validating block [4]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.609 UTC [committer/txvalidator] Validate -> INFO 06c[0m [mychannel] Validated block [4] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.610 UTC [kvledger] CommitWithPvtData -> INFO 06d[0m [mychannel] Committed block [4] with 1 transaction(s) in 0ms (state_validation=0ms block_commit=0ms state_commit=0ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:43.610 UTC [gossip/state] deliverPayloads -> INFO 06e[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:50.155 UTC [endorser] callChaincode -> INFO 06f[0m [mychannel][e04ff1c8] Entry chaincode: name:"smallbank" 
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:50.900 UTC [endorser] callChaincode -> INFO 070[0m [mychannel][e04ff1c8] Exit chaincode: name:"smallbank"  (745ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.374 UTC [blocksProvider] DeliverBlocks -> INFO 071[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.374 UTC [blocksProvider] DeliverBlocks -> INFO 072[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.375 UTC [blocksProvider] DeliverBlocks -> INFO 073[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.375 UTC [blocksProvider] DeliverBlocks -> INFO 074[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.376 UTC [blocksProvider] DeliverBlocks -> INFO 075[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.378 UTC [gossip/state] deliverPayloads -> INFO 076[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.378 UTC [blocksProvider] DeliverBlocks -> INFO 077[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.378 UTC [blocksProvider] DeliverBlocks -> INFO 078[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.379 UTC [gossip/state] deliverPayloads -> INFO 079[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.379 UTC [gossip/state] deliverPayloads -> INFO 07a[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.380 UTC [gossip/privdata] StoreBlock -> INFO 07b[0m [mychannel] Validating block [5]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.380 UTC [committer/txvalidator] Validate -> INFO 07c[0m [mychannel] Validated block [5] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.411 UTC [kvledger] CommitWithPvtData -> INFO 07d[0m [mychannel] Committed block [5] with 867 transaction(s) in 31ms (state_validation=29ms block_commit=0ms state_commit=2ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.411 UTC [gossip/state] deliverPayloads -> INFO 07e[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.441 UTC [blocksProvider] DeliverBlocks -> INFO 07f[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.441 UTC [blocksProvider] DeliverBlocks -> INFO 080[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.442 UTC [blocksProvider] DeliverBlocks -> INFO 081[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.442 UTC [blocksProvider] DeliverBlocks -> INFO 082[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.442 UTC [blocksProvider] DeliverBlocks -> INFO 083[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.443 UTC [blocksProvider] DeliverBlocks -> INFO 084[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.443 UTC [blocksProvider] DeliverBlocks -> INFO 085[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.443 UTC [gossip/state] deliverPayloads -> INFO 086[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.444 UTC [gossip/state] deliverPayloads -> INFO 087[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.444 UTC [gossip/state] deliverPayloads -> INFO 088[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.444 UTC [gossip/privdata] StoreBlock -> INFO 089[0m [mychannel] Validating block [6]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.444 UTC [committer/txvalidator] Validate -> INFO 08a[0m [mychannel] Validated block [6] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.468 UTC [kvledger] CommitWithPvtData -> INFO 08b[0m [mychannel] Committed block [6] with 1068 transaction(s) in 23ms (state_validation=20ms block_commit=0ms state_commit=2ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.468 UTC [gossip/state] deliverPayloads -> INFO 08c[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.499 UTC [blocksProvider] DeliverBlocks -> INFO 08d[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.499 UTC [blocksProvider] DeliverBlocks -> INFO 08e[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.500 UTC [blocksProvider] DeliverBlocks -> INFO 08f[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.500 UTC [blocksProvider] DeliverBlocks -> INFO 090[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.500 UTC [blocksProvider] DeliverBlocks -> INFO 091[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.500 UTC [gossip/state] deliverPayloads -> INFO 092[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.502 UTC [blocksProvider] DeliverBlocks -> INFO 093[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.502 UTC [blocksProvider] DeliverBlocks -> INFO 094[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.503 UTC [gossip/state] deliverPayloads -> INFO 095[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.503 UTC [gossip/state] deliverPayloads -> INFO 096[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.503 UTC [gossip/privdata] StoreBlock -> INFO 097[0m [mychannel] Validating block [7]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.503 UTC [committer/txvalidator] Validate -> INFO 098[0m [mychannel] Validated block [7] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.526 UTC [kvledger] CommitWithPvtData -> INFO 099[0m [mychannel] Committed block [7] with 1067 transaction(s) in 22ms (state_validation=15ms block_commit=0ms state_commit=6ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.526 UTC [gossip/state] deliverPayloads -> INFO 09a[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.565 UTC [blocksProvider] DeliverBlocks -> INFO 09b[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.565 UTC [blocksProvider] DeliverBlocks -> INFO 09c[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.566 UTC [blocksProvider] DeliverBlocks -> INFO 09d[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.566 UTC [blocksProvider] DeliverBlocks -> INFO 09e[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.566 UTC [blocksProvider] DeliverBlocks -> INFO 09f[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.566 UTC [gossip/state] deliverPayloads -> INFO 0a0[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.567 UTC [gossip/state] deliverPayloads -> INFO 0a1[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.567 UTC [gossip/state] deliverPayloads -> INFO 0a2[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.567 UTC [gossip/privdata] StoreBlock -> INFO 0a3[0m [mychannel] Validating block [8]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.567 UTC [committer/txvalidator] Validate -> INFO 0a4[0m [mychannel] Validated block [8] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.571 UTC [blocksProvider] DeliverBlocks -> INFO 0a5[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.571 UTC [blocksProvider] DeliverBlocks -> INFO 0a6[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.591 UTC [kvledger] CommitWithPvtData -> INFO 0a7[0m [mychannel] Committed block [8] with 1037 transaction(s) in 23ms (state_validation=17ms block_commit=0ms state_commit=6ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.591 UTC [gossip/state] deliverPayloads -> INFO 0a8[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.644 UTC [blocksProvider] DeliverBlocks -> INFO 0a9[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.645 UTC [blocksProvider] DeliverBlocks -> INFO 0aa[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.658 UTC [blocksProvider] DeliverBlocks -> INFO 0ab[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.658 UTC [blocksProvider] DeliverBlocks -> INFO 0ac[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.658 UTC [blocksProvider] DeliverBlocks -> INFO 0ad[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.658 UTC [gossip/state] deliverPayloads -> INFO 0ae[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.660 UTC [gossip/state] deliverPayloads -> INFO 0af[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.660 UTC [gossip/state] deliverPayloads -> INFO 0b0[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.660 UTC [gossip/privdata] StoreBlock -> INFO 0b1[0m [mychannel] Validating block [9]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.660 UTC [committer/txvalidator] Validate -> INFO 0b2[0m [mychannel] Validated block [9] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.663 UTC [blocksProvider] DeliverBlocks -> INFO 0b3[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.664 UTC [blocksProvider] DeliverBlocks -> INFO 0b4[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.693 UTC [kvledger] CommitWithPvtData -> INFO 0b5[0m [mychannel] Committed block [9] with 1116 transaction(s) in 32ms (state_validation=30ms block_commit=0ms state_commit=2ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.693 UTC [gossip/state] deliverPayloads -> INFO 0b6[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.700 UTC [blocksProvider] DeliverBlocks -> INFO 0b7[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.700 UTC [blocksProvider] DeliverBlocks -> INFO 0b8[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.701 UTC [blocksProvider] DeliverBlocks -> INFO 0b9[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.701 UTC [blocksProvider] DeliverBlocks -> INFO 0ba[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.701 UTC [blocksProvider] DeliverBlocks -> INFO 0bb[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.701 UTC [gossip/state] deliverPayloads -> INFO 0bc[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.702 UTC [blocksProvider] DeliverBlocks -> INFO 0bd[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.702 UTC [blocksProvider] DeliverBlocks -> INFO 0be[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.702 UTC [gossip/state] deliverPayloads -> INFO 0bf[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.702 UTC [gossip/state] deliverPayloads -> INFO 0c0[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.702 UTC [gossip/privdata] StoreBlock -> INFO 0c1[0m [mychannel] Validating block [10]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.702 UTC [committer/txvalidator] Validate -> INFO 0c2[0m [mychannel] Validated block [10] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.727 UTC [kvledger] CommitWithPvtData -> INFO 0c3[0m [mychannel] Committed block [10] with 1119 transaction(s) in 24ms (state_validation=15ms block_commit=0ms state_commit=9ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.731 UTC [gossip/state] deliverPayloads -> INFO 0c4[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.769 UTC [blocksProvider] DeliverBlocks -> INFO 0c5[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.769 UTC [blocksProvider] DeliverBlocks -> INFO 0c6[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.770 UTC [blocksProvider] DeliverBlocks -> INFO 0c7[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.770 UTC [blocksProvider] DeliverBlocks -> INFO 0c8[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.771 UTC [blocksProvider] DeliverBlocks -> INFO 0c9[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.771 UTC [gossip/state] deliverPayloads -> INFO 0ca[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.772 UTC [gossip/state] deliverPayloads -> INFO 0cb[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.772 UTC [gossip/state] deliverPayloads -> INFO 0cc[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.772 UTC [gossip/privdata] StoreBlock -> INFO 0cd[0m [mychannel] Validating block [11]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.772 UTC [committer/txvalidator] Validate -> INFO 0ce[0m [mychannel] Validated block [11] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.772 UTC [blocksProvider] DeliverBlocks -> INFO 0cf[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.772 UTC [blocksProvider] DeliverBlocks -> INFO 0d0[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.805 UTC [kvledger] CommitWithPvtData -> INFO 0d1[0m [mychannel] Committed block [11] with 1092 transaction(s) in 33ms (state_validation=29ms block_commit=0ms state_commit=4ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.805 UTC [gossip/state] deliverPayloads -> INFO 0d2[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.844 UTC [blocksProvider] DeliverBlocks -> INFO 0d3[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.844 UTC [blocksProvider] DeliverBlocks -> INFO 0d4[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.845 UTC [blocksProvider] DeliverBlocks -> INFO 0d5[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.845 UTC [blocksProvider] DeliverBlocks -> INFO 0d6[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.845 UTC [blocksProvider] DeliverBlocks -> INFO 0d7[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.845 UTC [gossip/state] deliverPayloads -> INFO 0d8[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.845 UTC [blocksProvider] DeliverBlocks -> INFO 0d9[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.845 UTC [blocksProvider] DeliverBlocks -> INFO 0da[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.846 UTC [gossip/state] deliverPayloads -> INFO 0db[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.846 UTC [gossip/state] deliverPayloads -> INFO 0dc[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.846 UTC [gossip/privdata] StoreBlock -> INFO 0dd[0m [mychannel] Validating block [12]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.846 UTC [committer/txvalidator] Validate -> INFO 0de[0m [mychannel] Validated block [12] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.873 UTC [kvledger] CommitWithPvtData -> INFO 0df[0m [mychannel] Committed block [12] with 1183 transaction(s) in 27ms (state_validation=23ms block_commit=0ms state_commit=3ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.873 UTC [gossip/state] deliverPayloads -> INFO 0e0[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.915 UTC [blocksProvider] DeliverBlocks -> INFO 0e1[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.915 UTC [blocksProvider] DeliverBlocks -> INFO 0e2[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.916 UTC [blocksProvider] DeliverBlocks -> INFO 0e3[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.916 UTC [blocksProvider] DeliverBlocks -> INFO 0e4[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.917 UTC [blocksProvider] DeliverBlocks -> INFO 0e5[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.917 UTC [gossip/state] deliverPayloads -> INFO 0e6[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.918 UTC [gossip/state] deliverPayloads -> INFO 0e7[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.918 UTC [gossip/state] deliverPayloads -> INFO 0e8[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.918 UTC [gossip/privdata] StoreBlock -> INFO 0e9[0m [mychannel] Validating block [13]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.918 UTC [committer/txvalidator] Validate -> INFO 0ea[0m [mychannel] Validated block [13] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.918 UTC [blocksProvider] DeliverBlocks -> INFO 0eb[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.918 UTC [blocksProvider] DeliverBlocks -> INFO 0ec[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.945 UTC [kvledger] CommitWithPvtData -> INFO 0ed[0m [mychannel] Committed block [13] with 1143 transaction(s) in 26ms (state_validation=21ms block_commit=0ms state_commit=5ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:04:59.945 UTC [gossip/state] deliverPayloads -> INFO 0ee[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.009 UTC [blocksProvider] DeliverBlocks -> INFO 0ef[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.009 UTC [blocksProvider] DeliverBlocks -> INFO 0f0[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.024 UTC [blocksProvider] DeliverBlocks -> INFO 0f1[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.024 UTC [blocksProvider] DeliverBlocks -> INFO 0f2[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.052 UTC [blocksProvider] DeliverBlocks -> INFO 0f3[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.060 UTC [gossip/state] deliverPayloads -> INFO 0f4[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.101 UTC [blocksProvider] DeliverBlocks -> INFO 0f5[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.101 UTC [blocksProvider] DeliverBlocks -> INFO 0f6[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.125 UTC [gossip/state] deliverPayloads -> INFO 0f7[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.128 UTC [gossip/state] deliverPayloads -> INFO 0f8[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.128 UTC [gossip/privdata] StoreBlock -> INFO 0f9[0m [mychannel] Validating block [14]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.128 UTC [committer/txvalidator] Validate -> INFO 0fa[0m [mychannel] Validated block [14] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.129 UTC [blocksProvider] DeliverBlocks -> INFO 0fb[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.129 UTC [blocksProvider] DeliverBlocks -> INFO 0fc[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.131 UTC [blocksProvider] DeliverBlocks -> INFO 0fd[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.131 UTC [blocksProvider] DeliverBlocks -> INFO 0fe[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.131 UTC [blocksProvider] DeliverBlocks -> INFO 0ff[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.132 UTC [blocksProvider] DeliverBlocks -> INFO 100[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.132 UTC [blocksProvider] DeliverBlocks -> INFO 101[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.138 UTC [blocksProvider] DeliverBlocks -> INFO 102[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.138 UTC [blocksProvider] DeliverBlocks -> INFO 103[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.139 UTC [blocksProvider] DeliverBlocks -> INFO 104[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.139 UTC [blocksProvider] DeliverBlocks -> INFO 105[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.140 UTC [blocksProvider] DeliverBlocks -> INFO 106[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.140 UTC [blocksProvider] DeliverBlocks -> INFO 107[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.140 UTC [blocksProvider] DeliverBlocks -> INFO 108[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.186 UTC [kvledger] CommitWithPvtData -> INFO 109[0m [mychannel] Committed block [14] with 1221 transaction(s) in 57ms (state_validation=54ms block_commit=0ms state_commit=2ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.186 UTC [gossip/state] deliverPayloads -> INFO 10a[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.186 UTC [gossip/state] deliverPayloads -> INFO 10b[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.188 UTC [gossip/state] deliverPayloads -> INFO 10c[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.188 UTC [gossip/state] deliverPayloads -> INFO 10d[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.188 UTC [gossip/privdata] StoreBlock -> INFO 10e[0m [mychannel] Validating block [15]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.188 UTC [committer/txvalidator] Validate -> INFO 10f[0m [mychannel] Validated block [15] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.200 UTC [blocksProvider] DeliverBlocks -> INFO 110[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.200 UTC [blocksProvider] DeliverBlocks -> INFO 111[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.201 UTC [blocksProvider] DeliverBlocks -> INFO 112[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.201 UTC [blocksProvider] DeliverBlocks -> INFO 113[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.202 UTC [blocksProvider] DeliverBlocks -> INFO 114[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.204 UTC [blocksProvider] DeliverBlocks -> INFO 115[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.204 UTC [blocksProvider] DeliverBlocks -> INFO 116[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.214 UTC [kvledger] CommitWithPvtData -> INFO 117[0m [mychannel] Committed block [15] with 1150 transaction(s) in 25ms (state_validation=22ms block_commit=0ms state_commit=3ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.214 UTC [gossip/state] deliverPayloads -> INFO 118[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.214 UTC [gossip/state] deliverPayloads -> INFO 119[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.215 UTC [gossip/state] deliverPayloads -> INFO 11a[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.215 UTC [gossip/state] deliverPayloads -> INFO 11b[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.215 UTC [gossip/privdata] StoreBlock -> INFO 11c[0m [mychannel] Validating block [16]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.215 UTC [committer/txvalidator] Validate -> INFO 11d[0m [mychannel] Validated block [16] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.242 UTC [kvledger] CommitWithPvtData -> INFO 11e[0m [mychannel] Committed block [16] with 1169 transaction(s) in 27ms (state_validation=24ms block_commit=0ms state_commit=2ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.242 UTC [gossip/state] deliverPayloads -> INFO 11f[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.242 UTC [gossip/state] deliverPayloads -> INFO 120[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.244 UTC [gossip/state] deliverPayloads -> INFO 121[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.244 UTC [gossip/state] deliverPayloads -> INFO 122[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.244 UTC [gossip/privdata] StoreBlock -> INFO 123[0m [mychannel] Validating block [17]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.244 UTC [committer/txvalidator] Validate -> INFO 124[0m [mychannel] Validated block [17] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.274 UTC [blocksProvider] DeliverBlocks -> INFO 125[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.274 UTC [blocksProvider] DeliverBlocks -> INFO 126[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.275 UTC [blocksProvider] DeliverBlocks -> INFO 127[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.275 UTC [blocksProvider] DeliverBlocks -> INFO 128[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.276 UTC [kvledger] CommitWithPvtData -> INFO 129[0m [mychannel] Committed block [17] with 1222 transaction(s) in 32ms (state_validation=22ms block_commit=0ms state_commit=9ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.277 UTC [gossip/state] deliverPayloads -> INFO 12a[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.277 UTC [blocksProvider] DeliverBlocks -> INFO 12b[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.277 UTC [blocksProvider] DeliverBlocks -> INFO 12c[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.278 UTC [blocksProvider] DeliverBlocks -> INFO 12d[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.278 UTC [gossip/state] deliverPayloads -> INFO 12e[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.282 UTC [gossip/state] deliverPayloads -> INFO 12f[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.282 UTC [gossip/state] deliverPayloads -> INFO 130[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.282 UTC [gossip/privdata] StoreBlock -> INFO 131[0m [mychannel] Validating block [18]
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.263 UTC [peer] func1 -> INFO 008[0m Auto-detected peer address: 10.0.2.128:7051
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.263 UTC [peer] func1 -> INFO 009[0m Host is 0.0.0.0 , falling back to auto-detected address: 10.0.2.128:7051
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | jyp: listenAddr= 0.0.0.0:7051 /opt/gopath/src/github.com/hyperledger/fabric/peer/node/start.go 195 2021-08-20 07:04:15.263270
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | jyp: register grpc deliver server
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.263 UTC [nodeCmd] computeChaincodeEndpoint -> INFO 00a[0m Entering computeChaincodeEndpoint with peerHostname: 10.0.2.128
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.264 UTC [nodeCmd] computeChaincodeEndpoint -> INFO 00b[0m Exit with ccEndpoint: 10.0.2.128:7052
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [33m2021-08-20 07:04:15.264 UTC [nodeCmd] createChaincodeServer -> WARN 00c[0m peer.chaincodeListenAddress is not set, using 10.0.2.128:7052
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.264 UTC [sccapi] registerSysCC -> INFO 00d[0m system chaincode lscc(github.com/hyperledger/fabric/core/scc/lscc) registered
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.264 UTC [sccapi] registerSysCC -> INFO 00e[0m system chaincode cscc(github.com/hyperledger/fabric/core/scc/cscc) registered
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.264 UTC [sccapi] registerSysCC -> INFO 00f[0m system chaincode qscc(github.com/hyperledger/fabric/core/scc/qscc) registered
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.264 UTC [sccapi] registerSysCC -> INFO 010[0m system chaincode +lifecycle(github.com/hyperledger/fabric/core/chaincode/lifecycle) registered
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | jyp: register grpc Admin server
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | jyp: TOOD: how to init plugin
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | jyp: register grpc Endorser server
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.265 UTC [gossip/service] func1 -> INFO 011[0m Initialize gossip with endpoint 10.0.2.128:7051 and bootstrap set [fabric_peer0:7051]
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.268 UTC [gossip/gossip] NewGossipService -> INFO 012[0m Creating gossip service with self membership of {fabric_peer5:7051 [] [235 111 141 74 128 96 188 253 221 18 42 210 110 40 38 56 208 235 8 29 238 126 44 138 207 74 9 62 181 25 175 52] 10.0.2.128:7051 <nil> <nil>}
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.268 UTC [gossip/gossip] start -> INFO 013[0m Gossip instance 10.0.2.128:7051 started
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.268 UTC [sccapi] deploySysCC -> INFO 014[0m system chaincode lscc/(github.com/hyperledger/fabric/core/scc/lscc) deployed
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.268 UTC [cscc] Init -> INFO 015[0m Init CSCC
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.268 UTC [sccapi] deploySysCC -> INFO 016[0m system chaincode cscc/(github.com/hyperledger/fabric/core/scc/cscc) deployed
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.269 UTC [qscc] Init -> INFO 017[0m Init QSCC
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.269 UTC [sccapi] deploySysCC -> INFO 018[0m system chaincode qscc/(github.com/hyperledger/fabric/core/scc/qscc) deployed
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.269 UTC [sccapi] deploySysCC -> INFO 019[0m system chaincode +lifecycle/(github.com/hyperledger/fabric/core/chaincode/lifecycle) deployed
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.269 UTC [nodeCmd] serve -> INFO 01a[0m Deployed system chaincodes
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.277 UTC [discovery] NewService -> INFO 01b[0m Created with config TLS: false, authCacheMaxSize: 1000, authCachePurgeRatio: 0.750000
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.277 UTC [nodeCmd] registerDiscoveryService -> INFO 01c[0m Discovery service activated
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.277 UTC [nodeCmd] serve -> INFO 01d[0m Starting peer with ID=[name:"fabric_peer5" ], network ID=[dev], address=[10.0.2.128:7051]
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:15.277 UTC [nodeCmd] serve -> INFO 01e[0m Started peer with ID=[name:"fabric_peer5" ], network ID=[dev], address=[10.0.2.128:7051]
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:17.100 UTC [endorser] callChaincode -> INFO 01f[0m [][c7a8bd55] Entry chaincode: name:"cscc" 
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:17.101 UTC [ledgermgmt] CreateLedger -> INFO 020[0m Creating ledger [mychannel] with genesis block
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:17.101 UTC [fsblkstorage] newBlockfileMgr -> INFO 021[0m Getting block information from block storage
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:17.104 UTC [kvledger] CommitWithPvtData -> INFO 022[0m [mychannel] Committed block [0] with 1 transaction(s) in 1ms (state_validation=0ms block_commit=0ms state_commit=0ms)
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:17.104 UTC [ledgermgmt] CreateLedger -> INFO 023[0m Created ledger [mychannel] with genesis block
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:17.106 UTC [gossip/gossip] JoinChan -> INFO 024[0m Joining gossip network of channel mychannel with 1 organizations
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [34m2021-08-20 07:04:17.106 UTC [gossip/gossip] learnAnchorPeers -> INFO 025[0m No configured anchor peers of Org1MSP for channel mychannel to learn about
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [35m2021-08-20 07:04:17.107 UTC [gossip/state] NewGossipStateProvider -> PANI 026[0m Committer height cannot be zero, ledger should include at least one block (genesis).
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | panic: Committer height cannot be zero, ledger should include at least one block (genesis).
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | 	panic: runtime error: invalid memory address or nil pointer dereference
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | [signal SIGSEGV: segmentation violation code=0x1 addr=0x30 pc=0xc46096]
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | 
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | goroutine 160 [running]:
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | github.com/hyperledger/fabric/core/chaincode/shim.(*Handler).triggerNextState(0xc42040ad80, 0x0, 0xc42009a7e0)
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/core/chaincode/shim/handler.go:35 +0x26
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | github.com/hyperledger/fabric/core/chaincode/shim.(*Handler).handleTransaction.func1.1(0xc42040ad80, 0xc420b97ea8, 0xc42009a7e0)
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/core/chaincode/shim/handler.go:256 +0x42
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | panic(0xed4480, 0xc4205921b0)
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | 	/opt/go/src/runtime/panic.go:502 +0x229
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | github.com/hyperledger/fabric/vendor/go.uber.org/zap/zapcore.(*CheckedEntry).Write(0xc420107970, 0x0, 0x0, 0x0)
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/vendor/go.uber.org/zap/zapcore/entry.go:229 +0x4f4
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | github.com/hyperledger/fabric/vendor/go.uber.org/zap.(*SugaredLogger).log(0xc4201743d0, 0xc420b96904, 0xc4202b1320, 0x54, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0)
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/vendor/go.uber.org/zap/sugar.go:234 +0xf6
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | github.com/hyperledger/fabric/vendor/go.uber.org/zap.(*SugaredLogger).Panicf(0xc4201743d0, 0xc4202b1320, 0x54, 0x0, 0x0, 0x0)
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/vendor/go.uber.org/zap/sugar.go:159 +0x79
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | github.com/hyperledger/fabric/common/flogging.(*FabricLogger).Panic(0xc4201743d8, 0xc4205920a0, 0x1, 0x1)
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/common/flogging/zap.go:73 +0x75
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | github.com/hyperledger/fabric/gossip/state.NewGossipStateProvider(0xc4202b9a61, 0x9, 0xc420439180, 0x7f7acc6f1cf8, 0xc420107ce0, 0xc420588000, 0x11d5d40)
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/gossip/state/state.go:190 +0x871
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | github.com/hyperledger/fabric/gossip/service.(*gossipServiceImpl).InitializeChannel(0xc4205ab0e0, 0xc4202b9a61, 0x9, 0xc4205a06e0, 0x1, 0x1, 0x11b86e0, 0xc420588000, 0x11d5d40, 0xc420438ee0, ...)
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/gossip/service/gossip_service.go:257 +0x7da
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | github.com/hyperledger/fabric/core/peer.createChain(0xc4202b9a61, 0x9, 0x11da3a0, 0xc420b52720, 0xc42040fa80, 0x11ca220, 0xc420174ce0, 0x11d33a0, 0xc4204308c0, 0x11baf20, ...)
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/core/peer/peer.go:407 +0x746
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | github.com/hyperledger/fabric/core/peer.CreateChainFromBlock(0xc42040fa80, 0x11ca220, 0xc420174ce0, 0x11d33a0, 0xc4204308c0, 0x0, 0xc4202b9a5c)
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/core/peer/peer.go:438 +0x1c2
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | github.com/hyperledger/fabric/core/scc/cscc.joinChain(0xc4202b95e0, 0x9, 0xc42040fa80, 0x11ca220, 0xc420174ce0, 0x11d33a0, 0xc4204308c0, 0x0, 0x0, 0x0, ...)
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/core/scc/cscc/configure.go:238 +0x99
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | github.com/hyperledger/fabric/core/scc/cscc.(*PeerConfiger).InvokeNoShim(0xc420430cd0, 0xc4205f6a80, 0x2, 0x2, 0xc4200af180, 0x0, 0x0, 0x0, 0x0, 0x0, ...)
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/core/scc/cscc/configure.go:166 +0x5fd
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | github.com/hyperledger/fabric/core/scc/cscc.(*PeerConfiger).Invoke(0xc420430cd0, 0x11dbb00, 0xc42027e840, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, ...)
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/core/scc/cscc/configure.go:120 +0x30c
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | github.com/hyperledger/fabric/core/chaincode/shim.(*Handler).handleTransaction.func1(0xc42040ad80, 0xc42009a7e0, 0xc42028ac00)
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/core/chaincode/shim/handler.go:282 +0x508
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | created by github.com/hyperledger/fabric/core/chaincode/shim.(*Handler).handleTransaction
+fabric_peer5.1.36eg7unx9tao@heming-rdma19    | 	/opt/gopath/src/github.com/hyperledger/fabric/core/chaincode/shim/handler.go:251 +0x53
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.282 UTC [committer/txvalidator] Validate -> INFO 132[0m [mychannel] Validated block [18] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.309 UTC [kvledger] CommitWithPvtData -> INFO 133[0m [mychannel] Committed block [18] with 1225 transaction(s) in 26ms (state_validation=23ms block_commit=0ms state_commit=3ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.309 UTC [gossip/state] deliverPayloads -> INFO 134[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.344 UTC [blocksProvider] DeliverBlocks -> INFO 135[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.344 UTC [blocksProvider] DeliverBlocks -> INFO 136[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.346 UTC [blocksProvider] DeliverBlocks -> INFO 137[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.346 UTC [blocksProvider] DeliverBlocks -> INFO 138[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.346 UTC [blocksProvider] DeliverBlocks -> INFO 139[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.347 UTC [blocksProvider] DeliverBlocks -> INFO 13a[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.347 UTC [blocksProvider] DeliverBlocks -> INFO 13c[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.347 UTC [gossip/state] deliverPayloads -> INFO 13b[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.350 UTC [gossip/state] deliverPayloads -> INFO 13d[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.350 UTC [gossip/state] deliverPayloads -> INFO 13e[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.351 UTC [gossip/privdata] StoreBlock -> INFO 13f[0m [mychannel] Validating block [19]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.351 UTC [committer/txvalidator] Validate -> INFO 140[0m [mychannel] Validated block [19] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.380 UTC [kvledger] CommitWithPvtData -> INFO 141[0m [mychannel] Committed block [19] with 1170 transaction(s) in 29ms (state_validation=25ms block_commit=0ms state_commit=3ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.381 UTC [gossip/state] deliverPayloads -> INFO 142[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.404 UTC [blocksProvider] DeliverBlocks -> INFO 143[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.404 UTC [blocksProvider] DeliverBlocks -> INFO 144[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.405 UTC [blocksProvider] DeliverBlocks -> INFO 145[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.405 UTC [blocksProvider] DeliverBlocks -> INFO 146[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.405 UTC [blocksProvider] DeliverBlocks -> INFO 147[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.405 UTC [gossip/state] deliverPayloads -> INFO 148[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.406 UTC [blocksProvider] DeliverBlocks -> INFO 149[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.406 UTC [blocksProvider] DeliverBlocks -> INFO 14a[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.406 UTC [gossip/state] deliverPayloads -> INFO 14b[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.406 UTC [gossip/state] deliverPayloads -> INFO 14c[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.406 UTC [gossip/privdata] StoreBlock -> INFO 14d[0m [mychannel] Validating block [20]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.406 UTC [committer/txvalidator] Validate -> INFO 14e[0m [mychannel] Validated block [20] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.433 UTC [kvledger] CommitWithPvtData -> INFO 14f[0m [mychannel] Committed block [20] with 1184 transaction(s) in 26ms (state_validation=22ms block_commit=0ms state_commit=3ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.433 UTC [gossip/state] deliverPayloads -> INFO 150[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.470 UTC [blocksProvider] DeliverBlocks -> INFO 151[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.470 UTC [blocksProvider] DeliverBlocks -> INFO 152[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.471 UTC [blocksProvider] DeliverBlocks -> INFO 153[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.471 UTC [blocksProvider] DeliverBlocks -> INFO 154[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.471 UTC [blocksProvider] DeliverBlocks -> INFO 155[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.471 UTC [gossip/state] deliverPayloads -> INFO 156[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.472 UTC [blocksProvider] DeliverBlocks -> INFO 157[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.472 UTC [blocksProvider] DeliverBlocks -> INFO 158[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.472 UTC [gossip/state] deliverPayloads -> INFO 159[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.472 UTC [gossip/state] deliverPayloads -> INFO 15a[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.472 UTC [gossip/privdata] StoreBlock -> INFO 15b[0m [mychannel] Validating block [21]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.472 UTC [committer/txvalidator] Validate -> INFO 15c[0m [mychannel] Validated block [21] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.501 UTC [kvledger] CommitWithPvtData -> INFO 15d[0m [mychannel] Committed block [21] with 1106 transaction(s) in 28ms (state_validation=24ms block_commit=0ms state_commit=3ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.507 UTC [gossip/state] deliverPayloads -> INFO 15e[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.543 UTC [blocksProvider] DeliverBlocks -> INFO 15f[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.543 UTC [blocksProvider] DeliverBlocks -> INFO 160[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.544 UTC [blocksProvider] DeliverBlocks -> INFO 161[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.544 UTC [blocksProvider] DeliverBlocks -> INFO 162[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.544 UTC [blocksProvider] DeliverBlocks -> INFO 163[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.544 UTC [gossip/state] deliverPayloads -> INFO 164[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.545 UTC [blocksProvider] DeliverBlocks -> INFO 165[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.545 UTC [blocksProvider] DeliverBlocks -> INFO 166[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.545 UTC [gossip/state] deliverPayloads -> INFO 167[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.545 UTC [gossip/state] deliverPayloads -> INFO 168[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.545 UTC [gossip/privdata] StoreBlock -> INFO 169[0m [mychannel] Validating block [22]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.546 UTC [committer/txvalidator] Validate -> INFO 16a[0m [mychannel] Validated block [22] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.569 UTC [kvledger] CommitWithPvtData -> INFO 16b[0m [mychannel] Committed block [22] with 1160 transaction(s) in 23ms (state_validation=19ms block_commit=0ms state_commit=3ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.569 UTC [gossip/state] deliverPayloads -> INFO 16c[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.619 UTC [blocksProvider] DeliverBlocks -> INFO 16d[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.620 UTC [blocksProvider] DeliverBlocks -> INFO 16e[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.620 UTC [blocksProvider] DeliverBlocks -> INFO 16f[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.620 UTC [blocksProvider] DeliverBlocks -> INFO 170[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.621 UTC [blocksProvider] DeliverBlocks -> INFO 171[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.621 UTC [gossip/state] deliverPayloads -> INFO 172[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.623 UTC [gossip/state] deliverPayloads -> INFO 173[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.623 UTC [gossip/state] deliverPayloads -> INFO 174[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.623 UTC [gossip/privdata] StoreBlock -> INFO 175[0m [mychannel] Validating block [23]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.623 UTC [committer/txvalidator] Validate -> INFO 176[0m [mychannel] Validated block [23] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.623 UTC [blocksProvider] DeliverBlocks -> INFO 177[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.623 UTC [blocksProvider] DeliverBlocks -> INFO 178[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.648 UTC [kvledger] CommitWithPvtData -> INFO 179[0m [mychannel] Committed block [23] with 1161 transaction(s) in 25ms (state_validation=22ms block_commit=0ms state_commit=2ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.649 UTC [gossip/state] deliverPayloads -> INFO 17a[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.692 UTC [blocksProvider] DeliverBlocks -> INFO 17b[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.692 UTC [blocksProvider] DeliverBlocks -> INFO 17c[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.698 UTC [blocksProvider] DeliverBlocks -> INFO 17d[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.698 UTC [blocksProvider] DeliverBlocks -> INFO 17e[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.699 UTC [blocksProvider] DeliverBlocks -> INFO 17f[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.702 UTC [gossip/state] deliverPayloads -> INFO 180[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.703 UTC [blocksProvider] DeliverBlocks -> INFO 181[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.703 UTC [blocksProvider] DeliverBlocks -> INFO 182[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.705 UTC [gossip/state] deliverPayloads -> INFO 183[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.706 UTC [gossip/state] deliverPayloads -> INFO 184[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.706 UTC [gossip/privdata] StoreBlock -> INFO 185[0m [mychannel] Validating block [24]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.706 UTC [committer/txvalidator] Validate -> INFO 186[0m [mychannel] Validated block [24] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.808 UTC [blocksProvider] DeliverBlocks -> INFO 187[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.808 UTC [blocksProvider] DeliverBlocks -> INFO 188[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.810 UTC [blocksProvider] DeliverBlocks -> INFO 189[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.810 UTC [blocksProvider] DeliverBlocks -> INFO 18a[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.810 UTC [blocksProvider] DeliverBlocks -> INFO 18b[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.819 UTC [blocksProvider] DeliverBlocks -> INFO 18c[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.820 UTC [blocksProvider] DeliverBlocks -> INFO 18d[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.837 UTC [kvledger] CommitWithPvtData -> INFO 18e[0m [mychannel] Committed block [24] with 1082 transaction(s) in 130ms (state_validation=118ms block_commit=0ms state_commit=11ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.837 UTC [gossip/state] deliverPayloads -> INFO 18f[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.837 UTC [gossip/state] deliverPayloads -> INFO 190[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.838 UTC [blocksProvider] DeliverBlocks -> INFO 191[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.838 UTC [blocksProvider] DeliverBlocks -> INFO 192[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.840 UTC [blocksProvider] DeliverBlocks -> INFO 193[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.840 UTC [blocksProvider] DeliverBlocks -> INFO 194[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.840 UTC [blocksProvider] DeliverBlocks -> INFO 195[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.842 UTC [blocksProvider] DeliverBlocks -> INFO 196[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.842 UTC [blocksProvider] DeliverBlocks -> INFO 197[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.844 UTC [gossip/state] deliverPayloads -> INFO 198[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.844 UTC [gossip/state] deliverPayloads -> INFO 199[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.844 UTC [gossip/privdata] StoreBlock -> INFO 19a[0m [mychannel] Validating block [25]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.844 UTC [committer/txvalidator] Validate -> INFO 19b[0m [mychannel] Validated block [25] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.889 UTC [blocksProvider] DeliverBlocks -> INFO 19c[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.889 UTC [blocksProvider] DeliverBlocks -> INFO 19d[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.891 UTC [blocksProvider] DeliverBlocks -> INFO 19e[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.891 UTC [blocksProvider] DeliverBlocks -> INFO 19f[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.892 UTC [kvledger] CommitWithPvtData -> INFO 1a0[0m [mychannel] Committed block [25] with 1238 transaction(s) in 48ms (state_validation=42ms block_commit=0ms state_commit=5ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.892 UTC [gossip/state] deliverPayloads -> INFO 1a1[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.892 UTC [gossip/state] deliverPayloads -> INFO 1a2[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.893 UTC [gossip/state] deliverPayloads -> INFO 1a3[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.894 UTC [gossip/state] deliverPayloads -> INFO 1a4[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.894 UTC [gossip/privdata] StoreBlock -> INFO 1a5[0m [mychannel] Validating block [26]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.894 UTC [committer/txvalidator] Validate -> INFO 1a6[0m [mychannel] Validated block [26] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.897 UTC [blocksProvider] DeliverBlocks -> INFO 1a7[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.898 UTC [blocksProvider] DeliverBlocks -> INFO 1a8[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.898 UTC [blocksProvider] DeliverBlocks -> INFO 1a9[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.917 UTC [kvledger] CommitWithPvtData -> INFO 1aa[0m [mychannel] Committed block [26] with 1228 transaction(s) in 22ms (state_validation=18ms block_commit=0ms state_commit=3ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.917 UTC [gossip/state] deliverPayloads -> INFO 1ab[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.917 UTC [gossip/state] deliverPayloads -> INFO 1ac[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.919 UTC [gossip/state] deliverPayloads -> INFO 1ad[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.919 UTC [gossip/state] deliverPayloads -> INFO 1ae[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.919 UTC [gossip/privdata] StoreBlock -> INFO 1af[0m [mychannel] Validating block [27]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.919 UTC [committer/txvalidator] Validate -> INFO 1b0[0m [mychannel] Validated block [27] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.942 UTC [kvledger] CommitWithPvtData -> INFO 1b1[0m [mychannel] Committed block [27] with 1249 transaction(s) in 22ms (state_validation=20ms block_commit=0ms state_commit=2ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.942 UTC [gossip/state] deliverPayloads -> INFO 1b2[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.958 UTC [blocksProvider] DeliverBlocks -> INFO 1b3[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.968 UTC [blocksProvider] DeliverBlocks -> INFO 1b4[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.970 UTC [blocksProvider] DeliverBlocks -> INFO 1b5[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.970 UTC [blocksProvider] DeliverBlocks -> INFO 1b6[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.970 UTC [blocksProvider] DeliverBlocks -> INFO 1b7[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.970 UTC [gossip/state] deliverPayloads -> INFO 1b8[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.971 UTC [blocksProvider] DeliverBlocks -> INFO 1b9[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.971 UTC [blocksProvider] DeliverBlocks -> INFO 1ba[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.972 UTC [gossip/state] deliverPayloads -> INFO 1bb[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.972 UTC [gossip/state] deliverPayloads -> INFO 1bc[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.972 UTC [gossip/privdata] StoreBlock -> INFO 1bd[0m [mychannel] Validating block [28]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:00.972 UTC [committer/txvalidator] Validate -> INFO 1be[0m [mychannel] Validated block [28] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.007 UTC [kvledger] CommitWithPvtData -> INFO 1bf[0m [mychannel] Committed block [28] with 1153 transaction(s) in 35ms (state_validation=29ms block_commit=0ms state_commit=6ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.008 UTC [gossip/state] deliverPayloads -> INFO 1c0[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.022 UTC [blocksProvider] DeliverBlocks -> INFO 1c1[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.022 UTC [blocksProvider] DeliverBlocks -> INFO 1c2[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.023 UTC [blocksProvider] DeliverBlocks -> INFO 1c3[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.023 UTC [blocksProvider] DeliverBlocks -> INFO 1c4[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.023 UTC [blocksProvider] DeliverBlocks -> INFO 1c5[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.024 UTC [blocksProvider] DeliverBlocks -> INFO 1c6[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.024 UTC [blocksProvider] DeliverBlocks -> INFO 1c7[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.024 UTC [gossip/state] deliverPayloads -> INFO 1c8[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.025 UTC [gossip/state] deliverPayloads -> INFO 1c9[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.025 UTC [gossip/state] deliverPayloads -> INFO 1ca[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.025 UTC [gossip/privdata] StoreBlock -> INFO 1cb[0m [mychannel] Validating block [29]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.025 UTC [committer/txvalidator] Validate -> INFO 1cc[0m [mychannel] Validated block [29] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.066 UTC [kvledger] CommitWithPvtData -> INFO 1cd[0m [mychannel] Committed block [29] with 1127 transaction(s) in 41ms (state_validation=30ms block_commit=0ms state_commit=11ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.067 UTC [gossip/state] deliverPayloads -> INFO 1ce[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.088 UTC [blocksProvider] DeliverBlocks -> INFO 1cf[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.088 UTC [blocksProvider] DeliverBlocks -> INFO 1d0[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.089 UTC [blocksProvider] DeliverBlocks -> INFO 1d1[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.089 UTC [blocksProvider] DeliverBlocks -> INFO 1d2[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.090 UTC [blocksProvider] DeliverBlocks -> INFO 1d3[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.090 UTC [blocksProvider] DeliverBlocks -> INFO 1d4[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.090 UTC [blocksProvider] DeliverBlocks -> INFO 1d5[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.090 UTC [gossip/state] deliverPayloads -> INFO 1d6[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.091 UTC [gossip/state] deliverPayloads -> INFO 1d7[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.091 UTC [gossip/state] deliverPayloads -> INFO 1d8[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.091 UTC [gossip/privdata] StoreBlock -> INFO 1d9[0m [mychannel] Validating block [30]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.091 UTC [committer/txvalidator] Validate -> INFO 1da[0m [mychannel] Validated block [30] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.122 UTC [kvledger] CommitWithPvtData -> INFO 1db[0m [mychannel] Committed block [30] with 1204 transaction(s) in 30ms (state_validation=22ms block_commit=0ms state_commit=7ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.122 UTC [gossip/state] deliverPayloads -> INFO 1dc[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.158 UTC [blocksProvider] DeliverBlocks -> INFO 1dd[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.159 UTC [blocksProvider] DeliverBlocks -> INFO 1de[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.160 UTC [blocksProvider] DeliverBlocks -> INFO 1df[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.160 UTC [blocksProvider] DeliverBlocks -> INFO 1e0[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.161 UTC [blocksProvider] DeliverBlocks -> INFO 1e1[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.161 UTC [gossip/state] deliverPayloads -> INFO 1e2[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.162 UTC [gossip/state] deliverPayloads -> INFO 1e3[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.162 UTC [gossip/state] deliverPayloads -> INFO 1e4[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.162 UTC [gossip/privdata] StoreBlock -> INFO 1e5[0m [mychannel] Validating block [31]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.162 UTC [committer/txvalidator] Validate -> INFO 1e6[0m [mychannel] Validated block [31] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.163 UTC [blocksProvider] DeliverBlocks -> INFO 1e7[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.163 UTC [blocksProvider] DeliverBlocks -> INFO 1e8[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.215 UTC [kvledger] CommitWithPvtData -> INFO 1e9[0m [mychannel] Committed block [31] with 1211 transaction(s) in 53ms (state_validation=42ms block_commit=0ms state_commit=10ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.216 UTC [gossip/state] deliverPayloads -> INFO 1ea[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.225 UTC [blocksProvider] DeliverBlocks -> INFO 1eb[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.225 UTC [blocksProvider] DeliverBlocks -> INFO 1ec[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.226 UTC [blocksProvider] DeliverBlocks -> INFO 1ed[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.226 UTC [blocksProvider] DeliverBlocks -> INFO 1ee[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.226 UTC [blocksProvider] DeliverBlocks -> INFO 1ef[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.226 UTC [gossip/state] deliverPayloads -> INFO 1f0[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.227 UTC [blocksProvider] DeliverBlocks -> INFO 1f1[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.227 UTC [blocksProvider] DeliverBlocks -> INFO 1f2[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.228 UTC [gossip/state] deliverPayloads -> INFO 1f3[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.228 UTC [gossip/state] deliverPayloads -> INFO 1f4[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.228 UTC [gossip/privdata] StoreBlock -> INFO 1f5[0m [mychannel] Validating block [32]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.228 UTC [committer/txvalidator] Validate -> INFO 1f6[0m [mychannel] Validated block [32] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.253 UTC [kvledger] CommitWithPvtData -> INFO 1f7[0m [mychannel] Committed block [32] with 1139 transaction(s) in 25ms (state_validation=21ms block_commit=0ms state_commit=3ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.253 UTC [gossip/state] deliverPayloads -> INFO 1f8[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.299 UTC [blocksProvider] DeliverBlocks -> INFO 1f9[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.299 UTC [blocksProvider] DeliverBlocks -> INFO 1fa[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.300 UTC [blocksProvider] DeliverBlocks -> INFO 1fb[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.300 UTC [blocksProvider] DeliverBlocks -> INFO 1fc[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.300 UTC [blocksProvider] DeliverBlocks -> INFO 1fd[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.300 UTC [gossip/state] deliverPayloads -> INFO 1fe[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.301 UTC [blocksProvider] DeliverBlocks -> INFO 1ff[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.301 UTC [blocksProvider] DeliverBlocks -> INFO 200[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.301 UTC [gossip/state] deliverPayloads -> INFO 201[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.301 UTC [gossip/state] deliverPayloads -> INFO 202[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.301 UTC [gossip/privdata] StoreBlock -> INFO 203[0m [mychannel] Validating block [33]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.301 UTC [committer/txvalidator] Validate -> INFO 204[0m [mychannel] Validated block [33] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.353 UTC [kvledger] CommitWithPvtData -> INFO 205[0m [mychannel] Committed block [33] with 1292 transaction(s) in 51ms (state_validation=46ms block_commit=0ms state_commit=4ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.353 UTC [gossip/state] deliverPayloads -> INFO 206[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.369 UTC [blocksProvider] DeliverBlocks -> INFO 207[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.369 UTC [blocksProvider] DeliverBlocks -> INFO 208[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.370 UTC [blocksProvider] DeliverBlocks -> INFO 209[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.370 UTC [blocksProvider] DeliverBlocks -> INFO 20a[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.370 UTC [blocksProvider] DeliverBlocks -> INFO 20b[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.370 UTC [gossip/state] deliverPayloads -> INFO 20c[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.371 UTC [blocksProvider] DeliverBlocks -> INFO 20d[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.371 UTC [blocksProvider] DeliverBlocks -> INFO 20e[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.372 UTC [gossip/state] deliverPayloads -> INFO 20f[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.372 UTC [gossip/state] deliverPayloads -> INFO 210[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.372 UTC [gossip/privdata] StoreBlock -> INFO 211[0m [mychannel] Validating block [34]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.372 UTC [committer/txvalidator] Validate -> INFO 212[0m [mychannel] Validated block [34] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.400 UTC [kvledger] CommitWithPvtData -> INFO 213[0m [mychannel] Committed block [34] with 1239 transaction(s) in 28ms (state_validation=25ms block_commit=0ms state_commit=3ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.400 UTC [gossip/state] deliverPayloads -> INFO 214[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.443 UTC [blocksProvider] DeliverBlocks -> INFO 215[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.443 UTC [blocksProvider] DeliverBlocks -> INFO 216[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.448 UTC [blocksProvider] DeliverBlocks -> INFO 217[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.449 UTC [blocksProvider] DeliverBlocks -> INFO 218[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.449 UTC [blocksProvider] DeliverBlocks -> INFO 219[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.449 UTC [gossip/state] deliverPayloads -> INFO 21a[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.452 UTC [gossip/state] deliverPayloads -> INFO 21b[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.452 UTC [gossip/state] deliverPayloads -> INFO 21c[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.452 UTC [gossip/privdata] StoreBlock -> INFO 21d[0m [mychannel] Validating block [35]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.452 UTC [committer/txvalidator] Validate -> INFO 21e[0m [mychannel] Validated block [35] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.456 UTC [blocksProvider] DeliverBlocks -> INFO 21f[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.456 UTC [blocksProvider] DeliverBlocks -> INFO 220[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.537 UTC [blocksProvider] DeliverBlocks -> INFO 221[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.539 UTC [blocksProvider] DeliverBlocks -> INFO 222[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.540 UTC [blocksProvider] DeliverBlocks -> INFO 223[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.541 UTC [blocksProvider] DeliverBlocks -> INFO 224[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.542 UTC [kvledger] CommitWithPvtData -> INFO 225[0m [mychannel] Committed block [35] with 1221 transaction(s) in 89ms (state_validation=85ms block_commit=0ms state_commit=3ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.542 UTC [gossip/state] deliverPayloads -> INFO 226[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.542 UTC [blocksProvider] DeliverBlocks -> INFO 227[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.544 UTC [blocksProvider] DeliverBlocks -> INFO 228[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.544 UTC [blocksProvider] DeliverBlocks -> INFO 229[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.544 UTC [gossip/state] deliverPayloads -> INFO 22a[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.545 UTC [gossip/state] deliverPayloads -> INFO 22b[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.545 UTC [gossip/state] deliverPayloads -> INFO 22c[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.545 UTC [gossip/privdata] StoreBlock -> INFO 22d[0m [mychannel] Validating block [36]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.545 UTC [committer/txvalidator] Validate -> INFO 22e[0m [mychannel] Validated block [36] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.565 UTC [kvledger] CommitWithPvtData -> INFO 22f[0m [mychannel] Committed block [36] with 1183 transaction(s) in 19ms (state_validation=16ms block_commit=0ms state_commit=2ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.565 UTC [gossip/state] deliverPayloads -> INFO 230[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.575 UTC [blocksProvider] DeliverBlocks -> INFO 231[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.575 UTC [blocksProvider] DeliverBlocks -> INFO 232[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.576 UTC [blocksProvider] DeliverBlocks -> INFO 233[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.576 UTC [blocksProvider] DeliverBlocks -> INFO 234[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.577 UTC [blocksProvider] DeliverBlocks -> INFO 235[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.577 UTC [gossip/state] deliverPayloads -> INFO 236[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.578 UTC [blocksProvider] DeliverBlocks -> INFO 237[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.578 UTC [blocksProvider] DeliverBlocks -> INFO 238[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.578 UTC [gossip/state] deliverPayloads -> INFO 239[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.578 UTC [gossip/state] deliverPayloads -> INFO 23a[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.578 UTC [gossip/privdata] StoreBlock -> INFO 23b[0m [mychannel] Validating block [37]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.578 UTC [committer/txvalidator] Validate -> INFO 23c[0m [mychannel] Validated block [37] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.630 UTC [kvledger] CommitWithPvtData -> INFO 23d[0m [mychannel] Committed block [37] with 1309 transaction(s) in 51ms (state_validation=47ms block_commit=0ms state_commit=4ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.630 UTC [gossip/state] deliverPayloads -> INFO 23e[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.638 UTC [blocksProvider] DeliverBlocks -> INFO 23f[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.641 UTC [blocksProvider] DeliverBlocks -> INFO 240[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.642 UTC [blocksProvider] DeliverBlocks -> INFO 241[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.642 UTC [blocksProvider] DeliverBlocks -> INFO 242[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.643 UTC [blocksProvider] DeliverBlocks -> INFO 243[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.643 UTC [blocksProvider] DeliverBlocks -> INFO 244[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.644 UTC [blocksProvider] DeliverBlocks -> INFO 245[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.644 UTC [gossip/state] deliverPayloads -> INFO 246[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.645 UTC [gossip/state] deliverPayloads -> INFO 247[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.652 UTC [gossip/state] deliverPayloads -> INFO 248[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.652 UTC [gossip/privdata] StoreBlock -> INFO 249[0m [mychannel] Validating block [38]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.653 UTC [committer/txvalidator] Validate -> INFO 24a[0m [mychannel] Validated block [38] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.686 UTC [kvledger] CommitWithPvtData -> INFO 24b[0m [mychannel] Committed block [38] with 1101 transaction(s) in 33ms (state_validation=30ms block_commit=0ms state_commit=2ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.686 UTC [gossip/state] deliverPayloads -> INFO 24c[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.703 UTC [blocksProvider] DeliverBlocks -> INFO 24d[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.704 UTC [blocksProvider] DeliverBlocks -> INFO 24e[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.704 UTC [blocksProvider] DeliverBlocks -> INFO 24f[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.704 UTC [blocksProvider] DeliverBlocks -> INFO 250[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.705 UTC [blocksProvider] DeliverBlocks -> INFO 251[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.705 UTC [gossip/state] deliverPayloads -> INFO 252[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.706 UTC [blocksProvider] DeliverBlocks -> INFO 253[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.706 UTC [blocksProvider] DeliverBlocks -> INFO 254[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.706 UTC [gossip/state] deliverPayloads -> INFO 255[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.706 UTC [gossip/state] deliverPayloads -> INFO 256[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.706 UTC [gossip/privdata] StoreBlock -> INFO 257[0m [mychannel] Validating block [39]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.706 UTC [committer/txvalidator] Validate -> INFO 258[0m [mychannel] Validated block [39] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.732 UTC [kvledger] CommitWithPvtData -> INFO 259[0m [mychannel] Committed block [39] with 1131 transaction(s) in 25ms (state_validation=22ms block_commit=0ms state_commit=2ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.732 UTC [gossip/state] deliverPayloads -> INFO 25a[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.775 UTC [blocksProvider] DeliverBlocks -> INFO 25b[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.775 UTC [blocksProvider] DeliverBlocks -> INFO 25c[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.776 UTC [blocksProvider] DeliverBlocks -> INFO 25d[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.776 UTC [blocksProvider] DeliverBlocks -> INFO 25e[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.776 UTC [blocksProvider] DeliverBlocks -> INFO 25f[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.776 UTC [gossip/state] deliverPayloads -> INFO 260[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.777 UTC [blocksProvider] DeliverBlocks -> INFO 261[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.777 UTC [blocksProvider] DeliverBlocks -> INFO 262[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.777 UTC [gossip/state] deliverPayloads -> INFO 263[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.777 UTC [gossip/state] deliverPayloads -> INFO 264[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.777 UTC [gossip/privdata] StoreBlock -> INFO 265[0m [mychannel] Validating block [40]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.777 UTC [committer/txvalidator] Validate -> INFO 266[0m [mychannel] Validated block [40] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.820 UTC [kvledger] CommitWithPvtData -> INFO 267[0m [mychannel] Committed block [40] with 1286 transaction(s) in 43ms (state_validation=20ms block_commit=0ms state_commit=23ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.821 UTC [gossip/state] deliverPayloads -> INFO 268[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.843 UTC [blocksProvider] DeliverBlocks -> INFO 269[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.843 UTC [blocksProvider] DeliverBlocks -> INFO 26a[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.844 UTC [blocksProvider] DeliverBlocks -> INFO 26b[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.844 UTC [blocksProvider] DeliverBlocks -> INFO 26c[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.844 UTC [blocksProvider] DeliverBlocks -> INFO 26d[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.844 UTC [gossip/state] deliverPayloads -> INFO 26e[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.845 UTC [blocksProvider] DeliverBlocks -> INFO 26f[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.845 UTC [blocksProvider] DeliverBlocks -> INFO 270[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.854 UTC [gossip/state] deliverPayloads -> INFO 271[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.854 UTC [gossip/state] deliverPayloads -> INFO 272[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.854 UTC [gossip/privdata] StoreBlock -> INFO 273[0m [mychannel] Validating block [41]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.854 UTC [committer/txvalidator] Validate -> INFO 274[0m [mychannel] Validated block [41] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.878 UTC [kvledger] CommitWithPvtData -> INFO 275[0m [mychannel] Committed block [41] with 1129 transaction(s) in 24ms (state_validation=20ms block_commit=0ms state_commit=4ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.878 UTC [gossip/state] deliverPayloads -> INFO 276[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.922 UTC [blocksProvider] DeliverBlocks -> INFO 277[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.922 UTC [blocksProvider] DeliverBlocks -> INFO 278[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.923 UTC [blocksProvider] DeliverBlocks -> INFO 279[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.923 UTC [blocksProvider] DeliverBlocks -> INFO 27a[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.923 UTC [blocksProvider] DeliverBlocks -> INFO 27b[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.923 UTC [gossip/state] deliverPayloads -> INFO 27c[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.924 UTC [blocksProvider] DeliverBlocks -> INFO 27d[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.924 UTC [blocksProvider] DeliverBlocks -> INFO 27e[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.924 UTC [gossip/state] deliverPayloads -> INFO 27f[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.924 UTC [gossip/state] deliverPayloads -> INFO 280[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.924 UTC [gossip/privdata] StoreBlock -> INFO 281[0m [mychannel] Validating block [42]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.924 UTC [committer/txvalidator] Validate -> INFO 282[0m [mychannel] Validated block [42] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.952 UTC [kvledger] CommitWithPvtData -> INFO 283[0m [mychannel] Committed block [42] with 1283 transaction(s) in 27ms (state_validation=24ms block_commit=0ms state_commit=3ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.952 UTC [gossip/state] deliverPayloads -> INFO 284[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.982 UTC [blocksProvider] DeliverBlocks -> INFO 285[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.982 UTC [blocksProvider] DeliverBlocks -> INFO 286[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.984 UTC [blocksProvider] DeliverBlocks -> INFO 287[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.984 UTC [blocksProvider] DeliverBlocks -> INFO 288[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.984 UTC [blocksProvider] DeliverBlocks -> INFO 289[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.986 UTC [gossip/state] deliverPayloads -> INFO 28a[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.987 UTC [blocksProvider] DeliverBlocks -> INFO 28b[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.987 UTC [blocksProvider] DeliverBlocks -> INFO 28c[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.987 UTC [gossip/state] deliverPayloads -> INFO 28d[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.987 UTC [gossip/state] deliverPayloads -> INFO 28e[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.987 UTC [gossip/privdata] StoreBlock -> INFO 28f[0m [mychannel] Validating block [43]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:01.987 UTC [committer/txvalidator] Validate -> INFO 290[0m [mychannel] Validated block [43] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.057 UTC [blocksProvider] DeliverBlocks -> INFO 291[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.057 UTC [blocksProvider] DeliverBlocks -> INFO 292[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.058 UTC [kvledger] CommitWithPvtData -> INFO 293[0m [mychannel] Committed block [43] with 1189 transaction(s) in 70ms (state_validation=67ms block_commit=0ms state_commit=3ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.059 UTC [gossip/state] deliverPayloads -> INFO 294[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.059 UTC [blocksProvider] DeliverBlocks -> INFO 295[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.059 UTC [blocksProvider] DeliverBlocks -> INFO 296[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.059 UTC [blocksProvider] DeliverBlocks -> INFO 297[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.059 UTC [gossip/state] deliverPayloads -> INFO 298[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.060 UTC [blocksProvider] DeliverBlocks -> INFO 299[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.060 UTC [blocksProvider] DeliverBlocks -> INFO 29a[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.061 UTC [gossip/state] deliverPayloads -> INFO 29b[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.061 UTC [gossip/state] deliverPayloads -> INFO 29c[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.061 UTC [gossip/privdata] StoreBlock -> INFO 29d[0m [mychannel] Validating block [44]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.061 UTC [committer/txvalidator] Validate -> INFO 29e[0m [mychannel] Validated block [44] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.095 UTC [kvledger] CommitWithPvtData -> INFO 29f[0m [mychannel] Committed block [44] with 1274 transaction(s) in 34ms (state_validation=30ms block_commit=0ms state_commit=3ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.095 UTC [gossip/state] deliverPayloads -> INFO 2a0[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.119 UTC [blocksProvider] DeliverBlocks -> INFO 2a1[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.119 UTC [blocksProvider] DeliverBlocks -> INFO 2a2[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.121 UTC [blocksProvider] DeliverBlocks -> INFO 2a3[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.121 UTC [blocksProvider] DeliverBlocks -> INFO 2a4[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.121 UTC [blocksProvider] DeliverBlocks -> INFO 2a5[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.121 UTC [gossip/state] deliverPayloads -> INFO 2a6[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.123 UTC [blocksProvider] DeliverBlocks -> INFO 2a7[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.123 UTC [blocksProvider] DeliverBlocks -> INFO 2a8[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.124 UTC [gossip/state] deliverPayloads -> INFO 2a9[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.124 UTC [gossip/state] deliverPayloads -> INFO 2aa[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.124 UTC [gossip/privdata] StoreBlock -> INFO 2ab[0m [mychannel] Validating block [45]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.124 UTC [committer/txvalidator] Validate -> INFO 2ac[0m [mychannel] Validated block [45] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.193 UTC [blocksProvider] DeliverBlocks -> INFO 2ad[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.193 UTC [blocksProvider] DeliverBlocks -> INFO 2ae[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.193 UTC [kvledger] CommitWithPvtData -> INFO 2af[0m [mychannel] Committed block [45] with 1010 transaction(s) in 69ms (state_validation=61ms block_commit=0ms state_commit=7ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.193 UTC [gossip/state] deliverPayloads -> INFO 2b0[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.195 UTC [blocksProvider] DeliverBlocks -> INFO 2b1[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.195 UTC [blocksProvider] DeliverBlocks -> INFO 2b2[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.195 UTC [blocksProvider] DeliverBlocks -> INFO 2b3[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.196 UTC [gossip/state] deliverPayloads -> INFO 2b4[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.197 UTC [blocksProvider] DeliverBlocks -> INFO 2b5[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.198 UTC [blocksProvider] DeliverBlocks -> INFO 2b6[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.205 UTC [gossip/state] deliverPayloads -> INFO 2b7[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.206 UTC [gossip/state] deliverPayloads -> INFO 2b8[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.206 UTC [gossip/privdata] StoreBlock -> INFO 2b9[0m [mychannel] Validating block [46]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.206 UTC [committer/txvalidator] Validate -> INFO 2ba[0m [mychannel] Validated block [46] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.276 UTC [blocksProvider] DeliverBlocks -> INFO 2bb[0m qiji: blockprovider recv finish
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.276 UTC [blocksProvider] DeliverBlocks -> INFO 2bc[0m qiji: blockprovider 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.276 UTC [blocksProvider] DeliverBlocks -> INFO 2bd[0m qiji: blockprovider 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.276 UTC [blocksProvider] DeliverBlocks -> INFO 2be[0m qiji: blockprovider 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.277 UTC [blocksProvider] DeliverBlocks -> INFO 2bf[0m qiji: blockprovider 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.277 UTC [blocksProvider] DeliverBlocks -> INFO 2c0[0m qiji: blockprovider 5
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.277 UTC [blocksProvider] DeliverBlocks -> INFO 2c1[0m qiji: blockprovider recv
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.294 UTC [kvledger] CommitWithPvtData -> INFO 2c2[0m [mychannel] Committed block [46] with 1294 transaction(s) in 87ms (state_validation=82ms block_commit=0ms state_commit=4ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.294 UTC [gossip/state] deliverPayloads -> INFO 2c3[0m qiji: deliverPayloads 4
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.294 UTC [gossip/state] deliverPayloads -> INFO 2c4[0m qiji: deliverPayloads 1
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.297 UTC [gossip/state] deliverPayloads -> INFO 2c5[0m qiji: deliverPayloads 2
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.297 UTC [gossip/state] deliverPayloads -> INFO 2c6[0m qiji: deliverPayloads 3
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.297 UTC [gossip/privdata] StoreBlock -> INFO 2c7[0m [mychannel] Validating block [47]
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.297 UTC [committer/txvalidator] Validate -> INFO 2c8[0m [mychannel] Validated block [47] in 0ms
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.313 UTC [kvledger] CommitWithPvtData -> INFO 2c9[0m [mychannel] Committed block [47] with 968 transaction(s) in 16ms (state_validation=14ms block_commit=0ms state_commit=1ms)
+fabric_peer5.1.7gdar3bszgq6@heming-rdma19    | [34m2021-08-20 07:05:02.313 UTC [gossip/state] deliverPayloads -> INFO 2ca[0m qiji: deliverPayloads 4

@@ -1,0 +1,504 @@
+latency conn=2 client=1 orderer_client=2
+peer0
+endorse: 
+ave: 1.0132272501243162
+50% tail: 1
+90% tail: 1
+95% tail: 1
+99% tail: 2
+committed: 
+ave: 24.65432098765432
+50% tail: 25
+90% tail: 33
+95% tail: 38
+99% tail: 45
+peer1
+endorse: 
+ave: 1.1732851985559567
+50% tail: 1
+90% tail: 1
+95% tail: 1
+99% tail: 2
+committed: 
+ave: 29.395061728395063
+50% tail: 29
+90% tail: 44
+95% tail: 48
+99% tail: 49
+peer2
+endorse: 
+ave: 1.0905570449806374
+50% tail: 1
+90% tail: 1
+95% tail: 1
+99% tail: 1
+committed: 
+ave: 21.65432098765432
+50% tail: 22
+90% tail: 34
+95% tail: 36
+99% tail: 42
+peer3
+endorse: 
+ave: 1.0955439582496989
+50% tail: 1
+90% tail: 1
+95% tail: 1
+99% tail: 2
+committed: 
+ave: 23.469135802469136
+50% tail: 24
+90% tail: 33
+95% tail: 37
+99% tail: 43
+peer4
+endorse: 
+ave: 1.1133232780291604
+50% tail: 1
+90% tail: 1
+95% tail: 1
+99% tail: 2
+committed: 
+ave: 24.28395061728395
+50% tail: 25
+90% tail: 32
+95% tail: 33
+99% tail: 39
+tps: 
+[11008.0, 9494.0, 9242.0, 13612.0, 7998.0, 11568.0, 10614.0, 10496.0, 9666.0]
+latency conn=2 client=2 orderer_client=2
+peer0
+endorse: 
+ave: 0.9993972272453285
+50% tail: 1
+90% tail: 1
+95% tail: 1
+99% tail: 1
+committed: 
+ave: 26.075949367088608
+50% tail: 26
+90% tail: 36
+95% tail: 39
+99% tail: 47
+peer1
+endorse: 
+ave: 1.2726819043816748
+50% tail: 1
+90% tail: 2
+95% tail: 2
+99% tail: 3
+committed: 
+ave: 32.51898734177215
+50% tail: 32
+90% tail: 47
+95% tail: 50
+99% tail: 64
+peer2
+endorse: 
+ave: 1.1269337564458548
+50% tail: 1
+90% tail: 1
+95% tail: 1
+99% tail: 2
+committed: 
+ave: 22.746835443037973
+50% tail: 23
+90% tail: 32
+95% tail: 39
+99% tail: 45
+peer3
+endorse: 
+ave: 1.0926092609260927
+50% tail: 1
+90% tail: 1
+95% tail: 1
+99% tail: 2
+committed: 
+ave: 23.962025316455698
+50% tail: 23
+90% tail: 37
+95% tail: 40
+99% tail: 47
+peer4
+endorse: 
+ave: 1.099788965933072
+50% tail: 1
+90% tail: 1
+95% tail: 1
+99% tail: 1
+committed: 
+ave: 25.189873417721518
+50% tail: 25
+90% tail: 33
+95% tail: 38
+99% tail: 47
+tps: 
+[10528.0, 11024.0, 9450.0, 10796.0, 11428.0, 12132.0, 8116.0, 10148.0, 12450.0]
+latency conn=4 client=2 orderer_client=4
+peer0
+endorse: 
+ave: 1.0165380374862183
+50% tail: 1
+90% tail: 1
+95% tail: 1
+99% tail: 2
+committed: 
+ave: 36.083333333333336
+50% tail: 39
+90% tail: 50
+95% tail: 53
+99% tail: 62
+peer1
+endorse: 
+ave: 1.3397607040442994
+50% tail: 1
+90% tail: 2
+95% tail: 2
+99% tail: 3
+committed: 
+ave: 49.125
+50% tail: 49
+90% tail: 75
+95% tail: 91
+99% tail: 102
+peer2
+endorse: 
+ave: 1.8001788553259142
+50% tail: 1
+90% tail: 3
+95% tail: 4
+99% tail: 7
+committed: 
+ave: 32.734693877551024
+50% tail: 34
+90% tail: 51
+95% tail: 53
+99% tail: 63
+peer3
+endorse: 
+ave: 1.0976352379985792
+50% tail: 1
+90% tail: 1
+95% tail: 1
+99% tail: 2
+committed: 
+ave: 36.583333333333336
+50% tail: 37
+90% tail: 53
+95% tail: 58
+99% tail: 65
+peer4
+endorse: 
+ave: 1.1257
+50% tail: 1
+90% tail: 1
+95% tail: 1
+99% tail: 2
+committed: 
+ave: 39.1875
+50% tail: 43
+90% tail: 55
+95% tail: 56
+99% tail: 60
+tps: 
+[17098.0, 16600.0, 13862.0, 19206.0, 19198.0]
+latency conn=4 client=4 orderer_client=4
+peer0
+endorse: 
+ave: 1.0922227797290516
+50% tail: 1
+90% tail: 1
+95% tail: 2
+99% tail: 2
+committed: 
+ave: 37.69387755102041
+50% tail: 41
+90% tail: 51
+95% tail: 56
+99% tail: 64
+peer1
+endorse: 
+ave: 1.6933
+50% tail: 1
+90% tail: 2
+95% tail: 3
+99% tail: 3
+committed: 
+ave: 45.61224489795919
+50% tail: 46
+90% tail: 71
+95% tail: 79
+99% tail: 82
+peer2
+endorse: 
+ave: 2.66726780883679
+50% tail: 2
+90% tail: 6
+95% tail: 7
+99% tail: 11
+committed: 
+ave: 29.612244897959183
+50% tail: 31
+90% tail: 45
+95% tail: 49
+99% tail: 67
+peer3
+endorse: 
+ave: 1.2047345483359746
+50% tail: 1
+90% tail: 2
+95% tail: 2
+99% tail: 2
+committed: 
+ave: 38.06122448979592
+50% tail: 43
+90% tail: 53
+95% tail: 54
+99% tail: 56
+peer4
+endorse: 
+ave: 1.1991971901655796
+50% tail: 1
+90% tail: 1
+95% tail: 2
+99% tail: 2
+committed: 
+ave: 36.02040816326531
+50% tail: 39
+90% tail: 54
+95% tail: 55
+99% tail: 60
+tps: 
+[16936.0, 16344.0, 14644.0, 19098.0, 18592.0]
+latency conn=8 client=4 orderer_client=8
+peer0
+endorse: 
+ave: 1.2714214463840399
+50% tail: 1
+90% tail: 2
+95% tail: 2
+99% tail: 3
+committed: 
+ave: 42.84615384615385
+50% tail: 44
+90% tail: 67
+95% tail: 70
+99% tail: 91
+peer1
+endorse: 
+ave: 2.2622253720765415
+50% tail: 2
+90% tail: 4
+95% tail: 4
+99% tail: 5
+committed: 
+ave: 50.1025641025641
+50% tail: 57
+90% tail: 81
+95% tail: 90
+99% tail: 98
+peer2
+endorse: 
+ave: 5.142786267116492
+50% tail: 4
+90% tail: 10
+95% tail: 12
+99% tail: 16
+committed: 
+ave: 35.282051282051285
+50% tail: 34
+90% tail: 54
+95% tail: 58
+99% tail: 89
+peer3
+endorse: 
+ave: 1.4113609231993633
+50% tail: 1
+90% tail: 2
+95% tail: 3
+99% tail: 4
+committed: 
+ave: 42.256410256410255
+50% tail: 43
+90% tail: 67
+95% tail: 70
+99% tail: 84
+peer4
+endorse: 
+ave: 1.3531829573934837
+50% tail: 1
+90% tail: 2
+95% tail: 2
+99% tail: 3
+committed: 
+ave: 43.05128205128205
+50% tail: 44
+90% tail: 77
+95% tail: 81
+99% tail: 93
+tps: 
+[23878.0, 21000.0, 15000.0, 18000.0]
+latency conn=8 client=8 orderer_client=8
+peer0
+endorse: 
+ave: 1.4396937456497962
+50% tail: 1
+90% tail: 2
+95% tail: 3
+99% tail: 7
+committed: 
+ave: 44.666666666666664
+50% tail: 48
+90% tail: 66
+95% tail: 71
+99% tail: 107
+peer1
+endorse: 
+ave: 2.988615937687238
+50% tail: 2
+90% tail: 6
+95% tail: 7
+99% tail: 8
+committed: 
+ave: 52.743589743589745
+50% tail: 55
+90% tail: 84
+95% tail: 99
+99% tail: 109
+peer2
+endorse: 
+ave: 9.114986430797066
+50% tail: 7
+90% tail: 17
+95% tail: 21
+99% tail: 30
+committed: 
+ave: 34.794871794871796
+50% tail: 34
+90% tail: 57
+95% tail: 59
+99% tail: 90
+peer3
+endorse: 
+ave: 1.5990561400058991
+50% tail: 1
+90% tail: 3
+95% tail: 4
+99% tail: 6
+committed: 
+ave: 39.256410256410255
+50% tail: 44
+90% tail: 60
+95% tail: 68
+99% tail: 76
+peer4
+endorse: 
+ave: 1.5328035859820701
+50% tail: 1
+90% tail: 2
+95% tail: 3
+99% tail: 5
+committed: 
+ave: 41.794871794871796
+50% tail: 43
+90% tail: 70
+95% tail: 74
+99% tail: 74
+tps: 
+[23744.0, 21000.0, 24000.0, 27000.0]
+latency conn=16 client=8 orderer_client=16
+peer0
+endorse: 
+ave: 1.617313915857605
+50% tail: 1
+90% tail: 3
+95% tail: 5
+99% tail: 7
+committed: 
+ave: 41.1025641025641
+50% tail: 43
+90% tail: 72
+95% tail: 77
+99% tail: 92
+peer1
+endorse: 
+ave: 3.695217130278167
+50% tail: 2
+90% tail: 8
+95% tail: 10
+99% tail: 15
+committed: 
+ave: 49.92307692307692
+50% tail: 46
+90% tail: 91
+95% tail: 118
+99% tail: 119
+peer2
+endorse: 
+ave: 16.07137816312128
+50% tail: 13
+90% tail: 32
+95% tail: 39
+99% tail: 51
+committed: 
+ave: 35.02564102564103
+50% tail: 35
+90% tail: 56
+95% tail: 72
+99% tail: 77
+peer3
+endorse: 
+ave: 1.682501503307276
+50% tail: 1
+90% tail: 3
+95% tail: 4
+99% tail: 6
+committed: 
+ave: 38.30769230769231
+50% tail: 41
+90% tail: 58
+95% tail: 62
+99% tail: 103
+peer4
+endorse: 
+ave: 1.7846108721157607
+50% tail: 1
+90% tail: 3
+95% tail: 4
+99% tail: 8
+committed: 
+ave: 39.1025641025641
+50% tail: 38
+90% tail: 62
+95% tail: 68
+99% tail: 108
+tps: 
+[27000.0, 18000.0, 18000.0]
+latency conn=16 client=16 orderer_client=16
+peer0
+endorse: 
+ave: 1.8247991967871486
+committed: 
+ave: 39.666666666666664
+peer1
+endorse: 
+ave: 4.179984019176987
+committed: 
+ave: 51.07692307692308
+peer2
+endorse: 
+ave: 24.092388029724845
+committed: 
+ave: 37.58974358974359
+peer3
+endorse: 
+ave: 2.370840411711802
+committed: 
+ave: 38.0
+peer4
+endorse: 
+ave: 2.1726911618669313
+committed: 
+ave: 38.53846153846154
+tps: 
+[24000.0, 12000.0, 18000.0, 39000.0]

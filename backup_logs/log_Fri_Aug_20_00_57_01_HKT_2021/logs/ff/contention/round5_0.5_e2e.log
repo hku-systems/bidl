@@ -1,0 +1,9 @@
+e2e
+create 50000 accounts
+panic: close of closed channel
+
+goroutine 6588 [running]:
+tape/pkg/infra.(*Observer).Start.func1(0xc0050982a0, 0xc00ab36000, 0xc000452010, 0xc350, 0xc0000d0660)
+	/root/pkg/infra/observer.go:54 +0x32c
+created by tape/pkg/infra.(*Observer).Start
+	/root/pkg/infra/observer.go:44 +0xe9

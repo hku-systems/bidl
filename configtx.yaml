@@ -179,7 +179,7 @@ Orderer: &OrdererDefaults
         - fabric_orderer:7050
 
     # Batch Timeout: The amount of time to wait before creating a batch
-    BatchTimeout: 1s
+    BatchTimeout: 50ms
 
     # Batch Size: Controls the number of messages batched into a block
     BatchSize:

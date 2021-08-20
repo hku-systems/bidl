@@ -87,7 +87,7 @@ func (t *SmallbankChaincode) CreateAccountRandom(stub shim.ChaincodeStubInterfac
 		return errormsg("Can not create duplicated account")
 	}
 
-	checking, errcheck := strconv.Atoi(args[2])
+	_, errcheck := strconv.Atoi(args[2])
 	if errcheck != nil {
 		return errormsg(ERROR_WRONG_ARGS + " create_account, checking balance should be integer")
 	}

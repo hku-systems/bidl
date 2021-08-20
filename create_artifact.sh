@@ -17,7 +17,7 @@ configtxgen -configPath ./ -outputAnchorPeersUpdate ./channel-artifacts/anchor_p
 
 cp organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/*sk organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/priv_sk
 
-tar -czvf data.tar.gz organizations channel-artifacts scripts chaincode > /dev/null
+tar -czvf data.tar.gz organizations channel-artifacts scripts chaincode tape.yaml > /dev/null
 
 for host in ${hosts[@]}; do 
     ssh $USER@$host "rm -rf ${SYS}_exp; mkdir ${SYS}_exp"

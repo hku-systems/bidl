@@ -1,0 +1,187 @@
+# Definition of nodes
+peer0: &peer0
+  addr: fabric_peer0:7051
+  #tls_ca_cert: ./organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp/tlscacerts/tlsca.org1.example.com-cert.pem
+
+peer1: &peer1
+  addr: fabric_peer1:7051
+  #tls_ca_cert: ./organizations/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/msp/tlscacerts/tlsca.org1.example.com-cert.pem
+
+peer2: &peer2
+  addr: fabric_peer2:7051
+  #tls_ca_cert: ./organizations/peerOrganizations/org1.example.com/peers/peer2.org1.example.com/msp/tlscacerts/tlsca.org1.example.com-cert.pem
+
+peer3: &peer3
+  addr: fabric_peer3:7051
+  #tls_ca_cert: ./organizations/peerOrganizations/org1.example.com/peers/peer3.org1.example.com/msp/tlscacerts/tlsca.org1.example.com-cert.pem
+
+peer4: &peer4
+  addr: fabric_peer4:7051
+peer5: &peer5
+  addr: fabric_peer5:7051
+peer6: &peer6
+  addr: fabric_peer6:7051
+peer7: &peer7
+  addr: fabric_peer7:7051
+peer8: &peer8
+  addr: fabric_peer8:7051
+peer9: &peer9
+  addr: fabric_peer9:7051
+peer10: &peer10
+  addr: fabric_peer10:7051
+peer11: &peer11
+  addr: fabric_peer11:7051
+peer12: &peer12
+  addr: fabric_peer12:7051
+peer13: &peer13
+  addr: fabric_peer13:7051
+peer14: &peer14
+  addr: fabric_peer14:7051
+peer15: &peer15
+  addr: fabric_peer15:7051
+peer16: &peer16
+  addr: fabric_peer16:7051
+peer17: &peer17
+  addr: fabric_peer17:7051
+peer18: &peer18
+  addr: fabric_peer18:7051
+peer19: &peer19
+  addr: fabric_peer19:7051
+peer20: &peer20
+  addr: fabric_peer20:7051
+peer21: &peer21
+  addr: fabric_peer21:7051
+peer22: &peer22
+  addr: fabric_peer22:7051
+peer23: &peer23
+  addr: fabric_peer23:7051
+peer24: &peer24
+  addr: fabric_peer24:7051
+peer25: &peer25
+  addr: fabric_peer25:7051
+peer26: &peer26
+  addr: fabric_peer26:7051
+peer27: &peer27
+  addr: fabric_peer27:7051
+peer28: &peer28
+  addr: fabric_peer28:7051
+peer29: &peer29
+  addr: fabric_peer29:7051
+peer30: &peer30
+  addr: fabric_peer30:7051
+peer31: &peer31
+  addr: fabric_peer31:7051
+peer32: &peer32
+  addr: fabric_peer32:7051
+peer33: &peer33
+  addr: fabric_peer33:7051
+peer34: &peer34
+  addr: fabric_peer34:7051
+peer35: &peer35
+  addr: fabric_peer35:7051
+peer36: &peer36
+  addr: fabric_peer36:7051
+peer37: &peer37
+  addr: fabric_peer37:7051
+peer38: &peer38
+  addr: fabric_peer38:7051
+peer39: &peer39
+  addr: fabric_peer39:7051
+peer40: &peer40
+  addr: fabric_peer40:7051
+peer41: &peer41
+  addr: fabric_peer41:7051
+peer42: &peer42
+  addr: fabric_peer42:7051
+peer43: &peer43
+  addr: fabric_peer43:7051
+peer44: &peer44
+  addr: fabric_peer44:7051
+peer45: &peer45
+  addr: fabric_peer45:7051
+peer46: &peer46
+  addr: fabric_peer46:7051
+peer47: &peer47
+  addr: fabric_peer47:7051
+peer48: &peer48
+  addr: fabric_peer48:7051
+peer49: &peer49
+  addr: fabric_peer49:7051
+
+orderer1: &orderer1
+  addr: fabric_orderer:7050
+  #tls_ca_cert: ./organizations/ordererOrganizations/example.com/msp/tlscacerts/tlsca.example.com-cert.pem
+
+# tape will divide endorsers into $endorser_groups groups. 
+# For example, if we have 9 endorsers and set endorser_groups=3, then the first
+# three endorsers belong to group_1, the middle endorsers belong to group_2, the
+# last three endorsers belong to group_3. 
+endorser_groups: 5
+endorsers:
+  - *peer0
+  - *peer1
+  - *peer2
+  - *peer3
+  - *peer4
+  # - *peer5
+  # - *peer6
+  # - *peer7
+  # - *peer8
+  # - *peer9
+  # - *peer10
+  # - *peer11
+  # - *peer12
+  # - *peer13
+  # - *peer14
+  # - *peer15
+  # - *peer16
+  # - *peer17
+  # - *peer18
+  # - *peer19
+  # - *peer20
+  # # - *peer21
+  # - *peer22
+  # - *peer23
+  # - *peer24
+  # - *peer25
+  # - *peer26
+  # - *peer27
+  # - *peer28
+  # - *peer29
+  # - *peer30
+  # - *peer31
+  # - *peer32
+  # - *peer33
+  # - *peer34
+  # - *peer35
+  # - *peer36
+  # - *peer37
+  # - *peer38
+  # - *peer39
+  # - *peer40
+  # - *peer41
+  # - *peer42
+  # - *peer43
+  # - *peer44
+  # - *peer45
+  # - *peer46
+  # - *peer47
+  # - *peer48
+committer: *peer5
+orderer: *orderer1
+
+# Invocation configs
+channel: mychannel
+chaincode: smallbank
+# args:
+num_of_conn: 2
+client_per_conn: 1
+threads: 10
+orderer_client: 200
+mspid: Org1MSP
+private_key: ./organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/priv_sk
+sign_cert: ./organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/signcerts/User1@org1.example.com-cert.pem
+
+check_txid: true # if false, must disable txid check in peer and orderer.  
+check_rwset: false # if true, output rwset for each transaction
+e2e: false  # end-to-end test

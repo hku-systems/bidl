@@ -21,6 +21,7 @@ docker save -o hlf_tools_${tag}.tar hyperledger/fabric-tools:$tag
 
 for host in ${hosts[@]}; do
     echo "###  $host  ###"
+    scp clean.sh $USER@$host:~/
     scp hlf_orderer_${tag}.tar $USER@$host:~/
     scp hlf_peer_${tag}.tar $USER@$host:~/
     scp hlf_tools_${tag}.tar $USER@$host:~/

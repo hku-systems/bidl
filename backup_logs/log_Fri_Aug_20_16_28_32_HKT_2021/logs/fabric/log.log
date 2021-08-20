@@ -1,0 +1,84 @@
+latency conn=1 client=1 orderer_client=1
+peer0
+endorse: 
+ave: 1.365606501454801
+committed: 
+ave: 85.64827586206897
+peer1
+endorse: 
+ave: 1.6383085074477657
+committed: 
+ave: 90.60344827586206
+peer2
+endorse: 
+ave: 1.183841218925421
+committed: 
+ave: 46.735849056603776
+peer3
+endorse: 
+ave: 1.4067373050779688
+committed: 
+ave: 46.66981132075472
+peer4
+endorse: 
+ave: 1.507606642139803
+committed: 
+ave: 98.01886792452831
+tps: 
+[4166.0, 4180.0, 4304.0, 4246.0, 4488.0, 3980.0, 2418.0, 2394.0, 2328.0, 2370.0, 2568.0, 2362.0, 2944.0, 3054.0, 2756.0, 1944.0, 2866.0, 2524.0, 2982.0, 3406.0, 2556.0, 2826.0, 2396.0, 3838.0, 4358.0, 4336.0, 5862.0, 4384.0, 4336.0]
+latency conn=2 client=2 orderer_client=2
+peer0
+endorse: 
+ave: 1.125414198212672
+committed: 
+ave: 184.73333333333332
+peer1
+endorse: 
+ave: 1.8918945601737585
+committed: 
+ave: 195.15384615384616
+peer2
+endorse: 
+ave: 1.2580352644836272
+committed: 
+ave: 68.8256880733945
+peer3
+endorse: 
+ave: 1.2440344896731501
+committed: 
+ave: 87.90825688073394
+peer4
+endorse: 
+ave: 1.252195608782435
+committed: 
+ave: 189.47368421052633
+tps: 
+[5186.0, 3680.0, 3694.0, 3846.0, 5964.0, 4684.0, 4844.0, 7644.0, 6582.0, 7790.0, 4948.0, 3852.0, 4056.0, 7816.0, 6014.0, 7558.0, 6904.0]
+latency conn=3 client=3 orderer_client=3
+peer0
+endorse: 
+ave: 1.3079867056098298
+committed: 
+ave: 183.40625
+peer1
+endorse: 
+ave: 2.3524711453092633
+committed: 
+ave: 215.75
+peer2
+endorse: 
+ave: 2.324105060338708
+committed: 
+ave: 84.13414634146342
+peer3
+endorse: 
+ave: 1.4744496463791215
+committed: 
+ave: 114.8048780487805
+peer4
+endorse: 
+ave: 1.797032168110746
+committed: 
+ave: 237.35384615384615
+tps: 
+[8188.0, 9002.0, 9188.0, 5394.0, 5144.0, 6612.0, 7786.0, 6582.0, 9200.0, 6804.0, 9196.0, 8236.0]
