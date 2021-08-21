@@ -22,6 +22,8 @@ for line in sys.stdin:
 
 timestamps.sort()
 
+print("ave: ", len(timestamps)/(timestamps[-1] - timestamps[0])*1e9)
+
 for i in range(len(timestamps)):
     if cur == 0:
         cur = timestamps[i]
