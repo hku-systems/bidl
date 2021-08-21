@@ -1,0 +1,214 @@
+[33m2021-08-06 06:55:50.881 UTC [nodeCmd] serve -> WARN 001[0m Error setting log level for module 'msp': invalid log level provided - 
+[33m2021-08-06 06:55:50.881 UTC [nodeCmd] serve -> WARN 002[0m Error setting log level for module 'gossip': invalid log level provided - 
+[33m2021-08-06 06:55:50.881 UTC [nodeCmd] serve -> WARN 003[0m Error setting log level for module 'ledger': invalid log level provided - 
+[33m2021-08-06 06:55:50.881 UTC [nodeCmd] serve -> WARN 004[0m Error setting log level for module 'cauthdsl': invalid log level provided - 
+[33m2021-08-06 06:55:50.881 UTC [nodeCmd] serve -> WARN 005[0m Error setting log level for module 'policies': invalid log level provided - 
+[33m2021-08-06 06:55:50.881 UTC [nodeCmd] serve -> WARN 006[0m Error setting log level for module 'grpc': invalid log level provided - 
+[33m2021-08-06 06:55:50.881 UTC [nodeCmd] serve -> WARN 007[0m Error setting log level for module 'peer.gossip': invalid log level provided - 
+[34m2021-08-06 06:55:50.881 UTC [nodeCmd] serve -> INFO 008[0m Starting peer:
+ Version: 1.3.0
+ Commit SHA: f760039
+ Go version: go1.10.4
+ OS/Arch: linux/amd64
+ Experimental features: false
+ Chaincode:
+  Base Image Version: 0.4.13
+  Base Docker Namespace: hyperledger
+  Base Docker Label: org.hyperledger.fabric
+  Docker Namespace: hyperledger
+[34m2021-08-06 06:55:50.881 UTC [ledgermgmt] initialize -> INFO 009[0m Initializing ledger mgmt
+[34m2021-08-06 06:55:50.881 UTC [kvledger] NewProvider -> INFO 00a[0m Initializing ledger provider
+[34m2021-08-06 06:55:50.882 UTC [kvledger] NewProvider -> INFO 00b[0m ledger provider Initialized
+[34m2021-08-06 06:55:50.882 UTC [ledgermgmt] initialize -> INFO 00c[0m ledger mgmt initialized
+[34m2021-08-06 06:55:50.882 UTC [peer] func1 -> INFO 00d[0m Auto-detected peer address: 172.25.0.6:7051
+[34m2021-08-06 06:55:50.882 UTC [peer] func1 -> INFO 00e[0m Returning peer3.org1.example.com:7051
+[34m2021-08-06 06:55:50.882 UTC [peer] func1 -> INFO 00f[0m Auto-detected peer address: 172.25.0.6:7051
+[34m2021-08-06 06:55:50.882 UTC [peer] func1 -> INFO 010[0m Returning peer3.org1.example.com:7051
+jyp: listenAddr= 0.0.0.0:7051 /opt/gopath/src/github.com/hyperledger/fabric/peer/node/start.go 195 2021-08-06 06:55:50.882842
+jyp: register grpc deliver server
+[34m2021-08-06 06:55:50.883 UTC [nodeCmd] computeChaincodeEndpoint -> INFO 011[0m Entering computeChaincodeEndpoint with peerHostname: peer3.org1.example.com
+[34m2021-08-06 06:55:50.883 UTC [nodeCmd] computeChaincodeEndpoint -> INFO 012[0m Exit with ccEndpoint: peer3.org1.example.com:7052
+[34m2021-08-06 06:55:50.884 UTC [sccapi] registerSysCC -> INFO 013[0m system chaincode lscc(github.com/hyperledger/fabric/core/scc/lscc) registered
+[34m2021-08-06 06:55:50.884 UTC [sccapi] registerSysCC -> INFO 014[0m system chaincode cscc(github.com/hyperledger/fabric/core/scc/cscc) registered
+[34m2021-08-06 06:55:50.884 UTC [sccapi] registerSysCC -> INFO 015[0m system chaincode qscc(github.com/hyperledger/fabric/core/scc/qscc) registered
+[34m2021-08-06 06:55:50.884 UTC [sccapi] registerSysCC -> INFO 016[0m system chaincode (+lifecycle,github.com/hyperledger/fabric/core/chaincode/lifecycle,true) disabled
+jyp: register grpc Admin server
+jyp: TOOD: how to init plugin
+jyp: register grpc Endorser server
+[34m2021-08-06 06:55:50.886 UTC [gossip/service] func1 -> INFO 017[0m Initialize gossip with endpoint peer3.org1.example.com:7051 and bootstrap set [peer3.org1.example.com:7051]
+[34m2021-08-06 06:55:50.889 UTC [gossip/gossip] NewGossipService -> INFO 018[0m Creating gossip service with self membership of {peer3.org1.example.com:7051 [] [78 101 72 38 67 91 137 118 28 226 178 53 251 57 173 193 100 107 192 14 190 221 205 33 109 178 187 178 11 246 161 239] peer3.org1.example.com:7051 <nil> <nil>}
+[34m2021-08-06 06:55:50.889 UTC [gossip/gossip] start -> INFO 019[0m Gossip instance peer3.org1.example.com:7051 started
+[34m2021-08-06 06:55:50.889 UTC [sccapi] deploySysCC -> INFO 01a[0m system chaincode lscc/(github.com/hyperledger/fabric/core/scc/lscc) deployed
+[34m2021-08-06 06:55:50.890 UTC [cscc] Init -> INFO 01b[0m Init CSCC
+[34m2021-08-06 06:55:50.890 UTC [sccapi] deploySysCC -> INFO 01c[0m system chaincode cscc/(github.com/hyperledger/fabric/core/scc/cscc) deployed
+[34m2021-08-06 06:55:50.890 UTC [qscc] Init -> INFO 01d[0m Init QSCC
+[34m2021-08-06 06:55:50.890 UTC [sccapi] deploySysCC -> INFO 01e[0m system chaincode qscc/(github.com/hyperledger/fabric/core/scc/qscc) deployed
+[34m2021-08-06 06:55:50.890 UTC [sccapi] deploySysCC -> INFO 01f[0m system chaincode (+lifecycle,github.com/hyperledger/fabric/core/chaincode/lifecycle) disabled
+[34m2021-08-06 06:55:50.890 UTC [nodeCmd] serve -> INFO 020[0m Deployed system chaincodes
+[34m2021-08-06 06:55:50.893 UTC [discovery] NewService -> INFO 021[0m Created with config TLS: false, authCacheMaxSize: 1000, authCachePurgeRatio: 0.750000
+[34m2021-08-06 06:55:50.893 UTC [nodeCmd] registerDiscoveryService -> INFO 022[0m Discovery service activated
+[34m2021-08-06 06:55:50.894 UTC [nodeCmd] serve -> INFO 023[0m Starting peer with ID=[name:"peer3.org1.example.com" ], network ID=[dev], address=[peer3.org1.example.com:7051]
+[34m2021-08-06 06:55:50.894 UTC [nodeCmd] serve -> INFO 024[0m Started peer with ID=[name:"peer3.org1.example.com" ], network ID=[dev], address=[peer3.org1.example.com:7051]
+[34m2021-08-06 06:55:50.894 UTC [nodeCmd] func8 -> INFO 025[0m Starting profiling server with listenAddress = 0.0.0.0:6060
+[34m2021-08-06 06:56:02.152 UTC [endorser] callChaincode -> INFO 026[0m [][a8050d63] Entry chaincode: name:"cscc" 
+[34m2021-08-06 06:56:02.153 UTC [ledgermgmt] CreateLedger -> INFO 027[0m Creating ledger [mychannel] with genesis block
+[34m2021-08-06 06:56:02.153 UTC [fsblkstorage] newBlockfileMgr -> INFO 028[0m Getting block information from block storage
+[34m2021-08-06 06:56:02.154 UTC [kvledger] CommitWithPvtData -> INFO 029[0m [mychannel] Committed block [0] with 1 transaction(s) in 0ms (state_validation=0ms block_commit=0ms state_commit=0ms)
+[34m2021-08-06 06:56:02.154 UTC [ledgermgmt] CreateLedger -> INFO 02a[0m Created ledger [mychannel] with genesis block
+[34m2021-08-06 06:56:02.159 UTC [gossip/gossip] JoinChan -> INFO 02b[0m Joining gossip network of channel mychannel with 1 organizations
+[34m2021-08-06 06:56:02.159 UTC [gossip/gossip] learnAnchorPeers -> INFO 02c[0m No configured anchor peers of Org1MSP for channel mychannel to learn about
+[34m2021-08-06 06:56:02.162 UTC [gossip/state] NewGossipStateProvider -> INFO 02d[0m Updating metadata information, current ledger sequence is at = 0, next expected block is = 1
+[34m2021-08-06 06:56:02.163 UTC [sccapi] deploySysCC -> INFO 02e[0m system chaincode lscc/mychannel(github.com/hyperledger/fabric/core/scc/lscc) deployed
+[34m2021-08-06 06:56:02.163 UTC [cscc] Init -> INFO 02f[0m Init CSCC
+[34m2021-08-06 06:56:02.164 UTC [sccapi] deploySysCC -> INFO 030[0m system chaincode cscc/mychannel(github.com/hyperledger/fabric/core/scc/cscc) deployed
+[34m2021-08-06 06:56:02.164 UTC [qscc] Init -> INFO 031[0m Init QSCC
+[34m2021-08-06 06:56:02.164 UTC [sccapi] deploySysCC -> INFO 032[0m system chaincode qscc/mychannel(github.com/hyperledger/fabric/core/scc/qscc) deployed
+[34m2021-08-06 06:56:02.164 UTC [sccapi] deploySysCC -> INFO 033[0m system chaincode (+lifecycle,github.com/hyperledger/fabric/core/chaincode/lifecycle) disabled
+[34m2021-08-06 06:56:02.164 UTC [endorser] callChaincode -> INFO 034[0m [][a8050d63] Exit chaincode: name:"cscc"  (12ms)
+[34m2021-08-06 06:56:08.165 UTC [gossip/election] beLeader -> INFO 035[0m [78 101 72 38 67 91 137 118 28 226 178 53 251 57 173 193 100 107 192 14 190 221 205 33 109 178 187 178 11 246 161 239] : Becoming a leader
+[34m2021-08-06 06:56:08.165 UTC [gossip/service] func1 -> INFO 036[0m Elected as a leader, starting delivery service for channel mychannel
+[34m2021-08-06 06:56:08.165 UTC [blocksProvider] DeliverBlocks -> INFO 037[0m qiji: blockprovider recv
+[34m2021-08-06 06:56:08.169 UTC [blocksProvider] DeliverBlocks -> INFO 038[0m qiji: blockprovider recv finish
+[34m2021-08-06 06:56:08.170 UTC [blocksProvider] DeliverBlocks -> INFO 039[0m qiji: blockprovider 1
+[34m2021-08-06 06:56:08.170 UTC [blocksProvider] DeliverBlocks -> INFO 03a[0m qiji: blockprovider 2
+[34m2021-08-06 06:56:08.170 UTC [blocksProvider] DeliverBlocks -> INFO 03b[0m qiji: blockprovider 3
+[34m2021-08-06 06:56:08.170 UTC [blocksProvider] DeliverBlocks -> INFO 03c[0m qiji: blockprovider 4
+[34m2021-08-06 06:56:08.170 UTC [blocksProvider] DeliverBlocks -> INFO 03d[0m qiji: blockprovider 5
+[34m2021-08-06 06:56:08.170 UTC [blocksProvider] DeliverBlocks -> INFO 03e[0m qiji: blockprovider recv
+[34m2021-08-06 06:56:08.170 UTC [gossip/state] deliverPayloads -> INFO 03f[0m qiji: deliverPayloads 1
+[34m2021-08-06 06:56:08.170 UTC [gossip/state] deliverPayloads -> INFO 040[0m qiji: deliverPayloads 2
+[34m2021-08-06 06:56:08.170 UTC [gossip/state] deliverPayloads -> INFO 041[0m qiji: deliverPayloads 3
+[34m2021-08-06 06:56:08.170 UTC [gossip/privdata] StoreBlock -> INFO 042[0m [mychannel] Validating block [1]
+[34m2021-08-06 06:56:08.170 UTC [committer/txvalidator] Validate -> INFO 043[0m [mychannel] Validated block [1] in 0ms
+[34m2021-08-06 06:56:08.171 UTC [kvledger] CommitWithPvtData -> INFO 044[0m [mychannel] Committed block [1] with 1 transaction(s) in 0ms (state_validation=0ms block_commit=0ms state_commit=0ms)
+[34m2021-08-06 06:56:08.171 UTC [gossip/state] deliverPayloads -> INFO 045[0m qiji: deliverPayloads 4
+[34m2021-08-06 06:56:09.427 UTC [endorser] callChaincode -> INFO 046[0m [][e3fcb45b] Entry chaincode: name:"lscc" 
+[34m2021-08-06 06:56:09.428 UTC [lscc] executeInstall -> INFO 047[0m Installed Chaincode [smallbank] Version [1.0] to peer
+[34m2021-08-06 06:56:09.428 UTC [endorser] callChaincode -> INFO 048[0m [][e3fcb45b] Exit chaincode: name:"lscc"  (1ms)
+[34m2021-08-06 06:56:12.129 UTC [blocksProvider] DeliverBlocks -> INFO 049[0m qiji: blockprovider recv finish
+[34m2021-08-06 06:56:12.130 UTC [blocksProvider] DeliverBlocks -> INFO 04a[0m qiji: blockprovider 1
+[34m2021-08-06 06:56:12.130 UTC [blocksProvider] DeliverBlocks -> INFO 04b[0m qiji: blockprovider 2
+[34m2021-08-06 06:56:12.130 UTC [blocksProvider] DeliverBlocks -> INFO 04c[0m qiji: blockprovider 3
+[34m2021-08-06 06:56:12.130 UTC [blocksProvider] DeliverBlocks -> INFO 04d[0m qiji: blockprovider 4
+[34m2021-08-06 06:56:12.130 UTC [blocksProvider] DeliverBlocks -> INFO 04e[0m qiji: blockprovider 5
+[34m2021-08-06 06:56:12.130 UTC [blocksProvider] DeliverBlocks -> INFO 04f[0m qiji: blockprovider recv
+[34m2021-08-06 06:56:12.130 UTC [gossip/state] deliverPayloads -> INFO 050[0m qiji: deliverPayloads 1
+[34m2021-08-06 06:56:12.130 UTC [gossip/state] deliverPayloads -> INFO 051[0m qiji: deliverPayloads 2
+[34m2021-08-06 06:56:12.130 UTC [gossip/state] deliverPayloads -> INFO 052[0m qiji: deliverPayloads 3
+[34m2021-08-06 06:56:12.130 UTC [gossip/privdata] StoreBlock -> INFO 053[0m [mychannel] Validating block [2]
+[34m2021-08-06 06:56:12.130 UTC [committer/txvalidator] Validate -> INFO 054[0m [mychannel] Validated block [2] in 0ms
+[34m2021-08-06 06:56:12.131 UTC [cceventmgmt] HandleStateUpdates -> INFO 055[0m Channel [mychannel]: Handling LSCC state update for chaincode [smallbank]
+[34m2021-08-06 06:56:12.132 UTC [kvledger] CommitWithPvtData -> INFO 056[0m [mychannel] Committed block [2] with 1 transaction(s) in 1ms (state_validation=1ms block_commit=0ms state_commit=0ms)
+[34m2021-08-06 06:56:12.132 UTC [gossip/state] deliverPayloads -> INFO 057[0m qiji: deliverPayloads 4
+[34m2021-08-06 06:56:14.237 UTC [blocksProvider] DeliverBlocks -> INFO 058[0m qiji: blockprovider recv finish
+[34m2021-08-06 06:56:14.237 UTC [blocksProvider] DeliverBlocks -> INFO 059[0m qiji: blockprovider 1
+[34m2021-08-06 06:56:14.237 UTC [blocksProvider] DeliverBlocks -> INFO 05a[0m qiji: blockprovider 2
+[34m2021-08-06 06:56:14.237 UTC [blocksProvider] DeliverBlocks -> INFO 05b[0m qiji: blockprovider 3
+[34m2021-08-06 06:56:14.238 UTC [blocksProvider] DeliverBlocks -> INFO 05c[0m qiji: blockprovider 4
+[34m2021-08-06 06:56:14.238 UTC [blocksProvider] DeliverBlocks -> INFO 05d[0m qiji: blockprovider 5
+[34m2021-08-06 06:56:14.238 UTC [blocksProvider] DeliverBlocks -> INFO 05e[0m qiji: blockprovider recv
+[34m2021-08-06 06:56:14.238 UTC [gossip/state] deliverPayloads -> INFO 05f[0m qiji: deliverPayloads 1
+[34m2021-08-06 06:56:14.238 UTC [gossip/state] deliverPayloads -> INFO 060[0m qiji: deliverPayloads 2
+[34m2021-08-06 06:56:14.238 UTC [gossip/state] deliverPayloads -> INFO 061[0m qiji: deliverPayloads 3
+[34m2021-08-06 06:56:14.238 UTC [gossip/privdata] StoreBlock -> INFO 062[0m [mychannel] Validating block [3]
+[34m2021-08-06 06:56:14.238 UTC [committer/txvalidator] Validate -> INFO 063[0m [mychannel] Validated block [3] in 0ms
+[34m2021-08-06 06:56:14.238 UTC [kvledger] CommitWithPvtData -> INFO 064[0m [mychannel] Committed block [3] with 2 transaction(s) in 0ms (state_validation=0ms block_commit=0ms state_commit=0ms)
+[34m2021-08-06 06:56:14.238 UTC [gossip/state] deliverPayloads -> INFO 065[0m qiji: deliverPayloads 4
+[34m2021-08-06 06:56:45.665 UTC [blocksProvider] DeliverBlocks -> INFO 066[0m qiji: blockprovider recv finish
+[34m2021-08-06 06:56:45.666 UTC [blocksProvider] DeliverBlocks -> INFO 067[0m qiji: blockprovider 1
+[34m2021-08-06 06:56:45.668 UTC [blocksProvider] DeliverBlocks -> INFO 068[0m qiji: blockprovider 2
+[34m2021-08-06 06:56:45.668 UTC [blocksProvider] DeliverBlocks -> INFO 069[0m qiji: blockprovider 3
+[34m2021-08-06 06:56:45.669 UTC [blocksProvider] DeliverBlocks -> INFO 06a[0m qiji: blockprovider 4
+[34m2021-08-06 06:56:45.669 UTC [gossip/state] deliverPayloads -> INFO 06b[0m qiji: deliverPayloads 1
+[34m2021-08-06 06:56:45.673 UTC [blocksProvider] DeliverBlocks -> INFO 06c[0m qiji: blockprovider 5
+[34m2021-08-06 06:56:45.673 UTC [blocksProvider] DeliverBlocks -> INFO 06d[0m qiji: blockprovider recv
+[34m2021-08-06 06:56:45.677 UTC [gossip/state] deliverPayloads -> INFO 06e[0m qiji: deliverPayloads 2
+[34m2021-08-06 06:56:45.677 UTC [gossip/state] deliverPayloads -> INFO 06f[0m qiji: deliverPayloads 3
+[34m2021-08-06 06:56:45.677 UTC [gossip/privdata] StoreBlock -> INFO 070[0m [mychannel] Validating block [4]
+[34m2021-08-06 06:56:45.677 UTC [committer/txvalidator] Validate -> INFO 071[0m [mychannel] Validated block [4] in 0ms
+[34m2021-08-06 06:56:45.714 UTC [kvledger] CommitWithPvtData -> INFO 072[0m [mychannel] Committed block [4] with 1500 transaction(s) in 36ms (state_validation=33ms block_commit=0ms state_commit=3ms)
+[34m2021-08-06 06:56:45.714 UTC [gossip/state] deliverPayloads -> INFO 073[0m qiji: deliverPayloads 4
+[34m2021-08-06 06:56:45.812 UTC [blocksProvider] DeliverBlocks -> INFO 074[0m qiji: blockprovider recv finish
+[34m2021-08-06 06:56:45.812 UTC [blocksProvider] DeliverBlocks -> INFO 075[0m qiji: blockprovider 1
+[34m2021-08-06 06:56:45.814 UTC [blocksProvider] DeliverBlocks -> INFO 076[0m qiji: blockprovider 2
+[34m2021-08-06 06:56:45.814 UTC [blocksProvider] DeliverBlocks -> INFO 077[0m qiji: blockprovider 3
+[34m2021-08-06 06:56:45.815 UTC [blocksProvider] DeliverBlocks -> INFO 078[0m qiji: blockprovider 4
+[34m2021-08-06 06:56:45.815 UTC [gossip/state] deliverPayloads -> INFO 079[0m qiji: deliverPayloads 1
+[34m2021-08-06 06:56:45.816 UTC [blocksProvider] DeliverBlocks -> INFO 07a[0m qiji: blockprovider 5
+[34m2021-08-06 06:56:45.816 UTC [blocksProvider] DeliverBlocks -> INFO 07b[0m qiji: blockprovider recv
+[34m2021-08-06 06:56:45.818 UTC [gossip/state] deliverPayloads -> INFO 07c[0m qiji: deliverPayloads 2
+[34m2021-08-06 06:56:45.818 UTC [gossip/state] deliverPayloads -> INFO 07d[0m qiji: deliverPayloads 3
+[34m2021-08-06 06:56:45.818 UTC [gossip/privdata] StoreBlock -> INFO 07e[0m [mychannel] Validating block [5]
+[34m2021-08-06 06:56:45.818 UTC [committer/txvalidator] Validate -> INFO 07f[0m [mychannel] Validated block [5] in 0ms
+[34m2021-08-06 06:56:45.871 UTC [kvledger] CommitWithPvtData -> INFO 080[0m [mychannel] Committed block [5] with 1500 transaction(s) in 52ms (state_validation=46ms block_commit=0ms state_commit=6ms)
+[34m2021-08-06 06:56:45.871 UTC [gossip/state] deliverPayloads -> INFO 081[0m qiji: deliverPayloads 4
+[34m2021-08-06 06:56:45.949 UTC [blocksProvider] DeliverBlocks -> INFO 082[0m qiji: blockprovider recv finish
+[34m2021-08-06 06:56:45.949 UTC [blocksProvider] DeliverBlocks -> INFO 083[0m qiji: blockprovider 1
+[34m2021-08-06 06:56:45.952 UTC [blocksProvider] DeliverBlocks -> INFO 084[0m qiji: blockprovider 2
+[34m2021-08-06 06:56:45.952 UTC [blocksProvider] DeliverBlocks -> INFO 085[0m qiji: blockprovider 3
+[34m2021-08-06 06:56:45.953 UTC [blocksProvider] DeliverBlocks -> INFO 086[0m qiji: blockprovider 4
+[34m2021-08-06 06:56:45.953 UTC [gossip/state] deliverPayloads -> INFO 087[0m qiji: deliverPayloads 1
+[34m2021-08-06 06:56:45.958 UTC [blocksProvider] DeliverBlocks -> INFO 088[0m qiji: blockprovider 5
+[34m2021-08-06 06:56:45.961 UTC [blocksProvider] DeliverBlocks -> INFO 089[0m qiji: blockprovider recv
+[34m2021-08-06 06:56:45.964 UTC [gossip/state] deliverPayloads -> INFO 08a[0m qiji: deliverPayloads 2
+[34m2021-08-06 06:56:45.964 UTC [gossip/state] deliverPayloads -> INFO 08b[0m qiji: deliverPayloads 3
+[34m2021-08-06 06:56:45.964 UTC [gossip/privdata] StoreBlock -> INFO 08c[0m [mychannel] Validating block [6]
+[34m2021-08-06 06:56:45.964 UTC [committer/txvalidator] Validate -> INFO 08d[0m [mychannel] Validated block [6] in 0ms
+[34m2021-08-06 06:56:46.008 UTC [kvledger] CommitWithPvtData -> INFO 08e[0m [mychannel] Committed block [6] with 1500 transaction(s) in 43ms (state_validation=34ms block_commit=0ms state_commit=9ms)
+[34m2021-08-06 06:56:46.008 UTC [gossip/state] deliverPayloads -> INFO 08f[0m qiji: deliverPayloads 4
+[34m2021-08-06 06:56:46.043 UTC [blocksProvider] DeliverBlocks -> INFO 090[0m qiji: blockprovider recv finish
+[34m2021-08-06 06:56:46.043 UTC [blocksProvider] DeliverBlocks -> INFO 091[0m qiji: blockprovider 1
+[34m2021-08-06 06:56:46.046 UTC [blocksProvider] DeliverBlocks -> INFO 092[0m qiji: blockprovider 2
+[34m2021-08-06 06:56:46.046 UTC [blocksProvider] DeliverBlocks -> INFO 093[0m qiji: blockprovider 3
+[34m2021-08-06 06:56:46.052 UTC [blocksProvider] DeliverBlocks -> INFO 094[0m qiji: blockprovider 4
+[34m2021-08-06 06:56:46.052 UTC [gossip/state] deliverPayloads -> INFO 095[0m qiji: deliverPayloads 1
+[34m2021-08-06 06:56:46.055 UTC [gossip/state] deliverPayloads -> INFO 096[0m qiji: deliverPayloads 2
+[34m2021-08-06 06:56:46.055 UTC [gossip/state] deliverPayloads -> INFO 097[0m qiji: deliverPayloads 3
+[34m2021-08-06 06:56:46.055 UTC [gossip/privdata] StoreBlock -> INFO 098[0m [mychannel] Validating block [7]
+[34m2021-08-06 06:56:46.055 UTC [committer/txvalidator] Validate -> INFO 099[0m [mychannel] Validated block [7] in 0ms
+[34m2021-08-06 06:56:46.056 UTC [blocksProvider] DeliverBlocks -> INFO 09a[0m qiji: blockprovider 5
+[34m2021-08-06 06:56:46.056 UTC [blocksProvider] DeliverBlocks -> INFO 09b[0m qiji: blockprovider recv
+[34m2021-08-06 06:56:46.089 UTC [kvledger] CommitWithPvtData -> INFO 09c[0m [mychannel] Committed block [7] with 1500 transaction(s) in 34ms (state_validation=31ms block_commit=0ms state_commit=3ms)
+[34m2021-08-06 06:56:46.089 UTC [gossip/state] deliverPayloads -> INFO 09d[0m qiji: deliverPayloads 4
+[34m2021-08-06 06:56:46.122 UTC [blocksProvider] DeliverBlocks -> INFO 09e[0m qiji: blockprovider recv finish
+[34m2021-08-06 06:56:46.122 UTC [blocksProvider] DeliverBlocks -> INFO 09f[0m qiji: blockprovider 1
+[34m2021-08-06 06:56:46.125 UTC [blocksProvider] DeliverBlocks -> INFO 0a0[0m qiji: blockprovider 2
+[34m2021-08-06 06:56:46.125 UTC [blocksProvider] DeliverBlocks -> INFO 0a1[0m qiji: blockprovider 3
+[34m2021-08-06 06:56:46.125 UTC [blocksProvider] DeliverBlocks -> INFO 0a2[0m qiji: blockprovider 4
+[34m2021-08-06 06:56:46.126 UTC [gossip/state] deliverPayloads -> INFO 0a3[0m qiji: deliverPayloads 1
+[34m2021-08-06 06:56:46.128 UTC [blocksProvider] DeliverBlocks -> INFO 0a4[0m qiji: blockprovider 5
+[34m2021-08-06 06:56:46.128 UTC [blocksProvider] DeliverBlocks -> INFO 0a5[0m qiji: blockprovider recv
+[34m2021-08-06 06:56:46.130 UTC [gossip/state] deliverPayloads -> INFO 0a6[0m qiji: deliverPayloads 2
+[34m2021-08-06 06:56:46.130 UTC [gossip/state] deliverPayloads -> INFO 0a7[0m qiji: deliverPayloads 3
+[34m2021-08-06 06:56:46.130 UTC [gossip/privdata] StoreBlock -> INFO 0a8[0m [mychannel] Validating block [8]
+[34m2021-08-06 06:56:46.130 UTC [committer/txvalidator] Validate -> INFO 0a9[0m [mychannel] Validated block [8] in 0ms
+[34m2021-08-06 06:56:46.178 UTC [kvledger] CommitWithPvtData -> INFO 0aa[0m [mychannel] Committed block [8] with 1500 transaction(s) in 47ms (state_validation=41ms block_commit=0ms state_commit=6ms)
+[34m2021-08-06 06:56:46.178 UTC [gossip/state] deliverPayloads -> INFO 0ab[0m qiji: deliverPayloads 4
+[34m2021-08-06 06:56:46.222 UTC [blocksProvider] DeliverBlocks -> INFO 0ac[0m qiji: blockprovider recv finish
+[34m2021-08-06 06:56:46.222 UTC [blocksProvider] DeliverBlocks -> INFO 0ad[0m qiji: blockprovider 1
+[34m2021-08-06 06:56:46.225 UTC [blocksProvider] DeliverBlocks -> INFO 0ae[0m qiji: blockprovider 2
+[34m2021-08-06 06:56:46.225 UTC [blocksProvider] DeliverBlocks -> INFO 0af[0m qiji: blockprovider 3
+[34m2021-08-06 06:56:46.226 UTC [blocksProvider] DeliverBlocks -> INFO 0b0[0m qiji: blockprovider 4
+[34m2021-08-06 06:56:46.226 UTC [gossip/state] deliverPayloads -> INFO 0b1[0m qiji: deliverPayloads 1
+[34m2021-08-06 06:56:46.229 UTC [gossip/state] deliverPayloads -> INFO 0b2[0m qiji: deliverPayloads 2
+[34m2021-08-06 06:56:46.229 UTC [gossip/state] deliverPayloads -> INFO 0b3[0m qiji: deliverPayloads 3
+[34m2021-08-06 06:56:46.229 UTC [gossip/privdata] StoreBlock -> INFO 0b4[0m [mychannel] Validating block [9]
+[34m2021-08-06 06:56:46.229 UTC [committer/txvalidator] Validate -> INFO 0b5[0m [mychannel] Validated block [9] in 0ms
+[34m2021-08-06 06:56:46.230 UTC [blocksProvider] DeliverBlocks -> INFO 0b6[0m qiji: blockprovider 5
+[34m2021-08-06 06:56:46.230 UTC [blocksProvider] DeliverBlocks -> INFO 0b7[0m qiji: blockprovider recv
+[34m2021-08-06 06:56:46.280 UTC [kvledger] CommitWithPvtData -> INFO 0b8[0m [mychannel] Committed block [9] with 1500 transaction(s) in 50ms (state_validation=45ms block_commit=0ms state_commit=4ms)
+[34m2021-08-06 06:56:46.280 UTC [gossip/state] deliverPayloads -> INFO 0b9[0m qiji: deliverPayloads 4
+[34m2021-08-06 06:56:48.254 UTC [blocksProvider] DeliverBlocks -> INFO 0ba[0m qiji: blockprovider recv finish
+[34m2021-08-06 06:56:48.254 UTC [blocksProvider] DeliverBlocks -> INFO 0bb[0m qiji: blockprovider 1
+[34m2021-08-06 06:56:48.258 UTC [blocksProvider] DeliverBlocks -> INFO 0bc[0m qiji: blockprovider 2
+[34m2021-08-06 06:56:48.258 UTC [blocksProvider] DeliverBlocks -> INFO 0bd[0m qiji: blockprovider 3
+[34m2021-08-06 06:56:48.258 UTC [blocksProvider] DeliverBlocks -> INFO 0be[0m qiji: blockprovider 4
+[34m2021-08-06 06:56:48.258 UTC [gossip/state] deliverPayloads -> INFO 0bf[0m qiji: deliverPayloads 1
+[34m2021-08-06 06:56:48.260 UTC [gossip/state] deliverPayloads -> INFO 0c0[0m qiji: deliverPayloads 2
+[34m2021-08-06 06:56:48.260 UTC [gossip/state] deliverPayloads -> INFO 0c1[0m qiji: deliverPayloads 3
+[34m2021-08-06 06:56:48.260 UTC [gossip/privdata] StoreBlock -> INFO 0c2[0m [mychannel] Validating block [10]
+[34m2021-08-06 06:56:48.260 UTC [committer/txvalidator] Validate -> INFO 0c3[0m [mychannel] Validated block [10] in 0ms
+[34m2021-08-06 06:56:48.262 UTC [blocksProvider] DeliverBlocks -> INFO 0c4[0m qiji: blockprovider 5
+[34m2021-08-06 06:56:48.262 UTC [blocksProvider] DeliverBlocks -> INFO 0c5[0m qiji: blockprovider recv
+[34m2021-08-06 06:56:48.301 UTC [kvledger] CommitWithPvtData -> INFO 0c6[0m [mychannel] Committed block [10] with 1000 transaction(s) in 40ms (state_validation=33ms block_commit=0ms state_commit=6ms)
+[34m2021-08-06 06:56:48.301 UTC [gossip/state] deliverPayloads -> INFO 0c7[0m qiji: deliverPayloads 4

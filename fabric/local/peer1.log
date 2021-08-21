@@ -1,0 +1,113 @@
+[33m2021-08-04 15:48:07.936 UTC [nodeCmd] serve -> WARN 001[0m Error setting log level for module 'msp': invalid log level provided - 
+[33m2021-08-04 15:48:07.936 UTC [nodeCmd] serve -> WARN 002[0m Error setting log level for module 'gossip': invalid log level provided - 
+[33m2021-08-04 15:48:07.936 UTC [nodeCmd] serve -> WARN 003[0m Error setting log level for module 'ledger': invalid log level provided - 
+[33m2021-08-04 15:48:07.936 UTC [nodeCmd] serve -> WARN 004[0m Error setting log level for module 'cauthdsl': invalid log level provided - 
+[33m2021-08-04 15:48:07.936 UTC [nodeCmd] serve -> WARN 005[0m Error setting log level for module 'policies': invalid log level provided - 
+[33m2021-08-04 15:48:07.936 UTC [nodeCmd] serve -> WARN 006[0m Error setting log level for module 'grpc': invalid log level provided - 
+[33m2021-08-04 15:48:07.936 UTC [nodeCmd] serve -> WARN 007[0m Error setting log level for module 'peer.gossip': invalid log level provided - 
+[34m2021-08-04 15:48:07.936 UTC [nodeCmd] serve -> INFO 008[0m Starting peer:
+ Version: 1.3.0
+ Commit SHA: 6072c63
+ Go version: go1.10.4
+ OS/Arch: linux/amd64
+ Experimental features: false
+ Chaincode:
+  Base Image Version: 0.4.13
+  Base Docker Namespace: hyperledger
+  Base Docker Label: org.hyperledger.fabric
+  Docker Namespace: hyperledger
+[34m2021-08-04 15:48:07.936 UTC [ledgermgmt] initialize -> INFO 009[0m Initializing ledger mgmt
+[34m2021-08-04 15:48:07.936 UTC [kvledger] NewProvider -> INFO 00a[0m Initializing ledger provider
+[34m2021-08-04 15:48:07.936 UTC [kvledger] NewProvider -> INFO 00b[0m ledger provider Initialized
+[34m2021-08-04 15:48:07.936 UTC [ledgermgmt] initialize -> INFO 00c[0m ledger mgmt initialized
+[34m2021-08-04 15:48:07.937 UTC [peer] func1 -> INFO 00d[0m Auto-detected peer address: 192.168.240.5:7051
+[34m2021-08-04 15:48:07.937 UTC [peer] func1 -> INFO 00e[0m Returning peer1.org1.example.com:7051
+[34m2021-08-04 15:48:07.937 UTC [peer] func1 -> INFO 00f[0m Auto-detected peer address: 192.168.240.5:7051
+[34m2021-08-04 15:48:07.937 UTC [peer] func1 -> INFO 010[0m Returning peer1.org1.example.com:7051
+jyp: listenAddr= 0.0.0.0:7051 /opt/gopath/src/github.com/hyperledger/fabric/peer/node/start.go 195 2021-08-04 15:48:07.937450
+jyp: register grpc deliver server
+[34m2021-08-04 15:48:07.938 UTC [nodeCmd] computeChaincodeEndpoint -> INFO 011[0m Entering computeChaincodeEndpoint with peerHostname: peer1.org1.example.com
+[34m2021-08-04 15:48:07.938 UTC [nodeCmd] computeChaincodeEndpoint -> INFO 012[0m Exit with ccEndpoint: peer1.org1.example.com:7052
+[34m2021-08-04 15:48:07.938 UTC [sccapi] registerSysCC -> INFO 013[0m system chaincode lscc(github.com/hyperledger/fabric/core/scc/lscc) registered
+[34m2021-08-04 15:48:07.938 UTC [sccapi] registerSysCC -> INFO 014[0m system chaincode cscc(github.com/hyperledger/fabric/core/scc/cscc) registered
+[34m2021-08-04 15:48:07.938 UTC [sccapi] registerSysCC -> INFO 015[0m system chaincode qscc(github.com/hyperledger/fabric/core/scc/qscc) registered
+[34m2021-08-04 15:48:07.938 UTC [sccapi] registerSysCC -> INFO 016[0m system chaincode (+lifecycle,github.com/hyperledger/fabric/core/chaincode/lifecycle,true) disabled
+jyp: register grpc Admin server
+jyp: TOOD: how to init plugin
+jyp: register grpc Endorser server
+[34m2021-08-04 15:48:07.941 UTC [gossip/service] func1 -> INFO 017[0m Initialize gossip with endpoint peer1.org1.example.com:7051 and bootstrap set [peer1.org1.example.com:7051]
+[34m2021-08-04 15:48:07.944 UTC [gossip/gossip] NewGossipService -> INFO 018[0m Creating gossip service with self membership of {peer1.org1.example.com:7051 [] [253 221 212 65 17 239 211 8 146 94 33 236 208 34 193 121 72 12 19 18 126 134 169 145 217 50 170 35 225 56 135 77] peer1.org1.example.com:7051 <nil> <nil>}
+[34m2021-08-04 15:48:07.945 UTC [gossip/gossip] start -> INFO 019[0m Gossip instance peer1.org1.example.com:7051 started
+[34m2021-08-04 15:48:07.946 UTC [sccapi] deploySysCC -> INFO 01a[0m system chaincode lscc/(github.com/hyperledger/fabric/core/scc/lscc) deployed
+[34m2021-08-04 15:48:07.946 UTC [cscc] Init -> INFO 01b[0m Init CSCC
+[34m2021-08-04 15:48:07.946 UTC [sccapi] deploySysCC -> INFO 01c[0m system chaincode cscc/(github.com/hyperledger/fabric/core/scc/cscc) deployed
+[34m2021-08-04 15:48:07.946 UTC [qscc] Init -> INFO 01d[0m Init QSCC
+[34m2021-08-04 15:48:07.946 UTC [sccapi] deploySysCC -> INFO 01e[0m system chaincode qscc/(github.com/hyperledger/fabric/core/scc/qscc) deployed
+[34m2021-08-04 15:48:07.946 UTC [sccapi] deploySysCC -> INFO 01f[0m system chaincode (+lifecycle,github.com/hyperledger/fabric/core/chaincode/lifecycle) disabled
+[34m2021-08-04 15:48:07.946 UTC [nodeCmd] serve -> INFO 020[0m Deployed system chaincodes
+[34m2021-08-04 15:48:07.949 UTC [discovery] NewService -> INFO 021[0m Created with config TLS: false, authCacheMaxSize: 1000, authCachePurgeRatio: 0.750000
+[34m2021-08-04 15:48:07.949 UTC [nodeCmd] registerDiscoveryService -> INFO 022[0m Discovery service activated
+[34m2021-08-04 15:48:07.949 UTC [nodeCmd] serve -> INFO 023[0m Starting peer with ID=[name:"peer1.org1.example.com" ], network ID=[dev], address=[peer1.org1.example.com:7051]
+[34m2021-08-04 15:48:07.949 UTC [nodeCmd] serve -> INFO 024[0m Started peer with ID=[name:"peer1.org1.example.com" ], network ID=[dev], address=[peer1.org1.example.com:7051]
+[34m2021-08-04 15:48:07.950 UTC [nodeCmd] func8 -> INFO 025[0m Starting profiling server with listenAddress = 0.0.0.0:6060
+[34m2021-08-04 15:48:12.982 UTC [endorser] callChaincode -> INFO 026[0m [][2cfdb928] Entry chaincode: name:"cscc" 
+[34m2021-08-04 15:48:12.983 UTC [ledgermgmt] CreateLedger -> INFO 027[0m Creating ledger [mychannel] with genesis block
+[34m2021-08-04 15:48:12.984 UTC [fsblkstorage] newBlockfileMgr -> INFO 028[0m Getting block information from block storage
+[34m2021-08-04 15:48:12.985 UTC [kvledger] CommitWithPvtData -> INFO 029[0m [mychannel] Committed block [0] with 1 transaction(s) in 0ms (state_validation=0ms block_commit=0ms state_commit=0ms)
+[34m2021-08-04 15:48:12.985 UTC [ledgermgmt] CreateLedger -> INFO 02a[0m Created ledger [mychannel] with genesis block
+[34m2021-08-04 15:48:12.991 UTC [gossip/gossip] JoinChan -> INFO 02b[0m Joining gossip network of channel mychannel with 1 organizations
+[34m2021-08-04 15:48:12.991 UTC [gossip/gossip] learnAnchorPeers -> INFO 02c[0m No configured anchor peers of Org1MSP for channel mychannel to learn about
+[34m2021-08-04 15:48:12.993 UTC [gossip/state] NewGossipStateProvider -> INFO 02d[0m Updating metadata information, current ledger sequence is at = 0, next expected block is = 1
+[34m2021-08-04 15:48:12.996 UTC [sccapi] deploySysCC -> INFO 02e[0m system chaincode lscc/mychannel(github.com/hyperledger/fabric/core/scc/lscc) deployed
+[34m2021-08-04 15:48:12.996 UTC [cscc] Init -> INFO 02f[0m Init CSCC
+[34m2021-08-04 15:48:12.996 UTC [sccapi] deploySysCC -> INFO 030[0m system chaincode cscc/mychannel(github.com/hyperledger/fabric/core/scc/cscc) deployed
+[34m2021-08-04 15:48:12.996 UTC [qscc] Init -> INFO 031[0m Init QSCC
+[34m2021-08-04 15:48:12.996 UTC [sccapi] deploySysCC -> INFO 032[0m system chaincode qscc/mychannel(github.com/hyperledger/fabric/core/scc/qscc) deployed
+[34m2021-08-04 15:48:12.997 UTC [sccapi] deploySysCC -> INFO 033[0m system chaincode (+lifecycle,github.com/hyperledger/fabric/core/chaincode/lifecycle) disabled
+[34m2021-08-04 15:48:12.997 UTC [endorser] callChaincode -> INFO 034[0m [][2cfdb928] Exit chaincode: name:"cscc"  (15ms)
+[34m2021-08-04 15:48:18.997 UTC [gossip/election] beLeader -> INFO 035[0m [253 221 212 65 17 239 211 8 146 94 33 236 208 34 193 121 72 12 19 18 126 134 169 145 217 50 170 35 225 56 135 77] : Becoming a leader
+[34m2021-08-04 15:48:18.997 UTC [gossip/service] func1 -> INFO 036[0m Elected as a leader, starting delivery service for channel mychannel
+[34m2021-08-04 15:48:22.375 UTC [gossip/privdata] StoreBlock -> INFO 037[0m [mychannel] Received block [1] from buffer
+[34m2021-08-04 15:48:22.375 UTC [gossip/privdata] StoreBlock -> INFO 038[0m [mychannel] skip Validating block [1]
+[34m2021-08-04 15:48:22.375 UTC [committer/txvalidator] Validate -> INFO 039[0m [mychannel] Validated block [1] in 0ms
+[34m2021-08-04 15:48:22.376 UTC [kvledger] CommitWithPvtData -> INFO 03a[0m [mychannel] Committed block [1] with 1 transaction(s) in 0ms (state_validation=0ms block_commit=0ms state_commit=0ms)
+[34m2021-08-04 15:48:25.899 UTC [endorser] callChaincode -> INFO 03b[0m [][eea6a5cf] Entry chaincode: name:"lscc" 
+[34m2021-08-04 15:48:25.900 UTC [lscc] executeInstall -> INFO 03c[0m Installed Chaincode [smallbank] Version [1.0] to peer
+[34m2021-08-04 15:48:25.900 UTC [endorser] callChaincode -> INFO 03d[0m [][eea6a5cf] Exit chaincode: name:"lscc"  (0ms)
+[34m2021-08-04 15:48:28.810 UTC [gossip/privdata] StoreBlock -> INFO 03e[0m [mychannel] Received block [2] from buffer
+[34m2021-08-04 15:48:28.810 UTC [gossip/privdata] StoreBlock -> INFO 03f[0m [mychannel] skip Validating block [2]
+[34m2021-08-04 15:48:28.810 UTC [committer/txvalidator] Validate -> INFO 040[0m [mychannel] Validated block [2] in 0ms
+[34m2021-08-04 15:48:28.811 UTC [cceventmgmt] HandleStateUpdates -> INFO 041[0m Channel [mychannel]: Handling LSCC state update for chaincode [smallbank]
+[34m2021-08-04 15:48:28.812 UTC [kvledger] CommitWithPvtData -> INFO 042[0m [mychannel] Committed block [2] with 1 transaction(s) in 0ms (state_validation=0ms block_commit=0ms state_commit=0ms)
+[34m2021-08-04 15:48:30.933 UTC [gossip/privdata] StoreBlock -> INFO 043[0m [mychannel] Received block [3] from buffer
+[34m2021-08-04 15:48:30.933 UTC [gossip/privdata] StoreBlock -> INFO 044[0m [mychannel] skip Validating block [3]
+[34m2021-08-04 15:48:30.933 UTC [committer/txvalidator] Validate -> INFO 045[0m [mychannel] Validated block [3] in 0ms
+[34m2021-08-04 15:48:30.934 UTC [kvledger] CommitWithPvtData -> INFO 046[0m [mychannel] Committed block [3] with 2 transaction(s) in 0ms (state_validation=0ms block_commit=0ms state_commit=0ms)
+[34m2021-08-04 15:48:56.168 UTC [gossip/privdata] StoreBlock -> INFO 047[0m [mychannel] Received block [4] from buffer
+[34m2021-08-04 15:48:56.169 UTC [gossip/privdata] StoreBlock -> INFO 048[0m [mychannel] skip Validating block [4]
+[34m2021-08-04 15:48:56.169 UTC [committer/txvalidator] Validate -> INFO 049[0m [mychannel] Validated block [4] in 0ms
+[34m2021-08-04 15:48:56.323 UTC [kvledger] CommitWithPvtData -> INFO 04a[0m [mychannel] Committed block [4] with 1500 transaction(s) in 88ms (state_validation=52ms block_commit=0ms state_commit=3ms)
+[34m2021-08-04 15:48:56.336 UTC [gossip/privdata] StoreBlock -> INFO 04b[0m [mychannel] Received block [5] from buffer
+[34m2021-08-04 15:48:56.337 UTC [gossip/privdata] StoreBlock -> INFO 04c[0m [mychannel] skip Validating block [5]
+[34m2021-08-04 15:48:56.337 UTC [committer/txvalidator] Validate -> INFO 04d[0m [mychannel] Validated block [5] in 0ms
+[34m2021-08-04 15:48:56.455 UTC [kvledger] CommitWithPvtData -> INFO 04e[0m [mychannel] Committed block [5] with 1500 transaction(s) in 90ms (state_validation=43ms block_commit=0ms state_commit=18ms)
+[34m2021-08-04 15:48:56.461 UTC [gossip/privdata] StoreBlock -> INFO 04f[0m [mychannel] Received block [6] from buffer
+[34m2021-08-04 15:48:56.461 UTC [gossip/privdata] StoreBlock -> INFO 050[0m [mychannel] skip Validating block [6]
+[34m2021-08-04 15:48:56.462 UTC [committer/txvalidator] Validate -> INFO 051[0m [mychannel] Validated block [6] in 0ms
+[34m2021-08-04 15:48:56.592 UTC [kvledger] CommitWithPvtData -> INFO 052[0m [mychannel] Committed block [6] with 1500 transaction(s) in 95ms (state_validation=54ms block_commit=0ms state_commit=7ms)
+[34m2021-08-04 15:48:56.597 UTC [gossip/privdata] StoreBlock -> INFO 053[0m [mychannel] Received block [7] from buffer
+[34m2021-08-04 15:48:56.597 UTC [gossip/privdata] StoreBlock -> INFO 054[0m [mychannel] skip Validating block [7]
+[34m2021-08-04 15:48:56.597 UTC [committer/txvalidator] Validate -> INFO 055[0m [mychannel] Validated block [7] in 0ms
+[34m2021-08-04 15:48:56.676 UTC [kvledger] CommitWithPvtData -> INFO 056[0m [mychannel] Committed block [7] with 1500 transaction(s) in 54ms (state_validation=22ms block_commit=0ms state_commit=10ms)
+[34m2021-08-04 15:48:56.678 UTC [gossip/privdata] StoreBlock -> INFO 057[0m [mychannel] Received block [8] from buffer
+[34m2021-08-04 15:48:56.678 UTC [gossip/privdata] StoreBlock -> INFO 058[0m [mychannel] skip Validating block [8]
+[34m2021-08-04 15:48:56.678 UTC [committer/txvalidator] Validate -> INFO 059[0m [mychannel] Validated block [8] in 0ms
+[34m2021-08-04 15:48:56.759 UTC [kvledger] CommitWithPvtData -> INFO 05a[0m [mychannel] Committed block [8] with 1500 transaction(s) in 55ms (state_validation=20ms block_commit=0ms state_commit=5ms)
+[34m2021-08-04 15:48:56.761 UTC [gossip/privdata] StoreBlock -> INFO 05b[0m [mychannel] Received block [9] from buffer
+[34m2021-08-04 15:48:56.761 UTC [gossip/privdata] StoreBlock -> INFO 05c[0m [mychannel] skip Validating block [9]
+[34m2021-08-04 15:48:56.761 UTC [committer/txvalidator] Validate -> INFO 05d[0m [mychannel] Validated block [9] in 0ms
+[34m2021-08-04 15:48:56.833 UTC [kvledger] CommitWithPvtData -> INFO 05e[0m [mychannel] Committed block [9] with 1500 transaction(s) in 51ms (state_validation=24ms block_commit=0ms state_commit=3ms)
+[34m2021-08-04 15:48:58.554 UTC [gossip/privdata] StoreBlock -> INFO 05f[0m [mychannel] Received block [10] from buffer
+[34m2021-08-04 15:48:58.554 UTC [gossip/privdata] StoreBlock -> INFO 060[0m [mychannel] skip Validating block [10]
+[34m2021-08-04 15:48:58.554 UTC [committer/txvalidator] Validate -> INFO 061[0m [mychannel] Validated block [10] in 0ms
+[34m2021-08-04 15:48:58.639 UTC [kvledger] CommitWithPvtData -> INFO 062[0m [mychannel] Committed block [10] with 1000 transaction(s) in 62ms (state_validation=21ms block_commit=0ms state_commit=6ms)
