@@ -4,24 +4,13 @@ SYS=$1
 OP=$2
 ## fastfabric
 if [ $SYS = "fastfabric" ]; then 
-    bash run-ff.sh $OP
+    bash run-ff.sh $OP $3
 elif [ $SYS = "fabric" ]; then 
     bash run-fabric.sh 
 elif [ $SYS = "streamchain" ]; then 
     bash run-streamchain.sh
 elif [ $SYS = "hotstuff" ]; then 
-    cd hotstuff
-    bash docker/run.sh hotstuff1.0
-    docker exec bash scripts/deploy/run.sh setup  
-    # set payload size in scripts/doploy/group_vars/all.yml in container c0
-    docker exec bash gen_all.sh 
-    docker exec bash run.sh new run1
-    docker exec bash run_cli.sh new run1_cli
-    sleep 10s
-    docker exec bash run_cli.sh stop run1_cli
-    docker exec bash run_cli.sh fetch run1_cli 
-    docker exec cat run1_cli/remote/*/stderr | python3 ../thr_hist.py --plot
-    bash docker/kill_docker.sh 
+    bash run-hotstuff.sh 
 elif [ $SYS = "SBFT" ]; then 
     cd SBFT
     docker run -it --rm --name sbfthost -v $PWD:/home/SBFT sbft:base

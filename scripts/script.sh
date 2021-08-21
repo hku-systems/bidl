@@ -22,6 +22,7 @@ VERBOSE="$5"
 LANGUAGE=`echo "$LANGUAGE" | tr [:upper:] [:lower:]`
 COUNTER=1
 MAX_RETRY=10
+all_peers=6
 
 CC_SRC_PATH="github.com/chaincode/smallbank"
 
@@ -29,6 +30,7 @@ echo "Channel name : "$CHANNEL_NAME
 
 # import utils
 . scripts/utils.sh
+let all_peers=all_peers-1
 
 createChannel() {
 	setGlobals peer0 1
@@ -51,7 +53,7 @@ createChannel() {
 
 joinChannel () {
 	for org in 1; do
-	    for peer in `seq 0 5`; do
+	    for peer in `seq 0 $all_peers`; do
 			joinChannelWithRetry peer$peer $org
 			echo "===================== peer${peer}.org${org} joined channel '$CHANNEL_NAME' ===================== "
 			# sleep $DELAY
@@ -73,7 +75,7 @@ sleep 2
 #
 ### Install chaincode on peer0.org1 and peer0.org2
 #echo "Installing chaincode on peer0.org1..."
-for peer in `seq 0 5`; do
+for peer in `seq 0 $all_peers`; do
 	echo "install chaincode on peer$peer"
 	installChaincode peer$peer 1
 done
@@ -85,7 +87,7 @@ instantiateChaincode peer0 1
 sleep 2
 createAccount 0 1 
 sleep 2
-for i in `seq 0 5`; do
+for i in `seq 0 $all_peers`; do
 	# setup chaincode container 
 	chaincodeQuery $i 1 a
 done
