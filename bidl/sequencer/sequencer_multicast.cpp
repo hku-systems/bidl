@@ -16,6 +16,9 @@
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
+#include <net/if.h>
+#include <sys/ioctl.h>
+
 using namespace std;
 
 struct in_addr localInterface;
@@ -39,11 +42,10 @@ int main(int argc, char *argv[]) {
     /*
     * Multicast interval
     */
-
     int TPS = 0;
     if( argc == 2) {
         TPS = atoi(argv[1]);
-        cout << "The multicast TPS: " << TPS << endl;
+        cout << "Multicast TPS:" << TPS << endl;
     } else if( argc > 2) {
         cout << "Usage: ./sequencer TPS" << endl;
         return 1;
@@ -53,16 +55,21 @@ int main(int argc, char *argv[]) {
     }
     int send_interval = 1e6 / TPS / 1e3;
     chrono::microseconds sleep_duration{send_interval};
-    cout << "TPS:" << TPS << " Interval:" << sleep_duration.count() << endl;
+    cout << "Multicast interval:" << sleep_duration.count() << endl;
 
-
-
+    /*
+    * declare the socket used for receiving transactions from clients
+    */
     int recv_fd = socket(AF_INET, SOCK_DGRAM, 0);
     if(recv_fd < 0) {
         perror("socket");
         exit(1);
     }
 
+
+    /*
+    * Declare the socket used for udp multicast
+    */
     struct sockaddr_in addr_serv;
     int len;
     memset(&addr_serv, 0, sizeof(struct sockaddr_in));
@@ -75,15 +82,11 @@ int main(int argc, char *argv[]) {
         perror("bind error:");
         exit(1);
     }
-    cout << "addr length:"  << len << endl;
 
     int recv_num;
     int send_num;
     struct sockaddr_in addr_client;
     
-    /*
-    * Declare the socket used for udp multicast
-    */
     int send_fd = socket(AF_INET, SOCK_DGRAM, 0);
     if(send_fd < 0) {
         perror("socket");
@@ -91,11 +94,30 @@ int main(int argc, char *argv[]) {
     }
 
     /*
-   * Set local interface for outbound multicast datagrams.
-   * The IP address specified must be associated with a local,
-   * multicast-capable interface.
-   */
-    localInterface.s_addr = inet_addr("10.22.1.8");
+    * Set local interface for outbound multicast datagrams.
+    * The IP address specified must be associated with a local,
+    * multicast-capable interface.
+    */
+    int fd;
+	struct ifreq ifr;
+
+    char iface[] = "enp5s0";
+    fd = socket(AF_INET, SOCK_DGRAM, 0);
+
+	//Type of address to retrieve - IPv4 IP address
+	ifr.ifr_addr.sa_family = AF_INET;
+
+	//Copy the interface name in the ifreq structure
+	strncpy(ifr.ifr_name , iface , IFNAMSIZ-1);
+	ioctl(fd, SIOCGIFADDR, &ifr);
+	close(fd);
+
+	//display result
+	printf("Binded to NIC: %s - %s\n" , iface , inet_ntoa(( (struct sockaddr_in *)&ifr.ifr_addr )->sin_addr) );
+    string interface_addr = inet_ntoa(( (struct sockaddr_in *)&ifr.ifr_addr )->sin_addr);
+
+    // localInterface.s_addr = inet_addr("10.22.1.7");
+    localInterface.s_addr = inet_addr(interface_addr.c_str());
     if (setsockopt(send_fd, IPPROTO_IP, IP_MULTICAST_IF,
                 (char *)&localInterface,
                 sizeof(localInterface)) < 0) {
@@ -112,7 +134,6 @@ int main(int argc, char *argv[]) {
     multicast_addr.sin_addr.s_addr = inet_addr("230.0.0.0");
     multicast_addr.sin_port = htons(BROA_PORT);
     socklen_t socklen = sizeof(multicast_addr);
-
 
     /*
     * Start multicast

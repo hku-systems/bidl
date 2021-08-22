@@ -5,11 +5,11 @@ if [ "$#" -ne 2 ]; then
     exit 1
 fi
 
-script_dir=$(cd "$(dirname "$0")";pwd)
-source $script_dir/env.sh
+# script_dir=$(cd "$(dirname "$0")";pwd)
+# bash $script_dir/env.sh
 
 echo "Stopping sequencer/consensus/normal nodes..."
-# source $script_dir/kill_all.sh
+# bash $script_dir/kill_all.sh
 source $script_dir/kill_all_local.sh
 
 # echo "Generating hosts.config..."
@@ -50,5 +50,5 @@ go run ./cmd/client --num=100000
 cd $base_dir
 echo "Please wait..."
 sleep 30
-source $base_dir/scripts/get_data.sh $2
+source $base_dir/scripts/get_data.sh
 
