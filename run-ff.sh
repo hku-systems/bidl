@@ -88,13 +88,13 @@ elif [ $1 == "nd" ]; then
         sleep 2
         docker exec $(docker ps | grep fabric_cli | awk '{print $1}') bash scripts/script.sh
         # create $accounts accounts
-        docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --e2e -n $accounts --orderer_client 40 --burst 1000 --txtype create_random --groups $peers --ndrate $nondeterminism_rate --config config.yaml > $nondeterminism 2>&1
+        docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --e2e -n $accounts --orderer_client 40 --burst 50000 --txtype create_random --groups $peers --ndrate $nondeterminism_rate --config config.yaml > $nondeterminism 2>&1
         sleep 2
 
         echo "nondeterminism_rate=$nondeterminism_rate, accounts=$accounts" >> log.log
         echo -n "tps: " >> log.log
         cat $nondeterminism | python3 tput.py $interval VALID >> log.log
-        grep "tps" $nondeterminism >> log.log
+        # grep "tps" $nondeterminism >> log.log
         for id in 0 1 2 3 4 5; do 
             docker service logs fabric_peer$id > logs/ff/nondeterminism/round${round}_peer$id.log 2>&1
         done
@@ -153,7 +153,7 @@ elif [ $1 == "contention" ]; then
 elif [ $1 == "breakdown" ]; then 
     if [ $2 == "endorse" ]; then 
         bash create_artifact.sh fastfabric
-        # endorse phase
+        # endorse phase: simulate by decreasing the clients with constant Orgs
         rm log.log
         rm -rf logs/ff/breakdown/endorse
         mkdir -p logs/ff/breakdown/endorse
@@ -192,7 +192,7 @@ elif [ $1 == "breakdown" ]; then
     # consensus phase: TODO 
 
     elif [ $2 == "commit" ]; then 
-        # commit phase
+        # commit phase: simulate by decreasing the block size with constant Orgs
         rm log.log 
         rm -rf logs/ff/breakdown/commit/
         mkdir -p logs/ff/breakdown/commit/
