@@ -5,8 +5,8 @@ if [ "$#" -ne 2 ]; then
     exit 1
 fi
 
-# script_dir=$(cd "$(dirname "$0")";pwd)
-# bash $script_dir/env.sh
+script_dir=$(cd "$(dirname "$0")";pwd)
+source $script_dir/env.sh
 
 echo "Stopping sequencer/consensus/normal nodes..."
 # bash $script_dir/kill_all.sh
