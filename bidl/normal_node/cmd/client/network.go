@@ -13,7 +13,21 @@ import (
 
 const ALIVE_CHECK_TIME = time.Second * 10
 
-func (c *Client) setupConnection(addr string) {
+func (c *Client) flowController(tps int) {
+	log.Infof("Start flow controller, TPS: %d kTxns/s", tps)
+	interval := time.Duration(1e6 / tps / 1e3 / 3)
+	ticker := time.NewTicker(interval * time.Microsecond)
+	for {
+		select {
+		case <- ticker.C:
+		packet := <-c.packets
+		_, err := c.connection.Write(packet.Bytes)
+		ErrorCheck(err, "flowController", true)
+		}
+	}
+}
+
+func (c *Client) setupConnection(addr string, tps int) {
 	/*
 		code for setting up udp connection using basic API, seems not necessary for simplicity.
 
@@ -45,6 +59,9 @@ func (c *Client) setupConnection(addr string) {
 		}
 		c.connection = conn*/
 
+	// set up flow controller
+	go c.flowController(tps)
+
 	// setting up udp multicast server with go standard API
 	address, err := net.ResolveUDPAddr("udp4", addr)
 
@@ -65,54 +82,7 @@ func (c *Client) setupConnection(addr string) {
 	srcAddr := &net.UDPAddr{IP: addrs[0].(*net.IPNet).IP, Port: 0}
 	conn, err := net.DialUDP("udp4", srcAddr, address)
 	c.connection = conn
-
-	//also listen from requests from the server on a random port
-	//listeningAddress, err := net.ResolveUDPAddr("udp4", ":0")
-	//ErrorCheck(err, "setupConnection", true)
-	//log.Printf("...CONNECTED! ")
-	//
-	//conn, err = net.ListenUDP("udp4", listeningAddress)
-	//ErrorCheck(err, "setupConnection", true)
-	//
-	//log.Printf("listening on: local:%s\n", conn.LocalAddr())
-
 }
-
-//func (c *common.Client) readFromSocket(buffersize int) {
-//	for {
-//		var b = make([]byte, buffersize)
-//		n, addr, err := c.connection.ReadFromUDP(b[0:])
-//		ErrorCheck(err, "readFromSocket", false)
-//
-//		b = b[0:n]
-//
-//		if n > 0 {
-//			pack := common.packet{b, addr}
-//			select {
-//			case c.packets <- pack:
-//				continue
-//			case <-c.kill:
-//				break
-//			}
-//		}
-//
-//		select {
-//		case <-c.kill:
-//			break
-//		default:
-//			continue
-//		}
-//	}
-//}
-
-//func (c *common.Client) processPackets() {
-//	for pack := range c.packets {
-//		var msg common.Message
-//		err := msgpack.Unmarshal(pack.bytes, &msg)
-//		ErrorCheck(err, "processPackets", false)
-//		c.messages <- msg
-//	}
-//}
 
 func (c *Client) Send(message string) {
 	msg := common.Message{
@@ -145,13 +115,10 @@ func (c *Client) SendTxn(txn *common.Transaction, order bool) {
 		b = append(common.MagicNumTxn, b...)
 		c.seq++
 	}
-	_, err = c.connection.Write(b)
-
-	//groupAddr, err := net.ResolveUDPAddr("udp", "230.0.0.0:7777")
-	//_, err = c.connection.WriteTo(b, groupAddr)
-	//_, err = c.connection.WriteTo(b, nil, groupAddr)
-	//log.Debug(len(b), b, "hash:", sha256.Sum256(b))
-	ErrorCheck(err, "SendTxn", false)
+	packet := common.Packet {
+		Bytes: b,
+	}
+	c.packets <- packet
 }
 
 func (c *Client) SendBlock(txns []*common.Transaction, blkSize int) {

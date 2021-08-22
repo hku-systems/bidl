@@ -35,7 +35,28 @@ void Print(uint8_t str[], uint64_t n)
 	printf("\n");
 }
 
-int main() {
+int main(int argc, char *argv[]) {
+    /*
+    * Multicast interval
+    */
+
+    int TPS = 0;
+    if( argc == 2) {
+        TPS = atoi(argv[1]);
+        cout << "The multicast TPS: " << TPS << endl;
+    } else if( argc > 2) {
+        cout << "Usage: ./sequencer TPS" << endl;
+        return 1;
+    } else {
+        cout << "Usage: ./sequencer TPS" << endl;
+        return 1;
+    }
+    int send_interval = 1e6 / TPS / 1e3;
+    chrono::microseconds sleep_duration{send_interval};
+    cout << "TPS:" << TPS << " Interval:" << sleep_duration.count() << endl;
+
+
+
     int recv_fd = socket(AF_INET, SOCK_DGRAM, 0);
     if(recv_fd < 0) {
         perror("socket");
@@ -92,10 +113,15 @@ int main() {
     multicast_addr.sin_port = htons(BROA_PORT);
     socklen_t socklen = sizeof(multicast_addr);
 
+
+    /*
+    * Start multicast
+    */
     uint32_t seq = 0;
     int tot = 0; // number of received transactions
     typedef chrono::high_resolution_clock Clock;
     auto t1 = Clock::now();
+    auto now = Clock::now();
     while(1) {
         // printf("wait\n");
         recv_num = recvfrom(recv_fd, recv_buf+12, sizeof(recv_buf), 0, (struct sockaddr *)&addr_client, (socklen_t *)&len);
@@ -103,11 +129,7 @@ int main() {
             perror("recvfrom error:");
             exit(1);
         } else {
-            // printf("recv: %d\n", recv_num);
             char* ipString = inet_ntoa(addr_client.sin_addr);
-            // uint64_t *seq = (uint64_t*)(recv_buf + 4);
-            // printf("%s %d %ld\n", ipString, ntohs(addr_client.sin_port), *seq);
-            // cout << "IP Address:" << ipString << ", Port:" << ntohs(addr_client.sin_port) << ", Seq Num:" << unsigned(*seq) << endl;
         }
 
         // assign seq number
@@ -135,7 +157,14 @@ int main() {
             auto t2 = Clock::now();
             auto interval = chrono::duration_cast<chrono::milliseconds>(t2-t1).count();
             t1 = t2;
-            cout << "Total:" << tot << " Interval:" << interval  << " TPS:" << prtInterval / interval << "kTxn/s" << endl;
+            cout << "Total:" << tot << " Interval:" << interval  << " TPS:" << prtInterval / interval << "kTxns/s" << endl;
+        }
+        while(true){
+            auto elapsed = chrono::duration_cast<chrono::microseconds>(chrono::high_resolution_clock::now() - now);
+            if (elapsed > sleep_duration) {
+                now = Clock::now();
+                break;
+            }
         }
     }
     close(recv_fd);

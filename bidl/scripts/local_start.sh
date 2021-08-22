@@ -31,7 +31,7 @@ for i in `seq 0 $[${1}-1]`; do
 done
 
 echo "Starting the sequencer..."
-$sequencer_dir/sequencer &> $base_dir/logs/sequencer.log &
+$sequencer_dir/sequencer 50 &> $base_dir/logs/sequencer.log &
 
 echo "Starting normal node..."
 docker run --name normal_node --net=host --cap-add NET_ADMIN normal_node /normal_node/server --quiet > $base_dir/logs/normal.log 2>&1 &
@@ -39,7 +39,7 @@ docker run --name normal_node --net=host --cap-add NET_ADMIN normal_node /normal
 sleep 10
 echo "Starting clients..."
 cd $normal_node_dir
-go run ./cmd/client
+go run ./cmd/client --tps=50
 cd $base_dir
 
 echo "Please wait..."

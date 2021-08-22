@@ -15,6 +15,7 @@ var opts struct {
 	Quiet        bool   `short:"q" long:"quiet" description:"whether to print logging info or not"`
 	BlockSize    int    `long:"blockSize" default:"500" description:"default block size"`
 	Order        bool   `short:"o" long:"order" description:"whether to add sequence numbers for transactions"`
+	TPS        	 int    `long:"tps" default:"50" description:"default sending TPS"`
 }
 
 func init() {
@@ -36,9 +37,9 @@ func init() {
 func main() {
 	client := NewClient()
 	if opts.Order { // there is no sequencer
-		client.setupConnection(opts.GroupAddress)
+		client.setupConnection(opts.GroupAddress, opts.TPS)
 	} else { // there is a sequencer
-		client.setupConnection(opts.SeqAddress)
+		client.setupConnection(opts.SeqAddress, opts.TPS)
 	}
 
 	ticker := time.NewTicker(3 * time.Second)

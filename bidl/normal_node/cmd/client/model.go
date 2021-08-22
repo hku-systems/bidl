@@ -19,7 +19,7 @@ type Client struct {
 //create a new client.
 func NewClient() *Client {
 	return &Client{
-		packets:  make(chan common.Packet),
+		packets:  make(chan common.Packet, 10000),
 		messages: make(chan common.Message),
 		kill:     make(chan bool),
 		seq:      0,
