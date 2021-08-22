@@ -207,7 +207,7 @@ public final class Acceptor {
 
 		// bidl: check transactions that are not received
 		// if we comment out the checkTxHash(value), then the node will proceed consensus without check if it hold all proposed transactions.
-		// checkTxHash(value);
+		checkTxHash(value);
 
 		if (epoch.propValue == null) { // only accept one propose per epoch
 			epoch.propValue = value;
