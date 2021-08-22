@@ -9,7 +9,8 @@ script_dir=$(cd "$(dirname "$0")";pwd)
 source $script_dir/env.sh
 
 echo "Stopping sequencer/consensus/normal nodes..."
-source $script_dir/kill_all.sh
+# source $script_dir/kill_all.sh
+source $script_dir/kill_all_local.sh
 
 # echo "Generating hosts.config..."
 rm -f $smart_dir/config/hosts.config
@@ -31,17 +32,23 @@ for i in `seq 0 $[${1}-1]`; do
 done
 
 echo "Starting the sequencer..."
-$sequencer_dir/sequencer 50 &> $base_dir/logs/sequencer.log &
+$sequencer_dir/sequencer 70 &> $base_dir/logs/sequencer.log &
 
 echo "Starting normal node..."
 docker run --name normal_node --net=host --cap-add NET_ADMIN normal_node /normal_node/server --quiet > $base_dir/logs/normal.log 2>&1 &
 
 sleep 10
 echo "Starting clients..."
+echo "Warming up..."
 cd $normal_node_dir
-go run ./cmd/client --tps=50
-cd $base_dir
+go run ./cmd/client --num=5000
 
+
+echo "benchmarking..."
+sleep 10
+go run ./cmd/client --num=100000
+
+cd $base_dir
 echo "Please wait..."
 sleep 30
 source $base_dir/scripts/get_data.sh

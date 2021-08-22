@@ -15,7 +15,8 @@ var opts struct {
 	Quiet        bool   `short:"q" long:"quiet" description:"whether to print logging info or not"`
 	BlockSize    int    `long:"blockSize" default:"500" description:"default block size"`
 	Order        bool   `short:"o" long:"order" description:"whether to add sequence numbers for transactions"`
-	TPS        	 int    `long:"tps" default:"50" description:"default sending TPS"`
+	TPS        	 int    `long:"tps" default:"100" description:"sending TPS"`
+	Num        	 int    `long:"num" default:"100000" description:"number of transactions"`
 }
 
 func init() {
@@ -48,16 +49,16 @@ func main() {
 	// generate payload
 	orgNum := 4           // number of organizations
 	accNum := 1000        // number of accounts for each organization
-	numTransfer := 100000 // number of transactions to be sent
+	numTransfer := opts.Num // number of transactions to be sent
 	txnsCreate := GenerateCreateWorkload(accNum, orgNum, false)
 	txnsTransfer := GenerateTransferWorkload(accNum, orgNum, numTransfer)
 	txns := append(txnsCreate, txnsTransfer...)
 
 	// submit transactions
-	num := len(txns)
+	// num := len(txns)
 	//num := 1000
-	log.Infof("Start sending %d transactions", num)
-	for i := 0; i < num; i++ {
+	log.Infof("Start sending %d transactions", opts.Num)
+	for i := 0; i < opts.Num; i++ {
 		client.SendTxn(txns[i], opts.Order)
 	}
 	//log.Infof("Start sending block")
