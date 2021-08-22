@@ -2,6 +2,10 @@
 
 echo  "Obtaining throughput and latency data..."
 
-cat $log_dir/normal.log | grep "BIDL throughput" 
+file=$base_dir/logs/bidl_performance_$1.log
 
-cat $log_dir/log_0.log | grep "Total latency" 
+rm -f $file
+
+cat $log_dir/normal.log | grep "BIDL throughput" > $file
+
+cat $log_dir/log_0.log | grep "Total latency" >> $file
