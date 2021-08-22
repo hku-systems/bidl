@@ -101,7 +101,7 @@ int main(int argc, char *argv[]) {
     int fd;
 	struct ifreq ifr;
 
-    char iface[] = "enp5s0";
+    char iface[] = "lo";
     fd = socket(AF_INET, SOCK_DGRAM, 0);
 
 	//Type of address to retrieve - IPv4 IP address

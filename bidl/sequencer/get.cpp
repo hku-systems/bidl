@@ -16,7 +16,7 @@ int main()
     // replace with your interface name
     // or ask user to input
     
-	char iface[] = "enp5s0";
+	char iface[] = "lo";
 	
 	fd = socket(AF_INET, SOCK_DGRAM, 0);
 

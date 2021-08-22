@@ -56,7 +56,7 @@ public class BidlFrontend extends Thread {
         Bootstrap bootstrap = new Bootstrap();
         NioEventLoopGroup acceptGroup = new NioEventLoopGroup(4);
         try {
-            NetworkInterface ni = NetworkInterface.getByName("enp5s0"); // used enp5s0 for hostwork
+            NetworkInterface ni = NetworkInterface.getByName("lo"); // used lo for hostwork
             // NetworkInterface ni = NetworkInterface.getByName("eth0"); // used en0 for
             // docker overlay network
             Enumeration<InetAddress> addresses = ni.getInetAddresses();

@@ -31,8 +31,8 @@ for i in `seq 0 $[${1}-1]`; do
     docker run --name smart$i --net=host --cap-add NET_ADMIN smart bash /home/runscripts/smartrun.sh bftsmart.demo.microbenchmarks.ThroughputLatencyServer $i 10 0 0 false nosig rwd > $base_dir/logs/log_${i}.log 2>&1 &
 done
 
-echo "Starting the sequencer..., tput:$2 kTxns/s."
-$sequencer_dir/sequencer $2 &> $base_dir/logs/sequencer.log &
+# echo "Starting the sequencer..., tput:$2 kTxns/s."
+# $sequencer_dir/sequencer $2 &> $base_dir/logs/sequencer.log &
 
 echo "Starting normal node..."
 docker run --name normal_node --net=host --cap-add NET_ADMIN normal_node /normal_node/server --quiet > $base_dir/logs/normal.log 2>&1 &
@@ -41,11 +41,11 @@ sleep 10
 echo "Starting clients..."
 echo "Warming up..."
 cd $normal_node_dir
-go run ./cmd/client --num=5000
+go run ./cmd/client --order --num=5000
 
 echo "benchmarking..."
 sleep 10
-go run ./cmd/client --num=100000
+go run ./cmd/client --order --num=100000
 
 cd $base_dir
 echo "Please wait..."

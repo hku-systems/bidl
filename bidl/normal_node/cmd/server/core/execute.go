@@ -288,6 +288,5 @@ func (p *Processor) ProcessPersist(data []byte) {
 	}
 	if p.Persists[result.TxnHash] == 4 { // 3f+1 = 4
 		p.commitTxn(hashes[:])
-		util.Monitor.TputTxn <- 1
 	}
 }

@@ -34,7 +34,7 @@ public class BidlFrontendSequencer {
         Bootstrap bootstrap = new Bootstrap();
         NioEventLoopGroup acceptGroup = new NioEventLoopGroup(1);
         try {
-            NetworkInterface ni = NetworkInterface.getByName("enp5s0"); // used en0 for
+            NetworkInterface ni = NetworkInterface.getByName("lo"); // used en0 for
             Enumeration<InetAddress> addresses = ni.getInetAddresses();
             InetAddress localAddress = null;
             while (addresses.hasMoreElements()) {

@@ -20,7 +20,7 @@ public class BIDLSender {
 
     public BIDLSender() {
         try {
-            NetworkInterface ni = NetworkInterface.getByName("enp5s0");
+            NetworkInterface ni = NetworkInterface.getByName("lo");
             if (ni == null) {
                 logger.error("Error getting the Network Interface");
                 return;

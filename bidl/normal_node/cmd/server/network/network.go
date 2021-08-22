@@ -19,7 +19,7 @@ type Network struct {
 
 func NewNetwork(addr string, bufferSize int) *Network {
 	// setup recv connection with standard API
-	nic, err := net.InterfaceByName("enp5s0")
+	nic, err := net.InterfaceByName("lo")
 	groupAddr, err := net.ResolveUDPAddr("udp", addr)
 	util.ErrorCheck(err, "NewNetwork", true)
 	recvConn, err := net.ListenMulticastUDP("udp", nic, groupAddr)
