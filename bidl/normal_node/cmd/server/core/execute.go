@@ -270,7 +270,7 @@ func (p *Processor) PersistExecResult(env *common.Envelop) {
 	}
 	buf, _ := msgpack.Marshal(result)
 	buf = append(common.MagicNumExecResult, buf...)
-	log.Infof("Persisting execution result for transaction %d", env.SeqTransaction.Seq)
+	log.Debugf("Persisting execution result for transaction %d", env.SeqTransaction.Seq)
 	p.Net.Multicast(buf)
 }
 

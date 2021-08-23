@@ -46,14 +46,25 @@ func CreateAccounts(acc int, org int, bal int) {
 // num: number of transactions
 // conflict: ratio of hot accounts
 func GenerateTransferWorkload(acc int, org int, num int, conflict int) []*common.Transaction {
+	conflictNum := 0
+	if conflict > 0 {
+		conflictNum = int(num / 100 * conflict)
+		log.Infof("%d%% accounts are hot accounts", conflict)
+	}
+
 	txns := make([]*common.Transaction, num)
 	dummy := make([]byte, 1024)
 	rand.Read(dummy)
 	for i := 0; i < num; i++ {
 		org1 := rand.Intn(org)
+		org2 := (org1 + 1) % org
 		acc1 := rand.Intn(acc)
-		org2 := org1 + 1
 		acc2 := rand.Intn(acc)
+		// select accounts from the hot accounts
+		if conflict > 0 {
+			acc1 = rand.Intn(conflictNum)
+			acc2 = rand.Intn(conflictNum)
+		}
 		payloadStr := strconv.Itoa(acc1) + ":" + strconv.Itoa(acc2) + "1"
 		orgStr := strconv.Itoa(org1) + ":" + strconv.Itoa(org2)
 		sig := util.CreateMAC([]byte(payloadStr), []byte(common.SecretKey))
