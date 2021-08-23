@@ -75,8 +75,8 @@ public class BidlFrontend extends Thread {
                     return new NioDatagramChannel(InternetProtocolFamily.IPv4);
                 }
             }).localAddress(localAddress, groupAddress.getPort()).option(ChannelOption.IP_MULTICAST_IF, ni)
-                    .option(ChannelOption.SO_RCVBUF, 1024 * 1024 * 100)
-                    .option(ChannelOption.RCVBUF_ALLOCATOR, new FixedRecvByteBufAllocator(1024 * 1024))
+                    .option(ChannelOption.SO_RCVBUF, 1024 * 1024 * 1000)
+                    .option(ChannelOption.RCVBUF_ALLOCATOR, new FixedRecvByteBufAllocator(1024 * 1024 * 10))
                     .option(ChannelOption.SO_REUSEADDR, true).handler(new ChannelInitializer<NioDatagramChannel>() {
                         @Override
                         public void initChannel(NioDatagramChannel ch) throws Exception {
@@ -206,7 +206,7 @@ public class BidlFrontend extends Thread {
                     byte[] block = new byte[blockBuffer.remaining()];
                     blockBuffer.get(block);
 
-                    // logger.debug("bidl: BidlFrontend, block " + " length " + block.length + " content "
+                    // logger.info("bidl: BidlFrontend, block " + " length " + block.length + " content "
                     //         + Arrays.toString(block));
 
                     byte[] reply = proxy.invokeOrdered(block);

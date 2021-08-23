@@ -501,21 +501,23 @@ public final class Acceptor {
 	}
 
 	private void checkTxHash(byte[] proposedValue) {
-		// - first 64 bytes is metadata, which only exists in the propose message and not exists in the deserializedPropValue
+		// - first 60 bytes of the proposed value is metadata, which only exists in the propose message and not exists in the deserializedPropValue
 		// - the first 4 bytes of the actual payload is an integer indicating the length of payload
+		// - each entry is a 2-tuple [seq, hash], the `seq` is 4 bytes uint32, hash is 32 bytes 
 		// - the last n-8 ~ n-4 bytes of the actual payload is an integer indicating the maximum sequence number
 		// - the last n-4 ~ n bytes of the actual payload is an integer indicating the length of signatures, which is (0) in our setting.
-		// logger.debug("bidl: processing new propose message, length:{}, content:{}", proposedValue.length,
+		// logger.info("bidl: processing new propose message, length:{}, content:{}", proposedValue.length,
 		// 		Arrays.toString(proposedValue));
 
 		// retrieve the maximum transaction sequence number in blocks
 		byte[] seqBytes = new byte[4];
 		int length = proposedValue.length - 8;
-		for (int i = length - 4, j = 0; i <= length - 1; i++, j++) {
+		for (int i = length - 4, j = 0; i < length; i++, j++) {
 			seqBytes[j] = proposedValue[i];
 		}
 		// if I have not received the latest transactions, wait for 5ms, the maximum
 		// waiting time is 5 * 5=15 ms.
+		// this can prevent unnecessary re-transmissions
 		int blockMaxSeq = fromByteArray(seqBytes);
 		try {
 			for (int waitN = 0; BidlFrontend.maxSeqNum < blockMaxSeq && waitN < 5; waitN++) {
@@ -532,16 +534,20 @@ public final class Acceptor {
 			ArrayList<byte[]> gapHashes = new ArrayList<>();
 			byte[] hash = new byte[32];
 			int gapNumber = 0;
-			int len = 0;
-			for (int i = 64; i < proposedValue.length - 8; i++) {
-				hash[len++] = proposedValue[i];
-				if (len == 32) {
-					if (!BidlFrontend.txMap.containsKey(new String(hash))) {
-						gapNumber++;
-						gapHashes.add(hash);
-					}
-					len = 0;
+			for (int i = 64; i < proposedValue.length - 12; i+=36) {
+				hash = Arrays.copyOfRange(proposedValue, i+4, i+36);
+				if (!BidlFrontend.txMap.containsKey(new String(hash))) {
+					gapNumber++;
+					gapHashes.add(hash);
 				}
+				// hash[len++] = proposedValue[i];
+				// if (len == 36) {
+				// 	if (!BidlFrontend.txMap.containsKey(new String(hash))) {
+				// 		gapNumber++;
+				// 		gapHashes.add(hash);
+				// 	}
+				// 	len = 0;
+				// }
 			}
 
 			// send gap-req message, and wait for gap-reply

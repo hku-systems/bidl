@@ -58,14 +58,16 @@ int main(int argc, char *argv[]) {
     cout << "Multicast interval:" << sleep_duration.count() << endl;
 
     /*
-    * declare the socket used for receiving transactions from clients
+    * Declare the socket used for receiving transactions from clients
     */
     int recv_fd = socket(AF_INET, SOCK_DGRAM, 0);
     if(recv_fd < 0) {
         perror("socket");
         exit(1);
     }
-
+    if (setsockopt(recv_fd, SOL_SOCKET, SO_RCVBUF, &BUF_LEN, sizeof(BUF_LEN)) == -1) {
+        cout<< "Error setting udp receive buffer" <<endl;
+    }
 
     /*
     * Declare the socket used for udp multicast
@@ -88,6 +90,7 @@ int main(int argc, char *argv[]) {
     struct sockaddr_in addr_client;
     
     int send_fd = socket(AF_INET, SOCK_DGRAM, 0);
+
     if(send_fd < 0) {
         perror("socket");
         exit(1);
