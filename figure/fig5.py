@@ -32,7 +32,19 @@ with open("logs/streamchain/validation.log") as f:
         streamchain_latency.append(float(temp[-2]))
         streamchain_tps.append(float(temp[-1]))
 
+with open("logs/streamchain/endorsement.log") as f:
+    cnt=0
+    for line in f.readlines():
+        temp = line.split(',')
+        streamchain_latency[cnt] += float(temp[-2])
+        cnt += 1
 
+with open("logs/streamchain/ordering.log") as f:
+    cnt=0
+    for line in f.readlines():
+        temp = line.split(',')
+        streamchain_latency[cnt] += float(temp[-2])
+        cnt += 1
 
 
 plt.plot(ff_tps, ff_latency, label="fastfabric")
