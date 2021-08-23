@@ -39,7 +39,24 @@ Create the docker overlay network with
 docker network create -d overlay --attachable HLF
 ```
 
+You can also use our cluster for all experiments. Please feel free to contact us for the ssh private key to access our cluster.
+
 ## Experiments
+
+### Experiment 0: Test run
+
+This experiment tests the experimental environment. The following test script benchmarks BIDL with 1e5 transactions.
+
+As BIDL relies on the IP multicast to disseminate transactions, the experimental environment needs a low packet loss rate. 
+
+If there are no errors when running the script, and the script print `Ok!`, then your experimental environment has a low packet loss rate and can run all experiments.
+
+- Command to run:
+
+```shell
+cd bidl
+bash ./scripts/test_run.sh
+```
 
 ### Experiment 1: End-to-end performance
 

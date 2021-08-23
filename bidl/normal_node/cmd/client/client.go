@@ -72,7 +72,7 @@ func main() {
 
 	// submit transactions
 	// num := len(txns)
-	//num := 1000
+	// num := 1000
 	log.Infof("Start sending %d transactions", opts.Num)
 	for i := 0; i < opts.Num; i++ {
 		client.SendTxn(txns[i], opts.Order)

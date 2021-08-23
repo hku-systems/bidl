@@ -181,7 +181,7 @@ int main(int argc, char *argv[]) {
             auto t2 = Clock::now();
             auto interval = chrono::duration_cast<chrono::milliseconds>(t2-t1).count();
             t1 = t2;
-            cout << "Total:" << tot << " Interval:" << interval  << " TPS:" << prtInterval / interval << "kTxns/s" << endl;
+            cout << "Total " << tot << " Interval " << interval  << " TPS " << prtInterval / interval << " kTxns/s" << endl;
         }
         while(true){
             auto elapsed = chrono::duration_cast<chrono::microseconds>(chrono::high_resolution_clock::now() - now);
