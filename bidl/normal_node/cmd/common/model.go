@@ -22,6 +22,7 @@ type Transaction struct {
 	Payload   []byte
 	Org       []byte
 	Signature []byte
+	Dummy	  []byte
 }
 
 // transaction with sequence number

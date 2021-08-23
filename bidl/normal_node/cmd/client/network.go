@@ -138,13 +138,20 @@ func (c *Client) SendBlock(txns []*common.Transaction, blkSize int) {
 			seqBuf := make([]byte, 8)
 			binary.LittleEndian.PutUint64(seqBuf, c.seq)
 			msgByte = append(seqBuf, msgByte...)
-			c.seq++
 			// add magic number
 			msgByte = append(common.MagicNumTxn, msgByte...)
-			// assemble txn hashes into the block
+
+			// assemble txn seq into the block
+			seqInt := uint32(c.seq)
+			seqIntBuf := make([]byte, 4)
+			binary.LittleEndian.PutUint32(seqIntBuf, seqInt)
+			block = append(block, seqIntBuf...)
+			
+			// assemble txn [seq, hash] into the block
 			hash := sha256.Sum256(msgByte)
 			block = append(block, hash[:]...)
 			//log.Debug("index:", j, len(msgByte), msg, "hash:", sha256.Sum256(msgByte))
+			c.seq++
 		}
 		temp := []byte{0, 0, 0, 0}
 		// add block length to the start of the block
@@ -157,7 +164,7 @@ func (c *Client) SendBlock(txns []*common.Transaction, blkSize int) {
 		block = append(block, temp...)
 		//log.Debugf("Assembled block size:", len(block), "Content:", block)
 		log.Debugf("Sending assembled block, size: %d", len(block))
-		//_, err := c.connection.Write(block)
-		//ErrorCheck(err, "SendBlock", false)
+		_, err := c.connection.Write(block)
+		ErrorCheck(err, "SendBlock", false)
 	}
 }

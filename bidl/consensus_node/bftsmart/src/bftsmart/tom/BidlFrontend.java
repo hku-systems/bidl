@@ -169,6 +169,9 @@ public class BidlFrontend extends Thread {
             maxSeqNum = seqNum > maxSeqNum ? seqNum : maxSeqNum;
             logger.debug("bidl: sequence Number of current transaction is {}, maximum:{}", seqNum, maxSeqNum);
 
+            // put the transaction's sequence number to the block buffer
+            this.payloadBuffer.putInt(seqNum);
+
             // get sha256 of the transaction bytes
             byte[] hash = this.digest.digest(rcvPktBuf);
 
@@ -180,7 +183,7 @@ public class BidlFrontend extends Thread {
             // logger.debug("bidl: new transaction received, size: {}, totalNumber: {}, num: {}, txMap size: {} ",
             //         rcvPktLength, this.totalNum, num, txMap.size());
 
-            // add transaction hashes to the next block
+            // add transaction hashes to the block buffer
             this.payloadBuffer.put(hash);
 
             // if I have collected enough transactions and I am the leader, submit txs to the co-located node

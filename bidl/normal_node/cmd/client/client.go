@@ -61,8 +61,8 @@ func main() {
 	for i := 0; i < opts.Num; i++ {
 		client.SendTxn(txns[i], opts.Order)
 	}
-	//log.Infof("Start sending block")
-	//client.SendBlock(txns[:num], opts.BlockSize)
+	log.Infof("Start sending block")
+	client.SendBlock(txns, opts.BlockSize)
 }
 
 func RandomString(n int) string {

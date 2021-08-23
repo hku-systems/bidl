@@ -1,14 +1,15 @@
 package main
 
 import (
-	log "github.com/sirupsen/logrus"
-	"github.com/syndtr/goleveldb/leveldb"
 	"math/rand"
 	"normal_node/cmd/common"
 	"normal_node/cmd/server/util"
 	"os"
 	"strconv"
 	"time"
+
+	log "github.com/sirupsen/logrus"
+	"github.com/syndtr/goleveldb/leveldb"
 )
 
 // acc: account number
@@ -45,6 +46,8 @@ func CreateAccounts(acc int, org int, bal int) {
 // num: number of transactions
 func GenerateTransferWorkload(acc int, org int, num int) []*common.Transaction {
 	txns := make([]*common.Transaction, num)
+	dummy := make([]byte, 1024)
+	rand.Read(dummy)
 	for i := 0; i < num; i++ {
 		org1 := rand.Intn(org)
 		acc1 := rand.Intn(acc)
@@ -58,6 +61,7 @@ func GenerateTransferWorkload(acc int, org int, num int) []*common.Transaction {
 			Payload:   []byte(payloadStr),
 			Org:       []byte(orgStr),
 			Signature: sig,
+			Dummy:     dummy,
 		}
 		txns[i] = txn
 	}
@@ -70,6 +74,8 @@ func GenerateTransferWorkload(acc int, org int, num int) []*common.Transaction {
 // nd: non-determinism
 func GenerateCreateWorkload(acc int, org int, nd bool) []*common.Transaction {
 	txns := make([]*common.Transaction, acc*org)
+	dummy := make([]byte, 1024)
+	rand.Read(dummy)
 	for i := 0; i < org; i++ {
 		for j := 0; j < acc; j++ {
 			var payloadStr string
@@ -85,6 +91,7 @@ func GenerateCreateWorkload(acc int, org int, nd bool) []*common.Transaction {
 				Payload:   []byte(payloadStr),
 				Org:       []byte(orgStr),
 				Signature: sig,
+				Dummy:	   dummy,
 			}
 			txns[i*acc+j] = txn
 		}

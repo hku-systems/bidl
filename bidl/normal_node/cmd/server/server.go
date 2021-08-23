@@ -4,12 +4,13 @@ import (
 	"bytes"
 	"crypto/sha256"
 	"encoding/binary"
-	log "github.com/sirupsen/logrus"
-	"github.com/vmihailenco/msgpack"
 	"normal_node/cmd/common"
 	"normal_node/cmd/server/core"
 	"normal_node/cmd/server/network"
 	"normal_node/cmd/server/util"
+
+	log "github.com/sirupsen/logrus"
+	"github.com/vmihailenco/msgpack"
 )
 
 var p *core.Processor

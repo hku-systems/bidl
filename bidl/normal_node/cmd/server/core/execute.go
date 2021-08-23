@@ -3,9 +3,6 @@ package core
 import (
 	"bytes"
 	"crypto/sha256"
-	log "github.com/sirupsen/logrus"
-	"github.com/syndtr/goleveldb/leveldb"
-	"github.com/vmihailenco/msgpack"
 	"normal_node/cmd/common"
 	"normal_node/cmd/server/config"
 	"normal_node/cmd/server/network"
@@ -14,6 +11,10 @@ import (
 	"strings"
 	"sync"
 	"unsafe"
+
+	log "github.com/sirupsen/logrus"
+	"github.com/syndtr/goleveldb/leveldb"
+	"github.com/vmihailenco/msgpack"
 )
 
 type Processor struct {
@@ -182,26 +183,28 @@ func (p *Processor) ProcessBlock(block []byte) {
 	// the first four bytes is an int indicating the block length
 	// the last eight bytes is two ints indicating the maximum sequence number and the signature length (0)
 	payload := block[4 : len(block)-8]
-	hashNum := len(payload) / 32
-	if len(payload) % 32 != 0 {
+	hashNum := len(payload) / 36
+	if len(payload) % 36 != 0 {
 		log.Errorf("The block is badly formed, block length: %d.", len(payload))
 		return
 	}
 	log.Infof("New block received, block number: %d", p.blkNum)
-	// obtain transaction hashes from block
-	hashesBlk := make([][32]byte, 0)
-	var hash *[32]byte
+	// obtain transaction [seq, hash] from block
+	hashesBlk := make([][]byte, 0)
+	var seqHash []byte
 	for i := 0; i < hashNum; i += 1 {
-		hash = byte32(payload[i*32 : i*32+32])
-		hashesBlk = append(hashesBlk, *hash)
+		// seqHash = byte32(payload[i*36 : i*36+36])
+		seqHash = payload[i*36 : i*36+36]
+		hashesBlk = append(hashesBlk, seqHash)
 	}
 	// check transaction hashes
 	reExec := false
 	for i := 0; i < hashNum; i++ {
-		hashBlk := hashesBlk[i]
-		seq := uint64(p.blkNum*p.BlkSize + i)
-		if _, ok := p.TXPool[seq]; ok {
-			hashLocal := p.TXPool[seq].SeqTransaction.Hash
+		seq, _ := strconv.Atoi(string(hashesBlk[i][:4]))
+		log.Infof("Seq: %d", seq)
+		hashBlk := byte32(hashesBlk[i][4:])
+		if _, ok := p.TXPool[uint64(seq)]; ok {
+			hashLocal := p.TXPool[uint64(seq)].SeqTransaction.Hash
 			//log.Debugf("sequence number is %l, hashnum: %d, blkNum %d, i: %d", seq, hashNum, p.blkNum, i)
 			//log.Debugf("hashBlk", hashBlk, "hashLocal", hashLocal)
 			if !bytes.Equal(hashBlk[:], hashLocal[:]) {
@@ -214,7 +217,7 @@ func (p *Processor) ProcessBlock(block []byte) {
 	if reExec {
 		log.Infof("re-execute transactions.")
 		for i := 0; i < hashNum; i++ {
-			hashBlk := hashesBlk[i]
+			hashBlk := *byte32(hashesBlk[i][4:])
 			if _, ok := p.Envelops[hashBlk]; ok {
 				p.ExecuteTxn(p.Envelops[hashBlk].SeqTransaction)
 			}
