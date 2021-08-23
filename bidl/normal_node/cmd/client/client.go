@@ -17,6 +17,7 @@ var opts struct {
 	Order        bool   `short:"o" long:"order" description:"whether to add sequence numbers for transactions"`
 	TPS        	 int    `long:"tps" default:"100" description:"sending TPS"`
 	Num        	 int    `long:"num" default:"100000" description:"number of transactions"`
+	nd        	 int    `long:"nd" default:"100000" description:"number of transactions"`
 }
 
 func init() {
@@ -61,8 +62,8 @@ func main() {
 	for i := 0; i < opts.Num; i++ {
 		client.SendTxn(txns[i], opts.Order)
 	}
-	log.Infof("Start sending block")
-	client.SendBlock(txns, opts.BlockSize)
+	//log.Infof("Start sending block")
+	//client.SendBlock(txns, opts.BlockSize)
 }
 
 func RandomString(n int) string {

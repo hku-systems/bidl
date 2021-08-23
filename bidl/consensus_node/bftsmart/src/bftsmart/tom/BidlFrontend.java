@@ -113,8 +113,8 @@ public class BidlFrontend extends Thread {
                 this.digest = MessageDigest.getInstance("SHA-256");
                 this.proxy = new ServiceProxy(1001, controller.getStaticConf().getProcessId());
                 this.signature = new byte[0];
-                this.blockBuffer = ByteBuffer.allocate(this.blockSize * 32 + Integer.BYTES * 2 + Integer.BYTES);
-                this.payloadBuffer = ByteBuffer.allocate(this.blockSize * 32 + Integer.BYTES);
+                this.blockBuffer = ByteBuffer.allocate(this.blockSize * 36 + Integer.BYTES * 2 + Integer.BYTES);
+                this.payloadBuffer = ByteBuffer.allocate(this.blockSize * 36 + Integer.BYTES);
                 logger.info("The default batch size is of BIDLFrontend is {}", this.blockSize);
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
@@ -149,7 +149,7 @@ public class BidlFrontend extends Thread {
                 for (int i=0; i<4; i++) {
                     rcvPktBuf[i] = BidlFrontend.MagicNumPersist[i];
                 }
-                bidlSender.send(rcvPktBuf);
+                bidlSender.send(Arrays.copyOfRange(rcvPktBuf, 0, rcvPktLength));
                 bytebuf.release();
                 return;
             } else if (Arrays.equals(magicNum, MagicNumPersist)) {
@@ -170,7 +170,8 @@ public class BidlFrontend extends Thread {
             logger.debug("bidl: sequence Number of current transaction is {}, maximum:{}", seqNum, maxSeqNum);
 
             // put the transaction's sequence number to the block buffer
-            this.payloadBuffer.putInt(seqNum);
+            // this.payloadBuffer.putInt(seqNum);
+            this.payloadBuffer.put(Arrays.copyOfRange(rcvPktBuf, 4, 8));
 
             // get sha256 of the transaction bytes
             byte[] hash = this.digest.digest(rcvPktBuf);

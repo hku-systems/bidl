@@ -3,6 +3,7 @@ package core
 import (
 	"bytes"
 	"crypto/sha256"
+	"encoding/binary"
 	"normal_node/cmd/common"
 	"normal_node/cmd/server/config"
 	"normal_node/cmd/server/network"
@@ -200,8 +201,7 @@ func (p *Processor) ProcessBlock(block []byte) {
 	// check transaction hashes
 	reExec := false
 	for i := 0; i < hashNum; i++ {
-		seq, _ := strconv.Atoi(string(hashesBlk[i][:4]))
-		log.Infof("Seq: %d", seq)
+		seq := binary.LittleEndian.Uint32(hashesBlk[i][:4])
 		hashBlk := byte32(hashesBlk[i][4:])
 		if _, ok := p.TXPool[uint64(seq)]; ok {
 			hashLocal := p.TXPool[uint64(seq)].SeqTransaction.Hash
@@ -270,13 +270,13 @@ func (p *Processor) PersistExecResult(env *common.Envelop) {
 	}
 	buf, _ := msgpack.Marshal(result)
 	buf = append(common.MagicNumExecResult, buf...)
-	log.Debugf("Persisting execution result for transaction %d", env.SeqTransaction.Seq)
+	log.Infof("Persisting execution result for transaction %d", env.SeqTransaction.Seq)
 	p.Net.Multicast(buf)
 }
 
 func (p *Processor) ProcessPersist(data []byte) {
 	var result common.Result
-	msgpack.Unmarshal(data,result)
+	msgpack.Unmarshal(data, &result)
 	if !p.Related(result.Org){
 		log.Debugf("Not related persist message, discard the message, seq: %d", result.Seq)
 		return;
@@ -289,7 +289,8 @@ func (p *Processor) ProcessPersist(data []byte) {
 	} else {
 		p.Persists[result.TxnHash] = 1
 	}
-	if p.Persists[result.TxnHash] == 4 { // 3f+1 = 4
+	if p.Persists[result.TxnHash] == 3 { // 3f+1 = 4
+		log.Debugf("Transaction execution result persisted, seq: %d", result.Seq)
 		p.commitTxn(hashes[:])
 	}
 }

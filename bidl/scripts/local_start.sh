@@ -45,7 +45,7 @@ go run ./cmd/client --order --num=5000
 
 echo "benchmarking..."
 sleep 10
-go run ./cmd/client --order --num=100000
+go run ./cmd/client --order --num=10000
 
 cd $base_dir
 echo "Please wait..."

@@ -1,9 +1,9 @@
 package util
 
 import (
+	"fmt"
 	log "github.com/sirupsen/logrus"
 	"time"
-	"fmt"
 )
 
 type TputMonitor struct {
@@ -35,7 +35,7 @@ func (monitor *TputMonitor) TxnThroughput() {
 			total++
 			if num == interval {
 				duration := int(time.Since(start).Milliseconds())
-				log.Infof("Received %d transactions, duration: %dms, transaction receiving tput: %d kTxns/s, total: %d", interval, duration, interval/duration, total)
+				log.Infof("Received %d transactions, duration: %dms, transaction tput: %d kTxns/s, total: %d", interval, duration, interval/duration, total)
 				start = time.Now()
 				num = 0
 			}
