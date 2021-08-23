@@ -2,6 +2,7 @@ package main
 
 import (
 	"math/rand"
+	"normal_node/cmd/common"
 	"time"
 
 	"github.com/jessevdk/go-flags"
@@ -17,7 +18,8 @@ var opts struct {
 	Order        bool   `short:"o" long:"order" description:"whether to add sequence numbers for transactions"`
 	TPS        	 int    `long:"tps" default:"100" description:"sending TPS"`
 	Num        	 int    `long:"num" default:"100000" description:"number of transactions"`
-	nd        	 int    `long:"nd" default:"100000" description:"number of transactions"`
+	ND        	 int    `long:"nd" default:"0" description:"ratio of non-deterministic transactions"`
+	Conflict     int    `long:"conflict" default:"0" description:"ratio of hot accounts for conflict transactions"`
 }
 
 func init() {
@@ -48,12 +50,25 @@ func main() {
 	defer ticker.Stop()
 
 	// generate payload
-	orgNum := 4           // number of organizations
-	accNum := 1000        // number of accounts for each organization
-	numTransfer := opts.Num // number of transactions to be sent
-	txnsCreate := GenerateCreateWorkload(accNum, orgNum, false)
-	txnsTransfer := GenerateTransferWorkload(accNum, orgNum, numTransfer)
-	txns := append(txnsCreate, txnsTransfer...)
+	orgNum := 1           // number of organizations
+	var txns []*common.Transaction
+	if opts.ND != 0 && opts.Conflict != 0 {
+		log.Errorf("Please only set non-deterministic rate or conflict rate")
+		return
+	} else if opts.ND != 0 {
+		accNum := opts.Num    // number of accounts for each organization
+		txns = GenerateCreateWorkload(accNum, orgNum, opts.ND)
+	} else if opts.Conflict != 0 {
+		accNum := 1000
+		txnsCreate := GenerateCreateWorkload(accNum, orgNum, 0)
+		txnsTransfer := GenerateTransferWorkload(accNum, orgNum, opts.Num, opts.Conflict)
+		txns = append(txnsCreate, txnsTransfer...)
+	} else {
+		accNum := 1000
+		txnsCreate := GenerateCreateWorkload(accNum, orgNum, 0)
+		txnsTransfer := GenerateTransferWorkload(accNum, orgNum, opts.Num, 0)
+		txns = append(txnsCreate, txnsTransfer...)
+	}
 
 	// submit transactions
 	// num := len(txns)
