@@ -39,6 +39,14 @@ cd $cur
 #     ssh -tt $USER@$host "mkdir -p $bm_path; sudo mount -t tmpfs -o size=8G $bm_path"
 # done 
 
+## tape
+cd $cur
+git clone qiji@10.22.1.8:~/tape
+git checkout hot
+cd tape
+docker build -f Dockerfile -t tape .
+
+exit 0
 
 ## deploy hotstuff
 cd hotstuff
@@ -51,10 +59,3 @@ cd $cur
 cd SBFT
 docker build -f Dockerfile_base -t sbft:base .
 cd $cur
-
-## tape
-cd $cur
-git clone qiji@10.22.1.8:~/tape
-git checkout hot
-cd tape
-docker build -f Dockerfile -t tape .
