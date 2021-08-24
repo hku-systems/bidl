@@ -31,7 +31,8 @@ Prerequisite:
 2. The machines should be able to SSH each other without password.
 3. Each host machine should have docker engine installed.
 4. The user should be able to execute docker command without `sudo` privilege, which can be achieved by `sudo usermod -aG docker (username)`.
-5. The machines should join the same docker swarm cluster. If you haven't done so, you can follow [this Docker official guide](https://docs.docker.com/engine/swarm/swarm-tutorial/)
+5. The machines should join the same docker swarm cluster. If you haven't done so, you can follow [this Docker official guide](https://docs.docker.com/engine/swarm/swarm-tutorial/).
+6. The machines need to support the IP multicast.
 
 Create the docker overlay network with
 
