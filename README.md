@@ -23,7 +23,7 @@ This artifact contains the implementation of BIDL, together with scripts for rep
 git clone git@github.com:hku-systems/bidl.git
 ```
 
-### Create the docker containers
+### Create the docker images
 
 Prerequisite:
 
@@ -39,6 +39,18 @@ Create the docker overlay network with
 ```shell
 docker network create -d overlay --attachable HLF
 ```
+
+To run Fabric and Fastfabric, you need to set the `host` parameter (IP address) in `config-fabric.yaml` and `config-fastfabric.yaml`. Make sure the length of host list is at least equal to the number of peers. In the following experiments, our scripts will generate docker compose files according to those configuration files. 
+
+To run streamchain, you need to set the IP addresses in `streamchain/setup/config.sh`. 
+
+Build the docker images for Fabric and Fastfabric with the following command.
+```shell 
+# Before you start, you need to replace the IP list in config.sh according to your experiment environment. 
+bash setup.sh
+```
+
+
 
 You can also use our cluster for all experiments. Please feel free to contact us for the ssh private key to access our cluster.
 

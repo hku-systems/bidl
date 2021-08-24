@@ -8,7 +8,7 @@ mkdir -p $HOME/go
 export GOPATH=$HOME/go
 
 ## init deploy 
-# bash runall.sh "docker pull hyperledger/fabric-ccenv:1.3.0; docker tag hyperledger/fabric-ccenv:latest"
+bash runall.sh "docker pull hyperledger/fabric-ccenv:1.3.0; docker tag hyperledger/fabric-ccenv:latest"
 
 ## deploy fastfabric
 mkdir -p $GOPATH/src/github.com/hyperledger
@@ -21,7 +21,6 @@ bash deploy.sh fastfabricv1.0
 
 ## deploy fabric
 
-cd $GOPATH/src/github.com/hyperledger/fabric
 rm -rf $GOPATH/src/github.com/hyperledger/fabric
 cp -r fabric $GOPATH/src/github.com/hyperledger/fabric
 cd $GOPATH/src/github.com/hyperledger/fabric
