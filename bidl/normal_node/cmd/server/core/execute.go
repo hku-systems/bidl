@@ -11,6 +11,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 	"unsafe"
 
 	log "github.com/sirupsen/logrus"
@@ -32,7 +33,7 @@ type Processor struct {
 	Net       *network.Network
 }
 
-var start := time.Now()
+var startExecBlk time.Time
 func NewProcessor(blkSize int, id int, net *network.Network) *Processor {
 	log.Debugf("Transaction processor initialized")
 	dbFile := "../state.db"
@@ -64,6 +65,7 @@ func (p *Processor) Related(orgs []byte) bool {
 	for org := range orgsRelate {
 		if org == p.ID {
 			related = true
+			break
 		}
 	}
 	return related
@@ -73,18 +75,20 @@ func (p *Processor) Related(orgs []byte) bool {
 func (p *Processor) ProcessTxn(txn *common.SequencedTransaction) {
 	p.mutex.Lock()
 	defer p.mutex.Unlock()
-
+	if p.txnNum == 0 {
+		startExecBlk = time.Now()
+	}
 	p.txnNum++
 	// execution latency
 	if p.txnNum % p.BlkSize == 0 {
-		end = time.Now()
 		elapsed := 	time.Since(startExecBlk) / time.Millisecond // duration in ms
+		startExecBlk = time.Now()
 		log.Infof("Block transactions execution latency: %dms", elapsed)
 	}
 
 	// check relative
 	if !p.Related(txn.Transaction.Org) {
-		log.Debugf("Not related to transaction %d, discard the transaction", txn.Seq)
+		log.Debugf("Not related to transaction %d, txnOrg:%s, discard the transaction", txn.Seq, string(txn.Transaction.Org))
 		return
 	}
 	// verify signature
@@ -96,7 +100,6 @@ func (p *Processor) ProcessTxn(txn *common.SequencedTransaction) {
 	}
 	// execute transaction
 	p.ExecuteTxn(txn)
-
 }
 
 func (p *Processor) ExecuteTxn(txn *common.SequencedTransaction) {
@@ -114,6 +117,7 @@ func (p *Processor) ExecuteTxn(txn *common.SequencedTransaction) {
 	} else {
 		log.Errorf("Error format of transactions")
 	}
+	time.Sleep(500 * time.Microsecond)
 	p.PersistExecResult(&env)
 }
 

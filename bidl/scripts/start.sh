@@ -1,9 +1,9 @@
 #!/bin/bash -e
 
-if [ "$#" -ne 2 ]; then
-    echo "Usage: bash ./scripts/local_start_docker.sh <num of nodes> <submit tput>"
-    exit 1
-fi
+# if [ "$#" -ne 2 ]; then
+#     echo "Usage: bash ./scripts/local_start_docker.sh <num of nodes> <submit tput>"
+#     exit 1
+# fi
 
 script_dir=$(cd "$(dirname "$0")";pwd)
 source $script_dir/env.sh
@@ -36,7 +36,19 @@ docker run --name normal_node --net=host --cap-add NET_ADMIN normal_node /normal
 echo "benchmarking..."
 sleep 10
 cd $normal_node_dir
-go run ./cmd/client --num=100000
+
+if [ $3 == "performance" ]; then
+    go run ./cmd/client --num=100000 --org=50
+elif [ $3 == "nd" ]; then 
+    go run ./cmd/client --num=100000 --org=50 --nd=$4 
+elif [ $3 == "contention" ]; then 
+    go run ./cmd/client --num=100000 --org=50 --conflict=$4
+elif [ $3 == "scalability" ]; then 
+    go run ./cmd/client --num=100000 --org=$4
+else 
+    echo "Invalid argument."
+    exit 1
+fi
 
 cd $base_dir
 echo "Please wait..."

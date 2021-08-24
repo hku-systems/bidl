@@ -56,8 +56,7 @@ func GenerateTransferWorkload(acc int, org int, num int, conflict int) []*common
 	dummy := make([]byte, 1000)
 	rand.Read(dummy)
 	for i := 0; i < num; i++ {
-		org1 := rand.Intn(org)
-		org2 := (org1 + 1) % org
+		orgID := rand.Intn(org)
 		acc1 := rand.Intn(acc)
 		acc2 := rand.Intn(acc)
 		// select accounts from the hot accounts
@@ -66,7 +65,7 @@ func GenerateTransferWorkload(acc int, org int, num int, conflict int) []*common
 			acc2 = rand.Intn(conflictNum)
 		}
 		payloadStr := strconv.Itoa(acc1) + ":" + strconv.Itoa(acc2) + "1"
-		orgStr := strconv.Itoa(org1) + ":" + strconv.Itoa(org2)
+		orgStr := strconv.Itoa(orgID) // org1:org2:org3
 		sig := util.CreateMAC([]byte(payloadStr), []byte(common.SecretKey))
 		txn := &common.Transaction {
 			Type:      common.TxnMessage,
@@ -102,7 +101,8 @@ func GenerateCreateWorkload(acc int, org int, nd int) []*common.Transaction {
 			} else {
 				payloadStr = strconv.Itoa(j) + ":" + strconv.Itoa(100000)
 			}
-			orgStr := strconv.Itoa(i) + ":" + strconv.Itoa((i+1)%org)
+			//orgStr := strconv.Itoa(i) + ":" + strconv.Itoa((i+1)%org)
+			orgStr := strconv.Itoa(i)
 			sig := util.CreateMAC([]byte(payloadStr), []byte(common.SecretKey))
 			txn := &common.Transaction{
 				Type:      common.TxnMessage,
