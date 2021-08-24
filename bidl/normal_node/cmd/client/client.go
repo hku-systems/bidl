@@ -17,6 +17,7 @@ var opts struct {
 	BlockSize    int    `long:"blockSize" default:"500" description:"default block size"`
 	Order        bool   `short:"o" long:"order" description:"whether to add sequence numbers for transactions"`
 	TPS        	 int    `long:"tps" default:"100" description:"sending TPS"`
+	Orgs         int    `long:"org" default:"1" description:"number of organizations"`
 	Num        	 int    `long:"num" default:"100000" description:"number of transactions"`
 	ND        	 int    `long:"nd" default:"0" description:"ratio of non-deterministic transactions"`
 	Conflict     int    `long:"conflict" default:"0" description:"ratio of hot accounts for conflict transactions"`
@@ -50,23 +51,22 @@ func main() {
 	defer ticker.Stop()
 
 	// generate payload
-	orgNum := 1           // number of organizations
 	var txns []*common.Transaction
 	if opts.ND != 0 && opts.Conflict != 0 {
 		log.Errorf("Please only set non-deterministic rate or conflict rate")
 		return
 	} else if opts.ND != 0 {
 		accNum := opts.Num    // number of accounts for each organization
-		txns = GenerateCreateWorkload(accNum, orgNum, opts.ND)
+		txns = GenerateCreateWorkload(accNum, opts.Orgs, opts.ND)
 	} else if opts.Conflict != 0 {
 		accNum := 1000
-		txnsCreate := GenerateCreateWorkload(accNum, orgNum, 0)
-		txnsTransfer := GenerateTransferWorkload(accNum, orgNum, opts.Num, opts.Conflict)
+		txnsCreate := GenerateCreateWorkload(accNum, opts.Orgs, 0)
+		txnsTransfer := GenerateTransferWorkload(accNum, opts.Orgs, opts.Num, opts.Conflict)
 		txns = append(txnsCreate, txnsTransfer...)
 	} else {
 		accNum := 1000
-		txnsCreate := GenerateCreateWorkload(accNum, orgNum, 0)
-		txnsTransfer := GenerateTransferWorkload(accNum, orgNum, opts.Num, 0)
+		txnsCreate := GenerateCreateWorkload(accNum, opts.Orgs, 0)
+		txnsTransfer := GenerateTransferWorkload(accNum, opts.Orgs, opts.Num, 0)
 		txns = append(txnsCreate, txnsTransfer...)
 	}
 

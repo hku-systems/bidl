@@ -20,6 +20,9 @@ done
 # echo "Generating system.config..."
 cp $base_dir/scripts/configs/system_${1}.config $smart_dir/config/system.config
 
+source $base_dir/scripts/compile.sh
+source $base_dir/scripts/build_image.sh
+
 echo "Start $1 consensus nodes..."
 rm -rf $base_dir/logs
 mkdir $base_dir/logs
@@ -40,6 +43,6 @@ go run ./cmd/client --num=100000
 
 cd $base_dir
 echo "Please wait..."
-sleep 10
+sleep 30
 source $base_dir/scripts/get_data.sh
 

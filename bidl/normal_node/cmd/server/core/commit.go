@@ -10,17 +10,20 @@ func (p *Processor) commitTxn(hashes [][32]byte) {
 	log.Debugf("Commiting transaction state.")
 	for i := 0; i < len(hashes); i++ {
 		hash := hashes[i]
-		if _, ok := p.Envelops[hash]; ok {
-			env := p.Envelops[hash]
-			wset := env.WSet
-			// commit the write set to DB
-			if !env.ND {
-				for k, v := range wset {
-					p.DB.Put([]byte(strconv.Itoa(k)), []byte(strconv.Itoa(v)), nil)
+		if env, ok := p.Envelops[hash]; ok {
+			if p.Related(env.SeqTransaction.Transaction.Org) {
+				env := p.Envelops[hash]
+				wset := env.WSet
+				// commit the write set to DB
+				if !env.ND {
+					for k, v := range wset {
+						p.DB.Put([]byte(strconv.Itoa(k)), []byte(strconv.Itoa(v)), nil)
+					}
 				}
+				util.Monitor.TputTxn <- 1
+				// delete the writeset
+				delete(p.Envelops, hash)
 			}
-			// delete the writeset
-			delete(p.Envelops, hash)
 		}
 	}
 }

@@ -42,7 +42,6 @@ func (s *Server) processPackets() {
 				p.ProcessPersist(pack.Bytes[4:])
 			} else if bytes.Equal(magicNum, common.MagicNumTxn) {
 				log.Debugf("new transaction received")
-				util.Monitor.TputTxn <- 1
 				hash := sha256.Sum256(pack.Bytes)
 				// the next eight bytes are the sequence number in uint64
 				seq := binary.LittleEndian.Uint64(pack.Bytes[4:12])

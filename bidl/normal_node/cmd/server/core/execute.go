@@ -73,7 +73,7 @@ func (p *Processor) ProcessTxn(txn *common.SequencedTransaction) {
 	p.mutex.Lock()
 	defer p.mutex.Unlock()
 	// check relative
-	if !p.Related(txn.Transaction.Org)  {
+	if !p.Related(txn.Transaction.Org) {
 		log.Debugf("Not related to transaction %d, discard the transaction", txn.Seq)
 		return
 	}
