@@ -8,6 +8,7 @@ import (
 
 type TputMonitor struct {
 	TputTxn chan int
+	LatencyTxn chan int
 	TputBlk chan int
 }
 

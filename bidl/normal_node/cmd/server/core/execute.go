@@ -32,6 +32,7 @@ type Processor struct {
 	Net       *network.Network
 }
 
+var start := time.Now()
 func NewProcessor(blkSize int, id int, net *network.Network) *Processor {
 	log.Debugf("Transaction processor initialized")
 	dbFile := "../state.db"
@@ -72,6 +73,15 @@ func (p *Processor) Related(orgs []byte) bool {
 func (p *Processor) ProcessTxn(txn *common.SequencedTransaction) {
 	p.mutex.Lock()
 	defer p.mutex.Unlock()
+
+	p.txnNum++
+	// execution latency
+	if p.txnNum % p.BlkSize == 0 {
+		end = time.Now()
+		elapsed := 	time.Since(startExecBlk) / time.Millisecond // duration in ms
+		log.Infof("Block transactions execution latency: %dms", elapsed)
+	}
+
 	// check relative
 	if !p.Related(txn.Transaction.Org) {
 		log.Debugf("Not related to transaction %d, discard the transaction", txn.Seq)
@@ -86,7 +96,7 @@ func (p *Processor) ProcessTxn(txn *common.SequencedTransaction) {
 	}
 	// execute transaction
 	p.ExecuteTxn(txn)
-	p.txnNum++
+
 }
 
 func (p *Processor) ExecuteTxn(txn *common.SequencedTransaction) {

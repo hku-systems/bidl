@@ -149,3 +149,11 @@
 13:39:21.749108 version@stat F·[3] S·872KiB[872KiB] Sc·[0.75]
 13:39:21.762461 db@janitor F·5 G·0
 13:39:21.762497 db@open done T·15.597342ms
+=============== Aug 24, 2021 (HKT) ===============
+21:38:07.267957 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+21:38:07.268318 version@stat F·[3] S·872KiB[872KiB] Sc·[0.75]
+21:38:07.268339 db@open opening
+21:38:07.269734 version@stat F·[3] S·872KiB[872KiB] Sc·[0.75]
+21:38:07.294557 db@janitor F·6 G·1
+21:38:07.294573 db@janitor removing journal-20
+21:38:07.294685 db@open done T·26.336799ms
