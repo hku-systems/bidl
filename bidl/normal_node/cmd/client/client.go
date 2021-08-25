@@ -64,7 +64,7 @@ func main() {
 		txnsTransfer := GenerateTransferWorkload(accNum, opts.Orgs, opts.Num, opts.Conflict)
 		txns = append(txnsCreate, txnsTransfer...)
 	} else {
-		accNum := 1000
+		accNum := 10
 		txnsCreate := GenerateCreateWorkload(accNum, opts.Orgs, 0)
 		txnsTransfer := GenerateTransferWorkload(accNum, opts.Orgs, opts.Num, 0)
 		txns = append(txnsCreate, txnsTransfer...)

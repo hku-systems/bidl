@@ -1,10 +1,11 @@
 package main
 
 import (
-	"github.com/jessevdk/go-flags"
-	log "github.com/sirupsen/logrus"
 	"normal_node/cmd/server/util"
 	"os"
+
+	"github.com/jessevdk/go-flags"
+	log "github.com/sirupsen/logrus"
 )
 
 var opts struct {
@@ -37,6 +38,8 @@ func init() {
 func main() {
 	if opts.ID == -1 {
 		log.Infof("Node id not set, I will process all transactions.")
+	} else {
+		log.Infof("My organization id:%d.", opts.ID)
 	}
 	//uconn4, err := net.ListenUDP("udp4", &net.UDPAddr{IP: net.IPv4zero, Port: opts.Port})
 	//addr, err := net.ResolveUDPAddr("udp", opts.GroupAddr)

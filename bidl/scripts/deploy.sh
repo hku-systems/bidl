@@ -34,15 +34,15 @@ echo "Starting the sequencer..., tput:$2 kTxns/s."
 $sequencer_dir/sequencer $2 &> $base_dir/logs/sequencer.log &
 
 echo "Starting normal node..."
-docker run --name normal_node --net=host --cap-add NET_ADMIN normal_node /normal_node/server --quiet > $base_dir/logs/normal.log 2>&1 &
+docker run --name normal_node --net=host --cap-add NET_ADMIN normal_node /normal_node/server --quiet --id=0 > $base_dir/logs/normal.log 2>&1 &
 
-echo "benchmarking..."
 sleep 10
+echo "benchmarking..."
 cd $normal_node_dir
-go run ./cmd/client --num=100000
+go run ./cmd/client --num=100000 --org=4
 
 cd $base_dir
 echo "Please wait..."
-sleep 30
+sleep 10
 source $base_dir/scripts/get_data.sh
 

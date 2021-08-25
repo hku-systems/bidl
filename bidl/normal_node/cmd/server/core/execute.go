@@ -2,6 +2,9 @@ package core
 
 import (
 	"bytes"
+	"crypto/ecdsa"
+	"crypto/elliptic"
+	"crypto/rand"
 	"crypto/sha256"
 	"encoding/binary"
 	"normal_node/cmd/common"
@@ -26,11 +29,13 @@ type Processor struct {
 	DB        *leveldb.DB
 	TempState map[int]int // temp execution state
 	txnNum    int  // total number of transactions received
+	execNum   int  // total number of transactions executed
 	blkNum    int  // total number of block received
 	mutex     sync.Mutex
 	BlkSize   int  // default block size
 	ID        int  // node id
 	Net       *network.Network
+	privateKey *ecdsa.PrivateKey
 }
 
 var startExecBlk time.Time
@@ -41,17 +46,28 @@ func NewProcessor(blkSize int, id int, net *network.Network) *Processor {
 	if err != nil {
 		log.Fatal("Error open state.db!")
 	}
+
+	pubkeyCurve := elliptic.P256()
+	privatekey := new(ecdsa.PrivateKey)
+	privatekey, err = ecdsa.GenerateKey(pubkeyCurve, rand.Reader) // this generates a public & private key pair
+	// privateKey, err := ecdsa.GenerateKey(rand.Reader, 2048)
+	if err != nil {
+		panic(err)
+	}
+
 	return &Processor{
-		Persists:  make(map[[32]byte]int),
-		TXPool:    make(map[uint64]common.Envelop),
-		Envelops:  make(map[[32]byte]common.Envelop),
-		DB:        database,
-		TempState: make(map[int]int),
-		txnNum:    0,
-		blkNum:    0,
-		BlkSize:   blkSize,
-		ID:        id,
-		Net:       net,
+		Persists:  	make(map[[32]byte]int),
+		TXPool:    	make(map[uint64]common.Envelop),
+		Envelops: 	make(map[[32]byte]common.Envelop),
+		DB:       	database,
+		TempState: 	make(map[int]int),
+		txnNum:    	0,
+		execNum:   	0,
+		blkNum:    	0,
+		BlkSize:   	blkSize,
+		ID:        	id,
+		Net:       	net,
+		privateKey: privatekey,
 	}
 }
 
@@ -62,8 +78,9 @@ func (p *Processor) Related(orgs []byte) bool {
 	orgStr := string(orgs)
 	orgsRelate := strings.Split(orgStr, ":")
 	related := false
-	for org := range orgsRelate {
-		if org == p.ID {
+	for _, org := range orgsRelate {
+		orgInt, _ := strconv.Atoi(org)
+		if orgInt == p.ID {
 			related = true
 			break
 		}
@@ -83,7 +100,8 @@ func (p *Processor) ProcessTxn(txn *common.SequencedTransaction) {
 	if p.txnNum % p.BlkSize == 0 {
 		elapsed := 	time.Since(startExecBlk) / time.Millisecond // duration in ms
 		startExecBlk = time.Now()
-		log.Infof("Block transactions execution latency: %dms", elapsed)
+		log.Infof("Block transactions execution latency: %dms, for executing %d transactions.", elapsed, p.execNum)
+		p.execNum = 0
 	}
 
 	// check relative
@@ -91,6 +109,7 @@ func (p *Processor) ProcessTxn(txn *common.SequencedTransaction) {
 		log.Debugf("Not related to transaction %d, txnOrg:%s, discard the transaction", txn.Seq, string(txn.Transaction.Org))
 		return
 	}
+	p.execNum++;
 	// verify signature
 	sig := txn.Transaction.Signature[:32]
 	valid := util.ValidMAC(txn.Transaction.Payload, sig, []byte(common.SecretKey))
@@ -117,7 +136,22 @@ func (p *Processor) ExecuteTxn(txn *common.SequencedTransaction) {
 	} else {
 		log.Errorf("Error format of transactions")
 	}
-	time.Sleep(500 * time.Microsecond)
+	buf, _ := msgpack.Marshal(env)
+	p.DB.Put([]byte("tx:"+strconv.Itoa(p.txnNum)), buf, nil)
+	msgHash := sha256.New()
+	_, err := msgHash.Write(buf)
+	if err != nil {
+		panic(err)
+	}
+	msgHashSum := msgHash.Sum(nil)
+	r, s, err := ecdsa.Sign(rand.Reader, p.privateKey, msgHashSum)
+	if err != nil {
+		panic(err)
+	}
+	signature := r.Bytes()
+ 	signature = append(signature, s.Bytes()...)
+	env.Signature = signature
+
 	p.PersistExecResult(&env)
 }
 
