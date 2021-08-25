@@ -39,7 +39,7 @@ docker run --name normal_node --net=host --cap-add NET_ADMIN normal_node /normal
 sleep 10
 echo "benchmarking..."
 cd $normal_node_dir
-go run ./cmd/client --num=100000 --org=4
+go run ./cmd/client --num=100000 --org=50 --order
 
 cd $base_dir
 echo "Please wait..."

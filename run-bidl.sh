@@ -9,16 +9,17 @@ if [ $1 == "performance" ]; then
     rm -rf $rst_dir
     mkdir -p $rst_dir
     touch $rst_file
-    for tput_cap in 60; do
+    for tput_cap in 15 30 60; do
         echo "Transaction submission rate: $nondeterminism_rate kTxns/s"
         # run benchmark
         bash ./bidl/scripts/start.sh $peers $tput_cap performance
         # obtain throughput data
         echo -n "rate $tput_cap throughput " >> $rst_file
-        cat ./bidl/logs/normal.log | grep "BIDL transaction commit throughput:" | python3 ./bidl/scripts/bidl_tput.py >> $rst_file
+        cat ./bidl/logs/normal.log | grep "BIDL block commit throughput:" | python3 ./bidl/scripts/bidl_tput.py >> $rst_file
         # obtain latency data
         echo -n "rate $tput_cap latency " >> $rst_file
-        cat ./bidl/logs/log_0.log | grep "Total latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
+        # cat ./bidl/logs/log_0.log | grep "Total latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
+        cat ./bidl/logs/log_0.log | grep "Consensus latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
     done
     exit 0
 elif [ $1 == "nd" ]; then 

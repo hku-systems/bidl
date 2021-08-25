@@ -33,7 +33,7 @@ import bftsmart.tom.core.ExecutionManager;
 public class BidlFrontend extends Thread {
     public static int maxSeqNum = 0;
     public static final ConcurrentMap<String, byte[]> txMap = new ConcurrentHashMap<>();
-    public static final BlockingQueue<byte[]> txBlockingQueue = new LinkedBlockingDeque<>();
+    public static final BlockingQueue<byte[]> txBlockingQueue = new LinkedBlockingQueue<>();
     public static final byte[] MagicNumTxn = {7, 7, 7, 7};
     public static final byte[] MagicNumBlock = {6, 6, 6, 6};
     public static final byte[] MagicNumExecResult = {5, 5, 5, 5};
@@ -60,7 +60,7 @@ public class BidlFrontend extends Thread {
         InetSocketAddress groupAddress = new InetSocketAddress("230.0.0.0", 7777);
         logger.info("bidl: new BIDL frontend started, listening group address: {}", groupAddress);
         Bootstrap bootstrap = new Bootstrap();
-        NioEventLoopGroup acceptGroup = new NioEventLoopGroup(4);
+        EventLoopGroup acceptGroup = new NioEventLoopGroup(4);
         try {
             NetworkInterface ni = NetworkInterface.getByName("lo"); // used lo for hostwork
             // NetworkInterface ni = NetworkInterface.getByName("eth0"); // used en0 for
@@ -82,8 +82,8 @@ public class BidlFrontend extends Thread {
                 }
             }).localAddress(localAddress, groupAddress.getPort()).option(ChannelOption.IP_MULTICAST_IF, ni)
                     .option(ChannelOption.SO_RCVBUF, 1024 * 1024 * 1000)
-                    .option(ChannelOption.RCVBUF_ALLOCATOR, new FixedRecvByteBufAllocator(1024 * 1024 * 10))
-                    .option(ChannelOption.SO_REUSEADDR, true).handler(new ChannelInitializer<NioDatagramChannel>() {
+                    .option(ChannelOption.RCVBUF_ALLOCATOR, new FixedRecvByteBufAllocator(1024 * 1024 * 1000))
+					.option(ChannelOption.SO_REUSEADDR, true).handler(new ChannelInitializer<NioDatagramChannel>() {
                         @Override
                         public void initChannel(NioDatagramChannel ch) throws Exception {
                             ChannelPipeline pipeline = ch.pipeline();
@@ -103,6 +103,10 @@ public class BidlFrontend extends Thread {
     }
 
     private class SequencerDecodeHandler extends ChannelInboundHandlerAdapter {
+        private int txNum;
+        SequencerDecodeHandler(){
+            txNum = 0;
+        }
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
             // Get input stream
@@ -139,13 +143,12 @@ public class BidlFrontend extends Thread {
                 return;
             }
             
-            logger.debug("bidl: transaction received, length: {}, content {}", rcvPktLength, Arrays.toString(rcvPktBuf));
             txBlockingQueue.add(rcvPktBuf);
-            // logger.debug("bidl: new transaction received, size: {}, totalNumber: {}, num: {}, txMap size: {} ",
-            //         rcvPktLength, this.totalNum, num, txMap.size());
-
-            // if I have collected enough transactions and I am the leader, submit txs to the co-located node
             bytebuf.release();
+            txNum++;
+            if (txNum % 500 == 0){
+                logger.info("bidl: received enough transactions. Num:{}", txNum);
+            }
         }
     }
 
@@ -190,6 +193,7 @@ public class BidlFrontend extends Thread {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                
                 // retrieve the sequence number of this transaction
                 int seqNum = fromByteArrayLittleEndian(rcvPktBuf, 4);
                 maxSeqNum = seqNum > maxSeqNum ? seqNum : maxSeqNum;
@@ -216,8 +220,6 @@ public class BidlFrontend extends Thread {
                 // if I have collected enough transactions and I am the leader, submit txs to the co-located node
                 if (this.num == this.blockSize) {
                     logger.info("bidl: collected enough transactions. Num:{}, TotalNum:{}", this.num, this.totalNum);
-                    logger.debug("bidl: currentleader: {}, myID: {}", execManager.getCurrentLeader(),
-                            controller.getStaticConf().getProcessId());
                     payloadBuffer.putInt(maxSeqNum);
                     if (execManager.getCurrentLeader() == controller.getStaticConf().getProcessId()) {
                         payloadBuffer.flip();

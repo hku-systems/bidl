@@ -22,9 +22,9 @@ func (s *Server) setupServerConnection(addr string, bufferSize int) {
 	go net.ReadFromSocket()
 	// set up throughput monitor
 	util.NewTputMonitor(opts.BlockSize)
-	// wait for packets
+	// receive packets
 	go s.processPackets()
-	// process messages
+	// process packets
 	p = core.NewProcessor(s.BlkSize, s.ID, net)
 }
 
@@ -60,12 +60,10 @@ func (s *Server) processPackets() {
 					})
 				log.Debugf("Received transaction with sequence number %d", seq)
 				util.Monitor.TputTxn <- 1
-
 			} else if bytes.Equal(magicNum, common.MagicNumBlock) {
 				log.Infof("new block received.")
 				p.ProcessBlock(pack.Bytes[4:])
 				util.Monitor.TputBlk <- 1
-
 			} else {
 				log.Errorf("Invalid message type", pack.Bytes[0:20], "length:", len(pack.Bytes))
 			}

@@ -1,2 +1,6 @@
-rate 60 throughput 46
-rate 60 latency 
+rate 15 throughput 14
+rate 15 latency 6
+rate 30 throughput 32
+rate 30 latency 10
+rate 60 throughput 34
+rate 60 latency 8

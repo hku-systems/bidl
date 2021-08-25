@@ -9,7 +9,7 @@ rm -f $tput_file
 rm -f $latency_file
 
 while true; do 
-	wait=$( cat $log_dir/normal.log | grep "BIDL transaction commit throughput:" | wc -l)
+	wait=$( cat $log_dir/normal.log | grep "BIDL block commit throughput:" | wc -l)
 	if [ $wait -gt 10 ]; then 
 		break;
 	fi 

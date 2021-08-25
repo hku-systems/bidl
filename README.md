@@ -19,9 +19,7 @@ This artifact contains the implementation of BIDL, together with scripts for rep
 
 ### Clone the codebase
 
-```shell
-git clone git@github.com:hku-systems/bidl.git
-```
+	git clone git@github.com:hku-systems/bidl.git
 
 ### Create the docker images
 
@@ -34,24 +32,31 @@ Prerequisite:
 5. The machines should join the same docker swarm cluster. If you haven't done so, you can follow [this Docker official guide](https://docs.docker.com/engine/swarm/swarm-tutorial/).
 6. The machines need to support the IP multicast.
 
-Create the docker overlay network with
+Configurations:
 
-```shell
-docker network create -d overlay --attachable HLF
-```
+1. Create the docker overlay network with
+	docker network create -d overlay --attachable HLF
 
-To run Fabric and Fastfabric, you need to set the `host` parameter (IP address) in `config-fabric.yaml` and `config-fastfabric.yaml`. Make sure the length of host list is at least equal to the number of peers. In the following experiments, our scripts will generate docker compose files according to those configuration files. 
 
-To run streamchain, you need to set the IP addresses in `streamchain/setup/config.sh`. 
+2. Configure system UDP buffer to 250 Mbytes by
 
-Build the docker images for Fabric and Fastfabric with the following command.
+	> sysctl -w net.core.rmem_max=262144000
+	> sysctl -w net.core.rmem_default=262144000
+
+3. Setup the loopback interface for multicast with
+
+	> sudo ifconfig lo multicast
+	> sudo route add -net 224.0.0.0 netmask 240.0.0.0 dev lo
+
+4. To run Fabric and Fastfabric, you need to set the `host` parameter (IP address) in `config-fabric.yaml` and `config-fastfabric.yaml`. Make sure the length of host list is at least equal to the number of peers. In the following experiments, our scripts will generate docker compose files according to those configuration files. 
+
+5. To run streamchain, you need to set the IP addresses in `streamchain/setup/config.sh`. 
+
+6. Build the docker images for Fabric and Fastfabric with the following command.
 ```shell 
 # Before you start, you need to replace the IP list in config.sh according to your experiment environment. 
 bash setup.sh
 ```
-
-
-
 You can also use our cluster for all experiments. Please feel free to contact us for the ssh private key to access our cluster.
 
 ## Experiments
