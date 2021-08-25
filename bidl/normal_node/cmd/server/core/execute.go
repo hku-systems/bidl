@@ -238,6 +238,7 @@ func (p *Processor) ProcessBlock(block []byte) {
 		return
 	}
 	log.Infof("New block received, block number: %d", p.blkNum)
+	startBlkCommit := time.Now()
 	// obtain transaction [seq, hash] from block
 	hashesBlk := make([][]byte, 0)
 	var seqHash []byte
@@ -271,8 +272,10 @@ func (p *Processor) ProcessBlock(block []byte) {
 			}
 		}
 	}
-	p.commitBlock(block)
 	p.blkNum++
+	p.commitBlock(block)
+	elapsed := 	time.Since(startBlkCommit) / time.Millisecond // duration in ms
+	log.Infof("Commit latency: %dms for block %d", elapsed, p.blkNum)
 }
 
 func byte32(s []byte) (a *[32]byte) {
