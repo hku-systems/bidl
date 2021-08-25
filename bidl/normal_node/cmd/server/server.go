@@ -59,7 +59,7 @@ func (s *Server) processPackets() {
 						Hash:        hash,
 					})
 				log.Debugf("Received transaction with sequence number %d", seq)
-				//util.Monitor.TputTxn <- 1
+				util.Monitor.TputTxn <- 1
 
 			} else if bytes.Equal(magicNum, common.MagicNumBlock) {
 				log.Infof("new block received.")

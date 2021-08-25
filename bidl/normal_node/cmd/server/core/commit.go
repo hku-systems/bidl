@@ -2,7 +2,7 @@ package core
 
 import (
 	"strconv"
-	"normal_node/cmd/server/util"
+	// "normal_node/cmd/server/util"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -18,7 +18,6 @@ func (p *Processor) commitTxn(hashes [][32]byte) {
 				for k, v := range wset {
 					p.DB.Put([]byte(strconv.Itoa(k)), []byte(strconv.Itoa(v)), nil)
 				}
-				util.Monitor.TputTxn <- 1
 			}
 			// delete the writeset
 			delete(p.Envelops, hash)

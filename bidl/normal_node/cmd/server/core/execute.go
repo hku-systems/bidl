@@ -106,7 +106,6 @@ func (p *Processor) ProcessTxn(txn *common.SequencedTransaction) {
 
 	// check relative
 	if !p.Related(txn.Transaction.Org) {
-		p.PersistExecResult(&env)
 		log.Debugf("Not related to transaction %d, txnOrg:%s, discard the transaction", txn.Seq, string(txn.Transaction.Org))
 		return
 	}
@@ -321,9 +320,9 @@ func (p *Processor) PersistExecResult(env *common.Envelop) {
 		TxnHash: env.SeqTransaction.Hash,
 	}
 	buf, _ := msgpack.Marshal(result)
-	buf = append(common.MagicNumExecResult, buf...)
+	_ = append(common.MagicNumExecResult, buf...)
 	log.Debugf("Persisting execution result for transaction %d", env.SeqTransaction.Seq)
-	p.Net.Multicast(buf)
+	// p.Net.Multicast(buf)
 }
 
 func (p *Processor) ProcessPersist(data []byte) {
