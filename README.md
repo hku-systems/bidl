@@ -2,9 +2,7 @@
 
 ## Artifact summary
 
-BIDL is a high-throughput and low-latency permissioned blockchain framework designed for the datacenter networks (or multiple datacenters connected with dedicated network cables). BIDL can achieve high performance with Byzantine failures of malicious nodes/clients.
-
-This artifact contains the implementation of BIDL, together with scripts for reproducing the main results of this work.
+BIDL is a high-throughput and low-latency permissioned blockchain framework designed for the datacenter networks (or multiple datacenters connected with dedicated network cables). BIDL can achieve high performance with Byzantine failures of malicious nodes/clients. This artifact contains the implementation of BIDL, together with scripts for reproducing the main results of this work.
 
 ## Artifact Check-list
 
@@ -19,8 +17,10 @@ This artifact contains the implementation of BIDL, together with scripts for rep
 
 ### Clone the codebase
 
-	git clone git@github.com:hku-systems/bidl.git
-
+```shell
+git clone git@github.com:hku-systems/bidl.git
+```
+	
 ### Create the docker images
 
 Prerequisite:
@@ -35,28 +35,36 @@ Prerequisite:
 Configurations:
 
 1. Create the docker overlay network with
-	docker network create -d overlay --attachable HLF
 
+```shell
+docker network create -d overlay --attachable HLF
+```
 
-2. Configure system UDP buffer to 250 Mbytes by
+2. Configure system UDP buffer to 250 Mbytes (avoiding packet losses at the system network buffer) by
 
-	> sysctl -w net.core.rmem_max=262144000
-	> sysctl -w net.core.rmem_default=262144000
+```shell
+sysctl -w net.core.rmem_max=262144000
+sysctl -w net.core.rmem_default=262144000
+```
 
 3. Setup the loopback interface for multicast with
 
-	> sudo ifconfig lo multicast
-	> sudo route add -net 224.0.0.0 netmask 240.0.0.0 dev lo
+```shell
+sudo ifconfig lo multicast
+sudo route add -net 224.0.0.0 netmask 240.0.0.0 dev lo
+```
 
 4. To run Fabric and Fastfabric, you need to set the `host` parameter (IP address) in `config-fabric.yaml` and `config-fastfabric.yaml`. Make sure the length of host list is at least equal to the number of peers. In the following experiments, our scripts will generate docker compose files according to those configuration files. 
 
 5. To run streamchain, you need to set the IP addresses in `streamchain/setup/config.sh`. 
 
 6. Build the docker images for Fabric and Fastfabric with the following command.
-```shell 
+ 
+ ```shell
 # Before you start, you need to replace the IP list in config.sh according to your experiment environment. 
 bash setup.sh
 ```
+
 You can also use our cluster for all experiments. Please feel free to contact us for the ssh private key to access our cluster.
 
 ## Experiments
