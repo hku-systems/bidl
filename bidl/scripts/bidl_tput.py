@@ -6,7 +6,7 @@ bidl_mean_tps = 0
 lines = []
 lines = sys.stdin.readlines()
 
-for line in lines[int(len(lines)*0.3):int(len(lines)*0.6)]:
+for line in lines[int(len(lines)*0.4):int(len(lines)*0.7)]:
 	bidl_tps_raw.append(int(line.split()[-2]))
 bidl_mean_tps = int(np.mean(bidl_tps_raw))
 print(bidl_mean_tps)

@@ -37,7 +37,8 @@ func (monitor *TputMonitor) TxnThroughput() {
 			total++
 			if num == interval {
 				duration := int(time.Since(start).Milliseconds())
-				log.Infof("Received %d transactions, duration: %dms, transaction tput: %d kTxns/s, total: %d", interval, duration, interval/duration, total)
+				// log.Infof("Received %d transactions, duration: %dms, transaction tput: %d kTxns/s, total: %d", interval, duration, interval/duration, total)
+				fmt.Printf("BIDL transaction commit throughput: %d kTxns/s\n", interval/duration)
 				start = time.Now()
 				num = 0
 			}
@@ -48,7 +49,7 @@ func (monitor *TputMonitor) TxnThroughput() {
 func (monitor *TputMonitor) BlkThroughput(blkSize int) {
 	log.Infof("Start monitor block committing throughput")
 	num := 0
-	interval := 2
+	interval := 10
 	start := time.Now()
 	for {
 		select {
@@ -59,7 +60,7 @@ func (monitor *TputMonitor) BlkThroughput(blkSize int) {
 				if duration == 0 {
 					duration = 1
 				}
-				fmt.Printf("BIDL throughput: %d kTxns/s\n", interval*blkSize*1e6/duration)
+				fmt.Printf("BIDL block commit throughput: %d kTxns/s\n", interval*blkSize*1e6/duration)
 				start = time.Now()
 				num = 0
 			}

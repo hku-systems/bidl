@@ -106,6 +106,7 @@ func (p *Processor) ProcessTxn(txn *common.SequencedTransaction) {
 
 	// check relative
 	if !p.Related(txn.Transaction.Org) {
+		p.PersistExecResult(&env)
 		log.Debugf("Not related to transaction %d, txnOrg:%s, discard the transaction", txn.Seq, string(txn.Transaction.Org))
 		return
 	}
@@ -326,12 +327,10 @@ func (p *Processor) PersistExecResult(env *common.Envelop) {
 }
 
 func (p *Processor) ProcessPersist(data []byte) {
+	p.mutex.Lock()
+	defer p.mutex.Unlock()
 	var result common.Result
 	msgpack.Unmarshal(data, &result)
-	if !p.Related(result.Org){
-		log.Debugf("Not related persist message, discard the message, seq: %d", result.Seq)
-		return;
-	}
 	log.Debugf("New persist message received, seq: %d", result.Seq)
 	var hashes [1][32]byte
 	hashes[0] = result.TxnHash

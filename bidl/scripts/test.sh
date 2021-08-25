@@ -2,6 +2,9 @@
 
 echo  "Obtaining throughput and latency data..."
 
+base_dir="/home/jqi/github/BIDL-artifact/bidl"
+log_dir="/home/jqi/github/BIDL-artifact/bidl/logs"
+
 tput_file=$base_dir/logs/bidl_performance_tput.log
 latency_file=$base_dir/logs/bidl_performance_latency.log
 
@@ -17,6 +20,6 @@ while true; do
 	sleep 5
 done
 
-cat $log_dir/normal.log | grep "BIDL transaction commit throughput: " > $tput_file
+# cat $log_dir/normal.log | grep "BIDL transaction commit throughput: " > $tput_file
 
-cat $log_dir/log_0.log | grep "Total latency" > $latency_file
+# cat $log_dir/log_0.log | grep "Total latency" > $latency_file
