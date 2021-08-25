@@ -1,10 +1,9 @@
 #!/bin/bash
 
-hosts=(10.22.1.2
-10.22.1.3
-10.22.1.4
-10.22.1.6
-10.22.1.8
-10.22.1.9
-10.22.1.19)
+hosts=(ms0837.utah.cloudlab.us
+ms0835.utah.cloudlab.us
+ms0838.utah.cloudlab.us
+ms0812.utah.cloudlab.us
+ms0808.utah.cloudlab.us)
+
 

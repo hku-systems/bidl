@@ -1,8 +1,8 @@
 # Setup-related parameters
-export event="10.22.1.1"
+export event="ms0837.utah.cloudlab.us"
 export add_events=""
-export peers="10.22.1.1 10.22.1.2 10.22.1.3 10.22.1.4"
-export orderers="10.22.1.6"
+export peers="ms0835.utah.cloudlab.us ms0838.utah.cloudlab.us ms0812.utah.cloudlab.us ms0808.utah.cloudlab.us"
+export orderers="ms0837.utah.cloudlab.us"
 export user=$USER
 export goexec="/usr/local/go/bin"
 export bm_path="$HOME/benchmark"
