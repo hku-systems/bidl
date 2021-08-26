@@ -122,7 +122,6 @@ func (c *Client) SendTxn(txn *common.Transaction, order bool) {
 }
 
 func (c *Client) SendBlock(txns []*common.Transaction, blkSize int) {
-	// Generate block from transactions, which contains transaction hashes
 	c.seq = 0
 	for i := 0; i < len(txns); i += blkSize {
 		var block []byte
@@ -134,23 +133,22 @@ func (c *Client) SendBlock(txns []*common.Transaction, blkSize int) {
 				Message: txn,
 			}
 			msgByte, err := msgpack.Marshal(msg)
-			// add seq number
+			// add seq number to buffer
 			seqBuf := make([]byte, 8)
 			binary.LittleEndian.PutUint64(seqBuf, c.seq)
 			msgByte = append(seqBuf, msgByte...)
-			// add magic number
+			// add magic number to buffer
 			msgByte = append(common.MagicNumTxn, msgByte...)
 
-			// assemble txn seq into the block
+			// assemble txn [seq, hash] into the block
 			seqInt := uint32(c.seq)
 			seqIntBuf := make([]byte, 4)
 			binary.LittleEndian.PutUint32(seqIntBuf, seqInt)
 			block = append(block, seqIntBuf...)
 			
-			// assemble txn [seq, hash] into the block
 			hash := sha256.Sum256(msgByte)
 			block = append(block, hash[:]...)
-			//log.Debug("index:", j, len(msgByte), msg, "hash:", sha256.Sum256(msgByte))
+			log.Debug("index:", j, len(msgByte), msg, "hash:", hash)
 			c.seq++
 		}
 		temp := []byte{0, 0, 0, 0}

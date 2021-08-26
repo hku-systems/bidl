@@ -30,8 +30,6 @@ func NewNetwork(addr string, bufferSize int) *Network {
 	util.ErrorCheck(err, "NewNetwork", true)
 	log.Infof(addrs[0].(*net.IPNet).IP.String())
 	srcAddr := &net.UDPAddr{IP: addrs[0].(*net.IPNet).IP, Port: 0}
-	// ip := net.ParseIP("10.22.1.8")
-	// srcAddr := &net.UDPAddr{IP: ip, Port: 0}
 	sendConn, err := net.DialUDP("udp", srcAddr, groupAddr)
 	util.ErrorCheck(err, "NewNetwork", true)
 
@@ -50,7 +48,7 @@ func (network *Network) ReadFromSocket() {
 		var b = make([]byte, network.bufferSize)
 		n, _, err := network.RecvConnection.ReadFromUDP(b[0:])
 		util.ErrorCheck(err, "readFromSocket", false)
-		log.Debugf("New message received, length:", n, "content:", b[:10])
+		log.Debug("New message received, length:", n, "content:", b[:10])
 		if n > 0 {
 			pack := common.Packet{b[:n]}
 			network.Packets <- pack

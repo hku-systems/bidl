@@ -92,11 +92,14 @@ func (p *Processor) Related(orgs []byte) bool {
 func (p *Processor) ProcessTxn(txn *common.SequencedTransaction) {
 	p.mutex.Lock()
 	defer p.mutex.Unlock()
+
 	if p.txnNum == 0 {
 		startExecBlk = time.Now()
 	}
 	p.txnNum++
-	// execution latency
+	if !p.Related(txn.Transaction.Org) {
+		p.execNum++
+	}
 	if p.txnNum % p.BlkSize == 0 {
 		elapsed := 	time.Since(startExecBlk) / time.Millisecond // duration in ms
 		startExecBlk = time.Now()
@@ -104,13 +107,7 @@ func (p *Processor) ProcessTxn(txn *common.SequencedTransaction) {
 		p.execNum = 0
 	}
 
-	// check relative
-	if !p.Related(txn.Transaction.Org) {
-		log.Debugf("Not related to transaction %d, txnOrg:%s, discard the transaction", txn.Seq, string(txn.Transaction.Org))
-		return
-	}
-	p.execNum++;
-	// verify signature
+	// verify MAC
 	sig := txn.Transaction.Signature[:32]
 	valid := util.ValidMAC(txn.Transaction.Payload, sig, []byte(common.SecretKey))
 	if !valid {
@@ -122,40 +119,76 @@ func (p *Processor) ProcessTxn(txn *common.SequencedTransaction) {
 }
 
 func (p *Processor) ExecuteTxn(txn *common.SequencedTransaction) {
+
+	related := p.Related(txn.Transaction.Org) 
+	if !p.Related(txn.Transaction.Org) {
+		log.Debugf("Not related to transaction %d, txnOrg:%s.", txn.Seq, string(txn.Transaction.Org))
+		return
+	}
+
 	payload := strings.Split(string(txn.Transaction.Payload), ":")
 	var env common.Envelop
-	if len(payload) == 2 { // this is an account creation transaction
-		acc, _ := strconv.Atoi(payload[0])
-		balance, _ := strconv.Atoi(payload[1])
-		env = p.ExecCreateTxn(acc, balance, txn)
-	} else if len(payload) == 3 { // this is a balance transfer transaction
-		from, _ := strconv.Atoi(payload[0])
-		to, _ := strconv.Atoi(payload[1])
-		balance, _ := strconv.Atoi(payload[2])
-		env = p.ExecTransferTxn(from, to, balance, txn)
-	} else {
-		log.Errorf("Error format of transactions")
-	}
-	buf, _ := msgpack.Marshal(env)
-	p.DB.Put([]byte("tx:"+strconv.Itoa(p.txnNum)), buf, nil)
-	msgHash := sha256.New()
-	_, err := msgHash.Write(buf)
-	if err != nil {
-		panic(err)
-	}
-	msgHashSum := msgHash.Sum(nil)
-	r, s, err := ecdsa.Sign(rand.Reader, p.privateKey, msgHashSum)
-	if err != nil {
-		panic(err)
-	}
-	signature := r.Bytes()
- 	signature = append(signature, s.Bytes()...)
-	env.Signature = signature
+	nd := false
 
-	p.PersistExecResult(&env)
+	if related {
+		p.execNum++;
+		if len(payload) == 2 { // account creation transaction
+			acc, _ := strconv.Atoi(payload[0])
+			balance, _ := strconv.Atoi(payload[1])
+			env = p.ExecCreateTxn(acc, balance, txn)
+		} else if len(payload) == 3 { // balance transfer transaction
+			from, _ := strconv.Atoi(payload[0])
+			to, _ := strconv.Atoi(payload[1])
+			balance, _ := strconv.Atoi(payload[2])
+			env = p.ExecTransferTxn(from, to, balance, txn)
+		} else {
+			log.Errorf("Error format of transactions")
+		}
+
+		buf, _ := msgpack.Marshal(env)
+		p.DB.Put([]byte("tx:"+strconv.Itoa(p.txnNum)), buf, nil)
+		msgHash := sha256.New()
+		_, err := msgHash.Write(buf)
+		if err != nil {
+			panic(err)
+		}
+
+		msgHashSum := msgHash.Sum(nil)
+		r, s, err := ecdsa.Sign(rand.Reader, p.privateKey, msgHashSum)
+		if err != nil {
+			panic(err)
+		}
+		signature := r.Bytes()
+		signature = append(signature, s.Bytes()...)
+		env.Signature = signature
+
+		p.PersistExecResult(&env)
+
+	} else {
+		balance := 0
+		if len(payload) == 2 {
+			balance, _ = strconv.Atoi(payload[1])
+		} else if len(payload) == 3 {
+			balance, _ = strconv.Atoi(payload[2])
+		} else {
+			log.Errorf("Error format transaction")
+			return
+		}
+
+		if balance == -1 {
+			nd = true
+		}
+		env = common.Envelop {
+			SeqTransaction: txn,
+			WSet: make(map[int]int),
+			ND: nd,
+		}
+	}
+	
+	p.Envelops[txn.Hash] = env
+	p.TXPool[txn.Seq] = env
 }
 
-// create account transaction
 func (p *Processor) ExecCreateTxn(account int, balance int, txn *common.SequencedTransaction) common.Envelop {
 	log.Debugf("Executing create transaction, account: %d, balance: %d", account, balance)
 	if _, ok := p.TempState[account]; ok {
@@ -173,18 +206,15 @@ func (p *Processor) ExecCreateTxn(account int, balance int, txn *common.Sequence
 	}
 	buf, _ := msgpack.Marshal(wset)
 	execHash := sha256.Sum256(buf)
-	env := common.Envelop{
+	env := common.Envelop {
 		SeqTransaction: txn,
 		WSet: wset,
 		ExecHash: execHash,
 		ND: nd,
 	}
-	p.Envelops[txn.Hash] = env
-	p.TXPool[txn.Seq] = env
 	return env
 }
 
-// execute balance transafer transaction
 func (p *Processor) ExecTransferTxn(from int, to int, balance int, txn *common.SequencedTransaction) common.Envelop {
 	log.Debugf("Executing transfer transaction, from: %d, to: %d, balance: %d", from, to, balance)
 	// update state
@@ -219,9 +249,6 @@ func (p *Processor) ExecTransferTxn(from int, to int, balance int, txn *common.S
 		ExecHash: execHash,
 		ND: false,
 	}
-
-	p.Envelops[txn.Hash] = env
-	p.TXPool[txn.Seq] = env
 	return env
 }
 
@@ -241,17 +268,19 @@ func (p *Processor) ProcessBlock(block []byte) {
 	startBlkCommit := time.Now()
 	// obtain transaction [seq, hash] from block
 	hashesBlk := make([][]byte, 0)
+	hashes := make([][32]byte, 0)
 	var seqHash []byte
-	for i := 0; i < hashNum; i += 1 {
+	for i := 0; i < hashNum; i++ {
 		// seqHash = byte32(payload[i*36 : i*36+36])
 		seqHash = payload[i*36 : i*36+36]
 		hashesBlk = append(hashesBlk, seqHash)
+		hashes = append(hashes, *byte32(payload[i*36+4 : i*36+36]))
 	}
 	// check transaction hashes
 	reExec := false
 	for i := 0; i < hashNum; i++ {
 		seq := binary.LittleEndian.Uint32(hashesBlk[i][:4])
-		hashBlk := byte32(hashesBlk[i][4:])
+		hashBlk := hashesBlk[i][4:]
 		if _, ok := p.TXPool[uint64(seq)]; ok {
 			hashLocal := p.TXPool[uint64(seq)].SeqTransaction.Hash
 			//log.Debugf("sequence number is %l, hashnum: %d, blkNum %d, i: %d", seq, hashNum, p.blkNum, i)
@@ -273,6 +302,7 @@ func (p *Processor) ProcessBlock(block []byte) {
 		}
 	}
 	p.blkNum++
+	p.commitTxn(hashes)
 	p.commitBlock(block)
 	elapsed := 	time.Since(startBlkCommit) / time.Millisecond // duration in ms
 	log.Infof("Commit latency: %dms for block %d", elapsed, p.blkNum)
@@ -320,9 +350,9 @@ func (p *Processor) PersistExecResult(env *common.Envelop) {
 		TxnHash: env.SeqTransaction.Hash,
 	}
 	buf, _ := msgpack.Marshal(result)
-	_ = append(common.MagicNumExecResult, buf...)
+	buf = append(common.MagicNumExecResult, buf...)
 	log.Debugf("Persisting execution result for transaction %d", env.SeqTransaction.Seq)
-	// p.Net.Multicast(buf)
+	p.Net.Multicast(buf)
 }
 
 func (p *Processor) ProcessPersist(data []byte) {
@@ -339,7 +369,7 @@ func (p *Processor) ProcessPersist(data []byte) {
 		p.Persists[result.TxnHash] = 1
 	}
 	if p.Persists[result.TxnHash] == 3 { // 3f+1 = 4
-		log.Debugf("Transaction execution result persisted, seq: %d", result.Seq)
-		p.commitTxn(hashes[:])
+		log.Infof("Transaction execution result persisted, seq: %d", result.Seq)
 	}
 }
+

@@ -11,9 +11,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.concurrent.*;
-// import java.util.concurrent.BlockingDeque;
-// import java.util.concurrent.ConcurrentHashMap;
-// import java.util.concurrent.ConcurrentMap;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.socket.DatagramPacket;
@@ -62,9 +59,7 @@ public class BidlFrontend extends Thread {
         Bootstrap bootstrap = new Bootstrap();
         EventLoopGroup acceptGroup = new NioEventLoopGroup(4);
         try {
-            NetworkInterface ni = NetworkInterface.getByName("lo"); // used lo for hostwork
-            // NetworkInterface ni = NetworkInterface.getByName("eth0"); // used en0 for
-            // docker overlay network
+            NetworkInterface ni = NetworkInterface.getByName("lo"); 
             Enumeration<InetAddress> addresses = ni.getInetAddresses();
             InetAddress localAddress = null;
             while (addresses.hasMoreElements()) {
@@ -161,7 +156,6 @@ public class BidlFrontend extends Thread {
         private ServiceProxy proxy = null;
         private byte[] signature = null;
         private int blockSize = 500;
-        private ByteBuffer packetBuffer = null;
         private Logger logger = LoggerFactory.getLogger(this.getClass());
 
         Assembler() {
@@ -237,7 +231,7 @@ public class BidlFrontend extends Thread {
                         // logger.info("bidl: BidlFrontend, block " + " length " + block.length + " content "
                         //         + Arrays.toString(block));
     
-                        byte[] reply = proxy.invokeOrdered(block);
+                        proxy.invokeOrdered(block);
                         logger.info("bidl: I am the leader, new block submitted, totalNumber: " + this.totalNum
                                 + " block length: " + block.length + " signature.length " + this.signature.length
                                 + "maximum sequence number" + maxSeqNum);

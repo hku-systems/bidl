@@ -81,20 +81,21 @@ func GenerateTransferWorkload(acc int, org int, num int, conflict int) []*common
 	return txns
 }
 
-// generate transactions for creating accounts
+// GenerateCreateWorkload generate transactions for creating accounts
 // acc: number of accounts for each organization
 // org: number of organizations
-// nd: non-determinism
+// nd: non-determinism rate
 func GenerateCreateWorkload(acc int, org int, nd int) []*common.Transaction {
-	ndNum := 0
+	ndAcc := 0
 	if nd > 0 {
-		ndNum = int(acc * org / 100 * nd)
-		log.Infof("%d out of %d account create transactions are non-deterministic", ndNum, acc * org)
+		ndAcc = int(acc / 100 * nd)
+		log.Infof("%d out of %d transactions (%d%%) are non-deterministic in each of the %d organizations", ndAcc, acc, nd, org)
 	}
 	txns := make([]*common.Transaction, acc*org)
 	dummy := make([]byte, 1024)
 	rand.Read(dummy)
 	for i := 0; i < org; i++ {
+		ndNum := ndAcc
 		for j := 0; j < acc; j++ {
 			var payloadStr string
 			if ndNum > 0 {
@@ -103,7 +104,6 @@ func GenerateCreateWorkload(acc int, org int, nd int) []*common.Transaction {
 			} else {
 				payloadStr = strconv.Itoa(j) + ":" + strconv.Itoa(100000)
 			}
-			//orgStr := strconv.Itoa(i) + ":" + strconv.Itoa((i+1)%org)
 			orgStr := strconv.Itoa(i) + ":" + strconv.Itoa((i+1) % org)
 			sig := util.CreateMAC([]byte(payloadStr), []byte(common.SecretKey))
 			txn := &common.Transaction{
@@ -118,9 +118,3 @@ func GenerateCreateWorkload(acc int, org int, nd int) []*common.Transaction {
 	}
 	return txns
 }
-
-//func main() {
-//	//CreateAccounts(10000, 4, 100000)
-//	GenerateCreateWorkload(10000, 4)
-//	GenerateTransferWorkload(10000, 4, 10000)
-//}

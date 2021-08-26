@@ -56,8 +56,8 @@ func main() {
 		log.Errorf("Please only set non-deterministic rate or conflict rate")
 		return
 	} else if opts.ND != 0 {
-		accNum := opts.Num    // number of accounts for each organization
-		txns = GenerateCreateWorkload(accNum, opts.Orgs, opts.ND)
+		acc := int(opts.Num / opts.Orgs)    // number of accounts for each organization
+		txns = GenerateCreateWorkload(acc, opts.Orgs, opts.ND)
 	} else if opts.Conflict != 0 {
 		accNum := 1000
 		txnsCreate := GenerateCreateWorkload(accNum, opts.Orgs, 0)
@@ -71,19 +71,16 @@ func main() {
 	}
 
 	// submit transactions
-	// num := len(txns)
-	// num := 1000
 	log.Infof("Start sending %d transactions", opts.Num)
 	for i := 0; i < opts.Num; i++ {
 		client.SendTxn(txns[i], opts.Order)
 	}
-	//log.Infof("Start sending block")
-	//client.SendBlock(txns, opts.BlockSize)
+	log.Infof("Start sending block")
+	client.SendBlock(txns, opts.BlockSize)
 }
 
 func RandomString(n int) string {
 	var letter = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
-
 	b := make([]rune, n)
 	for i := range b {
 		b[i] = letter[rand.Intn(len(letter))]

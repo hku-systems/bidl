@@ -2,8 +2,8 @@
 
 peers=4
 
+bash ./bidl/scripts/create_artifact.sh
 if [ $1 == "performance" ]; then 
-    bash ./bidl/scripts/create_artifact.sh
     rst_dir=./logs/bidl/performance
     rst_file=$rst_dir/performance.log
     rm -rf $rst_dir
@@ -28,13 +28,13 @@ elif [ $1 == "nd" ]; then
     rm -rf $rst_dir
     mkdir -p $rst_dir
     touch $rst_file
-    for nondeterminism_rate in 10 20 30 40 50; do 
+    for nondeterminism_rate in 0; do 
         echo "Non-determinism rate: $nondeterminism_rate%"
         # run benchmark
         bash ./bidl/scripts/start.sh $peers 60 nd $nondeterminism_rate
         # obtain throughput data
         echo -n "rate $tput_cap throughput " >> $rst_file
-        cat ./bidl/logs/normal.log | grep "BIDL throughput" | python3 ./bidl/scripts/bidl_tput.py >> $rst_file
+        cat ./bidl/logs/normal.log | grep "BIDL transaction commit throughput" | python3 ./bidl/scripts/bidl_tput.py >> $rst_file
         # obtain latency data
         echo -n "rate $tput_cap latency " >> $rst_file
         cat ./bidl/logs/log_0.log | grep "Total latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
