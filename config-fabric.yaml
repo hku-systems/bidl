@@ -15,23 +15,35 @@ peers:
 orderer:
   name: orderer
   image: hyperledger/fabric-orderer:fabric
-  host: heming-rdma2
+  host: node7.bidl.bidl-pg0.utah.cloudlab.us
 
 cli:
   name: cli
   image: hyperledger/fabric-tools:fabric
-  host: heming-rdma8
+  host: node0.bidl.bidl-pg0.utah.cloudlab.us
   chaincode: fabric_exp/chaincode
   scripts: fabric_exp/scripts
 
 tape:
   name: tape
   image: tape:latest
-  host: heming-rdma8
+  host: node0.bidl.bidl-pg0.utah.cloudlab.us
   config: fabric_exp/tape.yaml
   organizations: fabric_exp/organizations
 
 hosts:
+  - node1.bidl.bidl-pg0.utah.cloudlab.us
+  - node1.bidl.bidl-pg0.utah.cloudlab.us
+  - node2.bidl.bidl-pg0.utah.cloudlab.us
+  - node2.bidl.bidl-pg0.utah.cloudlab.us
+  - node3.bidl.bidl-pg0.utah.cloudlab.us
+  - node3.bidl.bidl-pg0.utah.cloudlab.us
+  - node4.bidl.bidl-pg0.utah.cloudlab.us
+  - node4.bidl.bidl-pg0.utah.cloudlab.us
+  - node5.bidl.bidl-pg0.utah.cloudlab.us
+  - node5.bidl.bidl-pg0.utah.cloudlab.us
+  - node6.bidl.bidl-pg0.utah.cloudlab.us
+  - node6.bidl.bidl-pg0.utah.cloudlab.us
   - heming-rdma4
   - heming-rdma6
   - heming-rdma8

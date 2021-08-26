@@ -22,7 +22,7 @@ VERBOSE="$5"
 LANGUAGE=`echo "$LANGUAGE" | tr [:upper:] [:lower:]`
 COUNTER=1
 MAX_RETRY=10
-all_peers=6
+all_peers=12
 
 CC_SRC_PATH="github.com/chaincode/smallbank"
 

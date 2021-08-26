@@ -1,8 +1,8 @@
 # Setup-related parameters
-export event="ms0837.utah.cloudlab.us"
+export event="amd185.utah.cloudlab.us"
 export add_events=""
-export peers="ms0835.utah.cloudlab.us ms0838.utah.cloudlab.us ms0812.utah.cloudlab.us ms0808.utah.cloudlab.us"
-export orderers="ms0837.utah.cloudlab.us"
+export peers="amd187.utah.cloudlab.us amd189.utah.cloudlab.us amd202.utah.cloudlab.us amd188.utah.cloudlab.us"
+export orderers="amd181.utah.cloudlab.us"
 export user=$USER
 export goexec="/usr/local/go/bin"
 export bm_path="$HOME/benchmark"

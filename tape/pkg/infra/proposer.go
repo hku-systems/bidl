@@ -126,7 +126,7 @@ func (p *Proposer) Start(signed, processed chan *Elements, done <-chan struct{},
 		case <-done:
 			return
 		}
-		if cnt >= 20 {
+		if cnt >= 10 {
 			tps := cnt * 1e9 / int(st-base)
 			log.Println("endorser send rate", tps, "expect", endorser_send_rate)
 			if tps > endorser_send_rate {
