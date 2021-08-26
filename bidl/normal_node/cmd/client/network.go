@@ -148,7 +148,7 @@ func (c *Client) SendBlock(txns []*common.Transaction, blkSize int) {
 			
 			hash := sha256.Sum256(msgByte)
 			block = append(block, hash[:]...)
-			log.Debug("index:", j, len(msgByte), msg, "hash:", hash)
+			// log.Debug("index:", j, len(msgByte), msg, "hash:", hash)
 			c.seq++
 		}
 		temp := []byte{0, 0, 0, 0}

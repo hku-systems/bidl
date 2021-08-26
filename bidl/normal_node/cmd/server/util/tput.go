@@ -28,7 +28,7 @@ func (monitor *TputMonitor) TxnThroughput() {
 	log.Infof("Start monitor transaction receiving throughput")
 	num := 0
 	total := 0
-	interval := 1000
+	interval := 500
 	start := time.Now()
 	for {
 		select {

@@ -75,6 +75,7 @@ func main() {
 	for i := 0; i < opts.Num; i++ {
 		client.SendTxn(txns[i], opts.Order)
 	}
+	time.Sleep(time.Duration(5)*time.Second)
 	log.Infof("Start sending block")
 	client.SendBlock(txns, opts.BlockSize)
 }

@@ -41,7 +41,7 @@ type Processor struct {
 var startExecBlk time.Time
 func NewProcessor(blkSize int, id int, net *network.Network) *Processor {
 	log.Debugf("Transaction processor initialized")
-	dbFile := "../state.db"
+	dbFile := "state.db"
 	database, err := leveldb.OpenFile(dbFile, nil)
 	if err != nil {
 		log.Fatal("Error open state.db!")
