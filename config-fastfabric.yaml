@@ -20,21 +20,21 @@ orderer:
 cli:
   name: cli
   image: hyperledger/fabric-tools:fastfabric-v1.0
-  host: heming-rdma8
+  host: heming-rdma6
   chaincode: fastfabric_exp/chaincode
   scripts: fastfabric_exp/scripts
 
 tape:
   name: tape
   image: tape:latest
-  host: heming-rdma8
+  host: heming-rdma6
   config: fastfabric_exp/tape.yaml
   organizations: fastfabric_exp/organizations
 
 hosts:
   - heming-rdma4
-  - heming-rdma6
-  - heming-rdma8
+  - heming-rdma4
+  - heming-rdma9
   - heming-rdma9
   - heming-rdma3
   - heming-rdma19
