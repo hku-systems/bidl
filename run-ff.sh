@@ -12,10 +12,10 @@ if [ $1 == "performance" ]; then
     mkdir -p logs/ff/performance
     round=0
     rm log.log
-    for send_rate in 3000 13000 23000 33000; do
+    for send_rate in 2000 5000 8000 11000 13000 16000 20000 32000; do
     # for send_rate in 3000 8000 13000 18000 23000 28000 33000; do
         i=8
-        j=8
+        j=1
         k=20
         let round=round+1
         echo $round $send_rate
@@ -36,8 +36,8 @@ if [ $1 == "performance" ]; then
         sleep 2
         docker exec $(docker ps | grep fabric_cli | awk '{print $1}') bash scripts/script.sh
         # create 50000 accounts
-        docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --no-e2e -n 50000 --burst 50000 --num_of_conn $i --client_per_conn $j --groups $peers --send_rate $send_rate --config config.yaml > $phase1 2>&1
-        docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --no-e2e -n 50000 --burst 50000 --num_of_conn $i --client_per_conn $j --orderer_client $k --groups $peers --send_rate $send_rate --config config.yaml > $phase2 2>&1
+        # docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --no-e2e -n 50000 --burst 50000 --num_of_conn $i --client_per_conn $j --groups $peers --send_rate $send_rate --config config.yaml > $phase1 2>&1
+        docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --e2e -n 50000 --burst 50000 --num_of_conn $i --client_per_conn $j --orderer_client $k --groups $peers --send_rate $send_rate --config config.yaml > $phase2 2>&1
         for id in 0 1 2 3 4 5; do 
             docker service logs fabric_peer$id > logs/ff/performance/round_${round}_peer$id.log 2>&1
         done
@@ -55,7 +55,7 @@ if [ $1 == "performance" ]; then
         # TODO latency breakdown 
         mv $phase1 logs/ff/performance/
         mv $phase2 logs/ff/performance/
-        sleep 20
+        sleep 10
     done
     mv log.log logs/ff/performance/
     exit 0

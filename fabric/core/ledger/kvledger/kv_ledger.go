@@ -260,8 +260,8 @@ func (l *kvLedger) CommitWithPvtData(pvtdataAndBlock *ledger.BlockAndPvtData) er
 	startStateValidation := time.Now()
 	logger.Debugf("[%s] Validating state for block [%d]", l.ledgerID, blockNo)
 	// jyp: call (core/ledger/kvledger/txmgmt/txmgr/lockbasedtxmgr/lockbased_txmgr.go)?
-	fmt.Println("jyp: MVCC 0")
-	err = l.txtmgmt.ValidateAndPrepare(pvtdataAndBlock, false)
+	// fmt.Println("jyp: MVCC 0")
+	err = l.txtmgmt.ValidateAndPrepare(pvtdataAndBlock, true)
 	if err != nil {
 		return err
 	}
