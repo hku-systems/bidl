@@ -22,9 +22,9 @@ func (s *Server) setupServerConnection(addr string, bufferSize int) {
 	go net.ReadFromSocket()
 	// set up throughput monitor
 	util.NewTputMonitor(opts.BlockSize)
-	// wait for packets
+	// receive packets
 	go s.processPackets()
-	// process messages
+	// process packets
 	p = core.NewProcessor(s.BlkSize, s.ID, net)
 }
 
@@ -42,7 +42,6 @@ func (s *Server) processPackets() {
 				p.ProcessPersist(pack.Bytes[4:])
 			} else if bytes.Equal(magicNum, common.MagicNumTxn) {
 				log.Debugf("new transaction received")
-				util.Monitor.TputTxn <- 1
 				hash := sha256.Sum256(pack.Bytes)
 				// the next eight bytes are the sequence number in uint64
 				seq := binary.LittleEndian.Uint64(pack.Bytes[4:12])
@@ -60,13 +59,11 @@ func (s *Server) processPackets() {
 						Hash:        hash,
 					})
 				log.Debugf("Received transaction with sequence number %d", seq)
-				//util.Monitor.TputTxn <- 1
-
+				util.Monitor.TputTxn <- 1
 			} else if bytes.Equal(magicNum, common.MagicNumBlock) {
 				log.Infof("new block received.")
 				p.ProcessBlock(pack.Bytes[4:])
 				util.Monitor.TputBlk <- 1
-
 			} else {
 				log.Errorf("Invalid message type", pack.Bytes[0:20], "length:", len(pack.Bytes))
 			}

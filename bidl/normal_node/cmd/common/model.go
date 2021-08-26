@@ -45,6 +45,7 @@ type Envelop struct {
 	SeqTransaction *SequencedTransaction
 	WSet           map[int]int // execution result
 	ExecHash       [32]byte    // hash of the WSet
+	Signature      []byte 
 	ND             bool
 }
 

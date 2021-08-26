@@ -2,12 +2,14 @@ package util
 
 import (
 	"fmt"
-	log "github.com/sirupsen/logrus"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type TputMonitor struct {
 	TputTxn chan int
+	LatencyTxn chan int
 	TputBlk chan int
 }
 
@@ -35,7 +37,8 @@ func (monitor *TputMonitor) TxnThroughput() {
 			total++
 			if num == interval {
 				duration := int(time.Since(start).Milliseconds())
-				log.Infof("Received %d transactions, duration: %dms, transaction tput: %d kTxns/s, total: %d", interval, duration, interval/duration, total)
+				// log.Infof("Received %d transactions, duration: %dms, transaction tput: %d kTxns/s, total: %d", interval, duration, interval/duration, total)
+				fmt.Printf("BIDL transaction commit throughput: %d kTxns/s\n", interval/duration)
 				start = time.Now()
 				num = 0
 			}
@@ -53,11 +56,14 @@ func (monitor *TputMonitor) BlkThroughput(blkSize int) {
 		case <-monitor.TputBlk:
 			num++
 			if num == interval {
-				duration := int(time.Since(start).Nanoseconds())
+				// duration := int(time.Since(start).Nanoseconds())
+				duration := int(time.Since(start).Milliseconds())
 				if duration == 0 {
-					duration = 1
+					fmt.Printf("BIDL block commit throughput: Inf kTxns/s\n")
+				} else {
+					// fmt.Printf("BIDL block commit throughput: %d kTxns/s\n", interval*blkSize*1e6/duration)
+					fmt.Printf("BIDL block commit throughput: %d kTxns/s\n", interval*blkSize/duration)
 				}
-				fmt.Printf("BIDL throughput: %d kTxns/s\n", interval*blkSize*1e6/duration)
 				start = time.Now()
 				num = 0
 			}

@@ -34,7 +34,7 @@ public class MulticastClient {
 
             InetAddress to = InetAddress.getByName("230.0.0.0");
             int numOfThreads = 1;
-            int perThreadTxs = 5000;
+            int perThreadTxs = 50000;
             int stopInterval = 10000;
             logger.info("Number of Threads {}, per-thread transactions {}", numOfThreads, perThreadTxs);
             ExecutorService fixedThreadPool = Executors.newFixedThreadPool(numOfThreads);
@@ -87,7 +87,7 @@ class SenderMulticast extends Thread {
                 if (stopCounter == this.stopInterval) {
                     logger.info("bidl: sent {} transactions, stop for 5ms", this.stopInterval);
                     stopCounter = 0;
-                    Thread.sleep(100);
+                    Thread.sleep(10);
                 }
             }
             this.socket.close();

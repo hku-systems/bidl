@@ -1,15 +1,14 @@
 #!/bin/bash -e
 
-if [ "$#" -ne 2 ]; then
-    echo "Usage: bash ./scripts/local_start_docker.sh <num of nodes> <submit tput>"
-    exit 1
-fi
+# if [ "$#" -ne 2 ]; then
+#     echo "Usage: bash ./scripts/local_start_docker.sh <num of nodes> <submit tput>"
+#     exit 1
+# fi
 
 script_dir=$(cd "$(dirname "$0")";pwd)
 source $script_dir/env.sh
 
 echo "Stopping sequencer/consensus/normal nodes..."
-# bash $script_dir/kill_all.sh
 source $script_dir/kill_all_local.sh
 
 # echo "Generating hosts.config..."
@@ -20,9 +19,6 @@ done
 
 # echo "Generating system.config..."
 cp $base_dir/scripts/configs/system_${1}.config $smart_dir/config/system.config
-
-source $base_dir/scripts/compile.sh
-source $base_dir/scripts/build_image.sh
 
 echo "Start $1 consensus nodes..."
 rm -rf $base_dir/logs
@@ -35,20 +31,27 @@ echo "Starting the sequencer..., tput:$2 kTxns/s."
 $sequencer_dir/sequencer $2 &> $base_dir/logs/sequencer.log &
 
 echo "Starting normal node..."
-docker run --name normal_node --net=host --cap-add NET_ADMIN normal_node /normal_node/server --quiet > $base_dir/logs/normal.log 2>&1 &
-
-# echo "Starting clients..."
-# echo "Warming up..."
-# cd $normal_node_dir
-# go run ./cmd/client --order --num=5000
+docker run --name normal_node --net=host --cap-add NET_ADMIN normal_node /normal_node/server --quiet --id=0 > $base_dir/logs/normal.log 2>&1 &
 
 echo "benchmarking..."
 sleep 10
 cd $normal_node_dir
-go run ./cmd/client --num=100000
+
+if [ $3 == "performance" ]; then
+    go run ./cmd/client --num=100000 --org=50 
+elif [ $3 == "nd" ]; then 
+    go run ./cmd/client --num=100000 --org=50 --nd=$4 
+elif [ $3 == "contention" ]; then 
+    go run ./cmd/client --num=100000 --org=50 --conflict=$4 
+elif [ $3 == "scalability" ]; then 
+    go run ./cmd/client --num=100000 --org=$4
+else 
+    echo "Invalid argument."
+    exit 1
+fi
 
 cd $base_dir
 echo "Please wait..."
-sleep 30
+
 source $base_dir/scripts/get_data.sh
 

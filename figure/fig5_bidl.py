@@ -57,16 +57,16 @@ with open("logs/streamchain/ordering.log") as f:
 # BIDL 
 bidl_tps_raw = []
 bidl_peak_tps = 0
-with open("logs/bidl/bidl_performance_tput_backup.log") as f: 
+with open("./bidl/logs/bidl_performance_tput.log") as f: 
 	lines = f.readlines()
-	for line in lines[-10:-1]:
+	for line in lines[int(len(lines)*0.3):int(len(lines)*0.6)]:
 		bidl_tps_raw.append(int(line.split()[-2]))
 	bidl_peak_tps = np.mean(bidl_tps_raw)
 
 bidl_latency_raw = []
-with open("logs/bidl/bidl_performance_latency_backup.log") as f: 
+with open("./bidl/logs/bidl_performance_latency.log") as f: 
 	lines = f.readlines()
-	for line in lines[:-1]:
+	for line in lines[int(len(lines)*0.3):int(len(lines)*0.6)]:
 		bidl_latency_raw.append(float(line.split()[3])/1e3)
 	bidl_peak_latency = np.mean(bidl_latency_raw)
 	

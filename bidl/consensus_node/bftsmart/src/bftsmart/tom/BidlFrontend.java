@@ -10,8 +10,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Enumeration;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.*;
+// import java.util.concurrent.BlockingDeque;
+// import java.util.concurrent.ConcurrentHashMap;
+// import java.util.concurrent.ConcurrentMap;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.socket.DatagramPacket;
@@ -29,8 +31,9 @@ import bftsmart.reconfiguration.ServerViewController;
 import bftsmart.tom.core.ExecutionManager;
 
 public class BidlFrontend extends Thread {
-    public static final ConcurrentMap<String, byte[]> txMap = new ConcurrentHashMap<>();
     public static int maxSeqNum = 0;
+    public static final ConcurrentMap<String, byte[]> txMap = new ConcurrentHashMap<>();
+    public static final BlockingQueue<byte[]> txBlockingQueue = new LinkedBlockingQueue<>();
     public static final byte[] MagicNumTxn = {7, 7, 7, 7};
     public static final byte[] MagicNumBlock = {6, 6, 6, 6};
     public static final byte[] MagicNumExecResult = {5, 5, 5, 5};
@@ -41,12 +44,15 @@ public class BidlFrontend extends Thread {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private ServerViewController controller;
     private ExecutionManager execManager;
+    private Assembler assember;
 
     BidlFrontend(ServerViewController controller, ExecutionManager executionManager) {
         super("BIDL frontend");
         this.controller = controller;
         this.execManager = executionManager;
         this.bidlSender = new BIDLSender();
+        this.assember = new Assembler();
+        this.assember.start();
     }
 
     @Override
@@ -54,7 +60,7 @@ public class BidlFrontend extends Thread {
         InetSocketAddress groupAddress = new InetSocketAddress("230.0.0.0", 7777);
         logger.info("bidl: new BIDL frontend started, listening group address: {}", groupAddress);
         Bootstrap bootstrap = new Bootstrap();
-        NioEventLoopGroup acceptGroup = new NioEventLoopGroup(4);
+        EventLoopGroup acceptGroup = new NioEventLoopGroup(4);
         try {
             NetworkInterface ni = NetworkInterface.getByName("lo"); // used lo for hostwork
             // NetworkInterface ni = NetworkInterface.getByName("eth0"); // used en0 for
@@ -76,8 +82,8 @@ public class BidlFrontend extends Thread {
                 }
             }).localAddress(localAddress, groupAddress.getPort()).option(ChannelOption.IP_MULTICAST_IF, ni)
                     .option(ChannelOption.SO_RCVBUF, 1024 * 1024 * 1000)
-                    .option(ChannelOption.RCVBUF_ALLOCATOR, new FixedRecvByteBufAllocator(1024 * 1024 * 10))
-                    .option(ChannelOption.SO_REUSEADDR, true).handler(new ChannelInitializer<NioDatagramChannel>() {
+                    .option(ChannelOption.RCVBUF_ALLOCATOR, new FixedRecvByteBufAllocator(1024 * 1024 * 1000))
+					.option(ChannelOption.SO_REUSEADDR, true).handler(new ChannelInitializer<NioDatagramChannel>() {
                         @Override
                         public void initChannel(NioDatagramChannel ch) throws Exception {
                             ChannelPipeline pipeline = ch.pipeline();
@@ -97,35 +103,10 @@ public class BidlFrontend extends Thread {
     }
 
     private class SequencerDecodeHandler extends ChannelInboundHandlerAdapter {
-        private int num = 0;
-        private int totalNum = 0;
-        private MessageDigest digest = null;
-        private ServiceProxy proxy = null;
-        private byte[] signature = null;
-        private ByteBuffer blockBuffer = null;
-        private ByteBuffer payloadBuffer = null;
-        private int blockSize = 500;
-
-        SequencerDecodeHandler() {
-            try {
-                this.num = 0;
-                this.totalNum = 0;
-                this.digest = MessageDigest.getInstance("SHA-256");
-                this.proxy = new ServiceProxy(1001, controller.getStaticConf().getProcessId());
-                this.signature = new byte[0];
-                this.blockBuffer = ByteBuffer.allocate(this.blockSize * 36 + Integer.BYTES * 2 + Integer.BYTES);
-                this.payloadBuffer = ByteBuffer.allocate(this.blockSize * 36 + Integer.BYTES);
-                logger.info("The default batch size is of BIDLFrontend is {}", this.blockSize);
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
+        private int txNum;
+        SequencerDecodeHandler(){
+            txNum = 0;
         }
-
-        // retrieve int from the byte array
-        int fromByteArrayLittleEndian(byte[] bytes, int start) {
-            return (bytes[start+3] & 0xFF) << 24 | (bytes[start+2] & 0xFF) << 16 | (bytes[start+1] & 0xFF) << 8 | (bytes[start] & 0xFF);
-        }
-
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
             // Get input stream
@@ -162,63 +143,111 @@ public class BidlFrontend extends Thread {
                 return;
             }
             
-            logger.debug("bidl: transaction received, length: {}, content {}", rcvPktLength, Arrays.toString(rcvPktBuf));
-
-            // retrieve the sequence number of this transaction
-            int seqNum = fromByteArrayLittleEndian(rcvPktBuf, 4);
-            maxSeqNum = seqNum > maxSeqNum ? seqNum : maxSeqNum;
-            logger.debug("bidl: sequence Number of current transaction is {}, maximum:{}", seqNum, maxSeqNum);
-
-            // put the transaction's sequence number to the block buffer
-            // this.payloadBuffer.putInt(seqNum);
-            this.payloadBuffer.put(Arrays.copyOfRange(rcvPktBuf, 4, 8));
-
-            // get sha256 of the transaction bytes
-            byte[] hash = this.digest.digest(rcvPktBuf);
-
-            this.num++;
-            this.totalNum++;
-
-            // add the tranasaction to the txmap
-            txMap.put(new String(hash), rcvPktBuf);
-            // logger.debug("bidl: new transaction received, size: {}, totalNumber: {}, num: {}, txMap size: {} ",
-            //         rcvPktLength, this.totalNum, num, txMap.size());
-
-            // add transaction hashes to the block buffer
-            this.payloadBuffer.put(hash);
-
-            // if I have collected enough transactions and I am the leader, submit txs to the co-located node
-            if (this.num == this.blockSize) {
-                logger.info("bidl: collected enough transactions. Num:{}, TotalNum:{}", this.num, this.totalNum);
-                logger.debug("bidl: currentleader: {}, myID: {}", execManager.getCurrentLeader(),
-                        controller.getStaticConf().getProcessId());
-                payloadBuffer.putInt(maxSeqNum);
-                if (execManager.getCurrentLeader() == controller.getStaticConf().getProcessId()) {
-                    payloadBuffer.flip();
-                    byte[] payload = new byte[payloadBuffer.remaining()];
-                    payloadBuffer.get(payload);
-
-                    blockBuffer.putInt(payload.length);
-                    blockBuffer.put(payload);
-                    blockBuffer.putInt(signature.length);
-                    blockBuffer.put(signature);
-                    blockBuffer.flip();
-                    byte[] block = new byte[blockBuffer.remaining()];
-                    blockBuffer.get(block);
-
-                    // logger.info("bidl: BidlFrontend, block " + " length " + block.length + " content "
-                    //         + Arrays.toString(block));
-
-                    byte[] reply = proxy.invokeOrdered(block);
-                    logger.info("bidl: I am the leader, new block submitted, totalNumber: " + this.totalNum
-                            + " block length: " + block.length + " signature.length " + this.signature.length
-                            + "maximum sequence number" + maxSeqNum);
-                }
-                this.num = 0;
-                this.payloadBuffer.clear();
-                this.blockBuffer.clear();
-            }
+            txBlockingQueue.add(rcvPktBuf);
             bytebuf.release();
+            txNum++;
+            if (txNum % 500 == 0){
+                logger.info("bidl: received enough transactions. Num:{}", txNum);
+            }
+        }
+    }
+
+    private class Assembler extends Thread {
+        private ByteBuffer payloadBuffer = null;
+        private ByteBuffer blockBuffer = null;
+        private int num = 0;
+        private int totalNum = 0;
+        private MessageDigest digest = null;
+        private ServiceProxy proxy = null;
+        private byte[] signature = null;
+        private int blockSize = 500;
+        private ByteBuffer packetBuffer = null;
+        private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+        Assembler() {
+            try {
+                this.num = 0;
+                this.totalNum = 0;
+                this.digest = MessageDigest.getInstance("SHA-256");
+                this.proxy = new ServiceProxy(1001, controller.getStaticConf().getProcessId());
+                this.signature = new byte[0];
+                this.blockBuffer = ByteBuffer.allocateDirect(this.blockSize * 36 + Integer.BYTES * 2 + Integer.BYTES);
+                this.payloadBuffer = ByteBuffer.allocateDirect(this.blockSize * 36 + Integer.BYTES);
+                logger.info("The default batch size is {}", this.blockSize);
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // retrieve int from the byte array
+        int fromByteArrayLittleEndian(byte[] bytes, int start) {
+            return (bytes[start+3] & 0xFF) << 24 | (bytes[start+2] & 0xFF) << 16 | (bytes[start+1] & 0xFF) << 8 | (bytes[start] & 0xFF);
+        }
+    
+        @Override
+        public void run() {
+            while (true) {
+                byte[] rcvPktBuf = null;
+                try {
+                    rcvPktBuf = BidlFrontend.txBlockingQueue.take();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                
+                // retrieve the sequence number of this transaction
+                int seqNum = fromByteArrayLittleEndian(rcvPktBuf, 4);
+                maxSeqNum = seqNum > maxSeqNum ? seqNum : maxSeqNum;
+                logger.debug("bidl: sequence Number of current transaction is {}, maximum:{}", seqNum, maxSeqNum);
+    
+                // put the transaction's sequence number to the block buffer
+                // this.payloadBuffer.putInt(seqNum);
+                payloadBuffer.put(Arrays.copyOfRange(rcvPktBuf, 4, 8));
+    
+                // get sha256 of the transaction bytes
+                byte[] hash = this.digest.digest(rcvPktBuf);
+    
+                this.num++;
+                this.totalNum++;
+    
+                // add the tranasaction to the txmap
+                txMap.put(new String(hash), rcvPktBuf);
+                // logger.debug("bidl: new transaction received, size: {}, totalNumber: {}, num: {}, txMap size: {} ",
+                //         rcvPktLength, this.totalNum, num, txMap.size());
+    
+                // add transaction hashes to the block buffer
+                this.payloadBuffer.put(hash);
+    
+                // if I have collected enough transactions and I am the leader, submit txs to the co-located node
+                if (this.num == this.blockSize) {
+                    logger.info("bidl: collected enough transactions. Num:{}, TotalNum:{}", this.num, this.totalNum);
+                    payloadBuffer.putInt(maxSeqNum);
+                    if (execManager.getCurrentLeader() == controller.getStaticConf().getProcessId()) {
+                        payloadBuffer.flip();
+                        byte[] payload = new byte[payloadBuffer.remaining()];
+                        payloadBuffer.get(payload);
+    
+                        blockBuffer.putInt(payload.length);
+                        blockBuffer.put(payload);
+                        blockBuffer.putInt(signature.length);
+                        blockBuffer.put(signature);
+                        blockBuffer.flip();
+                        byte[] block = new byte[blockBuffer.remaining()];
+                        blockBuffer.get(block);
+    
+                        // logger.info("bidl: BidlFrontend, block " + " length " + block.length + " content "
+                        //         + Arrays.toString(block));
+    
+                        byte[] reply = proxy.invokeOrdered(block);
+                        logger.info("bidl: I am the leader, new block submitted, totalNumber: " + this.totalNum
+                                + " block length: " + block.length + " signature.length " + this.signature.length
+                                + "maximum sequence number" + maxSeqNum);
+                    }
+                    this.num = 0;
+                    this.payloadBuffer.clear();
+                    this.blockBuffer.clear();
+                }
+            }
         }
     }
 }
+

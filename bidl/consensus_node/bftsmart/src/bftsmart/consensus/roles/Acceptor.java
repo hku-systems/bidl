@@ -215,8 +215,8 @@ public final class Acceptor {
 
 			/*** LEADER CHANGE CODE ********/
 			epoch.getConsensus().addWritten(value);
-			logger.trace("I have written value " + Arrays.toString(epoch.propValueHash) + " in consensus instance "
-					+ cid + " with timestamp " + epoch.getConsensus().getEts());
+			// logger.trace("I have written value " + Arrays.toString(epoch.propValueHash) + " in consensus instance "
+			// 		+ cid + " with timestamp " + epoch.getConsensus().getEts());
 			/*****************************************/
 
 			// start this consensus if it is not already running
@@ -257,8 +257,8 @@ public final class Acceptor {
 					epoch.getConsensus().getDecision().firstMessageProposed.acceptSentTime = System.nanoTime();
 
 					/**** LEADER CHANGE CODE! ******/
-					logger.debug("[CFT Mode] Setting consensus " + cid + " QuorumWrite tiemstamp to "
-							+ epoch.getConsensus().getEts() + " and value " + Arrays.toString(epoch.propValueHash));
+					// logger.debug("[CFT Mode] Setting consensus " + cid + " QuorumWrite tiemstamp to "
+					// 		+ epoch.getConsensus().getEts() + " and value " + Arrays.toString(epoch.propValueHash));
 					epoch.getConsensus().setQuorumWrites(epoch.propValueHash);
 					/*****************************************/
 
@@ -311,8 +311,8 @@ public final class Acceptor {
 				logger.debug("Sending ACCEPT message, cId:{}, I am:{}", cid, me);
 
 				/**** LEADER CHANGE CODE! ******/
-				logger.debug("Setting consensus " + cid + " QuorumWrite tiemstamp to " + epoch.getConsensus().getEts()
-						+ " and value " + Arrays.toString(value));
+				// logger.debug("Setting consensus " + cid + " QuorumWrite tiemstamp to " + epoch.getConsensus().getEts()
+				// 		+ " and value " + Arrays.toString(value));
 				epoch.getConsensus().setQuorumWrites(value);
 				/*****************************************/
 
@@ -504,8 +504,9 @@ public final class Acceptor {
 		// - first 60 bytes of the proposed value is metadata, which only exists in the propose message and not exists in the deserializedPropValue
 		// - the first 4 bytes of the actual payload is an integer indicating the length of payload
 		// - each entry is a 2-tuple [seq, hash], the `seq` is 4 bytes uint32, hash is 32 bytes 
-		// - the last n-8 ~ n-4 bytes of the actual payload is an integer indicating the maximum sequence number
-		// - the last n-4 ~ n bytes of the actual payload is an integer indicating the length of signatures, which is (0) in our setting.
+		// - the last n-12 ~ n-8 bytes of the actual payload is an integer indicating the maximum sequence number
+		// - the last n-8 ~ n-4 bytes of the actual payload is an integer indicating the length of signatures, which is (0) in our setting.
+		// - the last n-4 ~ n bytes of the actual payload are all zero
 		// logger.info("bidl: processing new propose message, length:{}, content:{}", proposedValue.length,
 		// 		Arrays.toString(proposedValue));
 
@@ -540,14 +541,6 @@ public final class Acceptor {
 					gapNumber++;
 					gapHashes.add(hash);
 				}
-				// hash[len++] = proposedValue[i];
-				// if (len == 36) {
-				// 	if (!BidlFrontend.txMap.containsKey(new String(hash))) {
-				// 		gapNumber++;
-				// 		gapHashes.add(hash);
-				// 	}
-				// 	len = 0;
-				// }
 			}
 
 			// send gap-req message, and wait for gap-reply
