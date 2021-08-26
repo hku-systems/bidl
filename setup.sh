@@ -30,19 +30,6 @@ source ~/.bashrc
 bash runall.sh "docker pull hyperledger/fabric-ccenv:1.3.0; docker tag hyperledger/fabric-ccenv:1.3.0 hyperledger/fabric-ccenv:latest"
 
 cur=$PWD
-## deploy fastfabric
-newgrp docker << END
-mkdir -p $GOPATH/src/github.com/hyperledger
-rm -rf $GOPATH/src/github.com/hyperledger/fabric
-cp -r fastfabric $GOPATH/src/github.com/hyperledger/fabric
-cd $GOPATH/src/github.com/hyperledger/fabric
-go mod init
-go mod vendor
-make peer-docker-clear orderer-docker-clear tools-docker-clear
-make peer-docker orderer-docker tools-docker
-cd $cur
-bash deploy.sh fastfabric-v1.0
-END
 
 ## deploy fabric
 newgrp docker << END
@@ -55,6 +42,20 @@ make peer-docker-clear orderer-docker-clear tools-docker-clear
 make peer-docker orderer-docker tools-docker
 cd $cur
 bash deploy.sh fabric
+END
+
+## deploy fastfabric
+newgrp docker << END
+mkdir -p $GOPATH/src/github.com/hyperledger
+rm -rf $GOPATH/src/github.com/hyperledger/fabric
+cp -r fastfabric $GOPATH/src/github.com/hyperledger/fabric
+cd $GOPATH/src/github.com/hyperledger/fabric
+go mod init
+go mod vendor
+make peer-docker-clear orderer-docker-clear tools-docker-clear
+make peer-docker orderer-docker tools-docker
+cd $cur
+bash deploy.sh fastfabric-v1.0
 END
 
 ## deploy streamchain
