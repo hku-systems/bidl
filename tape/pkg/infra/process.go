@@ -150,7 +150,7 @@ func breakdown_phase1(config Config, num int, burst int, rate float64, logger *l
 	// phase1: send proposals to endorsers
 	var cnt int32 = 0
 	var buffer [][]byte
-	var txids [][]byte
+	var txids []string
 	for i := 0; i < num; i++ {
 		select {
 		case err = <-errorCh:
@@ -171,7 +171,7 @@ func breakdown_phase1(config Config, num int, burst int, rate float64, logger *l
 			}
 			cnt += 1
 			buffer = append(buffer, bytes)
-			txids = append(txids, []byte(tx.Txid))
+			txids = append(txids, tx.Txid)
 			if cnt+assember.Abort >= int32(num) {
 				break
 			}
@@ -192,7 +192,7 @@ func breakdown_phase1(config Config, num int, burst int, rate float64, logger *l
 	for i := range buffer {
 		mw.Write(buffer[i])
 		mw.WriteByte('\n')
-		mw.Write(txids[i])
+		mw.WriteString(txids[i])
 		mw.WriteByte('\n')
 	}
 	mw.Flush()
@@ -222,15 +222,15 @@ func breakdown_phase2(config Config, num int, burst int, rate float64, logger *l
 	mfile, _ := os.Open(endorsement_file)
 	defer mfile.Close()
 	mscanner := bufio.NewScanner(mfile)
-	var txidbytes [][]byte
+	var txids []string
 	TXs := make([]common.Envelope, num)
 	i := 0
 	for mscanner.Scan() {
 		bytes := mscanner.Bytes()
 		json.Unmarshal(bytes, &TXs[i])
 		if mscanner.Scan() {
-			txid := mscanner.Bytes()
-			txidbytes = append(txidbytes, txid)
+			txid := mscanner.Text()
+			txids = append(txids, txid)
 		}
 		i++
 	}
@@ -241,7 +241,7 @@ func breakdown_phase2(config Config, num int, burst int, rate float64, logger *l
 		for i := 0; i < len(TXs); i++ {
 			var item Elements
 			item.Envelope = &TXs[i]
-			item.Txid = string(txidbytes[i])
+			item.Txid = txids[i]
 			envs <- &item
 		}
 	}()
