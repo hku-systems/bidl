@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"math/rand"
 	"sync/atomic"
 	"time"
-	"math/rand"
 
 	"github.com/hyperledger/fabric-protos-go/common"
 	"github.com/hyperledger/fabric-protos-go/orderer"
@@ -71,12 +71,18 @@ func CreateProposer(node Node, assember *Assembler, logger *log.Logger) (*Propos
 }
 
 func (p *Proposer) Start(signed, processed chan *Elements, done <-chan struct{}, threshold int, ii int, jj int) {
+	endorser_send_rate := g_send_rate / (g_num_of_conn * g_client_per_conn * g_groups)
+	base := time.Now().UnixNano()
+	interval := 1e9 / endorser_send_rate / 3
+	var st int64
+	cnt := 0
 	for {
 		select {
 		case s := <-signed:
 			//send sign proposal to peer for endorsement
 			// todo
-			st := time.Now().UnixNano()
+			time.Sleep(time.Duration(interval) * time.Nanosecond)
+			st = time.Now().UnixNano()
 			buffer_start <- fmt.Sprintf("start: %d %s %d %d", st, s.Txid, ii, jj)
 			r, err := p.e.ProcessProposal(context.Background(), s.SignedProp)
 			if err != nil || r.Response.Status < 200 || r.Response.Status >= 400 {
@@ -87,24 +93,24 @@ func (p *Proposer) Start(signed, processed chan *Elements, done <-chan struct{},
 				}
 				continue
 			}
+			cnt += 1
 			s.lock.Lock()
 			//collect for endorsement
 			s.Responses = append(s.Responses, r)
 			if len(s.Responses) >= threshold {
 				// processed <- s
 				// todo
-				st := time.Now().UnixNano()
-				buffer_proposal <- fmt.Sprintf("proposal: %d %s", st, s.Txid)
 				if g_ndrate > 1e-6 {
 					// g_ndrate != 0, nondeterministic behavior
 					pr := rand.Float64()
 					if pr < g_ndrate {
-						// drop 
+						// drop
 						atomic.AddInt32(&p.assm.Abort, 1)
 						continue
 					}
-
 				}
+				st := time.Now().UnixNano()
+				buffer_proposal <- fmt.Sprintf("proposal: %d %s", st, s.Txid)
 				env, err := CreateSignedTx(s.Proposal, p.assm.Signer, s.Responses, p.assm.Conf.Check_rwset)
 				if err != nil {
 					// will not be here
@@ -119,6 +125,16 @@ func (p *Proposer) Start(signed, processed chan *Elements, done <-chan struct{},
 			s.lock.Unlock()
 		case <-done:
 			return
+		}
+		if cnt >= endorser_send_rate {
+			tps := cnt * 1e9 / int(st-base)
+			log.Println("endorser send rate", tps, "expect", endorser_send_rate)
+			if tps != endorser_send_rate {
+				et := 1e9/tps - interval
+				interval = 1e9/endorser_send_rate - et
+			}
+			base = st
+			cnt = 0
 		}
 	}
 }
@@ -161,19 +177,36 @@ func CreateBroadcaster(node Node, logger *log.Logger) (*Broadcaster, error) {
 
 func (b *Broadcaster) Start(envs <-chan *Elements, errorCh chan error, done <-chan struct{}) {
 	b.logger.Debugf("Start sending broadcast")
+	orderer_send_rate := g_send_rate / g_orderer_client
+	base := time.Now().UnixNano()
+	cnt := 0
+	interval := 1e9 / orderer_send_rate / 3
+	var st int64
 	for {
 		select {
 		case e := <-envs:
 			// todo
-			st := time.Now().UnixNano()
+			st = time.Now().UnixNano()
 			buffer_sent <- fmt.Sprintf("sent: %d %s", st, e.Txid)
 			err := b.c.Send(e.Envelope)
 			if err != nil {
 				errorCh <- err
 			}
+			cnt += 1
+			time.Sleep(time.Duration(interval) * time.Nanosecond)
 
 		case <-done:
 			return
+		}
+		if cnt >= orderer_send_rate {
+			tps := cnt * 1e9 / int(st-base)
+			log.Println("orderer send rate", tps, "expect", orderer_send_rate)
+			if tps != orderer_send_rate {
+				et := 1e9/tps - interval
+				interval = 1e9/orderer_send_rate - et
+			}
+			cnt = 0
+			base = st
 		}
 	}
 }

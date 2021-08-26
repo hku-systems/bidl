@@ -30,6 +30,7 @@ var (
 	g_client_per_conn int
 	g_groups          int
 	g_orderer_client  int
+	g_send_rate       int
 )
 
 func print_benchmark() {
@@ -252,7 +253,7 @@ func breakdown_phase2(config Config, num int, burst int, rate float64, logger *l
 
 }
 
-func Process(configPath string, num int, burst int, rate float64, e bool, hot_rate, contention_rate, nd_rate float64, txtype string, num_of_conn, client_per_conn int, groups int, orderer_client int, logger *log.Logger) error {
+func Process(configPath string, num int, burst int, rate float64, e bool, hot_rate, contention_rate, nd_rate float64, txtype string, num_of_conn, client_per_conn int, groups int, orderer_client, send_rate int, logger *log.Logger) error {
 	g_hot_rate = hot_rate
 	g_contetion_rate = contention_rate
 	g_txtype = txtype
@@ -261,6 +262,7 @@ func Process(configPath string, num int, burst int, rate float64, e bool, hot_ra
 	g_client_per_conn = client_per_conn
 	g_groups = groups
 	g_orderer_client = orderer_client
+	g_send_rate = send_rate
 	config, err := LoadConfig(configPath)
 	if err != nil {
 		return err

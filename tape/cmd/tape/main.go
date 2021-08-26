@@ -30,6 +30,7 @@ var (
 	nd_rate         = run.Flag("ndrate", "nondeterminism rate").Default("0").Float64()
 	num_of_conn     = run.Flag("num_of_conn", "num of conn").Default("16").Int()
 	client_per_conn = run.Flag("client_per_conn", "client per conn").Default("16").Int()
+	send_rate       = run.Flag("send_rate", "send rate").Default("3000").Int()
 	groups          = run.Flag("groups", "endorser groups").Default("10").Int()
 	orderer_client  = run.Flag("orderer_client", "orderer client").Default("20").Int()
 	version         = app.Command("version", "Show version information")
@@ -52,7 +53,7 @@ func main() {
 		fmt.Printf(infra.GetVersionInfo())
 	case run.FullCommand():
 		checkArgs(rate, burst, logger)
-		err = infra.Process(*con, *num, *burst, *rate, *e2e, *hot_rate, *contention_rate, *nd_rate, *txtype, *num_of_conn, *client_per_conn, *groups, *orderer_client, logger)
+		err = infra.Process(*con, *num, *burst, *rate, *e2e, *hot_rate, *contention_rate, *nd_rate, *txtype, *num_of_conn, *client_per_conn, *groups, *orderer_client, *send_rate, logger)
 	default:
 		err = errors.Errorf("invalid command: %s", fullCmd)
 	}
