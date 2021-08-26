@@ -5,11 +5,11 @@ sent_mp={}
 end_mp={}
 
 for line in sys.stdin: 
-    if "sent" in line:
+    if "sent:" in line:
         temp = line.split()
         if temp[2] not in sent_mp:
             sent_mp[temp[2]] = int(temp[1])
-    if "end" in line:
+    if "end:" in line:
         temp = line.split()
         if temp[2] not in end_mp:
             end_mp[temp[2]] = int(temp[1])

@@ -4,8 +4,8 @@
 
 for host in ${hosts[@]}; do
     echo "###  $host  ###"
-    ssh -tt $USER@$host "$1" 
+    ssh $USER@$host "$1" 
 done
 
-echo done
+echo "done"
 

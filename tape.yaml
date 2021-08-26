@@ -116,19 +116,19 @@ orderer1: &orderer1
 # For example, if we have 9 endorsers and set endorser_groups=3, then the first
 # three endorsers belong to group_1, the middle endorsers belong to group_2, the
 # last three endorsers belong to group_3. 
-endorser_groups: 11
+endorser_groups: 5
 endorsers:
   - *peer0
   - *peer1
   - *peer2
   - *peer3
   - *peer4
-  - *peer5
-  - *peer6
-  - *peer7
-  - *peer8
-  - *peer9
-  - *peer10
+  # - *peer5
+  # - *peer6
+  # - *peer7
+  # - *peer8
+  # - *peer9
+  # - *peer10
   # - *peer11
   # - *peer12
   # - *peer13
@@ -167,7 +167,7 @@ endorsers:
   # - *peer46
   # - *peer47
   # - *peer48
-committer: *peer11
+committer: *peer5
 orderer: *orderer1
 
 # Invocation configs

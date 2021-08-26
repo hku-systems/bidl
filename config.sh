@@ -1,11 +1,8 @@
 #!/bin/bash
 
-hosts=(amd190.utah.cloudlab.us
-amd187.utah.cloudlab.us
-amd189.utah.cloudlab.us
-amd202.utah.cloudlab.us
-amd188.utah.cloudlab.us
-amd181.utah.cloudlab.us
-amd185.utah.cloudlab.us
-amd186.utah.cloudlab.us)
+hosts=(amd228.utah.cloudlab.us
+amd239.utah.cloudlab.us
+amd225.utah.cloudlab.us
+amd222.utah.cloudlab.us
+amd244.utah.cloudlab.us)
 
