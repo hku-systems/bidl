@@ -23,4 +23,4 @@ plt.legend()
 plt.xlabel("rate")
 plt.ylabel("tps")
 
-plt.savefig("figure/fi8.pdf")
+plt.savefig("figure/fig8.pdf")

@@ -41,7 +41,7 @@ go mod vendor
 make peer-docker-clear orderer-docker-clear tools-docker-clear
 make peer-docker orderer-docker tools-docker
 cd $cur
-bash deploy.sh fabric
+bash deploy.sh fabric-v1.0
 END
 
 ## deploy fastfabric

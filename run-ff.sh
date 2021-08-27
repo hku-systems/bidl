@@ -54,7 +54,7 @@ if [ $1 == "performance" ]; then
         # TODO latency breakdown 
         mv $phase1 logs/ff/performance/
         mv $phase2 logs/ff/performance/
-        sleep 10
+        sleep 20
     done
     mv log.log logs/ff/performance/
     exit 0
@@ -69,6 +69,10 @@ elif [ $1 == "nd" ]; then
     # line=$(grep -n "endorser_groups:" $HOME/fastfabric_exp/tape.yaml | awk -F : '{print $1}')
     # sed -i "${line}c endorser_groups: 5" $HOME/fastfabric_exp/tape.yaml
     round=0
+    i=8
+    j=4
+    k=40
+    send_rate=20000
     for nondeterminism_rate in 0.1 0.2 0.3 0.4 0.5; do 
         let round=round+1
         nondeterminism=round${round}_${nondeterminism_rate}_nondeterminism.log 
@@ -83,7 +87,7 @@ elif [ $1 == "nd" ]; then
         sleep 2
         docker exec $(docker ps | grep fabric_cli | awk '{print $1}') bash scripts/script.sh
         # create $accounts accounts
-        docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --e2e -n $accounts --orderer_client 40 --burst 50000 --txtype create_random --groups $peers --ndrate $nondeterminism_rate --config config.yaml > $nondeterminism 2>&1
+        docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --e2e -n $accounts --orderer_client $k --num_of_conn $i --client_per_conn $j --burst 50000 --txtype create_random --groups $peers --send_rate $send_rate --ndrate $nondeterminism_rate --config config.yaml > $nondeterminism 2>&1
         sleep 2
 
         echo "nondeterminism_rate=$nondeterminism_rate, accounts=$accounts" >> log.log
@@ -109,6 +113,10 @@ elif [ $1 == "contention" ]; then
     hot_rate=0.01
     accounts=50000
     round=0
+    i=8
+    j=4
+    k=40
+    send_rate=20000
     for contention_rate in 0.1 0.2 0.3 0.4 0.5; do 
         let round=round+1
         docker stack deploy --resolve-image never --compose-file=docker-compose-fastfabric.yaml fabric
@@ -124,10 +132,10 @@ elif [ $1 == "contention" ]; then
         # create $accounts accounts
         log=round${round}_${contention_rate}_e2e.log 
         contention=round${round}_${contention_rate}_contention.log 
-        docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --e2e -n $accounts --burst 50000 --groups $peers --orderer_client 40 --config config.yaml > $log 2>&1
+        docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --e2e -n $accounts --burst 50000 --groups $peers --orderer_client $k --num_of_conn $i --client_per_conn $j --send_rate $send_rate --config config.yaml > $log 2>&1
         sleep 2
         # transfer money with contention rate = $i
-        docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --e2e -n 50000 --burst 50000 --groups $peers --orderer_client 40 --hrate $hot_rate --crate $contention_rate --config config.yaml > $contention 2>&1
+        docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --e2e -n 50000 --burst 50000 --groups $peers --orderer_client $k --num_of_conn $i --client_per_conn $j --send_rate $send_rate --hrate $hot_rate --crate $contention_rate --config config.yaml > $contention 2>&1
 
         echo "contention_rate=$contention_rate, accounts=$accounts, hot_rate=$hot_rate" >> log.log
         echo -n "tps: " >> log.log
@@ -153,6 +161,7 @@ elif [ $1 == "breakdown" ]; then
         rm -rf logs/ff/breakdown/endorse
         mkdir -p logs/ff/breakdown/endorse
         accounts=50000
+        send_rate=20000
         round=0
         for i in 25 22 20 18 15 13; do 
             for j in 4; do 
@@ -169,7 +178,7 @@ elif [ $1 == "breakdown" ]; then
                 sleep 2
                 docker exec $(docker ps | grep fabric_cli | awk '{print $1}') bash scripts/script.sh
                 log=round${round}_${i}_${j}_e2e.log 
-                docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --e2e -n $accounts --burst 50000 --groups $peers --num_of_conn 16 --client_per_conn 16 --orderer_client 40 --config config.yaml > $log 2>&1
+                docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --e2e -n $accounts --burst 50000 --groups $peers --num_of_conn 8 --client_per_conn 4 --orderer_client 40 --send_rate $send_rate --config config.yaml > $log 2>&1
                 sleep 5
                 docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --e2e -n $accounts --burst 50000 --groups $peers --num_of_conn $i --client_per_conn $j --orderer_client $i --config config.yaml > $log 2>&1
                 for id in 0 1 2 3 4 5; do 
@@ -224,7 +233,7 @@ elif [ $1 == "breakdown" ]; then
         sed -i "188c \        MaxMessageCount: 1500" configtx.yaml
     fi
 else 
-    echo "???"
+    echo "TODO ???"
 fi
 
 # line=$(grep -n "endorser_groups:" $HOME/fastfabric_exp/tape.yaml | awk -F : '{print $1}')

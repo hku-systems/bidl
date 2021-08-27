@@ -7,6 +7,7 @@ if [ $exp == "performance" ]; then
     bash run-fabric.sh 
     # bash run-streamchain.sh 
     # TODO: bidl
+    python3 figure/fig3.py
 
 elif [ $exp == "contention" ]; then 
     bash run-ff.sh contention 

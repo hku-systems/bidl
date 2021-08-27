@@ -10,13 +10,13 @@ with open("logs/ff/performance/log.log") as f:
         if line.startswith("ave"):
             temp = line.split()
             ff_tps.append(float(temp[-1]))
-        if "endorse" in line:
+        if "endorse " in line:
             endorse_latency.append(float(line.split()[-1]))
-        if "commit" in line:
+        if "commit " in line:
             commit_latency.append(float(line.split()[-1]))
 
 ff_latency = []
-for i in range(0, 40, 5):
+for i in range(0, len(endorse_latency), 5):
     temp = []
     for j in range(5): 
         idx = i + j
@@ -31,9 +31,9 @@ with open("logs/fabric/log.log") as f:
         if line.startswith("ave"):
             temp = line.split()
             fabric_tps.append(float(temp[-1]))
-        if "endorse" in line:
+        if "endorse " in line:
             endorse_latency.append(float(line.split()[-1]))
-        if "commit" in line:
+        if "commit " in line:
             commit_latency.append(float(line.split()[-1]))
 
 fabric_latency = []
@@ -42,6 +42,7 @@ for i in range(0, len(endorse_latency), 5):
     for j in range(5): 
         idx = i + j
         temp.append(endorse_latency[idx] + commit_latency[idx])
+    
     fabric_latency.append(np.mean(temp))
     print(temp)
 plt.plot(ff_tps, ff_latency, label="fastfabric")

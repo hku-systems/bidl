@@ -32,9 +32,9 @@ with open("logs/ff/performance/log.log") as f:
         if line.startswith("ave"):
             temp = line.split()
             ff_tps.append(float(temp[-1]))
-        if "endorse" in line:
+        if "endorse " in line:
             endorse_latency.append(float(line.split()[-1]))
-        if "commit" in line:
+        if "commit " in line:
             commit_latency.append(float(line.split()[-1]))
 
 ff_latency = []
@@ -53,9 +53,9 @@ with open("logs/fabric/log.log") as f:
         if line.startswith("ave"):
             temp = line.split()
             fabric_tps.append(float(temp[-1]))
-        if "endorse" in line:
+        if "endorse " in line:
             endorse_latency.append(float(line.split()[-1]))
-        if "commit" in line:
+        if "commit " in line:
             commit_latency.append(float(line.split()[-1]))
 
 fabric_latency = []
