@@ -16,7 +16,7 @@ services:
     deploy:
       placement:
         constraints:
-        - node.hostname==heming-rdma8
+        - node.hostname==node0.bidl.bidl-pg0.utah.cloudlab.us
     environment:
     - GOPATH=/opt/gopath
     - FABRIC_LOGGING_SPEC=INFO
@@ -28,17 +28,17 @@ services:
     - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.key
     - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
     - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
-    image: hyperledger/fabric-tools:fabric
+    image: hyperledger/fabric-tools:fabric-v1.0
     networks:
     - HLF
     stdin_open: true
     tty: true
     volumes:
     - /var/run/:/host/var/run/
-    - /home/yunpeng/fabric_exp/chaincode:/opt/gopath/src/github.com/chaincode
-    - /home/yunpeng/fabric_exp/organizations:/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations
-    - /home/yunpeng/fabric_exp/scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts
-    - /home/yunpeng/fabric_exp/channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+    - /users/yunpeng/fabric_exp/chaincode:/opt/gopath/src/github.com/chaincode
+    - /users/yunpeng/fabric_exp/organizations:/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations
+    - /users/yunpeng/fabric_exp/scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts
+    - /users/yunpeng/fabric_exp/channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
   orderer:
     command: bash -c "mkdir -p /var/hyperledger/production/orderer && orderer"
@@ -46,7 +46,7 @@ services:
     deploy:
       placement:
         constraints:
-        - node.hostname==heming-rdma2
+        - node.hostname==node4.bidl.bidl-pg0.utah.cloudlab.us
     environment:
     - GOPATH=/opt/gopath
     - ORDERER_GENERAL_LOGLEVEL=INFO
@@ -61,13 +61,13 @@ services:
     - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
     - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
     - ORDERER_GENERAL_TLS_ROOTCAS=/var/hyperledger/orderer/tls/ca.crt
-    image: hyperledger/fabric-orderer:fabric
+    image: hyperledger/fabric-orderer:fabric-v1.0
     networks:
     - HLF
     volumes:
-    - /home/yunpeng/fabric_exp/channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-    - /home/yunpeng/fabric_exp/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp:/var/hyperledger/orderer/msp
-    - /home/yunpeng/fabric_exp/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls:/var/hyperledger/orderer/tls
+    - /users/yunpeng/fabric_exp/channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+    - /users/yunpeng/fabric_exp/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp:/var/hyperledger/orderer/msp
+    - /users/yunpeng/fabric_exp/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls:/var/hyperledger/orderer/tls
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
   peer0:
     command: bash -c "mkdir -p /var/hyperledger/production && peer node start"
@@ -75,7 +75,7 @@ services:
     deploy:
       placement:
         constraints:
-        - node.hostname==heming-rdma4
+        - node.hostname==node1.bidl.bidl-pg0.utah.cloudlab.us
     environment:
     - GOPATH=/opt/gopath
     - CORE_PEER_ID=fabric_peer0
@@ -94,13 +94,13 @@ services:
     - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
     - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
     - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
-    image: hyperledger/fabric-peer:fabric
+    image: hyperledger/fabric-peer:fabric-v1.0
     networks:
     - HLF
     volumes:
     - /var/run/:/host/var/run/
-    - /home/yunpeng/fabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/fabric/msp
-    - /home/yunpeng/fabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls:/etc/hyperledger/fabric/tls
+    - /users/yunpeng/fabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/fabric/msp
+    - /users/yunpeng/fabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls:/etc/hyperledger/fabric/tls
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
   peer1:
     command: bash -c "mkdir -p /var/hyperledger/production && peer node start"
@@ -108,7 +108,7 @@ services:
     deploy:
       placement:
         constraints:
-        - node.hostname==heming-rdma6
+        - node.hostname==node1.bidl.bidl-pg0.utah.cloudlab.us
     environment:
     - GOPATH=/opt/gopath
     - CORE_PEER_ID=fabric_peer1
@@ -127,13 +127,13 @@ services:
     - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
     - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
     - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
-    image: hyperledger/fabric-peer:fabric
+    image: hyperledger/fabric-peer:fabric-v1.0
     networks:
     - HLF
     volumes:
     - /var/run/:/host/var/run/
-    - /home/yunpeng/fabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/msp:/etc/hyperledger/fabric/msp
-    - /home/yunpeng/fabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls:/etc/hyperledger/fabric/tls
+    - /users/yunpeng/fabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/msp:/etc/hyperledger/fabric/msp
+    - /users/yunpeng/fabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls:/etc/hyperledger/fabric/tls
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
   peer2:
     command: bash -c "mkdir -p /var/hyperledger/production && peer node start"
@@ -141,7 +141,7 @@ services:
     deploy:
       placement:
         constraints:
-        - node.hostname==heming-rdma8
+        - node.hostname==node2.bidl.bidl-pg0.utah.cloudlab.us
     environment:
     - GOPATH=/opt/gopath
     - CORE_PEER_ID=fabric_peer2
@@ -160,13 +160,13 @@ services:
     - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
     - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
     - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
-    image: hyperledger/fabric-peer:fabric
+    image: hyperledger/fabric-peer:fabric-v1.0
     networks:
     - HLF
     volumes:
     - /var/run/:/host/var/run/
-    - /home/yunpeng/fabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer2.org1.example.com/msp:/etc/hyperledger/fabric/msp
-    - /home/yunpeng/fabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer2.org1.example.com/tls:/etc/hyperledger/fabric/tls
+    - /users/yunpeng/fabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer2.org1.example.com/msp:/etc/hyperledger/fabric/msp
+    - /users/yunpeng/fabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer2.org1.example.com/tls:/etc/hyperledger/fabric/tls
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
   peer3:
     command: bash -c "mkdir -p /var/hyperledger/production && peer node start"
@@ -174,7 +174,7 @@ services:
     deploy:
       placement:
         constraints:
-        - node.hostname==heming-rdma9
+        - node.hostname==node2.bidl.bidl-pg0.utah.cloudlab.us
     environment:
     - GOPATH=/opt/gopath
     - CORE_PEER_ID=fabric_peer3
@@ -193,13 +193,13 @@ services:
     - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
     - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
     - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
-    image: hyperledger/fabric-peer:fabric
+    image: hyperledger/fabric-peer:fabric-v1.0
     networks:
     - HLF
     volumes:
     - /var/run/:/host/var/run/
-    - /home/yunpeng/fabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer3.org1.example.com/msp:/etc/hyperledger/fabric/msp
-    - /home/yunpeng/fabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer3.org1.example.com/tls:/etc/hyperledger/fabric/tls
+    - /users/yunpeng/fabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer3.org1.example.com/msp:/etc/hyperledger/fabric/msp
+    - /users/yunpeng/fabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer3.org1.example.com/tls:/etc/hyperledger/fabric/tls
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
   peer4:
     command: bash -c "mkdir -p /var/hyperledger/production && peer node start"
@@ -207,7 +207,7 @@ services:
     deploy:
       placement:
         constraints:
-        - node.hostname==heming-rdma3
+        - node.hostname==node3.bidl.bidl-pg0.utah.cloudlab.us
     environment:
     - GOPATH=/opt/gopath
     - CORE_PEER_ID=fabric_peer4
@@ -226,13 +226,13 @@ services:
     - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
     - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
     - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
-    image: hyperledger/fabric-peer:fabric
+    image: hyperledger/fabric-peer:fabric-v1.0
     networks:
     - HLF
     volumes:
     - /var/run/:/host/var/run/
-    - /home/yunpeng/fabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer4.org1.example.com/msp:/etc/hyperledger/fabric/msp
-    - /home/yunpeng/fabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer4.org1.example.com/tls:/etc/hyperledger/fabric/tls
+    - /users/yunpeng/fabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer4.org1.example.com/msp:/etc/hyperledger/fabric/msp
+    - /users/yunpeng/fabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer4.org1.example.com/tls:/etc/hyperledger/fabric/tls
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
   peer5:
     command: bash -c "mkdir -p /var/hyperledger/production && peer node start"
@@ -240,7 +240,7 @@ services:
     deploy:
       placement:
         constraints:
-        - node.hostname==heming-rdma19
+        - node.hostname==node3.bidl.bidl-pg0.utah.cloudlab.us
     environment:
     - GOPATH=/opt/gopath
     - CORE_PEER_ID=fabric_peer5
@@ -259,13 +259,13 @@ services:
     - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
     - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
     - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
-    image: hyperledger/fabric-peer:fabric
+    image: hyperledger/fabric-peer:fabric-v1.0
     networks:
     - HLF
     volumes:
     - /var/run/:/host/var/run/
-    - /home/yunpeng/fabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer5.org1.example.com/msp:/etc/hyperledger/fabric/msp
-    - /home/yunpeng/fabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer5.org1.example.com/tls:/etc/hyperledger/fabric/tls
+    - /users/yunpeng/fabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer5.org1.example.com/msp:/etc/hyperledger/fabric/msp
+    - /users/yunpeng/fabric_exp/organizations/peerOrganizations/org1.example.com/peers/peer5.org1.example.com/tls:/etc/hyperledger/fabric/tls
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
   tape:
     command: /bin/sh
@@ -273,14 +273,14 @@ services:
     deploy:
       placement:
         constraints:
-        - node.hostname==heming-rdma8
+        - node.hostname==node0.bidl.bidl-pg0.utah.cloudlab.us
     image: tape:latest
     networks:
     - HLF
     stdin_open: true
     tty: true
     volumes:
-    - /home/yunpeng/fabric_exp/tape.yaml:/config.yaml
-    - /home/yunpeng/fabric_exp/organizations:/organizations
+    - /users/yunpeng/fabric_exp/tape.yaml:/config.yaml
+    - /users/yunpeng/fabric_exp/organizations:/organizations
     working_dir: /
 version: '3'

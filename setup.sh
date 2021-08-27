@@ -4,6 +4,10 @@
 
 # mkdir -p /proj/bidl-PG0/docker
 # sudo ln -s /proj/bidl-PG0/docker /var/lib/docker
+rm -rf logs
+mkdir -p /proj/bidl-PG0/logs
+ln -s /proj/bidl-PG0/logs logs
+exit 0
 
 bash scp.sh presetup.sh 
 bash runall.sh "bash presetup.sh"
@@ -33,7 +37,9 @@ cur=$PWD
 
 ## deploy fabric
 newgrp docker << END
+source ~/.bashrc
 rm -rf $GOPATH/src/github.com/hyperledger/fabric
+mkdir -p fabric $GOPATH/src/github.com/hyperledger
 cp -r fabric $GOPATH/src/github.com/hyperledger/fabric
 cd $GOPATH/src/github.com/hyperledger/fabric
 go mod init
@@ -41,13 +47,16 @@ go mod vendor
 make peer-docker-clear orderer-docker-clear tools-docker-clear
 make peer-docker orderer-docker tools-docker
 cd $cur
-bash deploy.sh fabric-v1.0
+exit 0
 END
+bash deploy.sh fabric-v1.0
 
 ## deploy fastfabric
 newgrp docker << END
+source ~/.bashrc
 mkdir -p $GOPATH/src/github.com/hyperledger
 rm -rf $GOPATH/src/github.com/hyperledger/fabric
+mkdir -p fabric $GOPATH/src/github.com/hyperledger
 cp -r fastfabric $GOPATH/src/github.com/hyperledger/fabric
 cd $GOPATH/src/github.com/hyperledger/fabric
 go mod init
@@ -55,8 +64,9 @@ go mod vendor
 make peer-docker-clear orderer-docker-clear tools-docker-clear
 make peer-docker orderer-docker tools-docker
 cd $cur
-bash deploy.sh fastfabric-v1.0
+exit 0
 END
+bash deploy.sh fastfabric-v1.0
 
 ## deploy streamchain
 cd streamchain/setup
