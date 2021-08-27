@@ -5,7 +5,7 @@ exp=$1
 if [ $exp == "performance" ]; then 
     bash run-ff.sh performance 
     bash run-fabric.sh 
-    bash run-streamchain.sh 
+    # bash run-streamchain.sh 
     # TODO: bidl
 
 elif [ $exp == "contention" ]; then 
@@ -19,5 +19,6 @@ elif [ $exp == "breakdown" ]; then
     bash run-ff.sh breakdown commit
 
 elif [ $exp == "malicious" ]; then 
+    echo "TODO"
 
 fi

@@ -12,11 +12,10 @@ if [ $1 == "performance" ]; then
     mkdir -p logs/ff/performance
     round=0
     rm log.log
-    for send_rate in 2000 5000 8000 11000 13000 16000 20000 32000; do
-    # for send_rate in 3000 8000 13000 18000 23000 28000 33000; do
+    for send_rate in 4000 8000 12000 16000 20000 24000 28000 32000; do
         i=8
-        j=1
-        k=20
+        j=4
+        k=40
         let round=round+1
         echo $round $send_rate
         log=round_${round}_e2e_${send_rate}.log 
@@ -46,7 +45,7 @@ if [ $1 == "performance" ]; then
         # echo "latency (endorse): "  >> log.log
         # cat $phase1 | python3 latency_p1.py >> log.log
         # echo "latency (commit): "  >> log.log
-        # cat $phase2 | python3 latency_p2.py >> log.log
+        cat $phase2 | python3 latency_p2.py >> log.log
         echo latency conn=$i client=$j orderer_client=$k >> log.log
         bash process-latency.sh logs/ff/performance $round >> log.log
         echo "tps: " >> log.log

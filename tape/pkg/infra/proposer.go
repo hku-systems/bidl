@@ -129,11 +129,15 @@ func (p *Proposer) Start(signed, processed chan *Elements, done <-chan struct{},
 		if cnt >= 10 {
 			tps := cnt * 1e9 / int(st-base)
 			log.Println("endorser send rate", tps, "expect", endorser_send_rate)
-			if tps > endorser_send_rate {
-				interval = int(float64(interval) * 1.1)
-			} else if tps < endorser_send_rate {
-				interval = int(float64(interval) * 0.9)
+			if tps != 0 && tps != endorser_send_rate {
+				et := 1e9/tps - interval
+				interval = 1e9/endorser_send_rate - et
 			}
+			// if tps > endorser_send_rate {
+			// 	interval = int(float64(interval) * 1.1)
+			// } else if tps < endorser_send_rate {
+			// 	interval = int(float64(interval) * 0.9)
+			// }
 			base = st
 			cnt = 0
 		}
@@ -202,11 +206,15 @@ func (b *Broadcaster) Start(envs <-chan *Elements, errorCh chan error, done <-ch
 		if cnt >= 20 {
 			tps := cnt * 1e9 / int(st-base)
 			log.Println("orderer send rate", tps, "expect", orderer_send_rate)
-			if tps > orderer_send_rate {
-				interval = int(float64(interval) * 1.1)
-			} else if tps < orderer_send_rate {
-				interval = int(float64(interval) * 0.9)
+			if tps != 0 && tps != orderer_send_rate {
+				et := 1e9/tps - interval
+				interval = 1e9/orderer_send_rate - et
 			}
+			// if tps > orderer_send_rate {
+			// 	interval = int(float64(interval) * 1.1)
+			// } else if tps < orderer_send_rate {
+			// 	interval = int(float64(interval) * 0.9)
+			// }
 			cnt = 0
 			base = st
 		}

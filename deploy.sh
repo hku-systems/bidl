@@ -2,17 +2,21 @@
 
 . config.sh
 
+old=latest
 tag=latest
 
 if [ $# -eq 1 ]; then 
     tag=$1
+elif [ $# -eq 2 ]; then 
+    old=$1
+    tag=$2
 fi
 
-echo "image tag: $tag"
+echo "image tag: $old $tag"
 
-docker tag hyperledger/fabric-peer:latest hyperledger/fabric-peer:$tag
-docker tag hyperledger/fabric-orderer:latest hyperledger/fabric-orderer:$tag
-docker tag hyperledger/fabric-tools:latest hyperledger/fabric-tools:$tag
+docker tag hyperledger/fabric-peer:$old hyperledger/fabric-peer:$tag
+docker tag hyperledger/fabric-orderer:$old hyperledger/fabric-orderer:$tag
+docker tag hyperledger/fabric-tools:$old hyperledger/fabric-tools:$tag
 
 docker save -o hlf_peer_${tag}.tar hyperledger/fabric-peer:$tag
 docker save -o hlf_orderer_${tag}.tar hyperledger/fabric-orderer:$tag
