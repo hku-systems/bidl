@@ -9,17 +9,24 @@ if [ $1 == "performance" ]; then
     rm -rf $rst_dir
     mkdir -p $rst_dir
     touch $rst_file
-    for tput_cap in 15 30 60; do
-        echo "Transaction submission rate: $nondeterminism_rate kTxns/s"
+    # for tput_cap in 10 20 30 40 50 60; do
+    for tput_cap in 60; do
+        echo "Transaction submission rate: $tput_cap kTxns/s"
         # run benchmark
         bash ./bidl/scripts/start.sh $peers $tput_cap performance
         # obtain throughput data
         echo -n "rate $tput_cap throughput " >> $rst_file
-        cat ./bidl/logs/normal.log | grep "BIDL block commit throughput:" | python3 ./bidl/scripts/bidl_tput.py >> $rst_file
+        cat ./bidl/logs/normal.log | grep "BIDL transaction commit throughput:" | python3 ./bidl/scripts/bidl_tput.py $tput_cap >> $rst_file
         # obtain latency data
-        echo -n "rate $tput_cap latency " >> $rst_file
-        # cat ./bidl/logs/log_0.log | grep "Total latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
-        cat ./bidl/logs/log_0.log | grep "Consensus latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
+        # consensus latency
+        echo -n "rate $tput_cap consensus latency " >> $rst_file
+        cat ./bidl/logs/log_0.log | grep "Consensus latency" | python3 ./bidl/scripts/consensus_latency.py >> $rst_file
+        # execution latency 
+        echo -n "rate $tput_cap execution latency " >> $rst_file
+        cat ./bidl/logs/normal.log | grep "Execution latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
+        # commit latency 
+        echo -n "rate $tput_cap commit latency " >> $rst_file
+        cat ./bidl/logs/normal.log | grep "Commit latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
     done
     exit 0
 elif [ $1 == "nd" ]; then 

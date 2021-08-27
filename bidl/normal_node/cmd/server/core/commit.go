@@ -26,7 +26,7 @@ func (p *Processor) commitTxn(hashes [][32]byte) {
 			}
 			delete(p.Envelops, hash)
 		} else {
-			log.Debugf("I don't hold the hash")
+			log.Info("I don't hold the hash")
 		}
 	}
 }

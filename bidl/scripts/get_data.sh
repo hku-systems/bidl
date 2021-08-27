@@ -10,7 +10,7 @@ rm -f $latency_file
 
 while true; do 
 	wait=$( cat $log_dir/normal.log | grep "BIDL block commit throughput:" | wc -l)
-	if [ $wait -gt 10 ]; then 
+	if [ $wait -gt 80 ]; then 
 		break;
 	fi 
 	echo "wait 5s for results"

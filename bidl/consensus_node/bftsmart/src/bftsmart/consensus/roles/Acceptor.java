@@ -543,6 +543,7 @@ public final class Acceptor {
 				hash = Arrays.copyOfRange(proposedValue, i+4, i+36);
 				hashStr = new String(hash);
 				if (BidlFrontend.seqMap.containsKey(seq) && !BidlFrontend.seqMap.get(seq).equals(new String(hash))) {
+					logger.info("My local transaction hash is inconsistent with proposed hash");
 				 	gapNumber++;
 				 	gapHashes.add(hash);
 					byte[] txn = BidlFrontend.txMap.get(hashStr);

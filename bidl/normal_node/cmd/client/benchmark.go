@@ -53,7 +53,7 @@ func GenerateTransferWorkload(acc int, org int, num int, conflict int) []*common
 	}
 
 	txns := make([]*common.Transaction, num)
-	dummy := make([]byte, 1000)
+	dummy := make([]byte, 800)
 	rand.Read(dummy)
 	for i := 0; i < num; i++ {
 		// orgID := rand.Intn(org)
@@ -92,7 +92,7 @@ func GenerateCreateWorkload(acc int, org int, nd int) []*common.Transaction {
 		log.Infof("%d out of %d transactions (%d%%) are non-deterministic in each of the %d organizations", ndAcc, acc, nd, org)
 	}
 	txns := make([]*common.Transaction, acc*org)
-	dummy := make([]byte, 1024)
+	dummy := make([]byte, 800)
 	rand.Read(dummy)
 	for i := 0; i < org; i++ {
 		ndNum := ndAcc
