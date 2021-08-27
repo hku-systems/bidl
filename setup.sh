@@ -4,9 +4,6 @@
 
 # mkdir -p /proj/bidl-PG0/docker
 # sudo ln -s /proj/bidl-PG0/docker /var/lib/docker
-rm -rf logs
-mkdir -p /proj/bidl-PG0/logs
-ln -s /proj/bidl-PG0/logs logs
 
 bash scp.sh presetup.sh 
 bash runall.sh "bash presetup.sh"
@@ -17,17 +14,13 @@ cmd=$(grep docker docker.info)
 bash runall.sh "$cmd"
 sudo docker network create --driver overlay --attachable HLF
 
-# install golang
-wget https://golang.org/dl/go1.17.linux-amd64.tar.gz
-sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.17.linux-amd64.tar.gz
+rm -rf logs
+mkdir -p /proj/bidl-PG0/logs
+ln -s /proj/bidl-PG0/logs logs
 
 sudo apt install python3-pip -y
 pip3 install numpy matplotlib
 
-mkdir -p $HOME/go
-echo "export PATH=\$PATH:/usr/local/go/bin" >> ~/.bashrc
-echo "export GOPATH=$HOME/go" >> ~/.bashrc
-source ~/.bashrc
 
 ## init deploy 
 bash runall.sh "docker pull hyperledger/fabric-ccenv:1.3.0; docker tag hyperledger/fabric-ccenv:1.3.0 hyperledger/fabric-ccenv:latest"

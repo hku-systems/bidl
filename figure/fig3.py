@@ -45,7 +45,9 @@ for i in range(0, len(endorse_latency), 5):
     
     fabric_latency.append(np.mean(temp))
     print(temp)
-plt.plot(ff_tps, ff_latency, label="fastfabric")
-plt.plot(fabric_tps, fabric_latency, label="fabric")
+plt.plot(ff_tps, ff_latency, marker='o', label="fastfabric")
+plt.plot(fabric_tps, fabric_latency, marker='x', label="fabric")
+plt.xlabel("throughput")
+plt.ylabel("latency(ms)")
 plt.legend()
 plt.savefig("figure/fig3.pdf")
