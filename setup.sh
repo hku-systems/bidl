@@ -7,7 +7,6 @@
 rm -rf logs
 mkdir -p /proj/bidl-PG0/logs
 ln -s /proj/bidl-PG0/logs logs
-exit 0
 
 bash scp.sh presetup.sh 
 bash runall.sh "bash presetup.sh"
