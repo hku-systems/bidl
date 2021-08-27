@@ -8,6 +8,7 @@ import (
 	"normal_node/cmd/server/core"
 	"normal_node/cmd/server/network"
 	"normal_node/cmd/server/util"
+	"time"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/vmihailenco/msgpack"
@@ -28,7 +29,9 @@ func (s *Server) setupServerConnection(addr string, bufferSize int) {
 	p = core.NewProcessor(s.BlkSize, s.ID, net)
 }
 
-func (s *Server) processPackets() {
+func (s *Server) processPackets() { 
+	interval := 1000 / (s.tput * 1000 / s.BlkSize)
+	blkTicker := time.NewTicker(time.Duration(interval) * time.Millisecond)
 	for {
 		select {
 		case pack := <-net.Packets:
@@ -60,9 +63,12 @@ func (s *Server) processPackets() {
 					})
 				log.Debugf("Received transaction with sequence number %d", seq)
 			} else if bytes.Equal(magicNum, common.MagicNumBlock) {
+				select {
+				case <- blkTicker.C:
 				log.Infof("new block received.")
 				p.ProcessBlock(pack.Bytes[4:])
 				util.Monitor.TputBlk <- 1
+				}
 			} else {
 				log.Errorf("Invalid message type", pack.Bytes[0:20], "length:", len(pack.Bytes))
 			}

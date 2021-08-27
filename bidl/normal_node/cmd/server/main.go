@@ -15,6 +15,7 @@ var opts struct {
 	Quiet     bool   `short:"q" long:"quiet" description:"whether to print logging info or not"`
 	ID        int    `long:"id" default:"-1" description:"node ID"`
 	BlockSize int    `long:"blockSize" default:"500" description:"default block size"`
+	Tput	  int    `long:"tps" default:"50" description:"peak tput, preventing reporting extremely high tput caused by network jittering"`
 }
 
 func init() {
@@ -45,7 +46,7 @@ func main() {
 	//addr, err := net.ResolveUDPAddr("udp", opts.GroupAddr)
 	//uconn4, err := net.ListenMulticastUDP("udp", nil, addr)
 	//util.ErrorCheck(err, "main", true)
-	server := NewServer(opts.BlockSize, opts.ID)
+	server := NewServer(opts.BlockSize, opts.ID, opts.Tput)
 	server.setupServerConnection(opts.GroupAddr, opts.Buffer)
 	select {}
 }

@@ -48,7 +48,7 @@ public class BidlFrontend extends Thread {
     private ServerViewController controller;
     private ExecutionManager execManager;
     private Assembler assember;
-    public int totalNum = 0;
+    public volatile int totalNum = 0;
 
     BidlFrontend(ServerViewController controller, ExecutionManager executionManager) {
         super("BIDL frontend");
@@ -194,8 +194,12 @@ public class BidlFrontend extends Thread {
             while (true) {
                 byte[] rcvPktBuf = null;
                 try {
+                    // if (totalNum > 0 && totalNum % 500 == 0) {
+                    //     logger.info("totalNum 1 {}", totalNum);
+                    // }
                     if (execManager.getCurrentLeader() == controller.getStaticConf().getProcessId()) {
                         if (totalNum > 50000) {
+                            // logger.info("totalNum 2 {}", totalNum);
                             rcvPktBuf = BidlFrontend.txBlockingQueue.take();
                         } else {
                             continue;

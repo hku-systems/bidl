@@ -1,6 +1,7 @@
 #!/bin/bash -e
 
 peers=4
+default_tput=60
 
 bash ./bidl/scripts/create_artifact.sh
 if [ $1 == "performance" ]; then 
@@ -9,8 +10,8 @@ if [ $1 == "performance" ]; then
     rm -rf $rst_dir
     mkdir -p $rst_dir
     touch $rst_file
-    # for tput_cap in 10 20 30 40 50 60; do
-    for tput_cap in 60; do
+    for tput_cap in 10 20 30 40 50 60; do
+    # for tput_cap in 50; do
         echo "Transaction submission rate: $tput_cap kTxns/s"
         # run benchmark
         bash ./bidl/scripts/start.sh $peers $tput_cap performance
@@ -35,16 +36,13 @@ elif [ $1 == "nd" ]; then
     rm -rf $rst_dir
     mkdir -p $rst_dir
     touch $rst_file
-    for nondeterminism_rate in 0; do 
+    for nondeterminism_rate in 0 10 20 30 40 50; do 
         echo "Non-determinism rate: $nondeterminism_rate%"
         # run benchmark
-        bash ./bidl/scripts/start.sh $peers 60 nd $nondeterminism_rate
+        bash ./bidl/scripts/start.sh $peers $default_tput nd $nondeterminism_rate
         # obtain throughput data
-        echo -n "rate $tput_cap throughput " >> $rst_file
-        cat ./bidl/logs/normal.log | grep "BIDL transaction commit throughput" | python3 ./bidl/scripts/bidl_tput.py >> $rst_file
-        # obtain latency data
-        echo -n "rate $tput_cap latency " >> $rst_file
-        cat ./bidl/logs/log_0.log | grep "Total latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
+        echo -n "rate $nondeterminism_rate throughput " >> $rst_file
+        cat ./bidl/logs/normal.log | grep "BIDL transaction commit throughput" | python3 ./bidl/scripts/bidl_tput.py $default_tput >> $rst_file
     done
     exit 0
 elif [ $1 == "contention" ]; then 
@@ -53,13 +51,13 @@ elif [ $1 == "contention" ]; then
     rm -rf $rst_dir
     mkdir -p $rst_dir
     touch $rst_file
-    for contention_rate in 0.1 0.2 0.3 0.4 0.5; do 
+    for contention_rate in 10 20 30 40 50; do 
         echo "Contention rate = $contention_rate"
         # run benchmark
-        bash ./bidl/scripts/start.sh $peers 60 contention $contention_rate 
+        bash ./bidl/scripts/start.sh $peers $default_tput contention $contention_rate 
         # obtain throughput data
         echo -n "rate $tput_cap throughput " >> $rst_file
-        cat ./bidl/logs/normal.log | grep "BIDL throughput" | python3 ./bidl/scripts/bidl_tput.py >> $rst_file
+        cat ./bidl/logs/normal.log | grep "BIDL throughput" | python3 ./bidl/scripts/bidl_tput.py $default_tput >> $rst_file
         # obtain latency data
         echo -n "rate $tput_cap latency " >> $rst_file
         cat ./bidl/logs/log_0.log | grep "Total latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
@@ -76,10 +74,10 @@ elif [ $1 == "scalability" ]; then
         # run benchmark
         bash ./bidl/scripts/start.sh $org 60 scalability $org 
         # obtain throughput data
-        echo -n "rate $tput_cap throughput " >> $rst_file
+        echo -n "Orgs $org throughput " >> $rst_file
         cat ./bidl/logs/normal.log | grep "BIDL throughput" | python3 ./bidl/scripts/bidl_tput.py >> $rst_file
         # obtain latency data
-        echo -n "rate $tput_cap latency " >> $rst_file
+        echo -n "Orgs $org latency " >> $rst_file
         cat ./bidl/logs/log_0.log | grep "Total latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
     done
     exit 0
