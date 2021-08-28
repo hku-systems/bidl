@@ -1,6 +1,7 @@
 #!/bin/bash -e
 script_dir=$(cd "$(dirname "$0")";pwd)
 base_dir=$(cd $script_dir/..; pwd)
+user="jqi"
 
 # file=${BASH_SOURCE[0]}
 # source=$(dirname $file)
@@ -9,7 +10,8 @@ base_dir=$(cd $script_dir/..; pwd)
 smart_dir="$base_dir/consensus_node/bftsmart"
 sequencer_dir="$base_dir/sequencer"
 normal_node_dir="$base_dir/normal_node"
-log_dir="$base_dir/logs"
+# log_dir="$base_dir/logs"
+log_dir="/home/$user/logs"
 export GO111MODULE="on"
 
 echo "artifact base dir: "$base_dir

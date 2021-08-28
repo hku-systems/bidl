@@ -19,4 +19,4 @@ done
 
 cat $log_dir/normal_0.log | grep "BIDL transaction commit throughput: " > $tput_file
 
-cat $log_dir/log_0.log | grep "Consensus latency" > $latency_file
+cat $log_dir/consensus_0.log | grep "Consensus latency" > $latency_file

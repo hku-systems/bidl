@@ -1,5 +1,0 @@
-rate 60 throughput [0, 37, 58, 25, 38, 41, 58, 45, 58, 47, 50, 55, 55, 58, 50, 3, 58, 1, 16, 41, 37, 58, 35, 41, 30, 22, 45, 34, 14, 7, 7, 6, 6, 8, 6, 7, 8, 4, 6, 6, 11, 3, 6, 5, 5]
-35
-rate 60 consensus latency 17
-rate 60 execution latency 40
-rate 60 commit latency 18
