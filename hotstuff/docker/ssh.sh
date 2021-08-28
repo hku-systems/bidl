@@ -10,3 +10,4 @@ mkdir -p /root/.ssh
 mv docker/id_rsa /root/.ssh/
 mv docker/id_rsa.pub /root/.ssh/ 
 mv docker/authorized_keys /root/.ssh/
+chmod 600 /root/.ssh/id_rsa

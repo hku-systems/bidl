@@ -14,7 +14,7 @@ testbed_prefix: "/home/ubuntu/testbed"
 ansible_python_interpreter: /usr/bin/python3
 
 ## build config
-hs_flags: "-g -D HOTSTUFF_ENABLE_BENCHMARK -D HOTSTUFF_CMD_REQSIZE=1024"
+hs_flags: "-g -D HOTSTUFF_ENABLE_BENCHMARK -D HOTSTUFF_CMD_REQSIZE=32"
 
 ## app config
 # process name that is used by killall in reset
