@@ -1,0 +1,8 @@
+FROM ubuntu:18.04
+
+COPY . /home/SBFT
+WORKDIR /home/SBFT
+
+RUN apt update &&           \
+    ./install_deps.sh &&    \
+    apt install -y iproute2 iputils-ping 

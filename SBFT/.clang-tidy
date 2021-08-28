@@ -1,0 +1,38 @@
+---
+Checks:             '-*,bugprone-*,
+                    -bugprone-branch-clone,
+                    -bugprone-exception-escape,
+                    -bugprone-lambda-function-name,
+                    -bugprone-misplaced-widening-cast,
+                    -bugprone-not-null-terminated-result,
+                    performance-*,
+                    -performance-noexcept-move-constructor,
+                    misc-*,
+                    -misc-non-private-member-variables-in-classes,
+                    -misc-unused-parameters
+                    '
+WarningsAsErrors:   'bugprone-*,
+                    -bugprone-branch-clone,
+                    -bugprone-exception-escape,
+                    -bugprone-lambda-function-name,
+                    -bugprone-misplaced-widening-cast,
+                    -bugprone-not-null-terminated-result,
+                    performance-*,
+                    -performance-noexcept-move-constructor,
+                    misc-*,
+                    -misc-non-private-member-variables-in-classes,
+                    -misc-unused-parameters
+                    '
+# -bugprone-branch-clone - does not work well with switch cases
+# -bugprone-exception-escape - main functions throwing exceptions are OK: we prefer to analyze core dumps
+# -bugprone-lambda-function-name - Assert macro leads to many false positives
+# -bugprone-misplaced-widening-cast - does not seem to be a big issue
+# -bugprone-not-null-terminated-result - many false positives when std::string is used for storing raw bytes
+# -misc-non-private-member-variables-in-classes - seems irrelevant
+# -misc-unused-parameters - too many errors, fix later
+HeaderFilterRegex: ''
+AnalyzeTemporaryDtors: false
+FormatStyle:     file
+CheckOptions:
+    - { key:  performance-unnecessary-value-param.AllowedTypes, value:  'shared_ptr;SharedPtr;[Ll]og;BlockId' }
+...

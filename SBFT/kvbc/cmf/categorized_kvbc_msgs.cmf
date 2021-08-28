@@ -1,0 +1,127 @@
+# Updates
+
+Msg MerkleUpdatesData 1 {
+    map string string kv
+    list string deletes
+}
+
+Msg ValueWithExpirationData 2 {
+    string value
+    optional int64 expire_at
+    bool stale_on_update
+}
+
+Msg KeyValueUpdatesData 3 {
+    map string ValueWithExpirationData kv
+    list string deletes
+    bool calculate_root_hash
+}
+
+Msg SharedValueData 4 {
+    string value
+    list string category_ids
+}
+
+Msg SharedKeyValueUpdatesData 5 {
+    map string SharedValueData kv
+    bool calculate_root_hash
+}
+
+# Updates info
+
+Msg MerkleKeyFlag 1000 {
+    bool deleted
+}
+
+Msg MerkleUpdatesInfo 1001 {
+    map string MerkleKeyFlag keys
+    fixedlist uint8 32 root_hash
+    uint64 state_root_version
+}
+
+Msg KVKeyFlag 1002 {
+
+    bool deleted
+    bool stale_on_update
+}
+
+Msg KeyValueUpdatesInfo 1003 {
+    map string KVKeyFlag keys
+    optional fixedlist uint8 32 root_hash
+}
+
+Msg SharedKeyData 1004 {
+    list string categories
+}
+
+Msg SharedKeyValueUpdatesInfo 1005 {
+    map string SharedKeyData keys
+    optional map string fixedlist uint8 32 category_root_hashes
+}
+
+# Blocks
+
+Msg BlockKey 2000 {
+    uint64 block_id
+}
+
+Msg BlockData 2001 {
+    uint64 block_id
+    fixedlist uint8 32 parent_digest
+    optional SharedKeyValueUpdatesInfo shared_updates_info
+    map string oneof{
+        MerkleUpdatesInfo
+        KeyValueUpdatesInfo
+    } categories_updates_info
+}
+
+Msg RawBlockMerkleUpdates 2002 {
+    MerkleUpdatesData updates
+    fixedlist uint8 32 root_hash
+}
+
+Msg RawBlockKeyValueUpdates 2003 {
+    KeyValueUpdatesData updates
+    optional fixedlist uint8 32 root_hash
+}
+
+Msg RawBlockSharedUpdates 2004 {
+    SharedKeyValueUpdatesData updates
+    optional fixedlist uint8 32 root_hash
+}
+
+Msg RawBlockData 2005 {
+    fixedlist uint8 32 parent_digest
+    map string oneof{
+        RawBlockMerkleUpdates
+        RawBlockKeyValueUpdates
+    } category_updates
+
+    optional RawBlockSharedUpdates shared_update
+}
+
+# Misc
+
+Msg BenchmarkMessage 3000 {
+    string str
+    fixedlist uint8 32 hash
+    map string string map
+}
+
+# DB Key-Values
+
+Msg KeyHash 4000 {
+    fixedlist uint8 32 value
+}
+
+Msg VersionedKey 4001 {
+    KeyHash key_hash
+    uint64 version
+}
+
+# Persisted as a value in for keys in the index column family.
+# Contains a per category sorted list of versions for the key.
+Msg KeyVersionsPerCategory 4002 {
+    map string list uint64 data
+}
+

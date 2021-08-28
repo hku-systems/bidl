@@ -1,0 +1,125 @@
+Msg NewViewElement 1 {
+    uint16 replica_id
+    bytes digest
+}
+
+Msg Transaction 2 {
+    string name
+    list kvpair string string actions
+    optional bytes auth_key
+}
+
+Msg Envelope 3 {
+    uint32 version
+    oneof {
+        Transaction
+        NewViewElement
+    } x
+}
+
+Msg NewStuff 4 {
+    map string list kvpair string string crazy_map
+}
+
+Msg WithMsgRefs 5 {
+    NewStuff new_stuff
+    list Transaction tx_list
+    map string Envelope map_of_envelope
+}
+
+Msg Uint8 6 {
+    uint8 val
+}
+
+Msg Uint16 7 {
+    uint16 val
+}
+
+Msg Uint32 8 {
+    uint32 val
+}
+
+Msg Uint64 9 {
+    uint64 val
+}
+
+Msg Int8 10 {
+    int8 val
+}
+
+Msg Int16 11 {
+    int16 val
+}
+
+Msg Int32 12 {
+    int32 val
+}
+
+Msg Int64 13 {
+    int64 val
+}
+
+Msg FixedBuffer 14 {
+    fixedlist uint8 8 bytes8
+    fixedlist uint8 4 bytes4
+}
+
+Msg FixedTransactionList 15 {
+    fixedlist Transaction 1 transactions1
+    fixedlist Transaction 2 transactions2
+}
+
+Msg ComposedFixedList 16 {
+    list fixedlist uint8 32 hashes
+}
+
+######
+# Uncomment each message to induce various parse errors
+######
+
+# Duplicate name
+#Msg Envelope 1000 {
+#    string hello
+#}
+
+# Duplicate ID
+#Msg Hello 3 {
+#    string hello
+#}
+
+# ID too large
+#Msg XXX 9999999999 {
+#    uint32 version
+#    oneof {
+#        Transaction
+#        NewViewElement
+#    } msg
+#}
+
+# Bad message id
+#Msg Hello blah {
+#}
+
+# Missing field name
+#Msg Hello 3 {
+#    string
+#}
+
+# Invalid field type
+#Msg Hello 100 {
+#    blah string
+#}
+
+# Duplicate field names
+#Msg Hello 100 {
+#    string val
+#    uint16 val
+#}
+
+#Msg BadOneof 999 {
+#    uint32 version
+#    oneof {
+#        NonExistantType
+#        NewViewElement
+#    } x
+#}
