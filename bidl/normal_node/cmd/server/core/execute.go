@@ -147,14 +147,14 @@ func (p *Processor) ExecuteTxn(txn *common.SequencedTransaction) {
 			panic(err)
 		}
 
-		msgHashSum := msgHash.Sum(nil)
-		r, s, err := ecdsa.Sign(rand.Reader, p.privateKey, msgHashSum)
-		if err != nil {
-			panic(err)
-		}
-		signature := r.Bytes()
-		signature = append(signature, s.Bytes()...)
-		env.Signature = signature
+		// msgHashSum := msgHash.Sum(nil)
+		// r, s, err := ecdsa.Sign(rand.Reader, p.privateKey, msgHashSum)
+		// if err != nil {
+		// 	panic(err)
+		// }
+		// signature := r.Bytes()
+		// signature = append(signature, s.Bytes()...)
+		// env.Signature = signature
 
 		p.PersistExecResult(&env)
 

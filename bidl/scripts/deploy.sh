@@ -11,7 +11,7 @@ source $script_dir/env.sh
 echo "Stopping sequencer/consensus/normal nodes..."
 source $script_dir/kill_all_local.sh
 
-# echo "Generating hosts.config..."
+# echo "Generating hosts.config.."
 rm -f $smart_dir/config/hosts.config
 for i in `seq 0 $[${1}-1]`; do
     echo ${i} '127.0.0.1' `expr 1100 + ${i}`0  `expr 1100 + ${i}`1 >> $smart_dir/config/hosts.config
@@ -46,4 +46,3 @@ cd $base_dir
 echo "Please wait..."
 sleep 10
 source $base_dir/scripts/get_data.sh
-

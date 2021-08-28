@@ -10,7 +10,6 @@ rm -f $smart_dir/smart.tar
 rm -f $dir/smart.tar
 
 cd $smart_dir
-# docker image build -t smart $smart_dir
 docker image build -t smart .
 docker save -o $dir/smart.tar smart
 

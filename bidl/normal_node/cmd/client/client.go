@@ -21,6 +21,7 @@ var opts struct {
 	Num        	 int    `long:"num" default:"100000" description:"number of transactions"`
 	ND        	 int    `long:"nd" default:"0" description:"ratio of non-deterministic transactions"`
 	Conflict     int    `long:"conflict" default:"0" description:"ratio of hot accounts for conflict transactions"`
+	SendBlock    bool   `long:"sendBlock" description:"whether need to send blocks containing transactions"`
 }
 
 func init() {
@@ -75,9 +76,12 @@ func main() {
 	for i := 0; i < opts.Num; i++ {
 		client.SendTxn(txns[i], opts.Order)
 	}
-	// time.Sleep(time.Duration(5)*time.Second)
-	// log.Infof("Start sending block")
-	// client.SendBlock(txns, opts.BlockSize)
+	// send blocks
+	if opts.SendBlock && opts.Order {
+		time.Sleep(time.Duration(5)*time.Second)
+		log.Infof("Start sending block")
+		client.SendBlock(txns, opts.BlockSize)
+	}
 }
 
 func RandomString(n int) string {

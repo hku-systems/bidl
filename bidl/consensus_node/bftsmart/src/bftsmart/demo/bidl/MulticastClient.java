@@ -15,7 +15,7 @@ public class MulticastClient {
 
     public static void main(String args[]) {
         try {
-            NetworkInterface ni = NetworkInterface.getByName("lo");
+            NetworkInterface ni = NetworkInterface.getByName("enp5s0");
             // NetworkInterface ni = NetworkInterface.getByName("eth0");
             if (ni == null) {
                 logger.error("Error getting the Network Interface");

@@ -9,7 +9,7 @@ rm -f $tput_file
 rm -f $latency_file
 
 while true; do 
-	wait=$( cat $log_dir/normal.log | grep "BIDL block commit throughput:" | wc -l)
+	wait=$( cat $log_dir/normal_0.log | grep "BIDL block commit throughput:" | wc -l)
 	if [ $wait -gt 80 ]; then 
 		break;
 	fi 
@@ -17,6 +17,6 @@ while true; do
 	sleep 5
 done
 
-cat $log_dir/normal.log | grep "BIDL transaction commit throughput: " > $tput_file
+cat $log_dir/normal_0.log | grep "BIDL transaction commit throughput: " > $tput_file
 
 cat $log_dir/log_0.log | grep "Consensus latency" > $latency_file

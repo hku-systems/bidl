@@ -6,6 +6,7 @@ g++ -std=c++11 sequencer_multicast.cpp -o sequencer
 
 cd $smart_dir
 echo "Compiling consensus node..."
+ant clean
 ant
 
 cd $normal_node_dir

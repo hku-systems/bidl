@@ -31,20 +31,21 @@ echo "Starting the sequencer..., tput:$2 kTxns/s."
 $sequencer_dir/sequencer $2 &> $base_dir/logs/sequencer.log &
 
 echo "Starting normal node..."
-docker run --name normal_node --net=host --cap-add NET_ADMIN normal_node /normal_node/server --quiet --tps=$2 --id=0 > $base_dir/logs/normal.log 2>&1 &
+for i in `seq 0 9`; do
+    docker run --name normal_node$i --net=host --cap-add NET_ADMIN normal_node /normal_node/server --quiet --tps=$2 --id=$i > $base_dir/logs/normal_${i}.log 2>&1 &
+done
+
+sleep 10
 
 echo "benchmarking..."
-sleep 10
 cd $normal_node_dir
-
 if [ $3 == "performance" ]; then
-    go run ./cmd/client --num=100000 --org=50 
+    go run ./cmd/client --num=100000 --org=10
 elif [ $3 == "nd" ]; then 
     go run ./cmd/client --num=100000 --org=50 --nd=$4 
 elif [ $3 == "contention" ]; then 
     go run ./cmd/client --num=100000 --org=50 --conflict=$4 
 elif [ $3 == "scalability" ]; then 
-    # go run ./cmd/client --num=100000 --org=$4
     go run ./cmd/client --num=100000 --org=4
 else 
     echo "Invalid argument."

@@ -62,7 +62,7 @@ public class BidlFrontend extends Thread {
         Bootstrap bootstrap = new Bootstrap();
         EventLoopGroup acceptGroup = new NioEventLoopGroup(4);
         try {
-            NetworkInterface ni = NetworkInterface.getByName("lo"); 
+            NetworkInterface ni = NetworkInterface.getByName("enp5s0"); 
             Enumeration<InetAddress> addresses = ni.getInetAddresses();
             InetAddress localAddress = null;
             while (addresses.hasMoreElements()) {

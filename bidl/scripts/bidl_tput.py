@@ -14,5 +14,7 @@ for line in lines:
 			bidl_tps_raw.append(tput)
 
 num = len(bidl_tps_raw)
-bidl_mean_tps = int(np.mean(bidl_tps_raw[int(num*0.6):int(num*0.9)]))
+
+print(bidl_tps_raw)
+bidl_mean_tps = int(np.mean(bidl_tps_raw[int(num*0.3):int(num*0.5)]))
 print(bidl_mean_tps)

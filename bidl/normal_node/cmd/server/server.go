@@ -39,12 +39,12 @@ func (s *Server) processPackets() {
 			// the first four bytes are the magic number indicating the message type
 			magicNum := pack.Bytes[0:4]
 			if bytes.Equal(magicNum, common.MagicNumExecResult) {
-				log.Debugf("new execution result received, just ignore.")
+				log.Debugf("New execution result received, just ignore.")
 			} else if bytes.Equal(magicNum, common.MagicNumPersist) {
-				log.Debugf("new persist message received.")
+				log.Debugf("New persist message received.")
 				p.ProcessPersist(pack.Bytes[4:])
 			} else if bytes.Equal(magicNum, common.MagicNumTxn) {
-				log.Debugf("new transaction received")
+				log.Debugf("New transaction received")
 				hash := sha256.Sum256(pack.Bytes)
 				// the next eight bytes are the sequence number in uint64
 				seq := binary.LittleEndian.Uint64(pack.Bytes[4:12])
@@ -65,7 +65,7 @@ func (s *Server) processPackets() {
 			} else if bytes.Equal(magicNum, common.MagicNumBlock) {
 				select {
 				case <- blkTicker.C:
-				log.Infof("new block received.")
+				log.Infof("New block received.")
 				p.ProcessBlock(pack.Bytes[4:])
 				util.Monitor.TputBlk <- 1
 				}

@@ -1,25 +1,24 @@
-# How to access our servers for artifact evaluation. 
+# How to access our servers for artifact evaluation
 
 ## Steps
 
-#### Connect to HKU CS gatekeeper
+### Step 1: Connect to HKU CS gatekeeper
 
-For security reasons, our department only allow access to the gatekeeper using SSH keys. 
+For security reasons, our department only allow access to the gatekeeper using SSH keys.
 
-1. Create a key file and copy the private key from our HotCRP response into it. 
+1. Create a key file and copy the private key from our HotCRP response into it.
 
-2. `chmod 400 [key_file_name]`. 
+2. `chmod 400 [key_file_name]`.
 
-3. `ssh -i [key_file_name] sosp2021@gatekeeper3.cs.hku.hk`, and then enter the key passphrase (attached in our HotCRP response.)
+3. `ssh -i [key_file_name] sosp2021@gatekeeper3.cs.hku.hk`.
 
-#### Connect to our server
+### Step 2: Connect to our server
 
-    ssh [server_account]@202.45.128.160
+    ssh [server_account]@202.45.128.161
 
-The server account and server password are listed in our HotCRP response. 
+The server account and server password are listed in our HotCRP response.
 
-## Descriptions about our cluster. 
-
+## Descriptions about our cluster
 
 Each machine in our cluster has two IP addresses, one for access from the
 gatekeeper, one for interconnection among the machines, as shown in the below
@@ -35,16 +34,15 @@ file)**.
 | ...           |                                   |                        |
 | k             | 202.45.128.160+k-1                | 10.22.1.k              |
 
-
-We have asked for access to 9 machines, but since the environment is not completely clean, 
+We have asked for access to 9 machines, but since the environment is not completely clean,
 the experiment results may have some outliers if other people happen to run tasks on the cluster at the same time.
-You may re-run the outlier data points or simply ignore them when such contention happens. 
+You may re-run the outlier data points or simply ignore them when such contention happens.
 
 We have coordinated with other teams to better not use the **first 5 machines**
 (i.e., `10.22.1.1~10.22.1.5`) in the next two weeks, so please better use
 these 5 machines for most experiments to get a stable result. As explained
 in the [artifact readme page](https://github.com/hku-systems/bidl), running the
-experiments in a slightly smaller scale is already enough to verify our claims. 
+experiments in a slightly smaller scale is already enough to verify our claims.
 
 ## After accessing the cluster
 

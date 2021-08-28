@@ -32,7 +32,7 @@ public class MulticastServer {
         Bootstrap bootstrap = new Bootstrap();
         NioEventLoopGroup acceptGroup = new NioEventLoopGroup(1);
         try {
-            // NetworkInterface ni = NetworkInterface.getByName("lo"); // used en0 for
+            // NetworkInterface ni = NetworkInterface.getByName("enp5s0"); // used en0 for
             // OSX, wlan0 for windows
             NetworkInterface ni = NetworkInterface.getByName("eth0"); // used en0 for
             // OSX,
