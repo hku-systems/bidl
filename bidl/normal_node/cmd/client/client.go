@@ -41,6 +41,16 @@ func init() {
 	log.SetFormatter(formatter)
 }
 
+func Shuffle(slice []interface{}) {
+    r := rand.New(rand.NewSource(time.Now().Unix()))
+    for len(slice) > 0 {
+        n := len(slice)
+        randIndex := r.Intn(n)
+        slice[n-1], slice[randIndex] = slice[randIndex], slice[n-1]
+        slice = slice[:n-1]
+    }
+}
+
 func main() {
 	client := NewClient()
 	if opts.Order { // there is no sequencer
@@ -66,10 +76,13 @@ func main() {
 		txnsTransfer := GenerateTransferWorkload(accNum, opts.Orgs, opts.Num, opts.Conflict)
 		txns = append(txnsCreate, txnsTransfer...)
 	} else {
-		accNum := 1000
-		txnsCreate := GenerateCreateWorkload(accNum, opts.Orgs, 0)
-		txnsTransfer := GenerateTransferWorkload(accNum, opts.Orgs, opts.Num, 0)
-		txns = append(txnsCreate, txnsTransfer...)
+		// accNum := 1000
+		// txnsCreate := GenerateCreateWorkload(accNum, opts.Orgs, 0)
+		// txnsTransfer := GenerateTransferWorkload(accNum, opts.Orgs, opts.Num, 0)
+		// txns = append(txnsCreate, txnsTransfer...)
+		accNum := int(opts.Num / opts.Orgs)    // number of accounts for each organization
+		txns = GenerateCreateWorkload(accNum, opts.Orgs, 0)
+		Shuffle(txns)
 	}
 
 	// submit transactions to the sequencer

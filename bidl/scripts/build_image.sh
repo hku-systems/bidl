@@ -1,4 +1,6 @@
 #!/bin/bash
+script_dir=$(cd "$(dirname "$0")";pwd)
+source $script_dir/env.sh
 
 echo "Building consensus node image"
 rm -f $smart_dir/config/currentView

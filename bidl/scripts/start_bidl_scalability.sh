@@ -84,6 +84,9 @@ for host in `cat $base_dir/scripts/servers`; do
         ssh -n $user@${host} "docker run --name normal_node$i --net=host --cap-add NET_ADMIN normal_node /normal_node/server --quiet --tps=$3 --id=$i > logs/normal_${i}.log 2>&1 &"
         let i=$i+1
     done
+    if [ $i -eq $2 ]; then
+        break
+    fi
 done 
 
 echo "Starting the sequencer..."
@@ -108,7 +111,7 @@ cd $base_dir
 
 while true; do 
 	wait=$( cat /home/$user/logs/normal_0.log | grep "BIDL block commit throughput:" | wc -l)
-	if [ $wait -gt 50 ]; then 
+	if [ $wait -gt 20 ]; then 
 		break;
 	fi 
 	echo "wait 5s for results"

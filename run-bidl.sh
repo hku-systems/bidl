@@ -3,7 +3,7 @@
 user=jqi
 default_peers=4
 default_tput=60
-# bash ./bidl/scripts/kill_all.sh
+bash ./bidl/scripts/kill_all.sh
 # bash ./bidl/scripts/deploy_bidl.sh $default_peers
 
 if [ $1 == "performance" ]; then 
@@ -72,30 +72,30 @@ elif [ $1 == "scalability" ]; then
     mkdir -p $rst_dir
     touch $rst_file
 
-    # generate config file for all settings
-    # for org in 4 13 25; do 
-    #     bash ./bidl/scripts/gen_host_conf.sh $org
-    #     cp ./bidl/consensus_node/bftsmart/config/hosts.config ./bidl/scripts/configs/hosts_$org.config
-    # done
-    # bash ./bidl/scripts/copy_smart_config.sh
+    generate config file for all settings
+    for org in 4 13 25; do 
+        bash ./bidl/scripts/gen_host_conf.sh $org
+        cp ./bidl/consensus_node/bftsmart/config/hosts.config ./bidl/scripts/configs/hosts_$org.config
+    done
+    bash ./bidl/scripts/copy_smart_config.sh
 
-    for org in 25; do 
+    for org in 4 13 25; do 
         echo "Number of organizations = $org"
         # run benchmark
         bash ./bidl/scripts/start_bidl_scalability.sh $org $org $default_tput scalability
 
         # obtain latency data
         # consensus latency
-        echo -n "rate $tput_cap consensus latency " >> $rst_file
+        echo -n "rate $org consensus latency " >> $rst_file
         cat /home/$user/logs/consensus_0.log | grep "Consensus latency" | python3 ./bidl/scripts/consensus_latency.py >> $rst_file
         # execution latency 
-        echo -n "rate $tput_cap execution latency " >> $rst_file
+        echo -n "rate $org execution latency " >> $rst_file
         cat /home/$user/logs/normal_0.log | grep "Execution latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
         # commit latency 
-        echo -n "rate $tput_cap commit latency " >> $rst_file
+        echo -n "rate $org commit latency " >> $rst_file
         cat /home/$user/logs/normal_0.log | grep "Commit latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
     done
-    # bash ./bidl/scripts/kill_all.sh
+    bash ./bidl/scripts/kill_all.sh
     exit 0
 else 
     echo "Invalid argument."

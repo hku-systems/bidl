@@ -1,3 +1,0 @@
-rate  consensus latency 28
-rate  execution latency 27
-rate  commit latency 4
