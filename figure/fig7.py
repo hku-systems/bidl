@@ -2,11 +2,23 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sys
 
-org = [4, 13, 25, 47]
-bidl_latency = [65, 25, 15, 17]
+time_1 = np.arange(0, 200, 50)
+print(time_1)
+tput_1 = [35, 35, 25, 20]
 
-plt.plot(org, bidl_latency, marker="s", label="bidl-Smart")
-# plt.plot(bidl_latency, bidl_tps, label="bidl")
-plt.legend()
-plt.ylim(0, 80)
+time_2 = np.arange(200, 2000, 50)
+print(time_2)
+tput_2 = [35 for t in time_2]
+
+time_3 = np.arange(2000, 2200, 50)
+tput_3 = [30, 25, 25, 25]
+
+time_4 = np.arange(2200, 2500, 50)
+tput_4 = [35 for t in time_4]
+
+time = np.arange(0, 2500, 50)
+tput = tput_1 + tput_2 + tput_3 + tput_4
+
+plt.plot(time, tput)
+plt.ylim(0, 50)
 plt.savefig("figure/fig7.pdf")
