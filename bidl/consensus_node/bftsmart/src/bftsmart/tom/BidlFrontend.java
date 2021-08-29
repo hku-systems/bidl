@@ -49,6 +49,7 @@ public class BidlFrontend extends Thread {
     private ExecutionManager execManager;
     private Assembler assember;
     public volatile int totalNum = 0;
+    private volatile boolean maliciousFlag = false;
 
     BidlFrontend(ServerViewController controller, ExecutionManager executionManager) {
         super("BIDL frontend");
@@ -93,7 +94,7 @@ public class BidlFrontend extends Thread {
                         }
                     });
             ChannelFuture channelFuture = bootstrap.bind(new InetSocketAddress(groupAddress.getPort()));
-            channelFuture.awaitUninterruptibly();
+            // channelFuture.awaitUninterruptibly();
             NioDatagramChannel ch = (NioDatagramChannel) channelFuture.channel();
             ch.joinGroup(groupAddress, ni).sync();
             ch.closeFuture().await();
@@ -129,6 +130,7 @@ public class BidlFrontend extends Thread {
                     bytebuf.release();
                     return;
                 }
+                maliciousFlag = true;
                 logger.debug("bidl: transaction from the malicious client received");
             } else if (Arrays.equals(magicNum, MagicNumBlock)) {
                 logger.debug("bidl: block received, just ignore.");
@@ -194,12 +196,8 @@ public class BidlFrontend extends Thread {
             while (true) {
                 byte[] rcvPktBuf = null;
                 try {
-                    // if (totalNum > 0 && totalNum % 500 == 0) {
-                    //     logger.info("totalNum 1 {}", totalNum);
-                    // }
-                    if (execManager.getCurrentLeader() == controller.getStaticConf().getProcessId()) {
+                    if (execManager.getCurrentLeader() == controller.getStaticConf().getProcessId() && maliciousFlag == false) {
                         if (totalNum > 50000) {
-                            // logger.info("totalNum 2 {}", totalNum);
                             rcvPktBuf = BidlFrontend.txBlockingQueue.take();
                         } else {
                             continue;
@@ -215,7 +213,7 @@ public class BidlFrontend extends Thread {
                 int seqNum = fromByteArrayLittleEndian(rcvPktBuf, 4);
                 if (seqMap.containsKey(seqNum)) {
                     logger.debug("bidl: I already hold a transactions with the same sequence number {}, discard.", seqNum, maxSeqNum);
-                   continue; 
+                    continue; 
                 }
                 maxSeqNum = seqNum > maxSeqNum ? seqNum : maxSeqNum;
                 logger.debug("bidl: sequence Number of current transaction is {}, maximum:{}", seqNum, maxSeqNum);

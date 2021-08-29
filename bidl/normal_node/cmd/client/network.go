@@ -121,6 +121,35 @@ func (c *Client) SendTxn(txn *common.Transaction, order bool) {
 	c.packets <- packet
 }
 
+func (c *Client) SendMaliciousTxn(txn *common.Transaction, order bool) {
+	message, err := msgpack.Marshal(txn)
+	ErrorCheck(err, "Send", false)
+	msg := common.Message{
+		Type:    common.TxnMessage,
+		Message: message,
+	}
+
+	b, err := msgpack.Marshal(msg)
+
+	seqBuf := make([]byte, 8)
+	binary.LittleEndian.PutUint64(seqBuf, c.seq)
+	// add seq number
+	b = append(seqBuf, b...)
+	// add magic number
+	b1 := append(common.MagicNumTxnMalicious, b...)
+	b2 := append(common.MagicNumTxn, b...)
+	packet1 := common.Packet {
+		Bytes: b1,
+	}
+	packet2 := common.Packet {
+		Bytes: b2,
+	}
+	c.packets <- packet1
+	c.packets <- packet2
+
+	c.seq++
+}
+
 func (c *Client) SendBlock(txns []*common.Transaction, blkSize int) {
 	c.seq = 0
 	for i := 0; i < len(txns); i += blkSize {

@@ -28,14 +28,14 @@
   <!-- <logger name="io.netty" level="DEBUG"> -->
   <logger name="io.netty" level="INFO">
     <appender-ref ref="MIN-STDOUT" />
-  	<!--  <appender-ref ref="STDOUT" /> -->
+    <!--  <appender-ref ref="STDOUT" /> -->
   </logger>
   
   
   <!-- <logger name="bftsmart" level="DEBUG">  -->
   <logger name="bftsmart" level="INFO"> 
-  	<!-- <appender-ref ref="MIN-STDOUT" /> -->
-  	<appender-ref ref="STDOUT" />
+    <!-- <appender-ref ref="MIN-STDOUT" /> -->
+    <appender-ref ref="STDOUT" />
   </logger> 
   
   

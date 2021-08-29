@@ -534,36 +534,42 @@ public final class Acceptor {
 		if (executionManager.getCurrentLeader() != controller.getStaticConf().getProcessId()) {
 			ArrayList<byte[]> gapHashes = new ArrayList<>();
 			// byte[] hash = new byte[32];
-			byte[] hash = new byte[32];
-			String hashStr = new String(hash);
+			byte[] hashProp = new byte[32];
+			String hashPropStr = "";
+			String hashLocalStr = "";
 			int seq = 0;
 			int gapNumber = 0;
+			int localNumber = 0;
 			for (int i = 64; i < proposedValue.length - 12; i+=36) {
-				seq = fromByteArrayLittleEndian(proposedValue, 0);
-				hash = Arrays.copyOfRange(proposedValue, i+4, i+36);
-				hashStr = new String(hash);
-				if (BidlFrontend.seqMap.containsKey(seq) && !BidlFrontend.seqMap.get(seq).equals(new String(hash))) {
-					logger.info("My local transaction hash is inconsistent with proposed hash");
-				 	gapNumber++;
-				 	gapHashes.add(hash);
-					byte[] txn = BidlFrontend.txMap.get(hashStr);
-					String malicious = new String(Arrays.copyOfRange(txn, 0, 4));
-					if (BidlFrontend.conflictList.containsKey(malicious)) {
-						int views = BidlFrontend.conflictList.get(malicious);
-						if (views + 1 == 4) {
-							BidlFrontend.conflictList.remove(malicious);
-							BidlFrontend.denyList.put(malicious, 1);
+				seq = fromByteArrayLittleEndian(proposedValue, i);
+				hashProp = Arrays.copyOfRange(proposedValue, i+4, i+36);
+				hashPropStr = new String(hashProp);
+				hashLocalStr = BidlFrontend.seqMap.get(seq);
+				if (BidlFrontend.seqMap.containsKey(seq)) {
+					localNumber++;
+					if(!hashLocalStr.equals(hashPropStr)) {
+						logger.debug("My local transaction hash is inconsistent with proposed hash");
+						gapNumber++;
+						gapHashes.add(hashProp);
+						byte[] txn = BidlFrontend.txMap.get(hashLocalStr);
+						String malicious = new String(Arrays.copyOfRange(txn, 0, 4));
+						if (BidlFrontend.conflictList.containsKey(malicious)) {
+							int views = BidlFrontend.conflictList.get(malicious);
+							if (views + 1 == 4) {
+								BidlFrontend.conflictList.remove(malicious);
+								BidlFrontend.denyList.put(malicious, 1);
+							} else {
+								BidlFrontend.conflictList.put(malicious, views+1);
+							}
 						} else {
-							BidlFrontend.conflictList.put(malicious, views+1);
+							BidlFrontend.conflictList.put(malicious, 1);
 						}
-					} else {
-						BidlFrontend.conflictList.put(malicious, 1);
 					}
+				} else {
+					logger.debug("I don't hold the seq number.");
+					gapNumber++;
+					gapHashes.add(hashProp);
 				}
-				// if (!BidlFrontend.txMap.containsKey(new String(hash))) {
-				// 	gapNumber++;
-				// 	gapHashes.add(hash);
-				// }
 			}
 
 			// send gap-req message, and wait for gap-reply
@@ -579,13 +585,14 @@ public final class Acceptor {
 					int replyLen = waitQueue.take();
 					logger.info("bidl: gapReply received, reply len {}, duration: {}", replyLen,
 							System.currentTimeMillis() - startTime);
+					Thread.sleep(10);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 					Thread.currentThread().interrupt();
 				}
-			} else {
+			} else{
 				logger.info("bidl: I hold all proposed transactions.");
-			}
+			} 
 		}
 	}
 	int fromByteArrayLittleEndian(byte[] bytes, int start) {

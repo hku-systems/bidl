@@ -30,6 +30,7 @@ if [ $1 == "performance" ]; then
         echo -n "rate $tput_cap commit latency " >> $rst_file
         cat /home/$user/logs/normal_0.log | grep "Commit latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
     done
+    source $base_dir/scripts/kill_all.sh
     exit 0
 elif [ $1 == "nd" ]; then 
     rst_dir=./logs/bidl/nondeterminism
@@ -45,6 +46,7 @@ elif [ $1 == "nd" ]; then
         echo -n "rate $nondeterminism_rate throughput " >> $rst_file
         cat /home/$user/logs/normal_0.log | grep "BIDL transaction commit throughput" | python3 ./bidl/scripts/bidl_tput.py $default_tput >> $rst_file
     done
+    source $base_dir/scripts/kill_all.sh
     exit 0
 elif [ $1 == "contention" ]; then 
     rst_dir=./logs/bidl/contention
@@ -60,6 +62,7 @@ elif [ $1 == "contention" ]; then
         echo -n "rate $tput_cap throughput " >> $rst_file
         cat /home/$user/logs/normal_0.log | grep "BIDL transaction commit throughput" | python3 ./bidl/scripts/bidl_tput.py $default_tput >> $rst_file
     done
+    source $base_dir/scripts/kill_all.sh
     exit 0
 elif [ $1 == "scalability" ]; then 
     rst_dir=./logs/bidl/scalability
@@ -82,6 +85,7 @@ elif [ $1 == "scalability" ]; then
         echo -n "rate $tput_cap commit latency " >> $rst_file
         cat /home/$user/logs/normal_0.log | grep "Commit latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
     done
+    source $base_dir/scripts/kill_all.sh
     exit 0
 else 
     echo "Invalid argument."

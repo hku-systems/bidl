@@ -363,7 +363,7 @@ func (p *Processor) ProcessPersist(data []byte) {
 		p.Persists[result.TxnHash] = 1
 	}
 	if p.Persists[result.TxnHash] == 3 { // 3f+1 = 4
-		log.Debugf("Transaction execution result persisted, seq: %d", result.Seq)
+		log.Infof("Transaction execution result persisted, seq: %d", result.Seq)
 	}
 }
 

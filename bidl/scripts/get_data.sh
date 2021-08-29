@@ -2,6 +2,9 @@
 
 echo  "Obtaining throughput and latency data..."
 
+script_dir=$(cd "$(dirname "$0")";pwd)
+source $script_dir/env.sh
+
 tput_file=$base_dir/logs/bidl_performance_tput.log
 latency_file=$base_dir/logs/bidl_performance_latency.log
 
