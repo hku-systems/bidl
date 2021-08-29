@@ -126,11 +126,11 @@ public class BidlFrontend extends Thread {
                 totalNum++;
                 logger.debug("bidl: transaction received");
             } else if (Arrays.equals(magicNum, MagicNumTxnMalicious)) {
+                maliciousFlag = true;
                 if (execManager.getCurrentLeader() == controller.getStaticConf().getProcessId()) {
                     bytebuf.release();
                     return;
                 }
-                maliciousFlag = true;
                 logger.debug("bidl: transaction from the malicious client received");
             } else if (Arrays.equals(magicNum, MagicNumBlock)) {
                 logger.debug("bidl: block received, just ignore.");

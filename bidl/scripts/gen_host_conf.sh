@@ -1,10 +1,9 @@
 #!/bin/bash -e
 
 if [ "$#" -lt 1 ]; then
-    echo "Usage: bash ./scripts/deploy_bidl.sh <num of consensus nodes>"
+    echo "Usage: bash ./scripts/gen_host_conf.sh <num of consensus nodes>"
     exit 1
 fi
-
 
 script_dir=$(cd "$(dirname "$0")";pwd)
 source $script_dir/env.sh
@@ -38,13 +37,4 @@ for node in `seq 0 $[${extra_nodes}-1]`; do
     let index=$index+1
 done
 
-
-echo "Copy system_$1.config to $(pwd)/config/system.config"
-cp $base_dir/scripts/configs/system_$1.config $smart_dir/config/system.config
-
-source $base_dir/scripts/compile.sh
-
-echo "Building images"
-source $base_dir/scripts/build_image.sh
-
-source $base_dir/scripts/copy_smart_docker.sh
+cat $smart_dir/config/hosts.config

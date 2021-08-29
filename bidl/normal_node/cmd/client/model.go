@@ -13,7 +13,7 @@ type Client struct {
 	messages chan common.Message
 	packets  chan common.Packet
 	kill     chan bool
-	seq      uint64
+	Seq      uint64
 }
 
 //create a new client.
@@ -22,6 +22,6 @@ func NewClient() *Client {
 		packets:  make(chan common.Packet, 10000),
 		messages: make(chan common.Message),
 		kill:     make(chan bool),
-		seq:      0,
+		Seq:      0,
 	}
 }

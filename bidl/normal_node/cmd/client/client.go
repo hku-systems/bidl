@@ -73,14 +73,24 @@ func main() {
 	}
 
 	// submit transactions to the sequencer
-	log.Infof("Start sending %d transactions", opts.Num)
 	if opts.Malicious {
+		log.Infof("Start sending %d malicious transactions.", opts.Num)
+		client.Seq = 0
 		for i := 0; i < opts.Num; i++ {
-			client.SendMaliciousTxn(txns[i], opts.Order)
+			client.SendTxn(txns[i], opts.Order, true)
 		}
-	} else{
+		log.Infof("Wait...")
+		time.Sleep(time.Duration(10) * time.Second)
+		log.Infof("Start sending %d non-malicious transactions.", opts.Num)
+		client.Seq = 0
 		for i := 0; i < opts.Num; i++ {
-			client.SendTxn(txns[i], opts.Order)
+			client.SendTxn(txns[i], opts.Order, false)
+		}
+	} else {
+		log.Infof("Start sending %d transactions", opts.Num)
+		client.Seq = 0
+		for i := 0; i < opts.Num; i++ {
+			client.SendTxn(txns[i], opts.Order, false)
 		}
 	}
 	// send blocks (only for testing)

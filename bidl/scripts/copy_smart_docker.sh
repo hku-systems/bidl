@@ -1,5 +1,8 @@
 #!/bin/bash
 echo "Deploy docker image to all servers..."
+script_dir=$(cd "$(dirname "$0")";pwd)
+source $script_dir/env.sh
+echo $base_dir
 for host in `cat $base_dir/scripts/servers`; do
     echo $host
     scp $base_dir/smart.tar jqi@${host}:~/

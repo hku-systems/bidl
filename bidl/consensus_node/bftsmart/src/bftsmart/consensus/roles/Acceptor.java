@@ -174,10 +174,10 @@ public final class Acceptor {
 	 * @param msg The PROPOSE message to by processed
 	 */
 	public void proposeReceived(Epoch epoch, ConsensusMessage msg) {
-		// bidl: random leader change, leader change must be performed before executePropose, or the node will wait for the consensus to finish before proposing
+		// bidl: leader change, leader change must be performed before executePropose, or the node will wait for the consensus to finish before proposing
 		// proposeNum++;
-		// if (proposeNum == 10){
-		// 	logger.info("Randomly trigger view change");
+		// if (proposeNum == 180) {
+		// 	logger.info("BIDL trigger view change");
 		// 	tomLayer.getSynchronizer().triggerTimeout(new LinkedList<>());
 		// 	proposeNum = 0;
 		// }
@@ -556,10 +556,12 @@ public final class Acceptor {
 						if (BidlFrontend.conflictList.containsKey(malicious)) {
 							int views = BidlFrontend.conflictList.get(malicious);
 							if (views + 1 == 4) {
+								logger.info("Malicious client {} is added to the denylist.", malicious);
 								BidlFrontend.conflictList.remove(malicious);
 								BidlFrontend.denyList.put(malicious, 1);
 							} else {
-								BidlFrontend.conflictList.put(malicious, views+1);
+								logger.info("Put the malicious client {} to the conflict list.", malicious);
+								BidlFrontend.conflictList.put(malicious, views + 1);
 							}
 						} else {
 							BidlFrontend.conflictList.put(malicious, 1);
@@ -585,7 +587,6 @@ public final class Acceptor {
 					int replyLen = waitQueue.take();
 					logger.info("bidl: gapReply received, reply len {}, duration: {}", replyLen,
 							System.currentTimeMillis() - startTime);
-					Thread.sleep(10);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 					Thread.currentThread().interrupt();
