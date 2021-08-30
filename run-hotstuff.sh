@@ -3,7 +3,7 @@ cd hotstuff
 # rm -rf ../logs/hotstuff
 mkdir -p ../logs/hotstuff
 
-for node in 31; do
+for node in 4 7 16 31; do
     # set node IP
     echo "10.22.1.7" > docker/servers
     echo "10.22.1.9" >> docker/servers
