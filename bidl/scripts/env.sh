@@ -1,7 +1,6 @@
 #!/bin/bash -e
 script_dir=$(cd "$(dirname "$0")";pwd)
 base_dir=$(cd $script_dir/..; pwd)
-user="jqi"
 
 # file=${BASH_SOURCE[0]}
 # source=$(dirname $file)

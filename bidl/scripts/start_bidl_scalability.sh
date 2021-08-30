@@ -24,12 +24,12 @@ echo "######################################################"
 
 i=0
 for host in `cat $base_dir/scripts/servers`; do
-    ssh -n $user@${host} "cd ~; rm -rf ~/logs; mkdir ~/logs;"
+    ssh -n $USER@${host} "cd ~; rm -rf ~/logs; mkdir ~/logs;"
     for node in `seq 0 $[${consensus_nodes_per_host}-1]`; do
         echo ${host} ${i}
-        ssh -n $user@${host} "docker run --name smart$i \
-        --mount type=bind,source=/home/$user/configs/hosts_$1.config,destination=/home/config/hosts.config \
-        --mount type=bind,source=/home/$user/configs/system_$1.config,destination=/home/config/system.config \
+        ssh -n $USER@${host} "docker run --name smart$i \
+        --mount type=bind,source=/home/$USER/configs/hosts_$1.config,destination=/home/config/hosts.config \
+        --mount type=bind,source=/home/$USER/configs/system_$1.config,destination=/home/config/system.config \
         --net=host --cap-add NET_ADMIN \
         smart bash /home/runscripts/smartrun.sh bftsmart.demo.microbenchmarks.ThroughputLatencyServer $i 10 0 0 false nosig rwd > logs/consensus_$i.log 2>&1 &"
         let i=$i+1
@@ -41,9 +41,9 @@ done
 
 for node in `seq 0 $[${extra_nodes}-1]`; do
     echo "Extra consensus nodes on ${host}:${i}"
-    ssh -n $user@${host} "docker run --name smart$i \
-    --mount type=bind,source=/home/$user/configs/hosts_$1.config,destination=/home/config/hosts.config \
-    --mount type=bind,source=/home/$user/configs/system_$1.config,destination=/home/config/system.config \
+    ssh -n $USER@${host} "docker run --name smart$i \
+    --mount type=bind,source=/home/$USER/configs/hosts_$1.config,destination=/home/config/hosts.config \
+    --mount type=bind,source=/home/$USER/configs/system_$1.config,destination=/home/config/system.config \
     --net=host --cap-add NET_ADMIN smart bash /home/runscripts/smartrun.sh bftsmart.demo.microbenchmarks.ThroughputLatencyServer $i 10 0 0 false nosig rwd \
     > logs/consensus_$i.log 2>&1 &"
     let i=$i+1
@@ -52,7 +52,7 @@ done
 i=0
 while true; do 
     let i=$i+1
-	wait=$( cat /home/$user/logs/consensus_0.log | grep "Ready to process operations" | wc -l)
+	wait=$( cat /home/$USER/logs/consensus_0.log | grep "Ready to process operations" | wc -l)
 	if [ $wait -eq 1 ]; then 
 		break;
 	fi 
@@ -80,8 +80,8 @@ echo "######################################################"
 i=0
 for host in `cat $base_dir/scripts/servers`; do
     for node in `seq 0 $[${normal_nodes_per_host}-1]`; do
-        echo ${host} ${node}
-        ssh -n $user@${host} "docker run --name normal_node$i --net=host --cap-add NET_ADMIN normal_node /normal_node/server --quiet --tps=$3 --id=$i > logs/normal_${i}.log 2>&1 &"
+        echo ${host} ${i}
+        ssh -n $USER@${host} "docker run --name normal_node$i --net=host --cap-add NET_ADMIN normal_node /normal_node/server --quiet --tps=$3 --id=$i > logs/normal_${i}.log 2>&1 &"
         let i=$i+1
     done
     if [ $i -eq $2 ]; then
@@ -110,7 +110,7 @@ fi
 cd $base_dir
 
 while true; do 
-	wait=$( cat /home/$user/logs/normal_0.log | grep "BIDL block commit throughput:" | wc -l)
+	wait=$( cat /home/$USER/logs/normal_0.log | grep "BIDL block commit throughput:" | wc -l)
 	if [ $wait -gt 50 ]; then 
 		break;
 	fi 

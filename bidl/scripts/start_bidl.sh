@@ -44,7 +44,7 @@ done
 i=0
 while true; do 
     let i=$i+1
-	wait=$( cat /home/$user/logs/consensus_0.log | grep "Ready to process operations" | wc -l)
+	wait=$( cat /home/$USER/logs/consensus_0.log | grep "Ready to process operations" | wc -l)
 	if [ $wait -eq 1 ]; then 
 		break;
 	fi 

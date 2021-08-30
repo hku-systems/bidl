@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-user=jqi
+# user=jqi
 default_peers=4
 default_tput=60
 bash ./bidl/scripts/kill_all.sh
@@ -19,17 +19,17 @@ if [ $1 == "performance" ]; then
         bash ./bidl/scripts/start_bidl.sh 4 50 $tput_cap performance
         # obtain throughput data
         echo -n "rate $tput_cap throughput " >> $rst_file
-        cat /home/$user/logs/normal_0.log | grep "BIDL transaction commit throughput:" | python3 ./bidl/scripts/bidl_tput.py $tput_cap >> $rst_file
+        cat /home/$USER/logs/normal_0.log | grep "BIDL transaction commit throughput:" | python3 ./bidl/scripts/bidl_tput.py $tput_cap >> $rst_file
         # obtain latency data
         # consensus latency
         echo -n "rate $tput_cap consensus latency " >> $rst_file
-        cat /home/$user/logs/consensus_0.log | grep "Consensus latency" | python3 ./bidl/scripts/consensus_latency.py >> $rst_file
+        cat /home/$USER/logs/consensus_0.log | grep "Consensus latency" | python3 ./bidl/scripts/consensus_latency.py >> $rst_file
         # execution latency 
         echo -n "rate $tput_cap execution latency " >> $rst_file
-        cat /home/$user/logs/normal_0.log | grep "Execution latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
+        cat /home/$USER/logs/normal_0.log | grep "Execution latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
         # commit latency 
         echo -n "rate $tput_cap commit latency " >> $rst_file
-        cat /home/$user/logs/normal_0.log | grep "Commit latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
+        cat /home/$USER/logs/normal_0.log | grep "Commit latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
     done
     source $base_dir/scripts/kill_all.sh
     exit 0
@@ -45,7 +45,7 @@ elif [ $1 == "nd" ]; then
         bash ./bidl/scripts/start_bidl.sh 4 50 $default_tput nd $nondeterminism_rate
         # obtain throughput data
         echo -n "rate $nondeterminism_rate throughput " >> $rst_file
-        cat /home/$user/logs/normal_0.log | grep "BIDL transaction commit throughput" | python3 ./bidl/scripts/bidl_tput.py $default_tput >> $rst_file
+        cat /home/$USER/logs/normal_0.log | grep "BIDL transaction commit throughput" | python3 ./bidl/scripts/bidl_tput.py $default_tput >> $rst_file
     done
     source $base_dir/scripts/kill_all.sh
     exit 0
@@ -61,7 +61,7 @@ elif [ $1 == "contention" ]; then
         bash ./bidl/scripts/start_bidl.sh 4 50 $default_tput contention $contention_rate 
         # obtain throughput data
         echo -n "rate $tput_cap throughput " >> $rst_file
-        cat /home/$user/logs/normal_0.log | grep "BIDL transaction commit throughput" | python3 ./bidl/scripts/bidl_tput.py $default_tput >> $rst_file
+        cat /home/$USER/logs/normal_0.log | grep "BIDL transaction commit throughput" | python3 ./bidl/scripts/bidl_tput.py $default_tput >> $rst_file
     done
     source $base_dir/scripts/kill_all.sh
     exit 0
@@ -73,13 +73,13 @@ elif [ $1 == "scalability" ]; then
     touch $rst_file
 
     # generate config file for all settings
-    for org in 4 13 25; do 
+    for org in 4 25 49; do 
         bash ./bidl/scripts/gen_host_conf.sh $org
         cp ./bidl/consensus_node/bftsmart/config/hosts.config ./bidl/scripts/configs/hosts_$org.config
     done
     bash ./bidl/scripts/copy_smart_config.sh
 
-    for org in 4 13 25; do 
+    for org in 4 25 49; do 
     # for org in 25; do 
         echo "Number of organizations = $org"
         # run benchmark
@@ -88,13 +88,13 @@ elif [ $1 == "scalability" ]; then
         # obtain latency data
         # consensus latency
         echo -n "rate $org consensus latency " >> $rst_file
-        cat /home/$user/logs/consensus_0.log | grep "Consensus latency" | python3 ./bidl/scripts/consensus_latency.py >> $rst_file
+        cat /home/$USER/logs/consensus_0.log | grep "Consensus latency" | python3 ./bidl/scripts/consensus_latency.py >> $rst_file
         # execution latency 
         echo -n "rate $org execution latency " >> $rst_file
-        cat /home/$user/logs/normal_0.log | grep "Execution latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
+        cat /home/$USER/logs/normal_0.log | grep "Execution latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
         # commit latency 
         echo -n "rate $org commit latency " >> $rst_file
-        cat /home/$user/logs/normal_0.log | grep "Commit latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
+        cat /home/$USER/logs/normal_0.log | grep "Commit latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
     done
     bash ./bidl/scripts/kill_all.sh
     exit 0

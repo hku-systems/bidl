@@ -160,7 +160,7 @@ func (p *Processor) ExecuteTxn(txn *common.SequencedTransaction) {
 		signature := r.Bytes()
 		signature = append(signature, s.Bytes()...)
 		env.Signature = signature
-		time.Sleep(5 * time.Microsecond)
+		time.Sleep(1 * time.Microsecond)
 		if p.txnNum % 500 == 0 {
 			p.PersistExecResult(&env)
 		}
