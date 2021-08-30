@@ -31,8 +31,8 @@ func (c *Client) setupConnection(addr string, tps int) {
 	/*
 		code for setting up udp connection using basic API, seems not necessary for simplicity.
 
-		//en4, err := net.InterfaceByName("lo")
-		en4, err := net.InterfaceByName("lo")
+		//en4, err := net.InterfaceByName("enp5s0")
+		en4, err := net.InterfaceByName("enp5s0")
 		util.ErrorCheck(err, "setupConnection", true)
 
 		// bind a local address
@@ -69,7 +69,7 @@ func (c *Client) setupConnection(addr string, tps int) {
 	log.Printf("> server address: %s ... connecting ", address.String())
 
 	// use the lo network interface card
-	nif, err := net.InterfaceByName("lo")
+	nif, err := net.InterfaceByName("enp5s0")
 	if err !=nil {
 		log.Fatal(err)
 	}
@@ -97,7 +97,7 @@ func (c *Client) Send(message string) {
 	ErrorCheck(err, "Send", false)
 }
 
-func (c *Client) SendTxn(txn *common.Transaction, order bool) {
+func (c *Client) SendTxn(txn *common.Transaction, order bool, malicious bool) {
 	message, err := msgpack.Marshal(txn)
 	ErrorCheck(err, "Send", false)
 	msg := common.Message{
@@ -108,12 +108,16 @@ func (c *Client) SendTxn(txn *common.Transaction, order bool) {
 	b, err := msgpack.Marshal(msg)
 	if order {
 		seqBuf := make([]byte, 8)
-		binary.LittleEndian.PutUint64(seqBuf, c.seq)
+		binary.LittleEndian.PutUint64(seqBuf, c.Seq)
 		// add seq number
 		b = append(seqBuf, b...)
 		// add magic number
-		b = append(common.MagicNumTxn, b...)
-		c.seq++
+		if malicious {
+			b = append(common.MagicNumTxnMalicious, b...)
+		} else {
+			b = append(common.MagicNumTxn, b...)
+		}
+		c.Seq++
 	}
 	packet := common.Packet {
 		Bytes: b,
@@ -122,7 +126,7 @@ func (c *Client) SendTxn(txn *common.Transaction, order bool) {
 }
 
 func (c *Client) SendBlock(txns []*common.Transaction, blkSize int) {
-	c.seq = 0
+	c.Seq = 0
 	for i := 0; i < len(txns); i += blkSize {
 		var block []byte
 		for j := i; j < i+blkSize; j++ {
@@ -135,13 +139,13 @@ func (c *Client) SendBlock(txns []*common.Transaction, blkSize int) {
 			msgByte, err := msgpack.Marshal(msg)
 			// add seq number to buffer
 			seqBuf := make([]byte, 8)
-			binary.LittleEndian.PutUint64(seqBuf, c.seq)
+			binary.LittleEndian.PutUint64(seqBuf, c.Seq)
 			msgByte = append(seqBuf, msgByte...)
 			// add magic number to buffer
 			msgByte = append(common.MagicNumTxn, msgByte...)
 
 			// assemble txn [seq, hash] into the block
-			seqInt := uint32(c.seq)
+			seqInt := uint32(c.Seq)
 			seqIntBuf := make([]byte, 4)
 			binary.LittleEndian.PutUint32(seqIntBuf, seqInt)
 			block = append(block, seqIntBuf...)
@@ -149,7 +153,7 @@ func (c *Client) SendBlock(txns []*common.Transaction, blkSize int) {
 			hash := sha256.Sum256(msgByte)
 			block = append(block, hash[:]...)
 			// log.Debug("index:", j, len(msgByte), msg, "hash:", hash)
-			c.seq++
+			c.Seq++
 		}
 		temp := []byte{0, 0, 0, 0}
 		// add block length to the start of the block

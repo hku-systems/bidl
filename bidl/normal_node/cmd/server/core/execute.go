@@ -7,6 +7,7 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/binary"
+	"fmt"
 	"normal_node/cmd/common"
 	"normal_node/cmd/server/config"
 	"normal_node/cmd/server/network"
@@ -39,6 +40,7 @@ type Processor struct {
 }
 
 var startExecBlk time.Time
+var elapsedBlk time.Duration
 func NewProcessor(blkSize int, id int, net *network.Network) *Processor {
 	log.Debugf("Transaction processor initialized")
 	dbFile := "state.db"
@@ -94,17 +96,13 @@ func (p *Processor) ProcessTxn(txn *common.SequencedTransaction) {
 	defer p.mutex.Unlock()
 
 	if p.txnNum == 0 {
-		startExecBlk = time.Now()
+		// startExecBlk = time.Now()
+		elapsedBlk = 0
 	}
+	startExecTxn := time.Now()
 	p.txnNum++
-	if !p.Related(txn.Transaction.Org) {
+	if p.Related(txn.Transaction.Org) {
 		p.execNum++
-	}
-	if p.txnNum % p.BlkSize == 0 {
-		elapsed := 	time.Since(startExecBlk) / time.Millisecond // duration in ms
-		startExecBlk = time.Now()
-		log.Infof("Block transactions execution latency: %dms, for executing %d transactions.", elapsed, p.execNum)
-		p.execNum = 0
 	}
 
 	// verify MAC
@@ -116,22 +114,23 @@ func (p *Processor) ProcessTxn(txn *common.SequencedTransaction) {
 	}
 	// execute transaction
 	p.ExecuteTxn(txn)
+	elapsedTxn := time.Since(startExecTxn) / time.Microsecond // duration in us
+	elapsedBlk += elapsedTxn
+	if p.txnNum % p.BlkSize == 0 {
+		// elapsed := 	time.Since(startExecBlk) / time.Millisecond // duration in ms
+		// startExecBlk = time.Now()
+		fmt.Printf("Execution latency: %d ms, for executing %d transactions.\n", elapsedBlk/1e3, p.execNum)
+		elapsedBlk = 0
+		p.execNum = 0
+	}
 }
 
 func (p *Processor) ExecuteTxn(txn *common.SequencedTransaction) {
-
 	related := p.Related(txn.Transaction.Org) 
-	if !p.Related(txn.Transaction.Org) {
-		log.Debugf("Not related to transaction %d, txnOrg:%s.", txn.Seq, string(txn.Transaction.Org))
-		return
-	}
-
 	payload := strings.Split(string(txn.Transaction.Payload), ":")
 	var env common.Envelop
 	nd := false
-
 	if related {
-		p.execNum++;
 		if len(payload) == 2 { // account creation transaction
 			acc, _ := strconv.Atoi(payload[0])
 			balance, _ := strconv.Atoi(payload[1])
@@ -161,9 +160,10 @@ func (p *Processor) ExecuteTxn(txn *common.SequencedTransaction) {
 		signature := r.Bytes()
 		signature = append(signature, s.Bytes()...)
 		env.Signature = signature
-
-		p.PersistExecResult(&env)
-
+		time.Sleep(1 * time.Microsecond)
+		if p.txnNum % 500 == 0 {
+			p.PersistExecResult(&env)
+		}
 	} else {
 		balance := 0
 		if len(payload) == 2 {
@@ -305,7 +305,7 @@ func (p *Processor) ProcessBlock(block []byte) {
 	p.commitTxn(hashes)
 	p.commitBlock(block)
 	elapsed := 	time.Since(startBlkCommit) / time.Millisecond // duration in ms
-	log.Infof("Commit latency: %dms for block %d", elapsed, p.blkNum)
+	fmt.Printf("Commit latency: %d ms for block %d.\n", elapsed, p.blkNum)
 }
 
 func byte32(s []byte) (a *[32]byte) {
@@ -369,7 +369,7 @@ func (p *Processor) ProcessPersist(data []byte) {
 		p.Persists[result.TxnHash] = 1
 	}
 	if p.Persists[result.TxnHash] == 3 { // 3f+1 = 4
-		log.Infof("Transaction execution result persisted, seq: %d", result.Seq)
+		log.Debugf("Transaction execution result persisted, seq: %d", result.Seq)
 	}
 }
 

@@ -28,7 +28,7 @@ func (monitor *TputMonitor) TxnThroughput() {
 	log.Infof("Start monitor transaction receiving throughput")
 	num := 0
 	total := 0
-	interval := 500
+	interval := 1000
 	start := time.Now()
 	for {
 		select {
@@ -36,9 +36,14 @@ func (monitor *TputMonitor) TxnThroughput() {
 			num++
 			total++
 			if num == interval {
+				// duration := int(time.Since(start).Nanoseconds())
 				duration := int(time.Since(start).Milliseconds())
 				// log.Infof("Received %d transactions, duration: %dms, transaction tput: %d kTxns/s, total: %d", interval, duration, interval/duration, total)
-				fmt.Printf("BIDL transaction commit throughput: %d kTxns/s\n", interval/duration)
+				if duration == 0 {
+					fmt.Printf("BIDL transaction commit throughput: Inf kTxns/s\n")
+				} else {
+					fmt.Printf("BIDL transaction commit throughput: %d kTxns/s\n", interval/duration)
+				}
 				start = time.Now()
 				num = 0
 			}

@@ -14,12 +14,14 @@ fi
 
 echo "image tag: $old $tag"
 
-docker tag hyperledger/fabric-peer:$old hyperledger/fabric-peer:$tag
-docker tag hyperledger/fabric-orderer:$old hyperledger/fabric-orderer:$tag
-docker tag hyperledger/fabric-tools:$old hyperledger/fabric-tools:$tag
+sudo docker tag hyperledger/fabric-peer:$old hyperledger/fabric-peer:$tag
+sudo docker tag hyperledger/fabric-orderer:$old hyperledger/fabric-orderer:$tag
+sudo docker tag hyperledger/fabric-tools:$old hyperledger/fabric-tools:$tag
 
-docker save -o hlf_peer_${tag}.tar hyperledger/fabric-peer:$tag
-docker save -o hlf_orderer_${tag}.tar hyperledger/fabric-orderer:$tag
+sudo docker save -o hlf_peer_${tag}.tar hyperledger/fabric-peer:$tag
+sudo docker save -o hlf_orderer_${tag}.tar hyperledger/fabric-orderer:$tag
+sudo chown yunpeng:bidl-PG0 hlf_peer_${tag}.tar
+sudo chown yunpeng:bidl-PG0 hlf_orderer_${tag}.tar
 # docker save -o hlf_tools_${tag}.tar hyperledger/fabric-tools:$tag
 # docker save -o hlf_ccenv.tar hyperledger/fabric-ccenv:$tag
 

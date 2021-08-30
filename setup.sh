@@ -14,17 +14,13 @@ cmd=$(grep docker docker.info)
 bash runall.sh "$cmd"
 sudo docker network create --driver overlay --attachable HLF
 
-# install golang
-wget https://golang.org/dl/go1.17.linux-amd64.tar.gz
-sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.17.linux-amd64.tar.gz
+rm -rf logs
+mkdir -p /proj/bidl-PG0/logs
+ln -s /proj/bidl-PG0/logs logs
 
 sudo apt install python3-pip -y
 pip3 install numpy matplotlib
 
-mkdir -p $HOME/go
-echo "export PATH=\$PATH:/usr/local/go/bin" >> ~/.bashrc
-echo "export GOPATH=$HOME/go" >> ~/.bashrc
-source ~/.bashrc
 
 ## init deploy 
 bash runall.sh "docker pull hyperledger/fabric-ccenv:1.3.0; docker tag hyperledger/fabric-ccenv:1.3.0 hyperledger/fabric-ccenv:latest"
@@ -33,7 +29,9 @@ cur=$PWD
 
 ## deploy fabric
 newgrp docker << END
+source ~/.bashrc
 rm -rf $GOPATH/src/github.com/hyperledger/fabric
+mkdir -p fabric $GOPATH/src/github.com/hyperledger
 cp -r fabric $GOPATH/src/github.com/hyperledger/fabric
 cd $GOPATH/src/github.com/hyperledger/fabric
 go mod init
@@ -41,13 +39,16 @@ go mod vendor
 make peer-docker-clear orderer-docker-clear tools-docker-clear
 make peer-docker orderer-docker tools-docker
 cd $cur
+exit 0
 END
 bash deploy.sh fabric-v1.0
 
 ## deploy fastfabric
 newgrp docker << END
+source ~/.bashrc
 mkdir -p $GOPATH/src/github.com/hyperledger
 rm -rf $GOPATH/src/github.com/hyperledger/fabric
+mkdir -p fabric $GOPATH/src/github.com/hyperledger
 cp -r fastfabric $GOPATH/src/github.com/hyperledger/fabric
 cd $GOPATH/src/github.com/hyperledger/fabric
 go mod init
@@ -55,6 +56,7 @@ go mod vendor
 make peer-docker-clear orderer-docker-clear tools-docker-clear
 make peer-docker orderer-docker tools-docker
 cd $cur
+exit 0
 END
 bash deploy.sh fastfabric-v1.0
 

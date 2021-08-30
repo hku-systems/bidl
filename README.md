@@ -56,7 +56,7 @@ sudo route add -net 224.0.0.0 netmask 240.0.0.0 dev lo
 
 4. To run Fabric and Fastfabric, you need to set the `host` parameter (IP address) in `config-fabric.yaml` and `config-fastfabric.yaml`. Make sure the length of host list is at least equal to the number of peers. In the following experiments, our scripts will generate docker compose files according to those configuration files. 
 
-5. To run streamchain, you need to set the IP addresses in `streamchain/setup/config.sh`. 
+5. To run streamchain, you need to set the IP addresses in `streamchain/setup/config.sh`.
 
 6. Build the docker images for Fabric and Fastfabric with the following command.
  
@@ -94,6 +94,12 @@ This experiment runs BIDL/FastFabric/Hyperledger Fabric/StreamChain with the def
 bash run.sh performance
 ```
 
+- Output: a pdf file named `performance.pdf`, containing the throughput vs. latency of BIDL and baseline systems.
+- Expected results:
+	- BIDL has higher throughput than all baseline systems;
+	- StreamChain achieves the lowest latency;
+	- BIDL's latency is better than FastFabric and Hyperledger Fabric.
+
 ### Experiment 2: Performance with different ratio of contended transactions
 
 This experiment runs BIDL and FastFabric (achieves the best performance in Experiment 1) with the default smallbank workload with different contention ratios of transactions.
@@ -103,6 +109,11 @@ This experiment runs BIDL and FastFabric (achieves the best performance in Exper
 ```shell
 bash run.sh contention
 ```
+
+- Output: a pdf file named `contended.pdf`, containing the throughput of BIDL and baseline systems under different ratio of contended transactions.
+- Expected results:
+	- BIDL's throughput shows no obvious decline.
+	- FastFabric's throughput decreases as the ratio of contented transactions increases.
 
 ### Experiment 3: Performance with different ratio of non-deterministic transactions
 
@@ -114,6 +125,10 @@ This experiment runs BIDL and FastFabric (achieves the best performance in Exper
 bash run.sh nd 
 ```
 
+- Output: a pdf file named `nondeterminism.pdf`, containing the throughput of BIDL and baseline systems under different ratio of non-deterministic transactions.
+- Expected results:
+  - The throughput of BIDL and all baseline systems drop as the ratio of non-deterministic transactions increases.
+
 ### Experiment 4: Performance with malicious participants
 
 This experiment runs BIDL and Hyperledger Fabric with malicious participants.  Because FastFabric and StreamChain are designed for crash-fault-tolerant scenarios, we do not evaluate these two systems in this experiment.
@@ -123,3 +138,5 @@ This experiment runs BIDL and Hyperledger Fabric with malicious participants.  B
 ```shell
 bash run.sh malicious
 ```
+
+- Output: will be ready soon.

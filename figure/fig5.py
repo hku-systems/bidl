@@ -47,7 +47,7 @@ with open("logs/streamchain/ordering.log") as f:
         cnt += 1
 
 
-plt.plot(ff_tps, ff_latency, label="fastfabric")
-plt.plot(streamchain_tps, streamchain_latency, label="streamchain")
+plt.plot(ff_tps, ff_latency, marker='x', label="fastfabric")
+plt.plot(streamchain_tps, streamchain_latency, marker='s', label="streamchain")
 plt.legend()
 plt.savefig("figure/fig5.pdf")

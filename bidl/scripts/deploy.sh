@@ -11,7 +11,7 @@ source $script_dir/env.sh
 echo "Stopping sequencer/consensus/normal nodes..."
 source $script_dir/kill_all_local.sh
 
-# echo "Generating hosts.config..."
+# echo "Generating hosts.config.."
 rm -f $smart_dir/config/hosts.config
 for i in `seq 0 $[${1}-1]`; do
     echo ${i} '127.0.0.1' `expr 1100 + ${i}`0  `expr 1100 + ${i}`1 >> $smart_dir/config/hosts.config
@@ -35,14 +35,14 @@ $sequencer_dir/sequencer $2 &> $base_dir/logs/sequencer.log &
 
 echo "Starting normal node..."
 docker run --name normal_node --net=host --cap-add NET_ADMIN normal_node /normal_node/server --quiet --id=0 > $base_dir/logs/normal.log 2>&1 &
+# docker run --name normal_node --net=host --cap-add NET_ADMIN normal_node /normal_node/server --quiet > $base_dir/logs/normal.log 2>&1 &
 
 sleep 10
 echo "benchmarking..."
 cd $normal_node_dir
-go run ./cmd/client --num=100000 --org=50 --order
+go run ./cmd/client --num=100000 --org=50
 
 cd $base_dir
 echo "Please wait..."
 sleep 10
 source $base_dir/scripts/get_data.sh
-

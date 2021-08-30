@@ -1,2 +1,3 @@
-rate  throughput []
-rate  latency 47
+rate 0 throughput 63
+rate 25 throughput 37
+rate 50 throughput 25

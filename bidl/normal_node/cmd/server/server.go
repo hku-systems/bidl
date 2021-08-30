@@ -8,6 +8,7 @@ import (
 	"normal_node/cmd/server/core"
 	"normal_node/cmd/server/network"
 	"normal_node/cmd/server/util"
+	"time"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/vmihailenco/msgpack"
@@ -28,7 +29,9 @@ func (s *Server) setupServerConnection(addr string, bufferSize int) {
 	p = core.NewProcessor(s.BlkSize, s.ID, net)
 }
 
-func (s *Server) processPackets() {
+func (s *Server) processPackets() { 
+	interval := 1000 / (s.tput * 1000 / s.BlkSize)
+	blkTicker := time.NewTicker(time.Duration(interval) * time.Millisecond)
 	for {
 		select {
 		case pack := <-net.Packets:
@@ -36,12 +39,12 @@ func (s *Server) processPackets() {
 			// the first four bytes are the magic number indicating the message type
 			magicNum := pack.Bytes[0:4]
 			if bytes.Equal(magicNum, common.MagicNumExecResult) {
-				log.Debugf("new execution result received, just ignore.")
+				log.Debugf("New execution result received, just ignore.")
 			} else if bytes.Equal(magicNum, common.MagicNumPersist) {
-				log.Debugf("new persist message received.")
+				log.Debugf("New persist message received.")
 				p.ProcessPersist(pack.Bytes[4:])
 			} else if bytes.Equal(magicNum, common.MagicNumTxn) {
-				log.Debugf("new transaction received")
+				log.Debugf("New transaction received")
 				hash := sha256.Sum256(pack.Bytes)
 				// the next eight bytes are the sequence number in uint64
 				seq := binary.LittleEndian.Uint64(pack.Bytes[4:12])
@@ -60,9 +63,12 @@ func (s *Server) processPackets() {
 					})
 				log.Debugf("Received transaction with sequence number %d", seq)
 			} else if bytes.Equal(magicNum, common.MagicNumBlock) {
-				log.Infof("new block received.")
+				select {
+				case <- blkTicker.C:
+				log.Infof("New block received.")
 				p.ProcessBlock(pack.Bytes[4:])
 				util.Monitor.TputBlk <- 1
+				}
 			} else {
 				log.Errorf("Invalid message type", pack.Bytes[0:20], "length:", len(pack.Bytes))
 			}

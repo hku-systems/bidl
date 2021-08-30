@@ -56,3 +56,4 @@ var MagicNumPersist = []byte{4, 4, 4, 4}
 var MagicNumExecResult = []byte{5, 5, 5, 5}
 var MagicNumBlock = []byte{6, 6, 6, 6}
 var MagicNumTxn = []byte{7, 7, 7, 7}
+var MagicNumTxnMalicious = []byte{8, 8, 8, 8}

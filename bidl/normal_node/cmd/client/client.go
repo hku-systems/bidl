@@ -21,6 +21,8 @@ var opts struct {
 	Num        	 int    `long:"num" default:"100000" description:"number of transactions"`
 	ND        	 int    `long:"nd" default:"0" description:"ratio of non-deterministic transactions"`
 	Conflict     int    `long:"conflict" default:"0" description:"ratio of hot accounts for conflict transactions"`
+	SendBlock    bool   `long:"sendBlock" description:"send blocks containing transactions"`
+	Malicious    bool   `long:"malicious" description:"send malicious transactions, --order must be set"`
 }
 
 func init() {
@@ -37,6 +39,14 @@ func init() {
 		TimestampFormat: "15:04:05.000",
 	}
 	log.SetFormatter(formatter)
+}
+
+func Shuffle(txns []*common.Transaction) {
+    r := rand.New(rand.NewSource(time.Now().Unix()))
+    for i:=len(txns)-1; i>0; i-- {
+        randIndex := r.Intn(i)
+        txns[i], txns[randIndex] = txns[randIndex], txns[i]
+    }
 }
 
 func main() {
@@ -64,20 +74,43 @@ func main() {
 		txnsTransfer := GenerateTransferWorkload(accNum, opts.Orgs, opts.Num, opts.Conflict)
 		txns = append(txnsCreate, txnsTransfer...)
 	} else {
-		accNum := 10
-		txnsCreate := GenerateCreateWorkload(accNum, opts.Orgs, 0)
-		txnsTransfer := GenerateTransferWorkload(accNum, opts.Orgs, opts.Num, 0)
-		txns = append(txnsCreate, txnsTransfer...)
+		// accNum := 1000
+		// txnsCreate := GenerateCreateWorkload(accNum, opts.Orgs, 0)
+		// txnsTransfer := GenerateTransferWorkload(accNum, opts.Orgs, opts.Num, 0)
+		// txns = append(txnsCreate, txnsTransfer...)
+		accNum := int(opts.Num / opts.Orgs)    // number of accounts for each organization
+		txns = GenerateCreateWorkload(accNum, opts.Orgs, 0)
+		Shuffle(txns)
 	}
+	// log.Info(txns)
 
-	// submit transactions
-	log.Infof("Start sending %d transactions", opts.Num)
-	for i := 0; i < opts.Num; i++ {
-		client.SendTxn(txns[i], opts.Order)
+	// submit transactions to the sequencer
+	if opts.Malicious {
+		log.Infof("Start sending %d malicious transactions.", opts.Num)
+		client.Seq = 0
+		for i := 0; i < opts.Num; i++ {
+			client.SendTxn(txns[i], opts.Order, true)
+		}
+		log.Infof("Wait...")
+		time.Sleep(time.Duration(10) * time.Second)
+		log.Infof("Start sending %d non-malicious transactions.", opts.Num)
+		client.Seq = 0
+		for i := 0; i < opts.Num; i++ {
+			client.SendTxn(txns[i], opts.Order, false)
+		}
+	} else {
+		log.Infof("Start sending %d transactions", opts.Num)
+		client.Seq = 0
+		for i := 0; i < opts.Num && i < len(txns); i++ {
+			client.SendTxn(txns[i], opts.Order, false)
+		}
 	}
-	time.Sleep(time.Duration(5)*time.Second)
-	log.Infof("Start sending block")
-	client.SendBlock(txns, opts.BlockSize)
+	// send blocks (only for testing)
+	if opts.SendBlock && opts.Order {
+		time.Sleep(time.Duration(5)*time.Second)
+		log.Infof("Start sending block")
+		client.SendBlock(txns, opts.BlockSize)
+	}
 }
 
 func RandomString(n int) string {

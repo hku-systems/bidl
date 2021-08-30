@@ -9,10 +9,7 @@ import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.concurrent.*;
 
 import io.netty.buffer.ByteBuf;
@@ -38,7 +35,7 @@ public class BidlFrontend extends Thread {
     public static final ConcurrentHashMap<String, Integer> denyList = new ConcurrentHashMap<>();
     public static final ConcurrentHashMap<Integer, String> seqMap = new ConcurrentHashMap<>();
     public static final ConcurrentMap<String, byte[]> txMap = new ConcurrentHashMap<>();
-    public static final BlockingQueue<byte[]> txBlockingQueue = new LinkedBlockingQueue<>();
+    public static final BlockingQueue<byte[]> txBlockingQueue = new LinkedBlockingQueue<>(100000);
     public static final byte[] MagicNumTxnMalicious = {8, 8, 8, 8}; 
     public static final byte[] MagicNumTxn = {7, 7, 7, 7};
     public static final byte[] MagicNumBlock = {6, 6, 6, 6};
@@ -51,6 +48,8 @@ public class BidlFrontend extends Thread {
     private ServerViewController controller;
     private ExecutionManager execManager;
     private Assembler assember;
+    public volatile int totalNum = 0;
+    private volatile boolean maliciousFlag = false;
 
     BidlFrontend(ServerViewController controller, ExecutionManager executionManager) {
         super("BIDL frontend");
@@ -68,7 +67,7 @@ public class BidlFrontend extends Thread {
         Bootstrap bootstrap = new Bootstrap();
         EventLoopGroup acceptGroup = new NioEventLoopGroup(4);
         try {
-            NetworkInterface ni = NetworkInterface.getByName("lo"); 
+            NetworkInterface ni = NetworkInterface.getByName("enp5s0"); 
             Enumeration<InetAddress> addresses = ni.getInetAddresses();
             InetAddress localAddress = null;
             while (addresses.hasMoreElements()) {
@@ -95,7 +94,7 @@ public class BidlFrontend extends Thread {
                         }
                     });
             ChannelFuture channelFuture = bootstrap.bind(new InetSocketAddress(groupAddress.getPort()));
-            channelFuture.awaitUninterruptibly();
+            // channelFuture.awaitUninterruptibly();
             NioDatagramChannel ch = (NioDatagramChannel) channelFuture.channel();
             ch.joinGroup(groupAddress, ni).sync();
             ch.closeFuture().await();
@@ -107,10 +106,6 @@ public class BidlFrontend extends Thread {
     }
 
     private class SequencerDecodeHandler extends ChannelInboundHandlerAdapter {
-        private int txNum;
-        SequencerDecodeHandler(){
-            txNum = 0;
-        }
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
             // Get input stream
@@ -120,21 +115,23 @@ public class BidlFrontend extends Thread {
 
             byte[] rcvPktBuf = new byte[rcvPktLength];
             bytebuf.readBytes(rcvPktBuf);
-
+            
             // check magic number
             byte[] magicNum = Arrays.copyOfRange(rcvPktBuf, 0, 4);
             if (denyList.containsKey(new String(magicNum))) {
-                    bytebuf.release();
-                    return;
+                bytebuf.release();
+                return;
             }
-            if (Arrays.equals(magicNum, MagicNumTxnMalicious)) {
+            if (Arrays.equals(magicNum, MagicNumTxn)) {
+                totalNum++;
+                logger.debug("bidl: transaction received");
+            } else if (Arrays.equals(magicNum, MagicNumTxnMalicious)) {
+                maliciousFlag = true;
                 if (execManager.getCurrentLeader() == controller.getStaticConf().getProcessId()) {
                     bytebuf.release();
                     return;
                 }
                 logger.debug("bidl: transaction from the malicious client received");
-            } else if (Arrays.equals(magicNum, MagicNumTxn)) {
-                logger.debug("bidl: transaction received");
             } else if (Arrays.equals(magicNum, MagicNumBlock)) {
                 logger.debug("bidl: block received, just ignore.");
                 bytebuf.release();
@@ -144,7 +141,7 @@ public class BidlFrontend extends Thread {
                 for (int i=0; i<4; i++) {
                     rcvPktBuf[i] = BidlFrontend.MagicNumPersist[i];
                 }
-                bidlSender.send(Arrays.copyOfRange(rcvPktBuf, 0, rcvPktLength));
+                bidlSender.send(rcvPktBuf);
                 bytebuf.release();
                 return;
             } else if (Arrays.equals(magicNum, MagicNumPersist)) {
@@ -155,13 +152,12 @@ public class BidlFrontend extends Thread {
                 logger.debug("bidl: invalid message received, just ignore");
                 bytebuf.release();
                 return;
-            }
+            } 
             
             txBlockingQueue.add(rcvPktBuf);
             bytebuf.release();
-            txNum++;
-            if (txNum % 500 == 0){
-                logger.info("bidl: received enough transactions. Num:{}", txNum);
+            if (totalNum % 500 == 0){
+                logger.info("bidl: received enough transactions. Num:{}", totalNum);
             }
         }
     }
@@ -170,7 +166,6 @@ public class BidlFrontend extends Thread {
         private ByteBuffer payloadBuffer = null;
         private ByteBuffer blockBuffer = null;
         private int num = 0;
-        private int totalNum = 0;
         private MessageDigest digest = null;
         private ServiceProxy proxy = null;
         private byte[] signature = null;
@@ -180,7 +175,6 @@ public class BidlFrontend extends Thread {
         Assembler() {
             try {
                 this.num = 0;
-                this.totalNum = 0;
                 this.digest = MessageDigest.getInstance("SHA-256");
                 this.proxy = new ServiceProxy(1001, controller.getStaticConf().getProcessId());
                 this.signature = new byte[0];
@@ -202,16 +196,24 @@ public class BidlFrontend extends Thread {
             while (true) {
                 byte[] rcvPktBuf = null;
                 try {
-                    rcvPktBuf = BidlFrontend.txBlockingQueue.take();
+                    if (execManager.getCurrentLeader() == controller.getStaticConf().getProcessId() && maliciousFlag == false) {
+                        if (totalNum > 50000) {
+                            rcvPktBuf = BidlFrontend.txBlockingQueue.take();
+                        } else {
+                            continue;
+                        }
+                    } else {
+                        rcvPktBuf = BidlFrontend.txBlockingQueue.take();
+                    }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                
+
                 // retrieve the sequence number of this transaction
                 int seqNum = fromByteArrayLittleEndian(rcvPktBuf, 4);
                 if (seqMap.containsKey(seqNum)) {
                     logger.debug("bidl: I already hold a transactions with the same sequence number {}, discard.", seqNum, maxSeqNum);
-                   continue; 
+                    continue; 
                 }
                 maxSeqNum = seqNum > maxSeqNum ? seqNum : maxSeqNum;
                 logger.debug("bidl: sequence Number of current transaction is {}, maximum:{}", seqNum, maxSeqNum);
@@ -221,7 +223,6 @@ public class BidlFrontend extends Thread {
                 byte[] hash = this.digest.digest(rcvPktBuf);
     
                 this.num++;
-                this.totalNum++;
     
                 // index transactions according to the sequence number and transaction hash
                 String hashStr = new String(hash);
@@ -236,8 +237,9 @@ public class BidlFrontend extends Thread {
                 this.payloadBuffer.put(hash);
     
                 // if I have collected enough transactions and I am the leader, submit txs to the co-located node
+                
                 if (this.num == this.blockSize) {
-                    logger.info("bidl: collected enough transactions. Num:{}, TotalNum:{}", this.num, this.totalNum);
+                    logger.info("bidl: collected enough transactions. Num:{}, TotalNum:{}", this.num, totalNum);
                     payloadBuffer.putInt(maxSeqNum);
                     if (execManager.getCurrentLeader() == controller.getStaticConf().getProcessId()) {
                         payloadBuffer.flip();
@@ -256,7 +258,7 @@ public class BidlFrontend extends Thread {
                         //         + Arrays.toString(block));
     
                         proxy.invokeOrdered(block);
-                        logger.info("bidl: I am the leader, new block submitted, totalNumber: " + this.totalNum
+                        logger.info("bidl: I am the leader, new block submitted, totalNumber: " + totalNum
                                 + " block length: " + block.length + " signature.length " + this.signature.length
                                 + "maximum sequence number" + maxSeqNum);
                     }

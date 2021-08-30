@@ -16,7 +16,7 @@ services:
     deploy:
       placement:
         constraints:
-        - node.hostname==heming-rdma6
+        - node.hostname==node0.bidl.bidl-pg0.utah.cloudlab.us
     environment:
     - GOPATH=/opt/gopath
     - FABRIC_LOGGING_SPEC=INFO
@@ -108,7 +108,7 @@ services:
     deploy:
       placement:
         constraints:
-        - node.hostname==heming-rdma4
+        - node.hostname==node1.bidl.bidl-pg0.utah.cloudlab.us
     environment:
     - GOPATH=/opt/gopath
     - CORE_PEER_ID=fabric_peer1
@@ -273,7 +273,7 @@ services:
     deploy:
       placement:
         constraints:
-        - node.hostname==heming-rdma6
+        - node.hostname==node0.bidl.bidl-pg0.utah.cloudlab.us
     image: tape:latest
     networks:
     - HLF

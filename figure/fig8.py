@@ -17,10 +17,10 @@ with open("logs/ff/contention/log.log") as f:
             temp = line.split()
             ct_ff.append(float(temp[-1]))
         
-plt.plot(x, ct_ff, label="contention")
-plt.plot(x, nd_ff, label="nondeterminism")
+plt.plot(x, ct_ff, marker='x', label="contention")
+plt.plot(x, nd_ff, marker='o', label="nondeterminism")
 plt.legend()
-plt.xlabel("rate")
-plt.ylabel("tps")
+plt.xlabel("contention/nondeterminism rate")
+plt.ylabel("throughput")
 
 plt.savefig("figure/fig8.pdf")
