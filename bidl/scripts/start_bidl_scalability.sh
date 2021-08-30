@@ -111,7 +111,7 @@ cd $base_dir
 
 while true; do 
 	wait=$( cat /home/$user/logs/normal_0.log | grep "BIDL block commit throughput:" | wc -l)
-	if [ $wait -gt 20 ]; then 
+	if [ $wait -gt 50 ]; then 
 		break;
 	fi 
 	echo "wait 5s for results"

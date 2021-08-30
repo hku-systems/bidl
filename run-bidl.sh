@@ -72,7 +72,7 @@ elif [ $1 == "scalability" ]; then
     mkdir -p $rst_dir
     touch $rst_file
 
-    generate config file for all settings
+    # generate config file for all settings
     for org in 4 13 25; do 
         bash ./bidl/scripts/gen_host_conf.sh $org
         cp ./bidl/consensus_node/bftsmart/config/hosts.config ./bidl/scripts/configs/hosts_$org.config
@@ -80,6 +80,7 @@ elif [ $1 == "scalability" ]; then
     bash ./bidl/scripts/copy_smart_config.sh
 
     for org in 4 13 25; do 
+    # for org in 25; do 
         echo "Number of organizations = $org"
         # run benchmark
         bash ./bidl/scripts/start_bidl_scalability.sh $org $org $default_tput scalability

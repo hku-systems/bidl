@@ -41,13 +41,11 @@ func init() {
 	log.SetFormatter(formatter)
 }
 
-func Shuffle(slice []interface{}) {
+func Shuffle(txns []*common.Transaction) {
     r := rand.New(rand.NewSource(time.Now().Unix()))
-    for len(slice) > 0 {
-        n := len(slice)
-        randIndex := r.Intn(n)
-        slice[n-1], slice[randIndex] = slice[randIndex], slice[n-1]
-        slice = slice[:n-1]
+    for i:=len(txns)-1; i>0; i-- {
+        randIndex := r.Intn(i)
+        txns[i], txns[randIndex] = txns[randIndex], txns[i]
     }
 }
 
@@ -84,6 +82,7 @@ func main() {
 		txns = GenerateCreateWorkload(accNum, opts.Orgs, 0)
 		Shuffle(txns)
 	}
+	// log.Info(txns)
 
 	// submit transactions to the sequencer
 	if opts.Malicious {
@@ -102,7 +101,7 @@ func main() {
 	} else {
 		log.Infof("Start sending %d transactions", opts.Num)
 		client.Seq = 0
-		for i := 0; i < opts.Num; i++ {
+		for i := 0; i < opts.Num && i < len(txns); i++ {
 			client.SendTxn(txns[i], opts.Order, false)
 		}
 	}

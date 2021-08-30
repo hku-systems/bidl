@@ -25,6 +25,7 @@ func NewNetwork(addr string, bufferSize int) *Network {
 	util.ErrorCheck(err, "NewNetwork", true)
 	recvConn, err := net.ListenMulticastUDP("udp", nic, groupAddr)
 	util.ErrorCheck(err, "NewNetwork", true)
+	recvConn.SetReadBuffer(1024*1024*1000)
 
 	normalGroupAddr, err := net.ResolveUDPAddr("udp", "230.0.0.1:6666")
 	util.ErrorCheck(err, "NewNetwork", true)
@@ -40,7 +41,7 @@ func NewNetwork(addr string, bufferSize int) *Network {
 	util.ErrorCheck(err, "NewNetwork", true)
 
 	return &Network{
-		Packets:        make(chan common.Packet, 10000),
+		Packets:        make(chan common.Packet, 200000),
 		SendConnection: sendConn,
 		TxnRecvConnection: recvConn,
 		BlkRecvConnection: normalRecvConn,

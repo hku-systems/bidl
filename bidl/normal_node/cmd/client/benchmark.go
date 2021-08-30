@@ -105,8 +105,8 @@ func GenerateCreateWorkload(acc int, org int, nd int) []*common.Transaction {
 			} else {
 				payloadStr = strconv.Itoa(j) + ":" + strconv.Itoa(100000)
 			}
-			// orgStr := strconv.Itoa(i) + ":" + strconv.Itoa((i+1) % org)
-			orgStr := strconv.Itoa(i)
+			orgStr := strconv.Itoa(i) + ":" + strconv.Itoa((i+1) % org)
+			// orgStr := strconv.Itoa(i)
 			sig := util.CreateMAC([]byte(payloadStr), []byte(common.SecretKey))
 			txn := &common.Transaction{
 				Type:      common.TxnMessage,

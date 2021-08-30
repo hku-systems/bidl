@@ -11,7 +11,7 @@ import (
 var opts struct {
 	Port      int    `short:"p" long:"port" default:"7777" description:"port to listen on"`
 	GroupAddr string `long:"addr" default:"230.0.0.0:7777" description:"group address to listen on"`
-	Buffer    int    `short:"b" long:"buffer" default:"20000" description:"max buffer size for the socket io"`
+	Buffer    int    `short:"b" long:"buffer" default:"200000" description:"max buffer size for the socket io"`
 	Quiet     bool   `short:"q" long:"quiet" description:"whether to print logging info or not"`
 	ID        int    `long:"id" default:"-1" description:"node ID"`
 	BlockSize int    `long:"blockSize" default:"500" description:"default block size"`

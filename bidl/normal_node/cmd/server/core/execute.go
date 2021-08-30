@@ -40,6 +40,7 @@ type Processor struct {
 }
 
 var startExecBlk time.Time
+var elapsedBlk time.Duration
 func NewProcessor(blkSize int, id int, net *network.Network) *Processor {
 	log.Debugf("Transaction processor initialized")
 	dbFile := "state.db"
@@ -95,17 +96,13 @@ func (p *Processor) ProcessTxn(txn *common.SequencedTransaction) {
 	defer p.mutex.Unlock()
 
 	if p.txnNum == 0 {
-		startExecBlk = time.Now()
+		// startExecBlk = time.Now()
+		elapsedBlk = 0
 	}
+	startExecTxn := time.Now()
 	p.txnNum++
 	if p.Related(txn.Transaction.Org) {
 		p.execNum++
-	}
-	if p.txnNum % p.BlkSize == 0 {
-		elapsed := 	time.Since(startExecBlk) / time.Millisecond // duration in ms
-		startExecBlk = time.Now()
-		fmt.Printf("Execution latency: %d ms, for executing %d transactions.\n", elapsed, p.execNum)
-		p.execNum = 0
 	}
 
 	// verify MAC
@@ -117,10 +114,18 @@ func (p *Processor) ProcessTxn(txn *common.SequencedTransaction) {
 	}
 	// execute transaction
 	p.ExecuteTxn(txn)
+	elapsedTxn := time.Since(startExecTxn) / time.Microsecond // duration in us
+	elapsedBlk += elapsedTxn
+	if p.txnNum % p.BlkSize == 0 {
+		// elapsed := 	time.Since(startExecBlk) / time.Millisecond // duration in ms
+		// startExecBlk = time.Now()
+		fmt.Printf("Execution latency: %d ms, for executing %d transactions.\n", elapsedBlk/1e3, p.execNum)
+		elapsedBlk = 0
+		p.execNum = 0
+	}
 }
 
 func (p *Processor) ExecuteTxn(txn *common.SequencedTransaction) {
-
 	related := p.Related(txn.Transaction.Org) 
 	payload := strings.Split(string(txn.Transaction.Payload), ":")
 	var env common.Envelop
@@ -155,9 +160,10 @@ func (p *Processor) ExecuteTxn(txn *common.SequencedTransaction) {
 		signature := r.Bytes()
 		signature = append(signature, s.Bytes()...)
 		env.Signature = signature
-
-		p.PersistExecResult(&env)
-
+		time.Sleep(5 * time.Microsecond)
+		if p.txnNum % 500 == 0 {
+			p.PersistExecResult(&env)
+		}
 	} else {
 		balance := 0
 		if len(payload) == 2 {
