@@ -13,7 +13,7 @@ BIDL is a high-throughput and low-latency permissioned blockchain framework desi
 - Metrics: throughput and latency.
 - Expected runtime: each trial of each data point takes about 2 minutes.
 
-## Deployment
+## Deployment (skip this section if you use our cluster)
 
 ### Clone the codebase
 
@@ -71,17 +71,16 @@ You can also use our cluster for all experiments. Please feel free to contact us
 
 ### Experiment 0: Test run
 
-This experiment tests the experimental environment. The following test script benchmarks BIDL with 1e5 transactions.
+This experiment tests the experimental environment. The following test script benchmarks BIDL/Hyperledger Fabric/FastFabric and reports the end-to-end performance.
 
-As BIDL relies on the IP multicast to disseminate transactions, the experimental environment needs a low packet loss rate. 
+As BIDL relies on the IP multicast to disseminate transactions, the experimental environment needs a low packet loss rate.
 
 If there are no errors when running the script, and the script print `Ok!`, then your experimental environment has a low packet loss rate and can run all experiments.
 
 - Command to run:
 
 ```shell
-cd bidl
-bash ./scripts/test_run.sh
+bash ./bidl/scripts/run-bidl-local.sh test
 ```
 
 ### Experiment 1: End-to-end performance

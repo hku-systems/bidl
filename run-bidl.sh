@@ -1,10 +1,9 @@
 #!/bin/bash -e
 
-# user=jqi
 default_peers=4
 default_tput=60
 bash ./bidl/scripts/kill_all.sh
-# bash ./bidl/scripts/deploy_bidl.sh $default_peers
+bash ./bidl/scripts/deploy_bidl.sh $default_peers
 
 if [ $1 == "performance" ]; then 
     rst_dir=./logs/bidl/performance
@@ -12,8 +11,7 @@ if [ $1 == "performance" ]; then
     rm -rf $rst_dir
     mkdir -p $rst_dir
     touch $rst_file
-    for tput_cap in 60; do
-    # for tput_cap in 50; do
+    for tput_cap in 20 40 60; do
         echo "Transaction submission rate: $tput_cap kTxns/s"
         # run benchmark
         bash ./bidl/scripts/start_bidl.sh 4 50 $tput_cap performance
@@ -71,7 +69,6 @@ elif [ $1 == "scalability" ]; then
     rm -rf $rst_dir
     mkdir -p $rst_dir
     touch $rst_file
-
     # generate config file for all settings
     for org in 4 25 49; do 
         bash ./bidl/scripts/gen_host_conf.sh $org
@@ -80,11 +77,9 @@ elif [ $1 == "scalability" ]; then
     bash ./bidl/scripts/copy_smart_config.sh
 
     for org in 4 25 49; do 
-    # for org in 25; do 
         echo "Number of organizations = $org"
         # run benchmark
         bash ./bidl/scripts/start_bidl_scalability.sh $org $org $default_tput scalability
-
         # obtain latency data
         # consensus latency
         echo -n "rate $org consensus latency " >> $rst_file

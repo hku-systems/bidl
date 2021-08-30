@@ -82,7 +82,6 @@ func main() {
 		txns = GenerateCreateWorkload(accNum, opts.Orgs, 0)
 		Shuffle(txns)
 	}
-	// log.Info(txns)
 
 	// submit transactions to the sequencer
 	if opts.Malicious {

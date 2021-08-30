@@ -1,4 +1,5 @@
 # !/bin/bash
+
 echo "Killing consensus nodes..."
 docker stop $(docker ps -aq --filter name="smart"); docker rm $(docker ps -aq --filter name="smart")
 

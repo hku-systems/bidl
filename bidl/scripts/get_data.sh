@@ -1,4 +1,5 @@
-#!/bin/bash -e
+#!/bin/bash
+set -e
 
 echo  "Obtaining throughput and latency data..."
 
@@ -13,7 +14,7 @@ rm -f $latency_file
 
 while true; do 
 	wait=$( cat $log_dir/normal_0.log | grep "BIDL block commit throughput:" | wc -l)
-	if [ $wait -gt 80 ]; then 
+	if [ $wait -gt 50 ]; then 
 		break;
 	fi 
 	echo "wait 5s for results"

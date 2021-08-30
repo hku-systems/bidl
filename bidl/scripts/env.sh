@@ -10,7 +10,6 @@ smart_dir="$base_dir/consensus_node/bftsmart"
 sequencer_dir="$base_dir/sequencer"
 normal_node_dir="$base_dir/normal_node"
 log_dir="$base_dir/logs"
-# log_dir="/home/$user/logs"
 export GO111MODULE="on"
 
 echo "artifact base dir: "$base_dir

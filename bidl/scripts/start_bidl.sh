@@ -1,6 +1,6 @@
 #!/bin/bash -e
 if [ "$#" -lt 4 ]; then
-    echo "Usage: bash ./scripts/start_bidl.sh <1. num of consensus nodes> <2. num of normal nodes> <3. peak throughput> <4. benchmark> <5. benchmark parameters*>"
+    echo "Usage: bash ./bidl/scripts/start_bidl.sh <1. num of consensus nodes> <2. num of normal nodes> <3. peak throughput> <4. benchmark> <5. benchmark parameters*>"
     exit 1
 fi
 

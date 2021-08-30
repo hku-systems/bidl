@@ -27,27 +27,25 @@ gatekeeper, **and use the `10.22.1.x` for experiments (i.e., filling the `hosts.
 file)**.
 
 | machine index | IP for access from the gatekeeper | IP for interconnection |
-|---------------|-----------------------------------|------------------------|
+| ------------- | --------------------------------- | ---------------------- |
 | 1             | 202.45.128.160                    | 10.22.1.1              |
 | 2             | 202.45.128.161                    | 10.22.1.2              |
 | 3             | 202.45.128.162                    | 10.22.1.3              |
-| ...           |                                   |                        |
-| k             | 202.45.128.160+k-1                | 10.22.1.k              |
+| 4             | 202.45.128.162                    | 10.22.1.4              |
+| 5             | 202.45.128.162                    | 10.22.1.5              |
+| 6             | 202.45.128.162                    | 10.22.1.6              |
+| 7             | 202.45.128.162                    | 10.22.1.7              |
+| 8             | crashed                           | crashed                |
+| 9             | 202.45.128.162                    | 10.22.1.9              |
 
-We have asked for access to 9 machines, but since the environment is not completely clean,
+We have asked for access to 8 machines, but since the environment is not completely clean,
 the experiment results may have some outliers if other people happen to run tasks on the cluster at the same time.
 You may re-run the outlier data points or simply ignore them when such contention happens.
-
-We have coordinated with other teams to better not use the **first 5 machines**
-(i.e., `10.22.1.1~10.22.1.5`) in the next two weeks, so please better use
-these 5 machines for most experiments to get a stable result. As explained
-in the [artifact readme page](https://github.com/hku-systems/bidl), running the
-experiments in a slightly smaller scale is already enough to verify our claims.
 
 ## After accessing the cluster
 
 We have helped to finish the setup for meeting prerequisite requirements and
 creating the overlay network, so you can skip these steps in the instructions.
 
-After cloning the codebase, you can start from filling the `hosts.yml` file
-step. We have updated the readme file to mark the starting point.
+After cloning the codebase, you can skip all Deployment steps.
+We have updated the readme file to mark the starting point.
