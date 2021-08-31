@@ -71,17 +71,8 @@ You can also use our cluster for all experiments. Please feel free to contact us
 
 ### Experiment 0: Test run
 
-This experiment tests the experimental environment. The following test script benchmarks BIDL/Hyperledger Fabric/FastFabric and reports the end-to-end performance.
-
-As BIDL relies on the IP multicast to disseminate transactions, the experimental environment needs a low packet loss rate.
-
-If there are no errors when running the script, and the script print `Ok!`, then your experimental environment has a low packet loss rate and can run all experiments.
-
-- Command to run:
-
-```shell
-bash ./bidl/scripts/run-bidl-local.sh test
-```
+This experiment tests the experimental environment. The following test script benchmarks BIDL/FastFabric and reports the end-to-end performance.
+Please follow [README_GET_STARTED.md](https://github.com/hku-systems/bidl/blob/main/README_GET_STARTED.md).
 
 ### Experiment 1: End-to-end performance
 

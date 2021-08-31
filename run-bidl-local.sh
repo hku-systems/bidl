@@ -1,8 +1,8 @@
 #!/bin/bash
 set -eu
 peers=4 # number of consensus nodes
-default_tput=60 # trnasaction submission tput
-bash ./bidl/scripts/create_artifact.sh
+default_tput=50 # trnasaction submission tput
+# bash ./bidl/scripts/create_artifact.sh
 
 if [ $1 == "test" ]; then
     rst_dir=./logs/bidl/test
@@ -13,19 +13,21 @@ if [ $1 == "test" ]; then
     # start four consensus node and one normal node locally
     bash ./bidl/scripts/start_local.sh $peers $default_tput test
     # throughput 
-    echo -n "rate $default_tput throughput " >> $rst_file
+    echo -n "Submission rate $default_tput throughput " >> $rst_file
     cat ./bidl/logs/normal_0.log | grep "BIDL transaction commit throughput:" | python3 ./bidl/scripts/bidl_tput.py $default_tput >> $rst_file
     # consensus latency
-    echo -n "rate $default_tput consensus latency " >> $rst_file
+    echo -n "Submission rate $default_tput consensus latency " >> $rst_file
     cat ./bidl/logs/consensus_0.log | grep "Consensus latency" | python3 ./bidl/scripts/consensus_latency.py >> $rst_file
     # execution latency 
-    echo -n "rate $default_tput execution latency " >> $rst_file
+    echo -n "Submission rate $default_tput execution latency " >> $rst_file
     cat ./bidl/logs/normal_0.log | grep "Execution latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
     # commit latency 
-    echo -n "rate $default_tput commit latency " >> $rst_file
+    echo -n "Submission rate $default_tput commit latency " >> $rst_file
     cat ./bidl/logs/normal_0.log | grep "Commit latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
     bash ./bidl/scripts/kill_all_local.sh
+    echo "#################################################"
     cat $rst_file
+    echo "#################################################"
 elif [ $1 == "performance" ]; then 
     rst_dir=./logs/bidl/performance
     rst_file=$rst_dir/performance.log

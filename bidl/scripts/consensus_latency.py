@@ -10,4 +10,4 @@ for line in lines:
 	bidl_latency_raw.append(float(line.split()[3])/1e3)
 bidl_mean_latency = int(np.min(bidl_latency_raw))
 
-print(bidl_mean_latency)
+print(bidl_mean_latency, "ms")

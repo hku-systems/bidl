@@ -16,7 +16,7 @@ services:
     deploy:
       placement:
         constraints:
-        - node.hostname==heming-rdma6
+        - node.hostname==heming-rdma2
     environment:
     - GOPATH=/opt/gopath
     - FABRIC_LOGGING_SPEC=INFO
@@ -273,7 +273,7 @@ services:
     deploy:
       placement:
         constraints:
-        - node.hostname==heming-rdma6
+        - node.hostname==heming-rdma2
     image: tape:latest
     networks:
     - HLF
