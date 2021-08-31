@@ -6,7 +6,7 @@
 
 For security reasons, our department only allow access to the gatekeeper using SSH keys.
 
-1. Create a key file and copy the private key from our HotCRP response into it.
+1. Create a key file (e.g., id_rsa) and copy the private key from our HotCRP response into it.
 
 2. `chmod 400 [key_file_name]`.
 
