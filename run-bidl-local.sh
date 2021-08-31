@@ -26,6 +26,7 @@ if [ $1 == "test" ]; then
     echo -n "rate $default_tput commit latency " >> $rst_file
     cat ./bidl/logs/normal_0.log | grep "Commit latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
     bash ./bidl/scripts/kill_all_local.sh
+    cat $rst_file
 elif [ $1 == "performance" ]; then 
     rst_dir=./logs/bidl/performance
     rst_file=$rst_dir/performance.log

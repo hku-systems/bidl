@@ -1,4 +1,4 @@
 rate 60 throughput 63
 rate 60 consensus latency 4
-rate 60 execution latency 8
+rate 60 execution latency 7
 rate 60 commit latency 1
