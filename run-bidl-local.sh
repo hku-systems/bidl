@@ -1,6 +1,5 @@
 #!/bin/bash
-set -e
-set -u
+set -eu
 peers=4 # number of consensus nodes
 default_tput=60 # trnasaction submission tput
 bash ./bidl/scripts/create_artifact.sh
