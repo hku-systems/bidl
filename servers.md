@@ -31,12 +31,12 @@ file)**.
 | 1             | 202.45.128.160                    | 10.22.1.1              |
 | 2             | 202.45.128.161                    | 10.22.1.2              |
 | 3             | 202.45.128.162                    | 10.22.1.3              |
-| 4             | 202.45.128.162                    | 10.22.1.4              |
-| 5             | 202.45.128.162                    | 10.22.1.5              |
-| 6             | 202.45.128.162                    | 10.22.1.6              |
-| 7             | 202.45.128.162                    | 10.22.1.7              |
+| 4             | 202.45.128.163                    | 10.22.1.4              |
+| 5             | 202.45.128.164                    | 10.22.1.5              |
+| 6             | 202.45.128.165                    | 10.22.1.6              |
+| 7             | 202.45.128.166                    | 10.22.1.7              |
 | 8             | crashed                           | crashed                |
-| 9             | 202.45.128.162                    | 10.22.1.9              |
+| 9             | 202.45.128.168                    | 10.22.1.9              |
 
 We have asked for access to 8 machines, but since the environment is not completely clean,
 the experiment results may have some outliers if other people happen to run tasks on the cluster at the same time.
