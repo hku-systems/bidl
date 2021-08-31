@@ -1,4 +1,5 @@
 import yaml
+import socket
 import sys
 import os
 
@@ -139,7 +140,7 @@ cli_obj = {
     'deploy': {
         'placement': {
             'constraints': [
-                'node.hostname==' + cli['host'], 
+                'node.hostname==' + socket.gethostname(), 
             ]
         }
     },
@@ -179,7 +180,7 @@ tape_obj = {
     'deploy': {
         'placement': {
             'constraints': [
-                'node.hostname==' + tape['host'], 
+                'node.hostname==' + socket.gethostname(), 
             ]
         }
     },

@@ -20,14 +20,14 @@ orderer:
 cli:
   name: cli
   image: hyperledger/fabric-tools:fabric-v1.0
-  host: heming-rdma6
+  host: heming-rdma6 # deprecated
   chaincode: fabric_exp/chaincode
   scripts: fabric_exp/scripts
 
 tape:
   name: tape
   image: tape:latest
-  host: heming-rdma6
+  host: heming-rdma6 # deprecated
   config: fabric_exp/tape.yaml
   organizations: fabric_exp/organizations
 
