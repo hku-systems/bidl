@@ -179,13 +179,13 @@ Orderer: &OrdererDefaults
         - fabric_orderer:7050
 
     # Batch Timeout: The amount of time to wait before creating a batch
-    BatchTimeout: 50ms
+    BatchTimeout: 100ms
 
     # Batch Size: Controls the number of messages batched into a block
     BatchSize:
 
         # Max Message Count: The maximum number of messages to permit in a batch
-        MaxMessageCount: 1500
+        MaxMessageCount: 500
 
         # Absolute Max Bytes: The absolute maximum number of bytes allowed for
         # the serialized messages in a batch.
