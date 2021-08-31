@@ -5,7 +5,8 @@ docker stack rm fabric
 bash runall.sh "bash clean.sh"
 bash create_artifact.sh fastfabric
 docker stack deploy --compose-file=docker-compose-fastfabric.yaml fabric
-sleep 10
+docker ps
+sleep 5
 # setup the channel and deploy the smart conatract
 docker exec $(docker ps | grep fabric_cli | awk '{print $1}') bash scripts/script.sh 
 sleep 2
@@ -20,10 +21,10 @@ docker stack rm fabric
 bash runall.sh "bash clean.sh"
 # report the result
 echo "#################################################"
-echo "create 5000 acocunts"
+echo "create 50000 acocunts"
 grep "tps" create.log 
-echo "start 5000 payment transactions"
+echo "start 50000 payment transactions"
 grep "tps" transfer.log 
+echo -n "conflict: "
 cat transfer.log | python3 conflict.py
 echo "#################################################"
-docker node ls | grep \* | awk '{print $3}'
