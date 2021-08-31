@@ -10,4 +10,4 @@ echo "Killing BIDL clients..."
 docker stop $(docker ps -aq --filter name="bidl_client"); docker rm $(docker ps -aq --filter name="bidl_client")
 
 echo "Killing sequencer..."
-pkill -f sequencer
+docker stop $(docker ps -aq --filter name="sequencer"); docker rm $(docker ps -aq --filter name="sequencer")

@@ -63,7 +63,7 @@ public class BidlFrontend extends Thread {
     @Override
     public void run() {
         InetSocketAddress groupAddress = new InetSocketAddress("230.0.0.0", 7777);
-        logger.info("bidl: new BIDL frontend started, listening group address: {}", groupAddress);
+        logger.debug("bidl: new BIDL frontend started, listening group address: {}", groupAddress);
         Bootstrap bootstrap = new Bootstrap();
         EventLoopGroup acceptGroup = new NioEventLoopGroup(4);
         try {
@@ -76,7 +76,7 @@ public class BidlFrontend extends Thread {
                     localAddress = address;
                 }
             }
-            logger.info("Local address is {}", localAddress);
+            logger.debug("Local address is {}", localAddress);
 
             bootstrap = new Bootstrap().group(acceptGroup).channelFactory(new ChannelFactory<NioDatagramChannel>() {
                 @Override
@@ -157,7 +157,7 @@ public class BidlFrontend extends Thread {
             txBlockingQueue.add(rcvPktBuf);
             bytebuf.release();
             if (totalNum % 500 == 0){
-                logger.info("bidl: received enough transactions. Num:{}", totalNum);
+                logger.debug("bidl: received enough transactions. Num:{}", totalNum);
             }
         }
     }
@@ -180,7 +180,7 @@ public class BidlFrontend extends Thread {
                 this.signature = new byte[0];
                 this.blockBuffer = ByteBuffer.allocateDirect(this.blockSize * 36 + Integer.BYTES * 2 + Integer.BYTES);
                 this.payloadBuffer = ByteBuffer.allocateDirect(this.blockSize * 36 + Integer.BYTES);
-                logger.info("The default batch size is {}", this.blockSize);
+                logger.debug("The default batch size is {}", this.blockSize);
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
@@ -239,7 +239,7 @@ public class BidlFrontend extends Thread {
                 // if I have collected enough transactions and I am the leader, submit txs to the co-located node
                 
                 if (this.num == this.blockSize) {
-                    logger.info("bidl: collected enough transactions. Num:{}, TotalNum:{}", this.num, totalNum);
+                    logger.debug("bidl: collected enough transactions. Num:{}, TotalNum:{}", this.num, totalNum);
                     payloadBuffer.putInt(maxSeqNum);
                     if (execManager.getCurrentLeader() == controller.getStaticConf().getProcessId()) {
                         payloadBuffer.flip();
@@ -258,7 +258,7 @@ public class BidlFrontend extends Thread {
                         //         + Arrays.toString(block));
     
                         proxy.invokeOrdered(block);
-                        logger.info("bidl: I am the leader, new block submitted, totalNumber: " + totalNum
+                        logger.debug("bidl: I am the leader, new block submitted, totalNumber: " + totalNum
                                 + " block length: " + block.length + " signature.length " + this.signature.length
                                 + "maximum sequence number" + maxSeqNum);
                     }

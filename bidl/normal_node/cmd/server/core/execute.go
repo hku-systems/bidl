@@ -264,7 +264,7 @@ func (p *Processor) ProcessBlock(block []byte) {
 		log.Errorf("The block is badly formed, block length: %d.", len(payload))
 		return
 	}
-	log.Infof("New block received, block number: %d", p.blkNum)
+	log.Debugf("New block received, block number: %d", p.blkNum)
 	startBlkCommit := time.Now()
 	// obtain transaction [seq, hash] from block
 	hashesBlk := make([][]byte, 0)

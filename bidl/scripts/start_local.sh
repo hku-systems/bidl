@@ -25,16 +25,30 @@ echo "Starting $1 consensus nodes..."
 rm -rf $base_dir/logs
 mkdir $base_dir/logs
 for i in `seq 0 $[${1}-1]`; do
-    docker run --name smart$i --net=host --cap-add NET_ADMIN smart bash /home/runscripts/smartrun.sh bftsmart.demo.microbenchmarks.ThroughputLatencyServer $i 10 0 0 false nosig rwd > $base_dir/logs/consensus_${i}.log 2>&1 &
+    docker run --name smart$i --net=host --cap-add NET_ADMIN smart:latest bash /home/runscripts/smartrun.sh bftsmart.demo.microbenchmarks.ThroughputLatencyServer $i 10 0 0 false nosig rwd > $base_dir/logs/consensus_${i}.log 2>&1 &
 done
 
 echo "Starting the sequencer..., tput cap:$2 kTxns/s."
-$sequencer_dir/sequencer $2 &> $base_dir/logs/sequencer.log &
+docker run --name sequencer --net=host sequencer:latest /sequencer/sequencer $2 &> $base_dir/logs/sequencer.log &
 
 echo "Starting normal node..."
-docker run --name normal_node0 --net=host --cap-add NET_ADMIN normal_node /normal_node/server --quiet --tps=$2 --id=0 > $base_dir/logs/normal_0.log 2>&1 &
+docker run --name normal_node0 --net=host --cap-add NET_ADMIN normal_node:latest /normal_node/server --quiet --tps=$2 --id=0 > $base_dir/logs/normal_0.log 2>&1 &
 
-sleep 10
+echo "Waiting for consensus node to start..."
+i=0
+while true; do 
+    let i=$i+1
+	wait=$( cat $log_dir/consensus_0.log | grep "Ready to process operations" | wc -l)
+	if [ $wait -eq 1 ]; then 
+		break;
+	fi 
+	if [ $i -gt 5 ]; then 
+        echo "reaching maximum wait time, continue."
+		break;
+	fi 
+	echo "wait 5s for consensus nodes to setup"
+	sleep 5
+done
 
 echo "benchmarking..."
 

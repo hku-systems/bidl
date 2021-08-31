@@ -65,7 +65,7 @@ func (s *Server) processPackets() {
 			} else if bytes.Equal(magicNum, common.MagicNumBlock) {
 				select {
 				case <- blkTicker.C:
-				log.Infof("New block received.")
+				log.Debugf("New block received.")
 				p.ProcessBlock(pack.Bytes[4:])
 				util.Monitor.TputBlk <- 1
 				}
