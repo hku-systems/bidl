@@ -35,7 +35,6 @@ file)**.
 | 5             | 202.45.128.164                    | 10.22.1.5              |
 | 6             | 202.45.128.165                    | 10.22.1.6              |
 | 7             | 202.45.128.166                    | 10.22.1.7              |
-| 8             | crashed                           | crashed                |
 | 9             | 202.45.128.168                    | 10.22.1.9              |
 
 We have asked for access to 8 machines, but since the environment is not completely clean,
