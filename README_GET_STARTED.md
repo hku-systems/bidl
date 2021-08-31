@@ -1,5 +1,9 @@
 # Get Started Tutorial
 
+We have already set up necessary environments on `202.45.128.161`. You can
+directly use this server by `sosp21ae@202.45.128.161` to run the following two
+example networks.
+
 ## Run a FastFabric Network  
 
 You can bring the FastFabric network up with the following command:
@@ -30,7 +34,7 @@ valid: 40763/50000 81.53% invalid: 9237/50000 18.47%
 
 ## Run a BIDL Network
 
-You can start a minimal BIDL network up with the following command:
+You can start a minimal BIDL network with the following command:
 
 ```bash
 bash ./run-bidl-local.sh test
