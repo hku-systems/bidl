@@ -1,0 +1,9 @@
+organizations
+streamchain/setup/crypto-config
+streamchain/setup/logs
+logs
+hotstuff/scripts/deploy/hotstuff.gen*
+hotstuff/scripts/deploy/run1
+hotstuff/scripts/deploy/run1_cli
+*tar
+*log
