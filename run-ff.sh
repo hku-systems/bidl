@@ -33,7 +33,14 @@ if [ $1 == "performance" ]; then
             sleep 2
         done
         sleep 2
-        docker exec $(docker ps | grep fabric_cli | awk '{print $1}') bash scripts/script.sh
+        cli=$(docker ps | grep fabric_cli | awk '{print $1}')
+        while [ ! $cli ]: do 
+            echo "wait for cli contianer "
+            sleep 5
+            cli=$(docker ps | grep fabric_cli | awk '{print $1}')
+        done
+        echo $cli
+        docker exec $cli bash scripts/script.sh
         # create 50000 accounts
         # docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --no-e2e -n 50000 --burst 50000 --num_of_conn $i --client_per_conn $j --groups $peers --send_rate $send_rate --config config.yaml > $phase1 2>&1
         docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --e2e -n 50000 --burst 50000 --num_of_conn $i --client_per_conn $j --orderer_client $k --groups $peers --send_rate $send_rate --config config.yaml > $phase2 2>&1
@@ -85,7 +92,14 @@ elif [ $1 == "nd" ]; then
             sleep 2
         done
         sleep 2
-        docker exec $(docker ps | grep fabric_cli | awk '{print $1}') bash scripts/script.sh
+        cli=$(docker ps | grep fabric_cli | awk '{print $1}')
+        while [ ! $cli ]: do 
+            echo "wait for cli contianer "
+            sleep 5
+            cli=$(docker ps | grep fabric_cli | awk '{print $1}')
+        done
+        echo $cli
+        docker exec $cli bash scripts/script.sh
         # create $accounts accounts
         docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --e2e -n $accounts --orderer_client $k --num_of_conn $i --client_per_conn $j --burst 50000 --txtype create_random --groups $peers --send_rate $send_rate --ndrate $nondeterminism_rate --config config.yaml > $nondeterminism 2>&1
         sleep 2
@@ -128,7 +142,14 @@ elif [ $1 == "contention" ]; then
             sleep 2
         done
         sleep 2
-        docker exec $(docker ps | grep fabric_cli | awk '{print $1}') bash scripts/script.sh
+        cli=$(docker ps | grep fabric_cli | awk '{print $1}')
+        while [ ! $cli ]: do 
+            echo "wait for cli contianer "
+            sleep 5
+            cli=$(docker ps | grep fabric_cli | awk '{print $1}')
+        done
+        echo $cli
+        docker exec $cli bash scripts/script.sh
         # create $accounts accounts
         log=round${round}_${contention_rate}_e2e.log 
         contention=round${round}_${contention_rate}_contention.log 
