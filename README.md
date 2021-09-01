@@ -103,10 +103,10 @@ This experiment runs BIDL and FastFabric (achieves the best performance in Exper
 bash run.sh contention
 ```
 
-- Output: a pdf file named `contended.pdf`, containing the throughput of BIDL and baseline systems under different ratio of contended transactions.
+- Output: a pdf file named `contention.pdf`, containing the throughput of BIDL and baseline systems under different ratio of contended transactions.
 - Expected results:
 	- BIDL's throughput shows no obvious decline.
-	- FastFabric's throughput decreases as the ratio of contented transactions increases.
+	- FastFabric's effective throughput decreases with the increasing ratio of contented transactions.
 
 ### Experiment 3: Performance with different ratio of non-deterministic transactions
 
@@ -120,7 +120,7 @@ bash run.sh nd
 
 - Output: a pdf file named `nondeterminism.pdf`, containing the throughput of BIDL and baseline systems under different ratio of non-deterministic transactions.
 - Expected results:
-  - The throughput of BIDL and all baseline systems drop as the ratio of non-deterministic transactions increases.
+  - The effective throughput of BIDL and FastFabric all drop with the increasing ratio of non-deterministic transactions.
 
 ### Experiment 4: Performance with malicious participants
 
