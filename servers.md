@@ -23,8 +23,7 @@ The server account and server password are listed in our HotCRP response.
 Each machine in our cluster has two IP addresses, one for access from the
 gatekeeper, one for interconnection among the machines, as shown in the below
 table. Please use the `202.45.128.xxx` address to SSH machines from the
-gatekeeper, **and use the `10.22.1.x` for experiments (i.e., filling the `hosts.yml`
-file)**.
+gatekeeper, **and use the `10.22.1.x` for experiments.**
 
 | machine index | IP for access from the gatekeeper | IP for interconnection |
 | ------------- | --------------------------------- | ---------------------- |

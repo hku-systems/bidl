@@ -20,7 +20,7 @@ BIDL is a high-throughput and low-latency permissioned blockchain framework desi
 ```shell
 git clone git@github.com:hku-systems/bidl.git
 ```
-	
+
 ### Create the docker images
 
 Prerequisite:
@@ -54,13 +54,13 @@ sudo ifconfig lo multicast
 sudo route add -net 224.0.0.0 netmask 240.0.0.0 dev lo
 ```
 
-4. To run Fabric and Fastfabric, you need to set the `host` parameter (IP address) in `config-fabric.yaml` and `config-fastfabric.yaml`. Make sure the length of host list is at least equal to the number of peers. In the following experiments, our scripts will generate docker compose files according to those configuration files. 
+4. To run Fabric and Fastfabric, you need to set the `host` parameter (IP address) in `config-fabric.yaml` and `config-fastfabric.yaml`. Make sure the length of host list is at least equal to the number of peers. In the following experiments, our scripts will generate docker compose files according to those configuration files.
 
 5. To run streamchain, you need to set the IP addresses in `streamchain/setup/config.sh`.
 
 6. Build the docker images for Fabric and Fastfabric with the following command.
- 
- ```shell
+
+```shell
 # Before you start, you need to replace the IP list in config.sh according to your experiment environment. 
 bash setup.sh
 ```
