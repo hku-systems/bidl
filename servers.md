@@ -45,5 +45,9 @@ You may re-run the outlier data points or simply ignore them when such contentio
 We have helped to finish the setup for meeting prerequisite requirements and
 creating the overlay network, so you can skip these steps in the instructions.
 
-After cloning the codebase, you can skip all Deployment steps.
-We have updated the readme file to mark the starting point.
+After cloning the codebase, you can skip all Deployment steps. We have updated
+the readme file to mark the starting point.
+
+Please be noted that different evaluators may not be able to run experiments at
+the same time. This is because the docker containers started by other evaluators
+will have the same IP address and container name.
