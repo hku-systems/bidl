@@ -10,7 +10,10 @@ rm -rf $smart_dir/logs
 rm -rf $base_dir/logs
 
 rm -f $smart_dir/smart.tar
+
 rm -f $base_dir/smart.tar
+rm -f $base_dir/sequencer.tar
+rm -f $base_dir/normal_node.tar
 
 echo "Building consensus node image..."
 cd $smart_dir

@@ -36,7 +36,7 @@ public class BIDLSender {
             }
             InetSocketAddress inetAddr = new InetSocketAddress(localAddress, 0);
             logger.info("Preparing to use the interface: {}, IP: {}", ni.getName(), inetAddr);
-            this.group = InetAddress.getByName("230.0.0.0");
+            this.group = InetAddress.getByName("231.0.0.0");
 			this.port = 7777;
 			// this.socket = new DatagramSocket(inetAddr);
 			this.socket = new MulticastSocket(this.port);

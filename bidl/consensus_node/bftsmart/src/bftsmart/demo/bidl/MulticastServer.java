@@ -28,7 +28,7 @@ public class MulticastServer {
     private static Logger logger = LoggerFactory.getLogger(MulticastServer.class.getName());
 
     public static void main(String args[]) {
-        InetSocketAddress groupAddress = new InetSocketAddress("230.0.0.0", 7777);
+        InetSocketAddress groupAddress = new InetSocketAddress("231.0.0.0", 7777);
         Bootstrap bootstrap = new Bootstrap();
         NioEventLoopGroup acceptGroup = new NioEventLoopGroup(1);
         try {

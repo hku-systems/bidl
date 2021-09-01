@@ -8,8 +8,7 @@ import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.Enumeration;
+import java.util.*;
 import java.util.concurrent.*;
 
 import io.netty.buffer.ByteBuf;
@@ -31,7 +30,7 @@ public class BidlFrontend extends Thread {
     public static int maxSeqNum = 0;
 
     // public static final ConcurrentHashMap<String, HashSet<Integer>> conflictList = new ConcurrentHashMap<>();
-    public static final ConcurrentHashMap<String, Integer> conflictList = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<String, HashSet<Integer>> conflictList = new ConcurrentHashMap<>();
     public static final ConcurrentHashMap<String, Integer> denyList = new ConcurrentHashMap<>();
     public static final ConcurrentHashMap<Integer, String> seqMap = new ConcurrentHashMap<>();
     public static final ConcurrentMap<String, byte[]> txMap = new ConcurrentHashMap<>();
@@ -62,7 +61,7 @@ public class BidlFrontend extends Thread {
 
     @Override
     public void run() {
-        InetSocketAddress groupAddress = new InetSocketAddress("230.0.0.0", 7777);
+        InetSocketAddress groupAddress = new InetSocketAddress("231.0.0.0", 7777);
         logger.debug("bidl: new BIDL frontend started, listening group address: {}", groupAddress);
         Bootstrap bootstrap = new Bootstrap();
         EventLoopGroup acceptGroup = new NioEventLoopGroup(4);

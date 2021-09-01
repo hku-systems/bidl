@@ -43,7 +43,7 @@ public class Sequencer {
             InetSocketAddress inetAddr = new InetSocketAddress(localAddress, 0);
             logger.info("Preparing to using the interface: {}, IP: {}", ni.getName(), inetAddr);
 
-            InetAddress to = InetAddress.getByName("230.0.0.0");
+            InetAddress to = InetAddress.getByName("231.0.0.0");
 
             new SequencerMulticast(inetAddr, to, 7777, inQueue).start();
             new ClientUDPServer(7776, inQueue).start();

@@ -57,7 +57,7 @@ public class BidlFrontend extends Thread {
 
     @Override
     public void run() {
-        InetSocketAddress groupAddress = new InetSocketAddress("230.0.0.0", 7777);
+        InetSocketAddress groupAddress = new InetSocketAddress("231.0.0.0", 7777);
         logger.info("bidl: new BIDL frontend started, listening group address: {}", groupAddress);
         Bootstrap bootstrap = new Bootstrap();
         EventLoopGroup acceptGroup = new NioEventLoopGroup(4);

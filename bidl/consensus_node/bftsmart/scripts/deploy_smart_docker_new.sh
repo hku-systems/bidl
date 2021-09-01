@@ -64,9 +64,9 @@ done <./config/hosts.config
 # for host in `cat ./config/hosts.config|awk '{print $2}'`; do
 #     if [ $index -eq 0 ]; 
 #     then
-#         ssh jqi@${host} "docker run --net=host smart bash /home/runscripts/smartrun.sh bftsmart.demo.bidl.BidlFrontendSequencer 230.0.0.0 7777 true > logs/frontend.log 2>&1 &"
+#         ssh jqi@${host} "docker run --net=host smart bash /home/runscripts/smartrun.sh bftsmart.demo.bidl.BidlFrontendSequencer 231.0.0.0 7777 true > logs/frontend.log 2>&1 &"
 #     else
-#         ssh jqi@${host} "docker run --net=host smart bash /home/runscripts/smartrun.sh bftsmart.demo.bidl.BidlFrontendSequencer 230.0.0.0 7777 false > logs/frontend.log 2>&1 &"
+#         ssh jqi@${host} "docker run --net=host smart bash /home/runscripts/smartrun.sh bftsmart.demo.bidl.BidlFrontendSequencer 231.0.0.0 7777 false > logs/frontend.log 2>&1 &"
 #     fi
 #     let index=$index+1
 # done

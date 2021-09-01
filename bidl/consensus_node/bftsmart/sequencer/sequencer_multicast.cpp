@@ -76,7 +76,7 @@ int main() {
     struct sockaddr_in multicast_addr;
     memset(&multicast_addr, 0, sizeof(multicast_addr));
     multicast_addr.sin_family = AF_INET;
-    multicast_addr.sin_addr.s_addr = inet_addr("230.0.0.0");
+    multicast_addr.sin_addr.s_addr = inet_addr("231.0.0.0");
     multicast_addr.sin_port = htons(BROA_PORT);
     socklen_t socklen = sizeof(multicast_addr);
 

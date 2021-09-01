@@ -55,12 +55,12 @@ int main() {
     }
 
     /*
-     * Join the multicast group 230.0.0.0 on the local 10.22.1.8
+     * Join the multicast group 231.0.0.0 on the local 10.22.1.8
      * interface.  Note that this IP_ADD_MEMBERSHIP option must be
      * called for each local interface over which the multicast
      * datagrams are to be received.
      */
-    group.imr_multiaddr.s_addr = inet_addr("230.0.0.0");
+    group.imr_multiaddr.s_addr = inet_addr("231.0.0.0");
     group.imr_interface.s_addr = inet_addr("10.22.1.8");
     if (setsockopt(sock_fd, IPPROTO_IP, IP_ADD_MEMBERSHIP,
                 (char *)&group, sizeof(group)) < 0) {
