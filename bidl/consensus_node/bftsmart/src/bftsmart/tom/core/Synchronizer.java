@@ -909,6 +909,7 @@ public class Synchronizer {
     // and also sends the message
     private void catch_up(int regency) {
 
+        logger.info("I'm the new leader for regency {}", regency);
         logger.debug("Verifying STOPDATA info");
         ObjectOutputStream out = null;
         ByteArrayOutputStream bos = null;
