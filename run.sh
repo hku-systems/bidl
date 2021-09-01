@@ -5,7 +5,7 @@ exp=$1
 if [ $exp == "performance" ]; then 
     bash run-ff.sh performance 
     bash run-fabric.sh 
-    # bash run-streamchain.sh 
+    bash run-streamchain.sh 
     # TODO: bidl
     python3 figure/fig3.py
 

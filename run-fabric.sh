@@ -27,7 +27,14 @@ for send_rate in 2000 4000 6000 8000 10000 12000 14000 16000; do
         sleep 2
     done
     sleep 2
-    docker exec $(docker ps | grep fabric_cli | awk '{print $1}') bash scripts/script.sh
+    cli=$(docker ps | grep fabric_cli | awk '{print $1}')
+    while [ ! $cli ]: do 
+        echo "wait for cli contianer "
+        sleep 5
+        cli=$(docker ps | grep fabric_cli | awk '{print $1}')
+    done
+    echo $cli
+    docker exec $cli bash scripts/script.sh
     # create 50000 accounts
     # docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --no-e2e -n 50000 --burst 50 --num_of_conn $p1i --client_per_conn $p1j --groups 5 --config config.yaml > $phase1 2>&1
     docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --e2e -n 50000 --burst 50000 --num_of_conn $i --client_per_conn $j --send_rate $send_rate --orderer_client $k --groups 5 --config config.yaml > $log 2>&1
