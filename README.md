@@ -74,6 +74,9 @@ You can also use our cluster for all experiments. Please feel free to contact us
 This experiment tests the experimental environment. The following test script benchmarks BIDL/FastFabric and reports the end-to-end performance.
 Please follow [README_GET_STARTED.md](https://github.com/hku-systems/bidl/blob/main/README_GET_STARTED.md).
 
+We are doing the final debugging for the following experiments and all
+experiments will be ready before September 4, 2021.
+
 ### Experiment 1: End-to-end performance
 
 This experiment runs BIDL/FastFabric/Hyperledger Fabric/StreamChain with the default smallbank workload and reports the end-to-end throughput/latency of each system.
