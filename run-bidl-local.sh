@@ -115,11 +115,11 @@ elif [ $1 == "malicious" ]; then
     touch $rst_file
     bash ./bidl/scripts/start_local_test.sh $peers $default_tput malicious
     send_num=60000
-    for view in 0 1 2 3; do
+    for view in 0 1 2 3 4 5; do
         while true; do
             nodeID=$(( $view % $peers ))
             echo $nodeID
-            wait=$( cat ./bidl/logs/consensus_${nodeID}.log | grep "bftsmart.tom.core.TOMLayer - I'm the leader." | wc -l)
+            wait=$( cat ./bidl/logs/consensus_${nodeID}.log | grep "bftsmart.tom.core.Synchronizer - I'm the new leader and I received a STOPDATA" | wc -l)
             if [ $wait -eq 1 ]; then
                 break;
             fi
