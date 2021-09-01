@@ -1,3 +1,5 @@
+nondeterminism_rate=0.0, accounts=50000
+tps: ave:  20852.82090162401
 nondeterminism_rate=0.1, accounts=50000
 tps: ave:  18852.82090162401
 [12118.0, 20530.0, 20600.0, 22726.0]

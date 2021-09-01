@@ -73,7 +73,7 @@ elif [ $1 == "nd" ]; then
     j=4
     k=40
     send_rate=20000
-    for nondeterminism_rate in 0.1 0.2 0.3 0.4 0.5; do 
+    for nondeterminism_rate in 0 0.1 0.2 0.3 0.4 0.5; do 
         let round=round+1
         nondeterminism=round${round}_${nondeterminism_rate}_nondeterminism.log 
         docker stack deploy --resolve-image never --compose-file=docker-compose-fastfabric.yaml fabric
@@ -117,7 +117,7 @@ elif [ $1 == "contention" ]; then
     j=4
     k=40
     send_rate=20000
-    for contention_rate in 0.1 0.2 0.3 0.4 0.5; do 
+    for contention_rate in 0 0.1 0.2 0.3 0.4 0.5; do 
         let round=round+1
         docker stack deploy --resolve-image never --compose-file=docker-compose-fastfabric.yaml fabric
         while true; do 
