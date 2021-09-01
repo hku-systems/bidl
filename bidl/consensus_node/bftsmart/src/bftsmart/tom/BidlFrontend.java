@@ -115,9 +115,10 @@ public class BidlFrontend extends Thread {
             byte[] rcvPktBuf = new byte[rcvPktLength];
             bytebuf.readBytes(rcvPktBuf);
             
-            // check magic number
+            // check denylist
             byte[] magicNum = Arrays.copyOfRange(rcvPktBuf, 0, 4);
-            if (denyList.containsKey(new String(magicNum))) {
+            if (denyList.containsKey(Arrays.toString(magicNum))) {
+                logger.debug("Transaction account in denylist, discard.");
                 bytebuf.release();
                 return;
             }

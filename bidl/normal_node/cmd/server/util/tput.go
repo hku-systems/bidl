@@ -1,7 +1,6 @@
 package util
 
 import (
-	"fmt"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -40,9 +39,11 @@ func (monitor *TputMonitor) TxnThroughput() {
 				duration := int(time.Since(start).Milliseconds())
 				// log.Infof("Received %d transactions, duration: %dms, transaction tput: %d kTxns/s, total: %d", interval, duration, interval/duration, total)
 				if duration == 0 {
-					fmt.Printf("BIDL transaction commit throughput: Inf kTxns/s\n")
+					// fmt.Printf("BIDL transaction commit throughput: Inf kTxns/s\n")
+					log.Infof("BIDL transaction commit throughput: Inf kTxns/s\n")
 				} else {
-					fmt.Printf("BIDL transaction commit throughput: %d kTxns/s\n", interval/duration)
+					// fmt.Printf("BIDL transaction commit throughput: %d kTxns/s\n", interval/duration)
+					log.Infof("BIDL transaction commit throughput: %d kTxns/s\n", interval/duration)
 				}
 				start = time.Now()
 				num = 0
@@ -64,10 +65,12 @@ func (monitor *TputMonitor) BlkThroughput(blkSize int) {
 				// duration := int(time.Since(start).Nanoseconds())
 				duration := int(time.Since(start).Milliseconds())
 				if duration == 0 {
-					fmt.Printf("BIDL block commit throughput: Inf kTxns/s\n")
+					// fmt.Printf("BIDL block commit throughput: Inf kTxns/s\n")
+					log.Infof("BIDL block commit throughput: Inf kTxns/s\n")
 				} else {
 					// fmt.Printf("BIDL block commit throughput: %d kTxns/s\n", interval*blkSize*1e6/duration)
-					fmt.Printf("BIDL block commit throughput: %d kTxns/s\n", interval*blkSize/duration)
+					// fmt.Printf("BIDL block commit throughput: %d kTxns/s\n", interval*blkSize/duration)
+					log.Infof("BIDL block commit throughput: %d kTxns/s\n", interval*blkSize/duration)
 				}
 				start = time.Now()
 				num = 0

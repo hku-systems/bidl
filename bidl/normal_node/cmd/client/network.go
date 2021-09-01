@@ -14,7 +14,7 @@ import (
 const ALIVE_CHECK_TIME = time.Second * 10
 
 func (c *Client) flowController(tps int) {
-	log.Infof("Start flow controller, TPS: %d kTxns/s", tps)
+	log.Debugf("Start flow controller, TPS: %d kTxns/s", tps)
 	interval := time.Duration(1e6 / tps / 1e3 / 3)
 	ticker := time.NewTicker(interval * time.Microsecond)
 	for {
@@ -77,7 +77,7 @@ func (c *Client) setupConnection(addr string, tps int) {
     if err !=nil {
 		log.Fatal(err)
     }
-	log.Infof(addrs[0].(*net.IPNet).IP.String())
+	log.Infof("My IP address is %s\n", addrs[0].(*net.IPNet).IP.String())
 
 	srcAddr := &net.UDPAddr{IP: addrs[0].(*net.IPNet).IP, Port: 0}
 	conn, err := net.DialUDP("udp4", srcAddr, address)

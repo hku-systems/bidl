@@ -115,25 +115,25 @@ elif [ $1 == "malicious" ]; then
     touch $rst_file
     bash ./bidl/scripts/start_local_test.sh $peers $default_tput malicious
     send_num=60000
-    for view in 0 1 2 3 4 5; do
-        while true; do
-            nodeID=$(( $view % $peers ))
-            echo $nodeID
-            wait=$( cat ./bidl/logs/consensus_${nodeID}.log | grep "bftsmart.tom.core.Synchronizer - I'm the new leader and I received a STOPDATA" | wc -l)
-            if [ $wait -eq 1 ]; then
-                break;
-            fi
-            echo "wait 5s for consensus nodes to view change"
-            sleep 5
-        done
-        echo "consensus_${nodeID}.log: currentView is view $view"
-
-        sleep 10
+    for view in 0 1 2 3; do
         # kill client
         docker stop $(docker ps -aq --filter name="bidl_client"); docker rm $(docker ps -aq --filter name="bidl_client")
 
         # run benchmarking
         bash ./bidl/scripts/benchmark.sh 50 malicious $(( $send_num * $view )) 
+
+        while true; do
+            new_view=$(( $view + 1 ))
+            nodeID=$(( $new_view % $peers ))
+            echo "The new leader for the next view $new_view is node $nodeID"
+            wait=$( cat ./bidl/logs/consensus_${nodeID}.log | grep "I'm the new leader for regency ${new_view}" | wc -l)
+            if [ $wait -eq 1 ]; then
+                break;
+            fi
+            echo "Wait 5s for consensus nodes to view change"
+            sleep 5
+        done
+        sleep 10
 
         # bash ./bidl/scripts/get_data.sh
         # obtain throughput data
