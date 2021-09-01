@@ -1,8 +1,8 @@
 #!/bin/bash
-set -eu
+set -u
 peers=4 # number of consensus nodes
 default_tput=50 # trnasaction submission tput
-# bash ./bidl/scripts/create_artifact.sh
+# bash ./bidl/scripts/create_artifact.sh # build BIDL images
 
 if [ $1 == "test" ]; then
     rst_dir=./logs/bidl/test
@@ -113,16 +113,32 @@ elif [ $1 == "malicious" ]; then
     rm -rf $rst_dir
     mkdir -p $rst_dir
     touch $rst_file
-    bash ./bidl/scripts/start_local.sh $peers $default_tput 
-    for view in 0 1 2 3 4 5; do 
-        echo "currentView: $view"
-        # run benchmarking
+    bash ./bidl/scripts/start_local_test.sh $peers $default_tput malicious
+    send_num=60000
+    for view in 0 1 2 3; do
+        while true; do
+            nodeID=$(( $view % $peers ))
+            echo $nodeID
+            wait=$( cat ./bidl/logs/consensus_${nodeID}.log | grep "bftsmart.tom.core.TOMLayer - I'm the leader." | wc -l)
+            if [ $wait -eq 1 ]; then
+                break;
+            fi
+            echo "wait 5s for consensus nodes to view change"
+            sleep 5
+        done
+        echo "consensus_${nodeID}.log: currentView is view $view"
+
         sleep 10
-        bash ./bidl/scripts/benchmark.sh 50 malicious 
-        bash ./bidl/scripts/get_data.sh
+        # kill client
+        docker stop $(docker ps -aq --filter name="bidl_client"); docker rm $(docker ps -aq --filter name="bidl_client")
+
+        # run benchmarking
+        bash ./bidl/scripts/benchmark.sh 50 malicious $(( $send_num * $view )) 
+
+        # bash ./bidl/scripts/get_data.sh
         # obtain throughput data
-        echo -n "view $view throughput " >> $rst_file
-        cat ./bidl/logs/normal_0.log | grep "BIDL transaction commit throughput" | python3 ./bidl/scripts/bidl_tput.py $default_tput >> $rst_file
+        # echo -n "view $view throughput " >> $rst_file
+        # cat ./bidl/logs/normal_$view.log | grep "BIDL transaction commit throughput" | python3 ./bidl/scripts/bidl_tput.py $default_tput >> $rst_file
     done
     bash ./bidl/scripts/kill_all_local.sh
     exit 0

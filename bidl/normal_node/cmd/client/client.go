@@ -10,7 +10,7 @@ import (
 )
 
 var opts struct {
-	GroupAddress string `long:"groupaddress" default:"230.0.0.0:7777" description:"The group address"`
+	GroupAddress string `long:"groupaddress" default:"231.0.0.0:7777" description:"The group address"`
 	SeqAddress   string `long:"seqaddress" default:"127.0.0.1:8888" description:"The sequencer's address"`
 	Buffer       int    `short:"b" long:"buffer" default:"10240" description:"max buffer size for the socket io"`
 	Quiet        bool   `short:"q" long:"quiet" description:"whether to print logging info or not"`
@@ -23,6 +23,7 @@ var opts struct {
 	Conflict     int    `long:"conflict" default:"0" description:"ratio of hot accounts for conflict transactions"`
 	SendBlock    bool   `long:"sendBlock" description:"send blocks containing transactions"`
 	Malicious    bool   `long:"malicious" description:"send malicious transactions, --order must be set"`
+	StartSeq     int    `long:"startSeq" default:"0" description:"initial sequence number of transactions, --order must be set"`
 }
 
 func init() {
@@ -84,22 +85,21 @@ func main() {
 	}
 
 	// submit transactions to the sequencer
+	client.Seq = uint64(opts.StartSeq)
 	if opts.Malicious {
 		log.Infof("Start sending %d malicious transactions.", opts.Num)
-		client.Seq = 0
 		for i := 0; i < opts.Num; i++ {
 			client.SendTxn(txns[i], opts.Order, true)
 		}
 		log.Infof("Wait...")
 		time.Sleep(time.Duration(10) * time.Second)
+		client.Seq = uint64(opts.StartSeq)
 		log.Infof("Start sending %d non-malicious transactions.", opts.Num)
-		client.Seq = 0
 		for i := 0; i < opts.Num; i++ {
 			client.SendTxn(txns[i], opts.Order, false)
 		}
 	} else {
 		log.Infof("Start sending %d transactions", opts.Num)
-		client.Seq = 0
 		for i := 0; i < opts.Num && i < len(txns); i++ {
 			client.SendTxn(txns[i], opts.Order, false)
 		}

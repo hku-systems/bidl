@@ -20,9 +20,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.security.PrivateKey;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -175,12 +173,12 @@ public final class Acceptor {
 	 */
 	public void proposeReceived(Epoch epoch, ConsensusMessage msg) {
 		// bidl: leader change, leader change must be performed before executePropose, or the node will wait for the consensus to finish before proposing
-		// proposeNum++;
-		// if (proposeNum == 180) {
-		// 	logger.info("BIDL trigger view change");
-		// 	tomLayer.getSynchronizer().triggerTimeout(new LinkedList<>());
-		// 	proposeNum = 0;
-		// }
+		proposeNum++;
+		if (proposeNum == 100) {
+			logger.info("BIDL trigger view change");
+			tomLayer.getSynchronizer().triggerTimeout(new LinkedList<>());
+			proposeNum = 0;
+		}
 		int cid = epoch.getConsensus().getId();
 		int ts = epoch.getConsensus().getEts();
 		int ets = executionManager.getConsensus(msg.getNumber()).getEts();
@@ -552,19 +550,22 @@ public final class Acceptor {
 						gapNumber++;
 						gapHashes.add(hashProp);
 						byte[] txn = BidlFrontend.txMap.get(hashLocalStr);
-						String malicious = new String(Arrays.copyOfRange(txn, 0, 4));
-						if (BidlFrontend.conflictList.containsKey(malicious)) {
-							int views = BidlFrontend.conflictList.get(malicious);
-							if (views + 1 == 4) {
-								logger.info("Malicious client {} is added to the denylist.", malicious);
-								BidlFrontend.conflictList.remove(malicious);
-								BidlFrontend.denyList.put(malicious, 1);
+						String maliciousID = Arrays.toString(Arrays.copyOfRange(txn, 0, 4));
+						if (BidlFrontend.conflictList.containsKey(maliciousID)) {
+							HashSet<Integer> views = BidlFrontend.conflictList.get(maliciousID);
+							if (views.size() == controller.getQuorum()/2+1) { // controller.getQuorum() = ((n + f) / 2) replicas
+								logger.info("Malicious client {} is added to the denylist.", maliciousID);
+								BidlFrontend.conflictList.remove(maliciousID);
+								BidlFrontend.denyList.put(maliciousID, 1);
 							} else {
-								logger.info("Put the malicious client {} to the conflict list.", malicious);
-								BidlFrontend.conflictList.put(malicious, views + 1);
+								logger.info("Put the malicious client {} to the conflict list, views: {}.", maliciousID, views.size());
+								views.add(executionManager.getCurrentLeader());
+								BidlFrontend.conflictList.put(maliciousID, views);
 							}
 						} else {
-							BidlFrontend.conflictList.put(malicious, 1);
+							HashSet<Integer> views = new HashSet<Integer>();
+							views.add(executionManager.getCurrentLeader());
+							BidlFrontend.conflictList.put(maliciousID, views);
 						}
 					}
 				} else {

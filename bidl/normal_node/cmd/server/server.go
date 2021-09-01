@@ -43,6 +43,8 @@ func (s *Server) processPackets() {
 			} else if bytes.Equal(magicNum, common.MagicNumPersist) {
 				log.Debugf("New persist message received.")
 				p.ProcessPersist(pack.Bytes[4:])
+			} else if bytes.Equal(magicNum, common.MagicNumTxnMalicious) {
+				log.Debugf("New malicious transaction received.")
 			} else if bytes.Equal(magicNum, common.MagicNumTxn) {
 				log.Debugf("New transaction received")
 				hash := sha256.Sum256(pack.Bytes)

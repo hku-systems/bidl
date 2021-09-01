@@ -16,7 +16,7 @@ elif [ $2 == "contention" ]; then
 elif [ $2 == "scalability" ]; then 
     docker run --name bidl_client --net=host --cap-add NET_ADMIN normal_node /normal_node/client --num=100000 --org=$1
 elif [ $2 == "malicious" ]; then 
-    docker run --name bidl_client --net=host --cap-add NET_ADMIN normal_node /normal_node/client --num=100000 --org=$1 --order --malicious
+    docker run --name bidl_client --net=host --cap-add NET_ADMIN normal_node /normal_node/client --num=60000 --org=$1 --order --malicious --startSeq=$3
 else 
     echo "Invalid argument."
     exit 1

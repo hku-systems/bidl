@@ -2,7 +2,7 @@
 set -u
 
 if [ $# -lt 3 ]; then
-    echo "Usage: bash ./bidl/scripts/start_local.sh <1. num of consensus nodes> <2. peak throughput> <3. benchmark> <4. benchmark parameters*>"
+    echo "Usage: bash ./bidl/scripts/start_local_test.sh <1. num of consensus nodes> <2. peak throughput> <3. benchmark> <4. benchmark parameters*>"
     exit 1
 fi
 
@@ -44,24 +44,3 @@ while true; do
 	sleep 5
 done
 
-echo "benchmarking..."
-
-cd $normal_node_dir
-if [ $3 == "test" ]; then
-    docker run --name bidl_client --net=host --cap-add NET_ADMIN normal_node /normal_node/client --num=100000 --org=50
-elif [ $3 == "performance" ]; then
-    docker run --name bidl_client --net=host --cap-add NET_ADMIN normal_node /normal_node/client --num=100000 --org=50
-elif [ $3 == "nd" ]; then 
-    docker run --name bidl_client --net=host --cap-add NET_ADMIN normal_node /normal_node/client --num=100000 --org=50 --nd=$4
-elif [ $3 == "contention" ]; then 
-    docker run --name bidl_client --net=host --cap-add NET_ADMIN normal_node /normal_node/client --num=100000 --org=50 --conflict=$4
-elif [ $3 == "scalability" ]; then 
-    docker run --name bidl_client --net=host --cap-add NET_ADMIN normal_node /normal_node/client --num=100000 --org=50
-else 
-    echo "Invalid argument."
-    exit 1
-fi
-
-echo "Please wait..."
-
-bash $base_dir/scripts/get_data.sh

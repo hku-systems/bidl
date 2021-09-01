@@ -32,7 +32,7 @@ public class MulticastClient {
             InetSocketAddress inetAddr = new InetSocketAddress(localAddress, 0);
             logger.info("Preparing to using the interface: {}, IP: {}", ni.getName(), inetAddr);
 
-            InetAddress to = InetAddress.getByName("230.0.0.0");
+            InetAddress to = InetAddress.getByName("231.0.0.0");
             int numOfThreads = 1;
             int perThreadTxs = 50000;
             int stopInterval = 10000;
