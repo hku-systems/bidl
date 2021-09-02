@@ -28,7 +28,7 @@ for send_rate in 2000 4000 6000 8000 10000 12000 14000 16000; do
     done
     sleep 2
     cli=$(docker ps | grep fabric_cli | awk '{print $1}')
-    while [ ! $cli ]: do 
+    while [ ! $cli ]; do 
         echo "wait for cli contianer "
         sleep 5
         cli=$(docker ps | grep fabric_cli | awk '{print $1}')

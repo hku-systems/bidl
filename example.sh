@@ -18,7 +18,7 @@ docker exec $cli bash scripts/script.sh
 sleep 2
 # create 5000 accounts
 tape=$(docker ps | grep fabric_tape | awk '{print $1}')
-while [ ! $tape ]: do 
+while [ ! $tape ]; do 
     echo "wait for tape contianer "
     sleep 5
     let tape=$(docker ps | grep fabric_tape | awk '{print $1}')

@@ -34,7 +34,7 @@ if [ $1 == "performance" ]; then
         done
         sleep 2
         cli=$(docker ps | grep fabric_cli | awk '{print $1}')
-        while [ ! $cli ]: do 
+        while [ ! $cli ]; do 
             echo "wait for cli contianer "
             sleep 5
             cli=$(docker ps | grep fabric_cli | awk '{print $1}')
@@ -93,7 +93,7 @@ elif [ $1 == "nd" ]; then
         done
         sleep 2
         cli=$(docker ps | grep fabric_cli | awk '{print $1}')
-        while [ ! $cli ]: do 
+        while [ ! $cli ]; do 
             echo "wait for cli contianer "
             sleep 5
             cli=$(docker ps | grep fabric_cli | awk '{print $1}')
@@ -143,7 +143,7 @@ elif [ $1 == "contention" ]; then
         done
         sleep 2
         cli=$(docker ps | grep fabric_cli | awk '{print $1}')
-        while [ ! $cli ]: do 
+        while [ ! $cli ]; do 
             echo "wait for cli contianer "
             sleep 5
             cli=$(docker ps | grep fabric_cli | awk '{print $1}')
