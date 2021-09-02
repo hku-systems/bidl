@@ -2,7 +2,7 @@
 set -u
 peers=4 # number of consensus nodes
 default_tput=40 # trnasaction submission tput
-# bash ./bidl/scripts/create_artifact.sh # build BIDL images
+bash ./bidl/scripts/create_artifact.sh # build BIDL images
 
 if [ $1 == "test" ]; then
     rst_dir=./logs/bidl/test

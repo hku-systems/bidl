@@ -1,7 +1,8 @@
-#!/bin/bash -e
+#!/bin/bash
+set -u
 
 if [ "$#" -lt 1 ]; then
-    echo "Usage: bash ./scripts/deploy_bidl.sh <num of consensus nodes>"
+    echo "Usage: bash ./bidl/scripts/deploy_bidl.sh <1. num of consensus nodes>"
     exit 1
 fi
 
@@ -42,9 +43,7 @@ done
 echo "Copy system_$1.config to $(pwd)/config/system.config"
 cp $base_dir/scripts/configs/system_$1.config $smart_dir/config/system.config
 
-source $base_dir/scripts/compile.sh
-
 echo "Building images"
-source $base_dir/scripts/build_image.sh
+bash $base_dir/scripts/build_image.sh
 
-source $base_dir/scripts/copy_smart_docker.sh
+bash $base_dir/scripts/copy_smart_docker.sh

@@ -24,10 +24,10 @@ echo "######################################################"
 
 i=0
 for host in `cat $base_dir/scripts/servers`; do
-    ssh -n jqi@${host} "cd ~; rm -rf ~/logs; mkdir ~/logs;"
+    ssh -n ${USER}@${host} "cd ~; rm -rf ~/logs; mkdir ~/logs;"
     for node in `seq 0 $[${consensus_nodes_per_host}-1]`; do
         echo ${host} ${i}
-        ssh -n jqi@${host} "docker run --name smart$i --net=host --cap-add NET_ADMIN smart bash /home/runscripts/smartrun.sh bftsmart.demo.microbenchmarks.ThroughputLatencyServer $i 10 0 0 false nosig rwd > logs/consensus_$i.log 2>&1 &"
+        ssh -n ${USER}@${host} "docker run --name smart$i --net=host --cap-add NET_ADMIN smart bash /home/runscripts/smartrun.sh bftsmart.demo.microbenchmarks.ThroughputLatencyServer $i 10 0 0 false nosig rwd > logs/consensus_$i.log 2>&1 &"
         let i=$i+1
     done
     if [ $i -eq $1 ]; then
@@ -37,7 +37,7 @@ done
 
 for node in `seq 0 $[${extra_nodes}-1]`; do
     echo "Extra consensus nodes on localhost:"${i}
-    ssh -n jqi@${host} "docker run --name smart$i --net=host --cap-add NET_ADMIN smart bash /home/runscripts/smartrun.sh bftsmart.demo.microbenchmarks.ThroughputLatencyServer $i 10 0 0 false nosig rwd > logs/consensus_$i.log 2>&1 &"
+    ssh -n ${USER}@${host} "docker run --name smart$i --net=host --cap-add NET_ADMIN smart bash /home/runscripts/smartrun.sh bftsmart.demo.microbenchmarks.ThroughputLatencyServer $i 10 0 0 false nosig rwd > logs/consensus_$i.log 2>&1 &"
     let i=$i+1
 done
 
@@ -48,7 +48,7 @@ while true; do
 	if [ $wait -eq 1 ]; then 
 		break;
 	fi 
-	if [ $i -gt 5 ]; then 
+	if [ $i -gt 10 ]; then 
         echo "reaching maximum wait time, continue."
 		break;
 	fi 
@@ -73,13 +73,14 @@ i=0
 for host in `cat $base_dir/scripts/servers`; do
     for node in `seq 0 $[${normal_nodes_per_host}-1]`; do
         echo ${host} ${node}
-        ssh -n jqi@${host} "docker run --name normal_node$i --net=host --cap-add NET_ADMIN normal_node /normal_node/server --quiet --tps=$3 --id=$i > logs/normal_${i}.log 2>&1 &"
+        ssh -n ${USER}@${host} "docker run --name normal_node$i --net=host --cap-add NET_ADMIN normal_node /normal_node/server --quiet --tps=$3 --id=$i > logs/normal_${i}.log 2>&1 &"
         let i=$i+1
     done
 done 
 
 echo "Starting the sequencer..."
-$sequencer_dir/sequencer $3 &> sequencer.log &
+# $sequencer_dir/sequencer $3 &> sequencer.log &
+docker run --name sequencer --net=host sequencer:latest /sequencer/sequencer $3 > logs/sequencer.log 2>&1 &
 
 echo "benchmarking..."
 cd $normal_node_dir
@@ -99,7 +100,7 @@ fi
 cd $base_dir
 
 while true; do 
-	wait=$( cat $log_dir/normal_0.log | grep "BIDL block commit throughput:" | wc -l)
+	wait=$( cat /home/$USER/logs/normal_0.log | grep "BIDL block commit throughput:" | wc -l)
 	if [ $wait -gt 50 ]; then 
 		break;
 	fi 
