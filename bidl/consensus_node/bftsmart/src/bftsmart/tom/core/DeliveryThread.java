@@ -192,8 +192,8 @@ public final class DeliveryThread extends Thread {
 				if (init) {
 					logger.info(
 							"\n\t\t###################################"
-					      + "\n\t\t    Ready to process operations    "
-						  + "\n\t\t###################################");
+							+ "\n\t\t    Ready to process operations    "
+							+ "\n\t\t###################################");
 					init = false;
 				}
 			}
