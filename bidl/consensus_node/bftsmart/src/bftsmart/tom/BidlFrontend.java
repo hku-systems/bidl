@@ -35,6 +35,7 @@ public class BidlFrontend extends Thread {
     public static final ConcurrentHashMap<Integer, String> seqMap = new ConcurrentHashMap<>();
     public static final ConcurrentMap<String, byte[]> txMap = new ConcurrentHashMap<>();
     public static final BlockingQueue<byte[]> txBlockingQueue = new LinkedBlockingQueue<>(100000);
+    public static final byte[] MagicNumDenylist = {9, 9, 9, 9}; 
     public static final byte[] MagicNumTxnMalicious = {8, 8, 8, 8}; 
     public static final byte[] MagicNumTxn = {7, 7, 7, 7};
     public static final byte[] MagicNumBlock = {6, 6, 6, 6};
@@ -146,6 +147,12 @@ public class BidlFrontend extends Thread {
                 return;
             } else if (Arrays.equals(magicNum, MagicNumPersist)) {
                 logger.debug("bidl: persist message received");
+                bytebuf.release();
+                return;
+            } else if (Arrays.equals(magicNum, MagicNumDenylist)) {
+                byte[] maliciousIDBytes = Arrays.copyOfRange(rcvPktBuf, 4, 8);
+                denyList.put(Arrays.toString(maliciousIDBytes), 1);
+                logger.info("bidl: new denylist entry received {}", Arrays.toString(maliciousIDBytes));
                 bytebuf.release();
                 return;
             } else {

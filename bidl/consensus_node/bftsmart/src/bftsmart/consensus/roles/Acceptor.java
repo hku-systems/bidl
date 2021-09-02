@@ -174,7 +174,7 @@ public final class Acceptor {
 	public void proposeReceived(Epoch epoch, ConsensusMessage msg) {
 		// bidl: leader change, leader change must be performed before executePropose, or the node will wait for the consensus to finish before proposing
 		proposeNum++;
-		if (proposeNum == 100) {
+		if (proposeNum == 500) {
 			logger.info("BIDL trigger view change");
 			tomLayer.getSynchronizer().triggerTimeout(new LinkedList<>());
 			proposeNum = 0;
@@ -461,11 +461,13 @@ public final class Acceptor {
 			return;
 		}
 		logger.info("bidl: new block decided, send the decided value to all normal nodes");
-		byte[] decidedValue = epoch.deserializedPropValue[0].getContent();
-		ByteBuffer buffer = ByteBuffer.allocate(BidlFrontend.MagicNumBlock.length + decidedValue.length);
-		buffer.put(BidlFrontend.MagicNumBlock);
-		buffer.put(decidedValue);
-		bidlSender.send(buffer.array());
+		if (epoch.deserializedPropValue.length > 0) {
+			byte[] decidedValue = epoch.deserializedPropValue[0].getContent();
+			ByteBuffer buffer = ByteBuffer.allocate(BidlFrontend.MagicNumBlock.length + decidedValue.length);
+			buffer.put(BidlFrontend.MagicNumBlock);
+			buffer.put(decidedValue);
+			bidlSender.send(buffer.array());
+		}
 	}
 
 	private void removeHashes(Epoch epoch) {
@@ -542,8 +544,8 @@ public final class Acceptor {
 				seq = fromByteArrayLittleEndian(proposedValue, i);
 				hashProp = Arrays.copyOfRange(proposedValue, i+4, i+36);
 				hashPropStr = new String(hashProp);
-				hashLocalStr = BidlFrontend.seqMap.get(seq);
 				if (BidlFrontend.seqMap.containsKey(seq)) {
+					hashLocalStr = BidlFrontend.seqMap.get(seq);
 					localNumber++;
 					if(!hashLocalStr.equals(hashPropStr)) {
 						logger.debug("My local transaction hash is inconsistent with proposed hash");
@@ -557,6 +559,11 @@ public final class Acceptor {
 								logger.info("Malicious client {} is added to the denylist.", maliciousID);
 								BidlFrontend.conflictList.remove(maliciousID);
 								BidlFrontend.denyList.put(maliciousID, 1);
+								
+								ByteBuffer buffer = ByteBuffer.allocate(BidlFrontend.MagicNumBlock.length + 4);
+								buffer.put(BidlFrontend.MagicNumDenylist);
+								buffer.put(Arrays.copyOfRange(txn, 0, 4));
+								bidlSender.send(buffer.array());
 							} else {
 								logger.info("Put the malicious client {} to the conflict list, views: {}.", maliciousID, views.size());
 								views.add(executionManager.getCurrentLeader());

@@ -1,7 +1,7 @@
 #!/bin/bash
 set -u
 peers=4 # number of consensus nodes
-default_tput=50 # trnasaction submission tput
+default_tput=40 # trnasaction submission tput
 # bash ./bidl/scripts/create_artifact.sh # build BIDL images
 
 if [ $1 == "test" ]; then
@@ -114,18 +114,19 @@ elif [ $1 == "malicious" ]; then
     mkdir -p $rst_dir
     touch $rst_file
     bash ./bidl/scripts/start_local_test.sh $peers $default_tput malicious
-    send_num=60000
-    for view in 0 1 2 3; do
+    send_num=260000
+    # send_num=510000
+    for view in 0; do
         # kill client
         docker stop $(docker ps -aq --filter name="bidl_client"); docker rm $(docker ps -aq --filter name="bidl_client")
 
         # run benchmarking
         bash ./bidl/scripts/benchmark.sh 50 malicious $(( $send_num * $view )) 
 
+        new_view=$(( $view + 1 ))
+        nodeID=$(( $new_view % $peers ))
+        echo "The new leader for the next view $new_view is node $nodeID"
         while true; do
-            new_view=$(( $view + 1 ))
-            nodeID=$(( $new_view % $peers ))
-            echo "The new leader for the next view $new_view is node $nodeID"
             wait=$( cat ./bidl/logs/consensus_${nodeID}.log | grep "I'm the new leader for regency ${new_view}" | wc -l)
             if [ $wait -eq 1 ]; then
                 break;
@@ -134,11 +135,46 @@ elif [ $1 == "malicious" ]; then
             sleep 5
         done
         sleep 10
+    done
+    for view in 1; do
+        # kill client
+        docker stop $(docker ps -aq --filter name="bidl_client"); docker rm $(docker ps -aq --filter name="bidl_client")
 
-        # bash ./bidl/scripts/get_data.sh
-        # obtain throughput data
-        # echo -n "view $view throughput " >> $rst_file
-        # cat ./bidl/logs/normal_$view.log | grep "BIDL transaction commit throughput" | python3 ./bidl/scripts/bidl_tput.py $default_tput >> $rst_file
+        # run benchmarking
+        bash ./bidl/scripts/benchmark.sh 50 performance $(( $send_num * $view )) 
+
+        new_view=$(( $view + 1 ))
+        nodeID=$(( $new_view % $peers ))
+        echo "The new leader for the next view $new_view is node $nodeID"
+        while true; do
+            wait=$( cat ./bidl/logs/consensus_${nodeID}.log | grep "I'm the new leader for regency ${new_view}" | wc -l)
+            if [ $wait -eq 1 ]; then
+                break;
+            fi
+            echo "Wait 5s for consensus nodes to view change"
+            sleep 5
+        done
+        sleep 10
+    done
+    for view in 2 3 4; do
+        # kill client
+        docker stop $(docker ps -aq --filter name="bidl_client"); docker rm $(docker ps -aq --filter name="bidl_client")
+
+        # run benchmarking
+        bash ./bidl/scripts/benchmark.sh 50 malicious $(( $send_num * $view )) 
+
+        new_view=$(( $view + 1 ))
+        nodeID=$(( $new_view % $peers ))
+        echo "The new leader for the next view $new_view is node $nodeID"
+        while true; do
+            wait=$( cat ./bidl/logs/consensus_${nodeID}.log | grep "I'm the new leader for regency ${new_view}" | wc -l)
+            if [ $wait -eq 1 ]; then
+                break;
+            fi
+            echo "Wait 5s for consensus nodes to view change"
+            sleep 5
+        done
+        sleep 10
     done
     bash ./bidl/scripts/kill_all_local.sh
     exit 0

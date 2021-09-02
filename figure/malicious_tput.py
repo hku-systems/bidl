@@ -11,8 +11,10 @@ tick = 0
 for line in sys.stdin:
     if template in line:
         tput = line.split()[6]
-        tputs.append(tput)
-        x.append(tick)
+
+        if tick%4==0:
+            tputs.append(tput)
+            x.append(tick)
         tick = tick+1
         # tputs.append(temp[2][:-1])
 # print(tputs[:10])
@@ -64,7 +66,7 @@ for line in sys.stdin:
 #             xlabels.append(i*interval)
 
 fig, ax = plt.subplots()
-plt.plot(x, tputs)
+plt.plot(x[:300], tputs[:300])
 plt.xlabel('Time (ms)', fontsize=15)
 plt.ylabel('Throughput (kTxns/s)', fontsize=15)
 plt.ylim(0)

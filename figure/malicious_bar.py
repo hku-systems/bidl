@@ -3,13 +3,16 @@ import matplotlib.pyplot as plt
 import sys
 import datetime
 
-template = 'BIDL transaction commit throughput'
+tput_template = 'BIDL transaction commit throughput'
+view_template = "Installing regency"
+
 timestamps = []
 
 for line in sys.stdin:
-    if template in line:
+    if tput_template in line:
         temp = line.split()
         timestamps.append(temp[0][6:-1])
+
 print(len(timestamps))
 
 # t = datetime.datetime.strptime(timestamps[0],"%H:%M:%S.%f")

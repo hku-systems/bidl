@@ -20,20 +20,20 @@
     <queueSize>1000</queueSize>
   </appender>
 
-  <root level="DEBUG">
-  <!-- <root level="INFO"> -->
+  <!-- <root level="DEBUG"> -->
+  <root level="INFO">
     <!-- To use async logging use ref="ASYNC" instead -->
   </root>
 
-  <logger name="io.netty" level="DEBUG">
-  <!-- <logger name="io.netty" level="INFO"> -->
+  <!-- <logger name="io.netty" level="DEBUG"> -->
+  <logger name="io.netty" level="INFO">
     <appender-ref ref="MIN-STDOUT" />
     <!--  <appender-ref ref="STDOUT" /> -->
   </logger>
   
   
-  <logger name="bftsmart" level="DEBUG"> 
-  <!-- <logger name="bftsmart" level="INFO">  -->
+  <!-- <logger name="bftsmart" level="DEBUG">  -->
+  <logger name="bftsmart" level="INFO"> 
     <!-- <appender-ref ref="MIN-STDOUT" /> -->
     <appender-ref ref="STDOUT" />
   </logger> 
