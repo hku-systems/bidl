@@ -2,19 +2,19 @@
 set -u
 default_peers=4
 default_tput=60
-# bash ./bidl/scripts/kill_all.sh
+bash ./bidl/scripts/kill_all.sh
 # bash ./bidl/scripts/deploy_bidl.sh $default_peers
 
 if [ $1 == "performance" ]; then 
     rst_dir=./logs/bidl/performance
     rst_file=$rst_dir/performance.log
-    # rm -rf $rst_dir
-    # mkdir -p $rst_dir
-    # touch $rst_file
+    rm -rf $rst_dir
+    mkdir -p $rst_dir
+    touch $rst_file
     for tput_cap in 20 40 60; do
         echo "Transaction submission rate: $tput_cap kTxns/s"
         # run benchmark
-        # bash ./bidl/scripts/start_bidl.sh 4 50 $tput_cap performance
+        bash ./bidl/scripts/start_bidl.sh 4 50 $tput_cap performance
         # obtain throughput data
         echo -n "rate $tput_cap throughput " >> $rst_file
         cat /home/$USER/logs/normal_0.log | grep "BIDL transaction commit throughput:" | python3 ./bidl/scripts/bidl_tput.py $tput_cap >> $rst_file

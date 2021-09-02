@@ -56,6 +56,7 @@ int main(int argc, char *argv[]) {
     int send_interval = 1e6 / TPS / 1e3;
     chrono::microseconds sleep_duration{send_interval};
     cout << "Multicast interval:" << sleep_duration.count() << endl;
+    cout << "Group Address:" << "231.0.0.0" << endl;
 
     /*
     * Declare the socket used for receiving transactions from clients
@@ -116,7 +117,7 @@ int main(int argc, char *argv[]) {
 	close(fd);
 
 	//display result
-	printf("Binded to NIC: %s - %s\n" , iface , inet_ntoa(( (struct sockaddr_in *)&ifr.ifr_addr )->sin_addr) );
+	cout << "Binded to NIC: " << iface << "--" << inet_ntoa(( (struct sockaddr_in *)&ifr.ifr_addr )->sin_addr)<< endl;
     string interface_addr = inet_ntoa(( (struct sockaddr_in *)&ifr.ifr_addr )->sin_addr);
 
     // localInterface.s_addr = inet_addr("10.22.1.7");
@@ -137,6 +138,7 @@ int main(int argc, char *argv[]) {
     multicast_addr.sin_addr.s_addr = inet_addr("231.0.0.0");
     multicast_addr.sin_port = htons(BROA_PORT);
     socklen_t socklen = sizeof(multicast_addr);
+    printf("Multicast Address is 231.0.0.0");
 
     /*
     * Start multicast

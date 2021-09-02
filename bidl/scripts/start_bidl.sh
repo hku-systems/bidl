@@ -80,7 +80,7 @@ done
 
 echo "Starting the sequencer..."
 # $sequencer_dir/sequencer $3 &> sequencer.log &
-docker run --name sequencer --net=host sequencer:latest /sequencer/sequencer $3 > logs/sequencer.log 2>&1 &
+docker run --name sequencer --net=host sequencer:latest /sequencer/sequencer $3 > /home/${USER}/sequencer.log 2>&1 &
 
 echo "benchmarking..."
 cd $normal_node_dir
