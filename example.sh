@@ -7,7 +7,7 @@ bash create_artifact.sh fastfabric
 docker stack deploy --compose-file=docker-compose-fastfabric.yaml fabric
 sleep 5
 cli=$(docker ps | grep fabric_cli | awk '{print $1}')
-while [ ! $cli ]: do 
+while [ ! $cli ]; do 
     echo "wait for cli contianer "
     sleep 5
     let cli=$(docker ps | grep fabric_cli | awk '{print $1}')
