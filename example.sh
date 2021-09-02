@@ -14,7 +14,14 @@ while [ ! $cli ]; do
 done
 echo $cli
 # setup the channel and deploy the smart conatract
-docker exec $cli bash scripts/script.sh 
+timeout 120 docker exec $cli bash scripts/script.sh 
+if [ $? -ne 0 ]; then 
+    docker stack rm fabric 
+    bash runall.sh "bash clean.sh"
+    echo "something failed, rerun this script"
+    bash example.sh
+    exit 0
+fi
 sleep 2
 # create 5000 accounts
 tape=$(docker ps | grep fabric_tape | awk '{print $1}')

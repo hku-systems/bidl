@@ -12,11 +12,15 @@ if [ $1 == "performance" ]; then
     mkdir -p logs/ff/performance
     round=0
     rm log.log
-    for send_rate in 4000 8000 12000 16000 20000 24000 28000 32000; do
+    send_rates=(4000 8000 12000 16000 20000 24000 28000 32000)
+    len=${#send_rates[@]}
+    curi=0
+    while [ $curi -lt $len ]; do
+        send_rate=${send_rates[$curi]}
+        echo "send_rate:$send_rate"
         i=8
         j=4
         k=40
-        let round=round+1
         echo $round $send_rate
         log=round_${round}_e2e_${send_rate}.log 
         # sed -i "177c num_of_conn: $i" $HOME/fastfabric_exp/tape.yaml
@@ -25,22 +29,39 @@ if [ $1 == "performance" ]; then
         phase1=round_${round}_phase1_${send_rate}.log 
         phase2=round_${round}_phase2_${send_rate}.log 
         docker stack deploy --resolve-image never --compose-file=docker-compose-fastfabric.yaml fabric
+        cnt=0
         while true; do 
             wait=$(docker service list | grep 1/1 | wc -l)
             if [ $wait == $all ]; then 
                 break;
             fi 
             sleep 2
+            let cnt=cnt+1
+            echo "waiting... $cnt"
+            if [ $cnt -gt 30 ]; then 
+                let cnt=-1
+                break 
+            fi
         done
-        sleep 2
+        if [ $cnt -eq -1 ]; then 
+            docker stack rm fabric 
+            bash runall.sh "bash clean.sh"
+            echo "something failed, rerun round$round "
+            continue
+        fi
         cli=$(docker ps | grep fabric_cli | awk '{print $1}')
         while [ ! $cli ]; do 
-            echo "wait for cli contianer "
-            sleep 5
-            cli=$(docker ps | grep fabric_cli | awk '{print $1}')
+            echo "fatal error, please rerun this script:)"
+            exit 1
         done
         echo $cli
-        docker exec $cli bash scripts/script.sh
+        timeout 120 docker exec $cli bash scripts/script.sh
+        if [ $? -ne 0 ]; then 
+            docker stack rm fabric 
+            bash runall.sh "bash clean.sh"
+            echo "something failed, rerun round$round "
+            continue
+        fi
         # create 50000 accounts
         # docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --no-e2e -n 50000 --burst 50000 --num_of_conn $i --client_per_conn $j --groups $peers --send_rate $send_rate --config config.yaml > $phase1 2>&1
         docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --e2e -n 50000 --burst 50000 --num_of_conn $i --client_per_conn $j --orderer_client $k --groups $peers --send_rate $send_rate --config config.yaml > $phase2 2>&1
@@ -61,6 +82,8 @@ if [ $1 == "performance" ]; then
         # TODO latency breakdown 
         mv $phase1 logs/ff/performance/
         mv $phase2 logs/ff/performance/
+        let round=round+1
+        let curi=curi+1
         sleep 20
     done
     mv log.log logs/ff/performance/
@@ -80,26 +103,46 @@ elif [ $1 == "nd" ]; then
     j=4
     k=40
     send_rate=20000
-    for nondeterminism_rate in 0 0.1 0.2 0.3 0.4 0.5; do 
-        let round=round+1
+    nd_rates=(0 0.1 0.2 0.3 0.4 0.5)
+    len=${#nd_rates[@]}
+    curi=0
+    while [ $curi -lt $len ]; do
+        nondeterminism_rate=${nd_rates[$curi]}
+        echo "nondeterminism_rate:$nondeterminism_rate"
         nondeterminism=round${round}_${nondeterminism_rate}_nondeterminism.log 
         docker stack deploy --resolve-image never --compose-file=docker-compose-fastfabric.yaml fabric
+        cnt=0
         while true; do 
             wait=$(docker service list | grep 1/1 | wc -l)
             if [ $wait == $all ]; then 
                 break;
             fi 
             sleep 2
+            let cnt=cnt+1
+            echo "waiting... $cnt"
+            if [ $cnt -gt 30 ]; then 
+                let cnt=-1
+            fi
         done
-        sleep 2
+        if [ $cnt -eq -1 ]; then 
+            docker stack fabric 
+            bash runall.sh "bash clean.sh"
+            echo "something failed, rerun round$round "
+            continue
+        fi
         cli=$(docker ps | grep fabric_cli | awk '{print $1}')
         while [ ! $cli ]; do 
-            echo "wait for cli contianer "
-            sleep 5
-            cli=$(docker ps | grep fabric_cli | awk '{print $1}')
+            echo "fatal error, please rerun this script:)"
+            exit 1
         done
         echo $cli
-        docker exec $cli bash scripts/script.sh
+        timeout 120 docker exec $cli bash scripts/script.sh
+        if [ $? -ne 0 ]; then 
+            docker stack rm fabric 
+            bash runall.sh "bash clean.sh"
+            echo "something failed, rerun round$round "
+            continue
+        fi
         # create $accounts accounts
         docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --e2e -n $accounts --orderer_client $k --num_of_conn $i --client_per_conn $j --burst 50000 --txtype create_random --groups $peers --send_rate $send_rate --ndrate $nondeterminism_rate --config config.yaml > $nondeterminism 2>&1
         sleep 2
@@ -115,6 +158,8 @@ elif [ $1 == "nd" ]; then
         docker stack rm fabric
         bash runall.sh "bash clean.sh"
         mv $nondeterminism logs/ff/nondeterminism/
+        let round=round+1
+        let curi=curi+1
         sleep 20
     done
     mv log.log logs/ff/nondeterminism/
@@ -131,25 +176,46 @@ elif [ $1 == "contention" ]; then
     j=4
     k=40
     send_rate=20000
-    for contention_rate in 0 0.1 0.2 0.3 0.4 0.5; do 
-        let round=round+1
+    contention_rates=(0 0.1 0.2 0.3 0.4 0.5)
+    len=${#contention_rates[@]}
+    curi=0
+    while [ $curi -lt $len ]; do 
+        contention_rate=${contention_rates[$curi]}
+        echo "contention_rate:$contention_rate"
         docker stack deploy --resolve-image never --compose-file=docker-compose-fastfabric.yaml fabric
+        cnt=0
         while true; do 
             wait=$(docker service list | grep 1/1 | wc -l)
             if [ $wait == $all ]; then 
                 break;
             fi 
             sleep 2
+            let cnt=cnt+1
+            echo "waiting... $cnt"
+            if [ $cnt -gt 30 ]; then 
+                let cnt=-1
+                break 
+            fi
         done
-        sleep 2
+        if [ $cnt -eq -1 ]; then 
+            docker stack rm fabric 
+            bash runall.sh "bash clean.sh"
+            echo "something failed, rerun round$round "
+            continue
+        fi 
         cli=$(docker ps | grep fabric_cli | awk '{print $1}')
         while [ ! $cli ]; do 
-            echo "wait for cli contianer "
-            sleep 5
-            cli=$(docker ps | grep fabric_cli | awk '{print $1}')
+            echo "fatal error, please rerun this scirpt:)"
+            exit 1
         done
         echo $cli
-        docker exec $cli bash scripts/script.sh
+        timeout 120 docker exec $cli bash scripts/script.sh
+        if [ $? -ne 0 ]; then 
+            docker stack rm fabric 
+            bash runall.sh "bash clean.sh"
+            echo "something failed, rerun round$round "
+            continue
+        fi
         # create $accounts accounts
         log=round${round}_${contention_rate}_e2e.log 
         contention=round${round}_${contention_rate}_contention.log 
@@ -170,6 +236,8 @@ elif [ $1 == "contention" ]; then
         bash runall.sh "bash clean.sh"
         mv $log logs/ff/contention/
         mv $contention logs/ff/contention/
+        let round=round+1
+        let curi=curi+1
         sleep 20
     done
     mv log.log logs/ff/contention

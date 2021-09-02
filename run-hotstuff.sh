@@ -3,7 +3,7 @@ cd hotstuff
 # rm -rf ../logs/hotstuff
 mkdir -p ../logs/hotstuff
 
-for node in 7 16 31; do
+for node in 4 7 16 22; do
     # set node IP
     # echo "10.22.1.7" > docker/servers
     echo "10.22.1.9" > docker/servers
@@ -18,15 +18,18 @@ for node in 7 16 31; do
         fi
     done
 
-    ip=70
+    ip=110
     # start containers: from  10.0.2.$ip
     bash docker/run.sh hotstuff-v1.0 $ip
 
     # set payload size in scripts/doploy/group_vars/all.yml in container c0
-    echo "10.0.2.70" > scripts/deploy/clients.txt
-    echo "10.0.2.71 10.0.2.71" > scripts/deploy/replicas.txt
-    ip=72
-    for i in `seq 2 $node`; do 
+    echo "10.0.2.$ip" > scripts/deploy/clients.txt
+    for i in `seq 1 15`; do 
+        echo "10.0.2.$ip" >> scripts/deploy/clients.txt
+    done 
+    rm scripts/deploy/replicas.txt
+    let ip=ip+1
+    for i in `seq 1 $node`; do 
         echo "10.0.2.$ip 10.0.2.$ip" >> scripts/deploy/replicas.txt
         let ip=ip+1
     done

@@ -185,7 +185,7 @@ Orderer: &OrdererDefaults
     BatchSize:
 
         # Max Message Count: The maximum number of messages to permit in a batch
-        MaxMessageCount: 500
+        MaxMessageCount: 1500
 
         # Absolute Max Bytes: The absolute maximum number of bytes allowed for
         # the serialized messages in a batch.
