@@ -31,7 +31,9 @@ public class BidlFrontend extends Thread {
 
     // public static final ConcurrentHashMap<String, HashSet<Integer>> conflictList = new ConcurrentHashMap<>();
     public static final ConcurrentHashMap<String, HashSet<Integer>> conflictList = new ConcurrentHashMap<>();
-    public static final ConcurrentHashMap<String, Integer> denyList = new ConcurrentHashMap<>();
+    // public static final ConcurrentHashMap<String, Integer> denyList = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<String, Integer> denyListLocal = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<String, Integer> denyListGlobal = new ConcurrentHashMap<>();
     public static final ConcurrentHashMap<Integer, String> seqMap = new ConcurrentHashMap<>();
     public static final ConcurrentMap<String, byte[]> txMap = new ConcurrentHashMap<>();
     public static final BlockingQueue<byte[]> txBlockingQueue = new LinkedBlockingQueue<>(100000);
@@ -104,6 +106,9 @@ public class BidlFrontend extends Thread {
             acceptGroup.shutdownGracefully();
         }
     }
+    private void newMaliciousEntry(){
+
+    }
 
     private class SequencerDecodeHandler extends ChannelInboundHandlerAdapter {
         @Override
@@ -118,11 +123,12 @@ public class BidlFrontend extends Thread {
             
             // check denylist
             byte[] magicNum = Arrays.copyOfRange(rcvPktBuf, 0, 4);
-            if (denyList.containsKey(Arrays.toString(magicNum))) {
-                logger.debug("Transaction account in denylist, discard.");
+            String maliciousID = Arrays.toString(magicNum);
+            if (denyListGlobal.containsKey(maliciousID)) {
+                logger.debug("Transaction account in global denylist, discard.");
                 bytebuf.release();
                 return;
-            }
+            } 
             if (Arrays.equals(magicNum, MagicNumTxn)) {
                 totalNum++;
                 logger.debug("bidl: transaction received");
@@ -151,8 +157,19 @@ public class BidlFrontend extends Thread {
                 return;
             } else if (Arrays.equals(magicNum, MagicNumDenylist)) {
                 byte[] maliciousIDBytes = Arrays.copyOfRange(rcvPktBuf, 4, 8);
-                denyList.put(Arrays.toString(maliciousIDBytes), 1);
-                logger.info("bidl: new denylist entry received {}", Arrays.toString(maliciousIDBytes));
+                String maliciousIDStr = Arrays.toString(maliciousIDBytes);
+                logger.info("bidl: new denylist entry received {}", maliciousIDStr);
+                if (denyListLocal.containsKey(maliciousIDStr)) {
+                    int nodes = denyListLocal.get(maliciousIDStr);
+                    nodes = nodes + 1;
+                    denyListLocal.put(maliciousIDStr, nodes);
+                    if (nodes == controller.getQuorum()/2+1) { // f+1 nodes
+                        logger.info("Malicious client {} is added to the global denylist.", maliciousIDStr);
+                        denyListGlobal.put(maliciousIDStr, 1);
+                    } 
+                } else {
+                    denyListLocal.put(maliciousIDStr, 1);
+                }
                 bytebuf.release();
                 return;
             } else {
@@ -168,6 +185,7 @@ public class BidlFrontend extends Thread {
             }
         }
     }
+    
 
     private class Assembler extends Thread {
         private ByteBuffer payloadBuffer = null;
@@ -204,6 +222,7 @@ public class BidlFrontend extends Thread {
                 byte[] rcvPktBuf = null;
                 try {
                     if (execManager.getCurrentLeader() == controller.getStaticConf().getProcessId() && maliciousFlag == false) {
+                    // if (execManager.getCurrentLeader() == controller.getStaticConf().getProcessId()) {
                         if (totalNum > 50000) {
                             rcvPktBuf = BidlFrontend.txBlockingQueue.take();
                         } else {

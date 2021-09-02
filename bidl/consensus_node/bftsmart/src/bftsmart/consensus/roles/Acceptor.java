@@ -533,7 +533,6 @@ public final class Acceptor {
 
 		if (executionManager.getCurrentLeader() != controller.getStaticConf().getProcessId()) {
 			ArrayList<byte[]> gapHashes = new ArrayList<>();
-			// byte[] hash = new byte[32];
 			byte[] hashProp = new byte[32];
 			String hashPropStr = "";
 			String hashLocalStr = "";
@@ -553,21 +552,22 @@ public final class Acceptor {
 						gapHashes.add(hashProp);
 						byte[] txn = BidlFrontend.txMap.get(hashLocalStr);
 						String maliciousID = Arrays.toString(Arrays.copyOfRange(txn, 0, 4));
-						if (BidlFrontend.conflictList.containsKey(maliciousID)) {
+						if (BidlFrontend.denyListLocal.containsKey(maliciousID)) {
+							continue;
+						} else if (BidlFrontend.conflictList.containsKey(maliciousID)) {
 							HashSet<Integer> views = BidlFrontend.conflictList.get(maliciousID);
-							if (views.size() == controller.getQuorum()/2+1) { // controller.getQuorum() = ((n + f) / 2) replicas
-								logger.info("Malicious client {} is added to the denylist.", maliciousID);
+							views.add(executionManager.getCurrentLeader());
+							BidlFrontend.conflictList.put(maliciousID, views);
+
+							if (views.size() == controller.getQuorum()/2+1) { // f+1 views
+								logger.info("Malicious client {} is added to my local denylist.", maliciousID);
 								BidlFrontend.conflictList.remove(maliciousID);
-								BidlFrontend.denyList.put(maliciousID, 1);
+								BidlFrontend.denyListLocal.put(maliciousID, 1);
 								
 								ByteBuffer buffer = ByteBuffer.allocate(BidlFrontend.MagicNumBlock.length + 4);
 								buffer.put(BidlFrontend.MagicNumDenylist);
 								buffer.put(Arrays.copyOfRange(txn, 0, 4));
 								bidlSender.send(buffer.array());
-							} else {
-								logger.info("Put the malicious client {} to the conflict list, views: {}.", maliciousID, views.size());
-								views.add(executionManager.getCurrentLeader());
-								BidlFrontend.conflictList.put(maliciousID, views);
 							}
 						} else {
 							HashSet<Integer> views = new HashSet<Integer>();
