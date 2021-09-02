@@ -1,0 +1,1 @@
+rate 20 throughput rate 20 consensus latency rate 20 execution latency rate 20 commit latency rate 40 throughput rate 40 consensus latency rate 40 execution latency rate 40 commit latency rate 60 throughput rate 60 consensus latency rate 60 execution latency rate 60 commit latency 

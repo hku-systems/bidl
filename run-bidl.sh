@@ -1,20 +1,20 @@
-#!/bin/bash -e
-
+#!/bin/bash 
+set -u
 default_peers=4
 default_tput=60
-bash ./bidl/scripts/kill_all.sh
-bash ./bidl/scripts/deploy_bidl.sh $default_peers
+# bash ./bidl/scripts/kill_all.sh
+# bash ./bidl/scripts/deploy_bidl.sh $default_peers
 
 if [ $1 == "performance" ]; then 
     rst_dir=./logs/bidl/performance
     rst_file=$rst_dir/performance.log
-    rm -rf $rst_dir
-    mkdir -p $rst_dir
-    touch $rst_file
+    # rm -rf $rst_dir
+    # mkdir -p $rst_dir
+    # touch $rst_file
     for tput_cap in 20 40 60; do
         echo "Transaction submission rate: $tput_cap kTxns/s"
         # run benchmark
-        bash ./bidl/scripts/start_bidl.sh 4 50 $tput_cap performance
+        # bash ./bidl/scripts/start_bidl.sh 4 50 $tput_cap performance
         # obtain throughput data
         echo -n "rate $tput_cap throughput " >> $rst_file
         cat /home/$USER/logs/normal_0.log | grep "BIDL transaction commit throughput:" | python3 ./bidl/scripts/bidl_tput.py $tput_cap >> $rst_file
@@ -92,6 +92,77 @@ elif [ $1 == "scalability" ]; then
         cat /home/$USER/logs/normal_0.log | grep "Commit latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
     done
     bash ./bidl/scripts/kill_all.sh
+    exit 0
+elif [ $1 == "malicious" ]; then 
+    rst_dir=./logs/bidl/malicious
+    rst_file=$rst_dir/malicious.log
+    rm -rf $rst_dir
+    mkdir -p $rst_dir
+    touch $rst_file
+    bash ./bidl/scripts/start_local_test.sh $peers $default_tput malicious
+    send_num=260000
+    # send_num=510000
+    for view in 0; do # misbehave
+        # kill client
+        docker stop $(docker ps -aq --filter name="bidl_client"); docker rm $(docker ps -aq --filter name="bidl_client")
+
+        # run benchmarking
+        bash ./bidl/scripts/benchmark.sh 50 malicious $(( $send_num * $view )) 
+
+        new_view=$(( $view + 1 ))
+        nodeID=$(( $new_view % $peers ))
+        echo "The new leader for the next view $new_view is node $nodeID"
+        while true; do
+            wait=$( cat ./bidl/logs/consensus_${nodeID}.log | grep "I'm the new leader for regency ${new_view}" | wc -l)
+            if [ $wait -eq 1 ]; then
+                break;
+            fi
+            echo "Wait 5s for consensus nodes to view change"
+            sleep 5
+        done
+        sleep 10
+    done
+    for view in 1; do 
+        # kill client
+        docker stop $(docker ps -aq --filter name="bidl_client"); docker rm $(docker ps -aq --filter name="bidl_client")
+
+        # run benchmarking
+        bash ./bidl/scripts/benchmark.sh 50 performance $(( $send_num * $view )) 
+
+        new_view=$(( $view + 1 ))
+        nodeID=$(( $new_view % $peers ))
+        echo "The new leader for the next view $new_view is node $nodeID"
+        while true; do
+            wait=$( cat ./bidl/logs/consensus_${nodeID}.log | grep "I'm the new leader for regency ${new_view}" | wc -l)
+            if [ $wait -eq 1 ]; then
+                break;
+            fi
+            echo "Wait 5s for consensus nodes to view change"
+            sleep 5
+        done
+        sleep 10
+    done
+    for view in 2 3 4; do # misbehave
+        # kill client
+        docker stop $(docker ps -aq --filter name="bidl_client"); docker rm $(docker ps -aq --filter name="bidl_client")
+
+        # run benchmarking
+        bash ./bidl/scripts/benchmark.sh 50 malicious $(( $send_num * $view )) 
+
+        new_view=$(( $view + 1 ))
+        nodeID=$(( $new_view % $peers ))
+        echo "The new leader for the next view $new_view is node $nodeID"
+        while true; do
+            wait=$( cat ./bidl/logs/consensus_${nodeID}.log | grep "I'm the new leader for regency ${new_view}" | wc -l)
+            if [ $wait -eq 1 ]; then
+                break;
+            fi
+            echo "Wait 5s for consensus nodes to view change"
+            sleep 5
+        done
+        sleep 10
+    done
+    bash ./bidl/scripts/kill_all_local.sh
     exit 0
 else 
     echo "Invalid argument."
