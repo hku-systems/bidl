@@ -9,3 +9,4 @@ hotstuff/scripts/deploy/run1_cli
 *tar
 *log
 .idea
+figure/*.pdf
