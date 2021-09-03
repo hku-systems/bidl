@@ -1,9 +1,9 @@
-rate 4 consensus latency 6
-rate 4 execution latency 42
-rate 4 commit latency 3
-rate 25 consensus latency 17
-rate 25 execution latency 25
-rate 25 commit latency 1
-rate 49 consensus latency 55
-rate 49 execution latency 27
-rate 49 commit latency 16
+rate 4 consensus latency 3 ms
+rate 4 execution latency 41 ms
+rate 4 commit latency 9 ms
+rate 25 consensus latency 8 ms
+rate 25 execution latency 24 ms
+rate 25 commit latency 4 ms
+rate 49 consensus latency 18 ms
+rate 49 execution latency 25 ms
+rate 49 commit latency 18 ms

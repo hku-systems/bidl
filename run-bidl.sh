@@ -1,7 +1,7 @@
 #!/bin/bash 
 set -u
 default_peers=4
-default_tput=60
+default_tput=50
 bash ./bidl/scripts/kill_all.sh
 # bash ./bidl/scripts/deploy_bidl.sh $default_peers
 
@@ -29,7 +29,7 @@ if [ $1 == "performance" ]; then
         echo -n "rate $tput_cap commit latency " >> $rst_file
         cat /home/$USER/logs/normal_0.log | grep "Commit latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
     done
-    source $base_dir/scripts/kill_all.sh
+    bash ./bidl/scripts/kill_all.sh
     exit 0
 elif [ $1 == "nd" ]; then 
     rst_dir=./logs/bidl/nondeterminism
@@ -45,7 +45,7 @@ elif [ $1 == "nd" ]; then
         echo -n "rate $nondeterminism_rate throughput " >> $rst_file
         cat /home/$USER/logs/normal_0.log | grep "BIDL transaction commit throughput" | python3 ./bidl/scripts/bidl_tput.py $default_tput >> $rst_file
     done
-    source $base_dir/scripts/kill_all.sh
+    bash ./bidl/scripts/kill_all.sh
     exit 0
 elif [ $1 == "contention" ]; then 
     rst_dir=./logs/bidl/contention
@@ -58,10 +58,10 @@ elif [ $1 == "contention" ]; then
         # run benchmark
         bash ./bidl/scripts/start_bidl.sh 4 50 $default_tput contention $contention_rate 
         # obtain throughput data
-        echo -n "rate $tput_cap throughput " >> $rst_file
+        echo -n "rate $contention_rate throughput " >> $rst_file
         cat /home/$USER/logs/normal_0.log | grep "BIDL transaction commit throughput" | python3 ./bidl/scripts/bidl_tput.py $default_tput >> $rst_file
     done
-    source $base_dir/scripts/kill_all.sh
+    bash ./bidl/scripts/kill_all.sh
     exit 0
 elif [ $1 == "scalability" ]; then 
     rst_dir=./logs/bidl/scalability

@@ -69,13 +69,42 @@ with open("logs/streamchain/ordering.log") as f:
         cnt += 1
 
 
-# BIDL: TODO 
+# BIDL
+bidl_throughput = {} 
+bidl_consensus_latency = {}
+bidl_execution_latency = {} 
+bidl_commit_latency = {}
+with open("logs/bidl/performance/performance.log") as f: 
+    lines = f.readlines()
+    for line in lines:
+        k=int(line.split()[1])
+        v=int(line.split()[-2])
+        if "throughput" in line:
+            bidl_throughput[k] = v
+        if "consensus latency" in line:
+            bidl_consensus_latency[k] = v
+        if "execution latency" in line:
+            bidl_execution_latency[k] = v
+        if "commit latency" in line:
+            bidl_commit_latency[k] = v
+
+bidl_tps=[x*1e3 for x in bidl_throughput.values()]
+bidl_latency=[]
+for key in bidl_commit_latency.keys():
+    consensus_latency = bidl_consensus_latency[key]
+    execution_latency = bidl_execution_latency[key]
+    commit_latency = bidl_commit_latency[key]
+    if consensus_latency > execution_latency:
+        bidl_latency.append(consensus_latency + commit_latency)
+    else:
+        bidl_latency.append(execution_latency + commit_latency)
 
 plt.plot(ff_tps, ff_latency, marker='x', label="fastfabric")
 plt.plot(fabric_tps, fabric_latency, marker='o', label="fabric")
 plt.plot(streamchain_tps, streamchain_latency, marker='s', label="streamchain")
-# plt.plot(bidl_tps, bidl_latency, marker='P', label="BIDL")
+plt.plot(bidl_tps, bidl_latency, marker='P', label="BIDL")
+
 plt.xlabel("throughput")
 plt.ylabel("latency(ms)")
 plt.legend()
-plt.savefig("figure/performance.pdf")
+plt.savefig("figure/performance_test.pdf")

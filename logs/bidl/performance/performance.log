@@ -1,0 +1,12 @@
+rate 20 throughput 17 kTxns/s
+rate 20 consensus latency 14 ms
+rate 20 execution latency 12 ms
+rate 20 commit latency 0 ms
+rate 40 throughput 42 kTxns/s
+rate 40 consensus latency 16 ms
+rate 40 execution latency 20 ms
+rate 40 commit latency 1 ms
+rate 60 throughput 66 kTxns/s
+rate 60 consensus latency 17 ms
+rate 60 execution latency 17 ms
+rate 60 commit latency 1 ms

@@ -7,6 +7,7 @@ for host in `cat $base_dir/scripts/servers`; do
     echo $host
     scp $base_dir/smart.tar jqi@${host}:~/
     scp $base_dir/normal_node.tar jqi@${host}:~/
+    scp $base_dir/sequencer.tar jqi@${host}:~/
     ssh ${USER}@${host} 'docker rm $(docker ps -aq --filter name="smart"); docker rmi smart; docker load --input smart.tar;
     docker rm $(docker ps -aq --filter name="normal_node"); docker rmi normal_node; docker load --input normal_node.tar;
     docker rm $(docker ps -aq --filter name="sequencer"); docker rmi sequencer; docker load --input sequencer.tar'

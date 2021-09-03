@@ -1,4 +1,6 @@
-#!/bin/bash -e
+#!/bin/bash
+set -u
+
 if [ "$#" -lt 4 ]; then
     echo "Usage: bash ./bidl/scripts/start_bidl.sh <1. num of consensus nodes> <2. num of normal nodes> <3. peak throughput> <4. benchmark> <5. benchmark parameters*>"
     exit 1
@@ -78,9 +80,7 @@ for host in `cat $base_dir/scripts/servers`; do
     done
 done 
 
-echo "Starting the sequencer..."
-# $sequencer_dir/sequencer $3 &> sequencer.log &
-docker run --name sequencer --net=host sequencer:latest /sequencer/sequencer $3 > /home/${USER}/sequencer.log 2>&1 &
+docker run --name sequencer --net=host sequencer:latest /sequencer/sequencer $3 > /home/${USER}/logs/sequencer.log 2>&1 &
 
 echo "benchmarking..."
 cd $normal_node_dir

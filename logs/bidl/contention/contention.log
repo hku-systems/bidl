@@ -1,0 +1,3 @@
+rate 0 throughput 49 kTxns/s
+rate 25 throughput 50 kTxns/s
+rate 50 throughput 51 kTxns/s
