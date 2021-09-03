@@ -61,7 +61,7 @@ func (solo *consenter) HandleChain(support consensus.ConsenterSupport, metadata 
 func newChain(support consensus.ConsenterSupport) *chain {
 	return &chain{
 		support:  support,
-		sendChan: make(chan *message),
+		sendChan: make(chan *message, 50000),
 		exitChan: make(chan struct{}),
 	}
 }

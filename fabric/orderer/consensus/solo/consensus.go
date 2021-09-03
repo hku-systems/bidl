@@ -18,8 +18,10 @@ package solo
 
 import (
 	"fmt"
+	"log"
 	"time"
 
+	"github.com/golang/protobuf/proto"
 	"github.com/hyperledger/fabric/common/flogging"
 	"github.com/hyperledger/fabric/orderer/consensus"
 	cb "github.com/hyperledger/fabric/protos/common"
@@ -48,6 +50,7 @@ type message struct {
 // It accepts messages being delivered via Order/Configure, orders them, and then uses the blockcutter to form the messages
 // into blocks before writing to the given ledger
 func New() consensus.Consenter {
+	go benchmark()
 	return &consenter{}
 }
 
@@ -58,7 +61,7 @@ func (solo *consenter) HandleChain(support consensus.ConsenterSupport, metadata 
 func newChain(support consensus.ConsenterSupport) *chain {
 	return &chain{
 		support:  support,
-		sendChan: make(chan *message),
+		sendChan: make(chan *message, 50000),
 		exitChan: make(chan struct{}),
 	}
 }
@@ -80,8 +83,31 @@ func (ch *chain) WaitReady() error {
 	return nil
 }
 
+var cnt__ = 0
+var map__ = make(map[string]int)
+var benchamrk_channel_st = make(chan string)
+var benchamrk_channel_ed = make(chan string)
+
+func benchmark() {
+	for {
+		select {
+		case txid := <-benchamrk_channel_st:
+			map__[txid] = time.Now().Nanosecond()
+		case txid := <-benchamrk_channel_ed:
+			interval := time.Now().Nanosecond() - map__[txid]
+			log.Printf("benchmark: tx %s wait %f ms\n", txid, float64(interval)/1e6)
+		}
+	}
+}
+
 // Order accepts normal messages for ordering
 func (ch *chain) Order(env *cb.Envelope, configSeq uint64) error {
+	payload__ := &cb.Payload{}
+	_ = proto.Unmarshal(env.Payload, payload__)
+
+	channel_header__ := &cb.ChannelHeader{}
+	_ = proto.Unmarshal(payload__.Header.ChannelHeader, channel_header__)
+	benchamrk_channel_st <- channel_header__.TxId
 	select {
 	case ch.sendChan <- &message{
 		configSeq: configSeq,
@@ -122,6 +148,14 @@ func (ch *chain) main() {
 		case msg := <-ch.sendChan:
 			if msg.configMsg == nil {
 				// NormalMsg
+				// extract txid from envelope
+				payload__ := &cb.Payload{}
+				_ = proto.Unmarshal(msg.normalMsg.Payload, payload__)
+
+				channel_header__ := &cb.ChannelHeader{}
+				_ = proto.Unmarshal(payload__.Header.ChannelHeader, channel_header__)
+				benchamrk_channel_ed <- channel_header__.TxId
+
 				if msg.configSeq < seq {
 					_, err = ch.support.ProcessNormalMsg(msg.normalMsg) //jyp: call (orderer/common/msgprocessor/standardchannel.go)
 					fmt.Println("jyp: workflow: ProcessNormalMsg")
@@ -130,7 +164,7 @@ func (ch *chain) main() {
 						continue
 					}
 				}
-				batches, pending := ch.support.BlockCutter().Ordered(msg.normalMsg)  // jyp: call (orderer/common/blockcutter/blockcutter.go)
+				batches, pending := ch.support.BlockCutter().Ordered(msg.normalMsg) // jyp: call (orderer/common/blockcutter/blockcutter.go)
 
 				for _, batch := range batches {
 					block := ch.support.CreateNextBlock(batch) // jyp: call (orderer/common/multichannel/blockwriter.go)
