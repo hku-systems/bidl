@@ -70,13 +70,13 @@ elif [ $1 == "scalability" ]; then
     mkdir -p $rst_dir
     touch $rst_file
     # generate config file for all settings
-    for org in 4 25 49; do 
+    for org in 4 7 13 25 49; do 
         bash ./bidl/scripts/gen_host_conf.sh $org
         cp ./bidl/consensus_node/bftsmart/config/hosts.config ./bidl/scripts/configs/hosts_$org.config
     done
     bash ./bidl/scripts/copy_smart_config.sh
 
-    for org in 4 25 49; do 
+    for org in 4 7 13 25 49; do 
         echo "Number of organizations = $org"
         # run benchmark
         bash ./bidl/scripts/start_bidl_scalability.sh $org $org $default_tput scalability
@@ -99,18 +99,16 @@ elif [ $1 == "malicious" ]; then
     rm -rf $rst_dir
     mkdir -p $rst_dir
     touch $rst_file
-    bash ./bidl/scripts/start_local_test.sh $peers $default_tput malicious
+    bash ./bidl/scripts/start_bidl_only_normal.sh 50 $default_tput
+    bash ./bidl/scripts/start_local_only_consensus.sh $default_peers $default_tput malicious
     send_num=260000
-    # send_num=510000
     for view in 0; do # misbehave
-        # kill client
-        docker stop $(docker ps -aq --filter name="bidl_client"); docker rm $(docker ps -aq --filter name="bidl_client")
-
-        # run benchmarking
+        # run benchmark
         bash ./bidl/scripts/benchmark.sh 50 malicious $(( $send_num * $view )) 
 
+        # view change
         new_view=$(( $view + 1 ))
-        nodeID=$(( $new_view % $peers ))
+        nodeID=$(( $new_view % $default_peers ))
         echo "The new leader for the next view $new_view is node $nodeID"
         while true; do
             wait=$( cat ./bidl/logs/consensus_${nodeID}.log | grep "I'm the new leader for regency ${new_view}" | wc -l)
@@ -123,14 +121,11 @@ elif [ $1 == "malicious" ]; then
         sleep 10
     done
     for view in 1; do 
-        # kill client
-        docker stop $(docker ps -aq --filter name="bidl_client"); docker rm $(docker ps -aq --filter name="bidl_client")
-
-        # run benchmarking
+        # run benchmark
         bash ./bidl/scripts/benchmark.sh 50 performance $(( $send_num * $view )) 
 
         new_view=$(( $view + 1 ))
-        nodeID=$(( $new_view % $peers ))
+        nodeID=$(( $new_view % $default_peers ))
         echo "The new leader for the next view $new_view is node $nodeID"
         while true; do
             wait=$( cat ./bidl/logs/consensus_${nodeID}.log | grep "I'm the new leader for regency ${new_view}" | wc -l)
@@ -143,14 +138,11 @@ elif [ $1 == "malicious" ]; then
         sleep 10
     done
     for view in 2 3 4; do # misbehave
-        # kill client
-        docker stop $(docker ps -aq --filter name="bidl_client"); docker rm $(docker ps -aq --filter name="bidl_client")
-
-        # run benchmarking
+        # run benchmark
         bash ./bidl/scripts/benchmark.sh 50 malicious $(( $send_num * $view )) 
 
         new_view=$(( $view + 1 ))
-        nodeID=$(( $new_view % $peers ))
+        nodeID=$(( $new_view % $default_peers ))
         echo "The new leader for the next view $new_view is node $nodeID"
         while true; do
             wait=$( cat ./bidl/logs/consensus_${nodeID}.log | grep "I'm the new leader for regency ${new_view}" | wc -l)

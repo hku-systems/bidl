@@ -74,7 +74,7 @@ echo "######################################################"
 i=0
 for host in `cat $base_dir/scripts/servers`; do
     for node in `seq 0 $[${normal_nodes_per_host}-1]`; do
-        echo ${host} ${node}
+        echo ${host} ${i}
         ssh -n ${USER}@${host} "docker run --name normal_node$i --net=host --cap-add NET_ADMIN normal_node /normal_node/server --quiet --tps=$3 --id=$i > logs/normal_${i}.log 2>&1 &"
         let i=$i+1
     done

@@ -442,7 +442,6 @@ public final class Acceptor {
 	 * @param epoch Epoch at which the decision is made
 	 */
 	private void decide(Epoch epoch) {
-		// removeHashes(epoch);
 		if (epoch.getConsensus().getDecision().firstMessageProposed != null)
 			epoch.getConsensus().getDecision().firstMessageProposed.decisionTime = System.nanoTime();
 
@@ -457,10 +456,10 @@ public final class Acceptor {
 		// logger.debug("bidl: notifying new decided block, length:{}, content:{}", epoch.deserializedPropValue[0].getContent().length,
 		// 		Arrays.toString(epoch.deserializedPropValue[0].getContent()));
 		if (epoch.deserializedPropValue == null) {
-			logger.info("bidl: new block decided, however, the local deserializedPropValue is null");
+			logger.info("New block decided, however, the local deserializedPropValue is null");
 			return;
 		}
-		logger.info("bidl: new block decided, send the decided value to all normal nodes");
+		logger.info("New block decided, send the decided value to all normal nodes");
 		if (epoch.deserializedPropValue.length > 0) {
 			byte[] decidedValue = epoch.deserializedPropValue[0].getContent();
 			ByteBuffer buffer = ByteBuffer.allocate(BidlFrontend.MagicNumBlock.length + decidedValue.length);
@@ -473,7 +472,7 @@ public final class Acceptor {
 	private void removeHashes(Epoch epoch) {
 		int sizeBeforeCommit = BidlFrontend.txMap.size();
 		if (epoch.deserializedPropValue == null) {
-			logger.info("bidl: new block decided, however, local deserializedPropValue is null");
+			logger.info("New block decided, however, local deserializedPropValue is null");
 			return;
 		}
 		for (TOMMessage request : epoch.deserializedPropValue) {
@@ -492,7 +491,7 @@ public final class Acceptor {
 			}
 		}
 		int sizeAfterCommit = BidlFrontend.txMap.size();
-		logger.info("bidl: new block decided, remove all hashes, size before: {}, size after: {}", sizeBeforeCommit,
+		logger.info("New block decided, remove all hashes, size before: {}, size after: {}", sizeBeforeCommit,
 				sizeAfterCommit);
 	}
 
@@ -523,7 +522,7 @@ public final class Acceptor {
 		try {
 			for (int waitN = 0; BidlFrontend.maxSeqNum < blockMaxSeq && waitN < 5; waitN++) {
 				logger.info(
-						"bidl: maxmimum sequence number in proposed block is {}, my max sequence number is {}, wait for 5 ms.",
+						"Maxmimum sequence number in proposed block is {}, my max sequence number is {}, wait for 5 ms.",
 						blockMaxSeq, BidlFrontend.maxSeqNum);
 				Thread.sleep(5);
 			}
@@ -587,20 +586,20 @@ public final class Acceptor {
 				int[] leader = new int[1];
 				leader[0] = executionManager.getCurrentLeader();
 				logger.info(
-						"bidl: I have received the latest txns, but I don't hold {} number of proposed transactions, send gapReq to leader, and request for gapReply...",
+						"I have received the latest txns, but I don't hold {} number of proposed transactions, send gapReq to leader, and request for gapReply...",
 						gapNumber);
 				communication.send(leader, factory.createGapReqMsg(gapNumber, gapHashes));
 				long startTime = System.currentTimeMillis();
 				try {
 					int replyLen = waitQueue.take();
-					logger.info("bidl: gapReply received, reply len {}, duration: {}", replyLen,
+					logger.info("GapReply received, reply len {}, duration: {}", replyLen,
 							System.currentTimeMillis() - startTime);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 					Thread.currentThread().interrupt();
 				}
 			} else{
-				logger.info("bidl: I hold all proposed transactions.");
+				logger.info("I hold all proposed transactions.");
 			} 
 		}
 	}

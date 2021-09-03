@@ -116,9 +116,6 @@ func (p *Processor) ProcessTxn(txn *common.SequencedTransaction) {
 	elapsedTxn := time.Since(startExecTxn) / time.Microsecond // duration in us
 	elapsedBlk += elapsedTxn
 	if p.txnNum % p.BlkSize == 0 {
-		// elapsed := 	time.Since(startExecBlk) / time.Millisecond // duration in ms
-		// startExecBlk = time.Now()
-		// fmt.Printf("Execution latency: %d ms, for executing %d transactions.\n", elapsedBlk/1e3, p.execNum)
 		log.Infof("Execution latency: %d ms, for executing %d transactions.\n", elapsedBlk/1e3, p.execNum)
 		elapsedBlk = 0
 		p.execNum = 0
@@ -160,7 +157,7 @@ func (p *Processor) ExecuteTxn(txn *common.SequencedTransaction) {
 		signature := r.Bytes()
 		signature = append(signature, s.Bytes()...)
 		env.Signature = signature
-		time.Sleep(1 * time.Microsecond)
+		time.Sleep(5 * time.Microsecond)
 		if p.txnNum % 500 == 0 {
 			p.PersistExecResult(&env)
 		}
