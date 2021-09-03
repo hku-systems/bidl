@@ -13,7 +13,83 @@ BIDL is a high-throughput and low-latency permissioned blockchain framework desi
 - Metrics: throughput and latency.
 - Expected runtime: each trial of each data point takes about 2 minutes.
 
-## Deployment (skip this section if you use our cluster)
+## Experiments
+
+If otherwise specified, all BIDL's experiments run four consensus nodes and 50 normal nodes.
+
+### Experiment 0: Test run
+
+This experiment tests the experimental environment. The following test script benchmarks BIDL/FastFabric and reports the end-to-end performance.
+Please follow [README_GET_STARTED.md](https://github.com/hku-systems/bidl/blob/main/README_GET_STARTED.md).
+
+### Experiment 1: End-to-end performance
+
+**Performance of BIDL and baseline systems:**
+
+This experiment runs BIDL/FastFabric/Hyperledger Fabric/StreamChain with the default smallbank workload and reports the end-to-end throughput/latency of each system.
+
+- Command to run:
+
+```shell
+bash run.sh performance
+```
+
+- Output: a pdf file named `performance.pdf`, containing the throughput vs. latency of BIDL and baseline systems.
+- Expected results:
+	- BIDL has higher throughput than all baseline systems;
+	- StreamChain achieves the lowest latency;
+	- BIDL's latency is better than FastFabric and Hyperledger Fabric.
+
+**Scalability of BIDL:**
+This experiment runs BIDL with different number of organizations, each organization contains one consensus node and one normal node.
+
+### Experiment 2: Performance with different ratio of contended transactions
+
+This experiment runs BIDL and FastFabric (achieves the best performance in Experiment 1) with the default smallbank workload with different contention ratios of transactions.
+
+- Command to run:
+
+```shell
+bash run.sh contention
+```
+
+- Output: a pdf file named `contention.pdf`, containing the throughput of BIDL and baseline systems under different ratio of contended transactions.
+- Expected results:
+	- BIDL's throughput shows no obvious decline.
+	- FastFabric's effective throughput decreases with the increasing ratio of contented transactions.
+
+### Experiment 3: Performance with different ratio of non-deterministic transactions
+
+This experiment runs BIDL and FastFabric (achieves the best performance in Experiment 1) with different ratio of non-deterministic transactions.
+
+- Command to run:
+
+```shell
+bash run.sh nd 
+```
+
+- Output: a pdf file named `nondeterminism.pdf`, containing the throughput of BIDL and baseline systems under different ratio of non-deterministic transactions.
+- Expected results:
+  - The effective throughput of BIDL and FastFabric all drop with the increasing ratio of non-deterministic transactions.
+
+### Experiment 4: Performance with malicious participants
+
+This experiment runs BIDL with a malicious broadcaster. The malicious broadcaster broadcasts transactions with crafted sequence numbers. These crafted transactions will cause conflicts (with transactions from the sequencer) in nodes' sequence number spaces, causing the consensus throughput to drop. Consensus nodes shepherd the malicious broadcaster, and add the broadcaster to the denylist.
+
+- Command to run:
+
+```shell
+bash run.sh malicious
+```
+
+- Output: a pdf file named `malicious.pdf`, containing the throughput of BIDL under a malicious broadcaster during five views.
+- Expected results:
+  - BIDL's throughput drops in view 0 due to the malicious broadcaster's misbehavior.
+  - BIDL's throughput recovers in view 2. This is because the broadcaster
+    misbehaves in $f+1$ views with different leaders and the broadcaster is
+    added to the denylist.
+
+## Deployment (if you don't use our cluster)
 
 ### Clone the codebase
 
@@ -65,79 +141,3 @@ bash setup.sh
 ```
 
 You can also use our cluster for all experiments. Please feel free to contact us for the ssh private key to access our cluster.
-
-## Experiments
-
-If otherwise specified, all BIDL's experiments run four consensus nodes and 50 normal nodes.
-
-### Experiment 0: Test run
-
-This experiment tests the experimental environment. The following test script benchmarks BIDL/FastFabric and reports the end-to-end performance.
-Please follow [README_GET_STARTED.md](https://github.com/hku-systems/bidl/blob/main/README_GET_STARTED.md).
-
-### Experiment 1: End-to-end performance
-
-**Performance of BIDL and baseline systems:**
-
-This experiment runs BIDL/FastFabric/Hyperledger Fabric/StreamChain with the default smallbank workload and reports the end-to-end throughput/latency of each system.
-
-- Command to run:
-
-```shell
-bash run.sh performance
-```
-
-- Output: a pdf file named `performance.pdf`, containing the throughput vs. latency of BIDL and baseline systems.
-- Expected results:
-	- BIDL has higher throughput than all baseline systems;
-	- StreamChain achieves the lowest latency;
-	- BIDL's latency is better than FastFabric and Hyperledger Fabric.
-
-**Scalability**
-This experiment runs BIDL with different number of organizations, each organization contains one consensus node and one normal node.
-
-### Experiment 2: Performance with different ratio of contended transactions
-
-This experiment runs BIDL and FastFabric (achieves the best performance in Experiment 1) with the default smallbank workload with different contention ratios of transactions.
-
-- Command to run:
-
-```shell
-bash run.sh contention
-```
-
-- Output: a pdf file named `contention.pdf`, containing the throughput of BIDL and baseline systems under different ratio of contended transactions.
-- Expected results:
-	- BIDL's throughput shows no obvious decline.
-	- FastFabric's effective throughput decreases with the increasing ratio of contented transactions.
-
-### Experiment 3: Performance with different ratio of non-deterministic transactions
-
-This experiment runs BIDL and FastFabric (achieves the best performance in Experiment 1) with different ratio of non-deterministic transactions.
-
-- Command to run:
-
-```shell
-bash run.sh nd 
-```
-
-- Output: a pdf file named `nondeterminism.pdf`, containing the throughput of BIDL and baseline systems under different ratio of non-deterministic transactions.
-- Expected results:
-  - The effective throughput of BIDL and FastFabric all drop with the increasing ratio of non-deterministic transactions.
-
-### Experiment 4: Performance with malicious participants
-
-This experiment runs BIDL with a malicious broadcaster. The malicious broadcaster broadcasts transactions with crafted sequence numbers. These crafted transactions will cause conflicts (with transactions from the sequencer) in nodes' sequence number spaces, causing the consensus throughput to drop. Consensus nodes shepherd the malicious broadcaster, and add the broadcaster to the denylist.
-
-- Command to run:
-
-```shell
-bash run.sh malicious
-```
-
-- Output: a pdf file named `malicious.pdf`, containing the throughput of BIDL under a malicious broadcaster during five views.
-- Expected results:
-  - BIDL's throughput drops in view 0 due to the malicious broadcaster's misbehavior.
-  - BIDL's throughput recovers in view 2. This is because the broadcaster
-    misbehaves in $f+1$ views with different leaders and the broadcaster is
-    added to the denylist.
