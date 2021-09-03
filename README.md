@@ -54,11 +54,10 @@ sudo ifconfig lo multicast
 sudo route add -net 224.0.0.0 netmask 240.0.0.0 dev lo
 ```
 
-4. To run Fabric and Fastfabric, you need to set the `host` parameter (IP address) in `config-fabric.yaml` and `config-fastfabric.yaml`. Make sure the length of host list is at least equal to the number of peers. In the following experiments, our scripts will generate docker compose files according to those configuration files.
-
-5. To run streamchain, you need to set the IP addresses in `streamchain/setup/config.sh`.
-
-6. Build the docker images for Fabric and Fastfabric with the following command.
+4. To run BIDL, you need to list the servers you used in `./bidl/scripts/servers`. Make sure the first server address is the `IP` of your current server (i.e., the server you login and run experiments). In the following experiments, our scripts will put the leader consensus node on the first server and retrieve performance data from this node.
+5. To run Fabric and Fastfabric, you need to set the `host` parameter (IP address) in `config-fabric.yaml` and `config-fastfabric.yaml`. Make sure the length of host list is at least equal to the number of peers. In the following experiments, our scripts will generate docker compose files according to those configuration files.
+6. To run StreamChain, you need to set the IP addresses in `streamchain/setup/config.sh`.
+7. Build the docker images for Fabric and Fastfabric with the following command.
 
 ```shell
 # Before you start, you need to replace the IP list in config.sh according to your experiment environment. 
