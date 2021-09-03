@@ -6,18 +6,16 @@ import datetime
 template = 'operations/sec'
 
 lines = []
-for line in sys.stdin:
-    if template in line:
-        lines.append(line)
-
-print(len(lines))
+with open("./bidl/logs/consensus_0.log") as f:
+    for line in f.readlines():
+        if template in line:
+            lines.append(line)
 
 num = 0
 tputs = []
 nums = []
 avgs = []
 temps = []
-# tick = 0
 for i in range(len(lines)):
     line = lines[i]
     tput = 0

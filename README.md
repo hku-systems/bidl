@@ -21,6 +21,18 @@ If otherwise specified, all BIDL's experiments run four consensus nodes and 50 n
 
 1. Please login our cluster following [this page](https://github.com/hku-systems/bidl/blob/main/servers.md).
 2. Please go to server 2 (sosp21ae@202.45.128.161) to run the following experiments.
+3. Each experiment will generate a figure, you can download the figure with the following command:
+
+```shell
+ssh -i [key_file_name] -N -L [local_port]:202.45.128.164:22 sosp21ae@gatekeeper3.cs.hku.hk
+```
+
+- `-N`: Do not execute a remote command. This is useful for just forwarding ports.
+- `-L`: Specifies that the given port on the local (client) host is to be forwarded to the given host and port on the remote side.
+- `-i`: Selects a file from which the identity (private key) for RSA or DSA authentication is read.
+
+Please be noted that different evaluators may not be able to run experiments at the same time. This is because the docker containers started by other evaluators will have the same IP address and container name.
+You can check whether there are other evaluators running the experiments by `docker ps`.
 
 ### Experiment 0: Test run
 

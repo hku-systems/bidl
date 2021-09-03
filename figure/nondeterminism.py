@@ -30,4 +30,4 @@ plt.ylabel("Throughput (kTxns/s)")
 plt.ylim(0)
 
 # plt.savefig("figure/nondeterminism.pdf")
-plt.savefig("figure/nondeterminism_test.pdf")
+plt.savefig("figure/nondeterminism.pdf")
