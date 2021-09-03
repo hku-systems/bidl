@@ -17,6 +17,11 @@ BIDL is a high-throughput and low-latency permissioned blockchain framework desi
 
 If otherwise specified, all BIDL's experiments run four consensus nodes and 50 normal nodes.
 
+### Prepare
+
+1. Please login our cluster following [this page](https://github.com/hku-systems/bidl/blob/main/servers.md).
+2. Please go to server 2 (sosp21ae@202.45.128.161) to run the following experiments.
+
 ### Experiment 0: Test run
 
 This experiment tests the experimental environment. The following test script benchmarks BIDL/FastFabric and reports the end-to-end performance.
@@ -24,9 +29,9 @@ Please follow [README_GET_STARTED.md](https://github.com/hku-systems/bidl/blob/m
 
 ### Experiment 1: End-to-end performance
 
-**Performance of BIDL and baseline systems:**
+#### Experiment 1-1: Performance of BIDL and baseline systems
 
-This experiment runs BIDL/FastFabric/Hyperledger Fabric/StreamChain with the default smallbank workload and reports the end-to-end throughput/latency of each system.
+This experiment runs BIDL/FastFabric/Hyperledger Fabric/StreamChain with the Smallbank workload and reports the end-to-end throughput vs. latency of each system.
 
 - Command to run:
 
@@ -34,14 +39,27 @@ This experiment runs BIDL/FastFabric/Hyperledger Fabric/StreamChain with the def
 bash run.sh performance
 ```
 
-- Output: a pdf file named `performance.pdf`, containing the throughput vs. latency of BIDL and baseline systems.
+- Output: a pdf file named `./figure/performance.pdf`, containing the throughput vs. latency of BIDL and baseline systems.
 - Expected results:
 	- BIDL has higher throughput than all baseline systems;
 	- StreamChain achieves the lowest latency;
 	- BIDL's latency is better than FastFabric and Hyperledger Fabric.
 
-**Scalability of BIDL:**
+#### Experiment 1-2: Scalability of BIDL
+
 This experiment runs BIDL with different number of organizations, each organization contains one consensus node and one normal node.
+
+- Command to run:
+
+```shell
+bash run.sh scalability
+```
+
+- Output: a pdf file named `./figure/scalability.pdf`, containing the end-to-end latency of BIDL.
+
+- Expected results:
+	- BIDL's end-to-end latency first decrease with the number of organizations (number of transactions executed by node of each organization decreases);
+	- BIDL's end-to-end latency then increase when the number of organizations continue to increase (the consensus latency increases).
 
 ### Experiment 2: Performance with different ratio of contended transactions
 
@@ -68,7 +86,7 @@ This experiment runs BIDL and FastFabric (achieves the best performance in Exper
 bash run.sh nd 
 ```
 
-- Output: a pdf file named `nondeterminism.pdf`, containing the throughput of BIDL and baseline systems under different ratio of non-deterministic transactions.
+- Output: a pdf file named `./figure/nondeterminism.pdf`, containing the throughput of BIDL and baseline systems under different ratio of non-deterministic transactions.
 - Expected results:
   - The effective throughput of BIDL and FastFabric all drop with the increasing ratio of non-deterministic transactions.
 
@@ -82,12 +100,10 @@ This experiment runs BIDL with a malicious broadcaster. The malicious broadcaste
 bash run.sh malicious
 ```
 
-- Output: a pdf file named `malicious.pdf`, containing the throughput of BIDL under a malicious broadcaster during five views.
+- Output: a pdf file named `.figure/malicious.pdf`, containing the throughput of BIDL under a malicious broadcaster during five views.
 - Expected results:
-  - BIDL's throughput drops in view 0 due to the malicious broadcaster's misbehavior.
-  - BIDL's throughput recovers in view 2. This is because the broadcaster
-    misbehaves in $f+1$ views with different leaders and the broadcaster is
-    added to the denylist.
+  - BIDL's throughput drops in `view 0` due to the malicious broadcaster's misbehavior.
+  - BIDL's throughput recovers in `view 2`. This is because consensus nodes detect the broadcaster's misbehavior in $f+1$ views (with different leaders) and add the broadcaster to the denylist.
 
 ## Deployment (if you don't use our cluster)
 
