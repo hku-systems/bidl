@@ -69,15 +69,16 @@ You can also use our cluster for all experiments. Please feel free to contact us
 
 ## Experiments
 
+If otherwise specified, all BIDL's experiments run four consensus nodes and 50 normal nodes.
+
 ### Experiment 0: Test run
 
 This experiment tests the experimental environment. The following test script benchmarks BIDL/FastFabric and reports the end-to-end performance.
 Please follow [README_GET_STARTED.md](https://github.com/hku-systems/bidl/blob/main/README_GET_STARTED.md).
 
-We are doing the final debugging for the following experiments and all
-experiments will be ready before September 4, 2021.
-
 ### Experiment 1: End-to-end performance
+
+**Performance of BIDL and baseline systems:**
 
 This experiment runs BIDL/FastFabric/Hyperledger Fabric/StreamChain with the default smallbank workload and reports the end-to-end throughput/latency of each system.
 
@@ -92,6 +93,9 @@ bash run.sh performance
 	- BIDL has higher throughput than all baseline systems;
 	- StreamChain achieves the lowest latency;
 	- BIDL's latency is better than FastFabric and Hyperledger Fabric.
+
+**Scalability**
+This experiment runs BIDL with different number of organizations, each organization contains one consensus node and one normal node.
 
 ### Experiment 2: Performance with different ratio of contended transactions
 
@@ -124,7 +128,7 @@ bash run.sh nd
 
 ### Experiment 4: Performance with malicious participants
 
-This experiment runs BIDL and Hyperledger Fabric with malicious participants.  Because FastFabric and StreamChain are designed for crash-fault-tolerant scenarios, we do not evaluate these two systems in this experiment.
+This experiment runs BIDL with a malicious broadcaster. The malicious broadcaster broadcasts transactions with crafted sequence numbers. These crafted transactions will cause conflicts (with transactions from the sequencer) in nodes' sequence number spaces, causing the consensus throughput to drop. Consensus nodes shepherd the malicious broadcaster, and add the broadcaster to the denylist.
 
 - Command to run:
 
@@ -132,4 +136,9 @@ This experiment runs BIDL and Hyperledger Fabric with malicious participants.  B
 bash run.sh malicious
 ```
 
-- Output: will be ready soon.
+- Output: a pdf file named `malicious.pdf`, containing the throughput of BIDL under a malicious broadcaster during five views.
+- Expected results:
+  - BIDL's throughput drops in view 0 due to the malicious broadcaster's misbehavior.
+  - BIDL's throughput recovers in view 2. This is because the broadcaster
+    misbehaves in $f+1$ views with different leaders and the broadcaster is
+    added to the denylist.
