@@ -14,6 +14,8 @@ import (
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 )
+var g_orderer_token = make(chan struct{}, 50000)
+var g_token = make(chan struct{}, 50000)
 
 type Proposers struct {
 	workers [][]*Proposer
@@ -40,8 +42,21 @@ func CreateProposers(conn, client int, nodes []Node, assember *Assembler, logger
 	return &Proposers{workers: ps, client: client, logger: logger}, nil
 }
 
+func GetToken() {
+	<- g_token
+}
+func GetOrdererToken() {
+	<- g_orderer_token
+}
 func (ps *Proposers) Start(signed []chan *Elements, processed chan *Elements, done <-chan struct{}, config Config) {
 	ps.logger.Infof("Start sending transactions.")
+	interval := 1e9 / g_send_rate
+	go func() {
+		for {
+			time.Sleep(time.Duration(interval)*time.Nanosecond)
+			g_token <- struct{}{}
+		}
+	}()
 	for i := 0; i < len(config.Endorsers); i++ {
 		// peer connection should be config.ClientPerConn * config.NumOfConn
 		for k := 0; k < g_client_per_conn; k++ {
@@ -73,7 +88,6 @@ func CreateProposer(node Node, assember *Assembler, logger *log.Logger) (*Propos
 func (p *Proposer) Start(signed, processed chan *Elements, done <-chan struct{}, threshold int, ii int, jj int) {
 	endorser_send_rate := g_send_rate / (g_num_of_conn * g_client_per_conn * g_groups)
 	base := time.Now().UnixNano()
-	interval := 1e9 / endorser_send_rate
 	var st int64
 	cnt := 0
 	for {
@@ -81,7 +95,7 @@ func (p *Proposer) Start(signed, processed chan *Elements, done <-chan struct{},
 		case s := <-signed:
 			//send sign proposal to peer for endorsement
 			// todo
-			time.Sleep(time.Duration(interval) * time.Nanosecond)
+			GetToken()
 			st = time.Now().UnixNano()
 			buffer_start <- fmt.Sprintf("start: %d %s %d %d", st, s.Txid, ii, jj)
 			r, err := p.e.ProcessProposal(context.Background(), s.SignedProp)
@@ -129,15 +143,6 @@ func (p *Proposer) Start(signed, processed chan *Elements, done <-chan struct{},
 		if cnt >= 10 {
 			tps := cnt * 1e9 / int(st-base)
 			log.Println("endorser send rate", tps, "expect", endorser_send_rate)
-			if tps != 0 && tps != endorser_send_rate {
-				et := 1e9/tps - interval
-				interval = 1e9/endorser_send_rate - et
-			}
-			// if tps > endorser_send_rate {
-			// 	interval = int(float64(interval) * 1.1)
-			// } else if tps < endorser_send_rate {
-			// 	interval = int(float64(interval) * 0.9)
-			// }
 			base = st
 			cnt = 0
 		}
@@ -160,6 +165,13 @@ func CreateBroadcasters(conn int, orderer Node, logger *log.Logger) (Broadcaster
 }
 
 func (bs Broadcasters) Start(envs <-chan *Elements, errorCh chan error, done <-chan struct{}) {
+	interval := 1e9 / g_send_rate
+	go func() {
+		for {
+			time.Sleep(time.Duration(interval)*time.Nanosecond)
+			g_orderer_token <- struct{}{}
+		}
+	}()
 	for _, b := range bs {
 		go b.StartDraining(errorCh)
 		go b.Start(envs, errorCh, done)
@@ -185,12 +197,12 @@ func (b *Broadcaster) Start(envs <-chan *Elements, errorCh chan error, done <-ch
 	orderer_send_rate := g_send_rate / g_orderer_client
 	base := time.Now().UnixNano()
 	cnt := 0
-	interval := 1e9 / orderer_send_rate
 	var st int64
 	for {
 		select {
 		case e := <-envs:
 			// todo
+			GetOrdererToken()
 			st = time.Now().UnixNano()
 			buffer_sent <- fmt.Sprintf("sent: %d %s", st, e.Txid)
 			err := b.c.Send(e.Envelope)
@@ -198,7 +210,6 @@ func (b *Broadcaster) Start(envs <-chan *Elements, errorCh chan error, done <-ch
 				errorCh <- err
 			}
 			cnt += 1
-			time.Sleep(time.Duration(interval) * time.Nanosecond)
 
 		case <-done:
 			return
@@ -206,15 +217,6 @@ func (b *Broadcaster) Start(envs <-chan *Elements, errorCh chan error, done <-ch
 		if cnt >= 20 {
 			tps := cnt * 1e9 / int(st-base)
 			log.Println("orderer send rate", tps, "expect", orderer_send_rate)
-			if tps != 0 && tps != orderer_send_rate {
-				et := 1e9/tps - interval
-				interval = 1e9/orderer_send_rate - et
-			}
-			// if tps > orderer_send_rate {
-			// 	interval = int(float64(interval) * 1.1)
-			// } else if tps < orderer_send_rate {
-			// 	interval = int(float64(interval) * 0.9)
-			// }
 			cnt = 0
 			base = st
 		}

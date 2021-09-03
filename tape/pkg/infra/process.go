@@ -15,7 +15,7 @@ import (
 var endorsement_file = "ENDORSEMENT"
 
 var (
-	MAX_BUF           = 100010
+	MAX_BUF           = 1000010
 	buffer_start      = make(chan string, MAX_BUF) // start: timestamp txid clientid connectionid
 	buffer_proposal   = make(chan string, MAX_BUF) // proposal: timestamp txid
 	buffer_sent       = make(chan string, MAX_BUF) // sent: timestamp txid
