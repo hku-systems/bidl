@@ -7,7 +7,7 @@ crypto: fabric_exp/organizations
 artifacts: fabric_exp/channel-artifacts
 
 peers: 
-  image: hyperledger/fabric-peer:fabric-v1.0
+  image: hyperledger/fabric-peer:fabric-v1.0 # TODO: fabric-2phase
   template: peer
   count: 6
   bootstrap: 0
@@ -15,7 +15,7 @@ peers:
 orderer:
   name: orderer
   host: heming-rdma6
-  image: hyperledger/fabric-orderer:fabric-v1.0
+  image: hyperledger/fabric-orderer:fabric-v3.0 
 
 cli:
   name: cli

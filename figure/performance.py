@@ -1,10 +1,26 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
+def remove_outliers(x, outlierConstant = 1.5):
+    a = np.array(x)
+    upper_quartile = np.percentile(a, 75)
+    lower_quartile = np.percentile(a, 25)
+    IQR = (upper_quartile - lower_quartile) * outlierConstant
+    quartileSet = (lower_quartile - IQR, upper_quartile + IQR)
+    resultList = []
+    removedList = []
+    for y in a.tolist():
+        if y >= quartileSet[0] and y <= quartileSet[1]:
+            resultList.append(y)
+        else:
+            removedList.append(y)
+    return (resultList, removedList)
+
 
 ff_tps = []
 endorse_latency = []
 commit_latency = []
+orderer_latency = []
 with open("logs/ff/performance/log.log") as f: 
     for line in f.readlines():
         if line.startswith("ave"):
@@ -14,19 +30,27 @@ with open("logs/ff/performance/log.log") as f:
             endorse_latency.append(float(line.split()[-1]))
         if "commit " in line:
             commit_latency.append(float(line.split()[-1]))
-
+        if "orderer ave" in line: 
+            orderer_latency.append(float(line.split()[-1]))
 
 ff_latency = []
-for i in range(0, 40, 5):
+idj = 0
+for i in range(0, len(endorse_latency), 5):
     temp = []
     for j in range(5): 
         idx = i + j
         temp.append(endorse_latency[idx] + commit_latency[idx])
-    ff_latency.append(np.mean(temp))
+    res = remove_outliers(temp)
+    print("remove ff latency", res[1])
+    print(orderer_latency[idj])
+    ff_latency.append(np.mean(temp[0]) + orderer_latency[idj])
+    idj += 1
+# ff_latency[-1] = p3_latency[-1]
 
 fabric_tps = []
 endorse_latency = []
 commit_latency = []
+orderer_latency = []
 with open("logs/fabric/log.log") as f: 
     for line in f.readlines():
         if line.startswith("ave"):
@@ -36,15 +60,20 @@ with open("logs/fabric/log.log") as f:
             endorse_latency.append(float(line.split()[-1]))
         if "commit " in line:
             commit_latency.append(float(line.split()[-1]))
+        if "orderer ave" in line: 
+            orderer_latency.append(float(line.split()[-1]))
 
 fabric_latency = []
+idj = 0
 for i in range(0, len(endorse_latency), 5):
     temp = []
     for j in range(5): 
         idx = i + j
         temp.append(endorse_latency[idx] + commit_latency[idx])
-    
-    fabric_latency.append(np.mean(temp))
+    res = remove_outliers(temp)
+    print("remove fabric latency", res[1])
+    fabric_latency.append(np.mean(res[0]) + orderer_latency[idj])
+    idj += 1
 
 streamchain_latency = []
 streamchain_tps = []
@@ -67,7 +96,6 @@ with open("logs/streamchain/ordering.log") as f:
         temp = line.split(',')
         streamchain_latency[cnt] += float(temp[-2])
         cnt += 1
-
 
 # BIDL
 bidl_throughput = {} 

@@ -63,6 +63,7 @@ while [ $curi -lt $len ]; do
     for id in 0 1 2 3 4 5; do 
         docker service logs fabric_peer$id > logs/fabric/round_${round}_peer$id.log 2>&1
     done
+    docker service logs fabric_orderer > logs/fabric/round_${round}_orderer.log 2>&1
     docker stack rm fabric
     bash runall.sh "bash clean.sh"
     # echo "latency (endorse): "  >> log.log

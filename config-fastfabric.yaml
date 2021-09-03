@@ -7,14 +7,14 @@ crypto: fastfabric_exp/organizations
 artifacts: fastfabric_exp/channel-artifacts
 
 peers: 
-  image: hyperledger/fabric-peer:fastfabric-v1.0
+  image: hyperledger/fabric-peer:fastfabric-v1.0 # TODO: fastfabric-2phase
   template: peer
   count: 6
   bootstrap: 0
 
 orderer:
   name: orderer
-  image: hyperledger/fabric-orderer:fastfabric-v1.0
+  image: hyperledger/fabric-orderer:fastfabric-v3.0 
   host: heming-rdma6
 
 cli:

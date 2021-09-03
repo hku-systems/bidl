@@ -63,11 +63,12 @@ if [ $1 == "performance" ]; then
             continue
         fi
         # create 50000 accounts
-        # docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --no-e2e -n 50000 --burst 50000 --num_of_conn $i --client_per_conn $j --groups $peers --send_rate $send_rate --config config.yaml > $phase1 2>&1
-        docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --e2e -n 50000 --burst 50000 --num_of_conn $i --client_per_conn $j --orderer_client $k --groups $peers --send_rate $send_rate --config config.yaml > $phase2 2>&1
+        docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --no-e2e -n 200000 --burst 50000 --num_of_conn $i --client_per_conn $j --orderer_client $k --groups $peers --send_rate $send_rate --config config.yaml > $phase1 2>&1
+        docker exec $(docker ps | grep fabric_tape | awk '{print $1}') tape --no-e2e -n 200000 --burst 50000 --num_of_conn $i --client_per_conn $j --orderer_client $k --groups $peers --send_rate $send_rate --config config.yaml > $phase2 2>&1
         for id in 0 1 2 3 4 5; do 
             docker service logs fabric_peer$id > logs/ff/performance/round_${round}_peer$id.log 2>&1
         done
+        docker service logs fabric_orderer > logs/ff/performance/round_${round}_orderer.log 2>&1
         docker stack rm fabric
         bash runall.sh "bash clean.sh"
         # echo "latency (endorse): "  >> log.log

@@ -7,4 +7,7 @@ round=$2
         echo peer$peer
         bash breakdown.sh $cur/round_${round}_peer${peer}.log $3
     done
-# done
+    # done
+
+echo -n "orderer "
+cat $cur/round_${round}_orderer.log | python3 orderer.py
