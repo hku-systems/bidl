@@ -7,6 +7,7 @@ peers=5
 interval=500
 
 if [ $1 == "performance" ]; then 
+    sed -i "10c \  image: hyperledger/fabric-peer:fastfabric-2phase" config-fastfabric.yaml
     bash create_artifact.sh fastfabric
     rm -rf logs/ff/performance
     mkdir -p logs/ff/performance
@@ -91,6 +92,7 @@ if [ $1 == "performance" ]; then
     exit 0
 
 elif [ $1 == "nd" ]; then 
+    sed -i "10c \  image: hyperledger/fabric-peer:fastfabric-v1.0" config-fastfabric.yaml
     bash create_artifact.sh fastfabric
     rm -rf logs/ff/nondeterminism
     mkdir -p logs/ff/nondeterminism
@@ -166,6 +168,7 @@ elif [ $1 == "nd" ]; then
     mv log.log logs/ff/nondeterminism/
     exit 0
 elif [ $1 == "contention" ]; then 
+    sed -i "10c \  image: hyperledger/fabric-peer:fastfabric-v1.0" config-fastfabric.yaml
     bash create_artifact.sh fastfabric
     rm log.log
     rm  -rf logs/ff/contention
