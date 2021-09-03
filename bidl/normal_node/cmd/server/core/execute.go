@@ -7,7 +7,6 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/binary"
-	"fmt"
 	"normal_node/cmd/common"
 	"normal_node/cmd/server/config"
 	"normal_node/cmd/server/network"
@@ -109,7 +108,7 @@ func (p *Processor) ProcessTxn(txn *common.SequencedTransaction) {
 	sig := txn.Transaction.Signature[:32]
 	valid := util.ValidMAC(txn.Transaction.Payload, sig, []byte(common.SecretKey))
 	if !valid {
-		log.Info("MAC for transaction %d is invalid, discard the transaction", txn.Seq)
+		log.Infof("MAC for transaction %d is invalid, discard the transaction", txn.Seq)
 		return
 	}
 	// execute transaction
@@ -117,9 +116,7 @@ func (p *Processor) ProcessTxn(txn *common.SequencedTransaction) {
 	elapsedTxn := time.Since(startExecTxn) / time.Microsecond // duration in us
 	elapsedBlk += elapsedTxn
 	if p.txnNum % p.BlkSize == 0 {
-		// elapsed := 	time.Since(startExecBlk) / time.Millisecond // duration in ms
-		// startExecBlk = time.Now()
-		fmt.Printf("Execution latency: %d ms, for executing %d transactions.\n", elapsedBlk/1e3, p.execNum)
+		log.Infof("Execution latency: %d ms, for executing %d transactions.\n", elapsedBlk/1e3, p.execNum)
 		elapsedBlk = 0
 		p.execNum = 0
 	}
@@ -160,7 +157,7 @@ func (p *Processor) ExecuteTxn(txn *common.SequencedTransaction) {
 		signature := r.Bytes()
 		signature = append(signature, s.Bytes()...)
 		env.Signature = signature
-		time.Sleep(1 * time.Microsecond)
+		time.Sleep(5 * time.Microsecond)
 		if p.txnNum % 500 == 0 {
 			p.PersistExecResult(&env)
 		}
@@ -305,7 +302,8 @@ func (p *Processor) ProcessBlock(block []byte) {
 	p.commitTxn(hashes)
 	p.commitBlock(block)
 	elapsed := 	time.Since(startBlkCommit) / time.Millisecond // duration in ms
-	fmt.Printf("Commit latency: %d ms for block %d.\n", elapsed, p.blkNum)
+	// fmt.Printf("Commit latency: %d ms for block %d.\n", elapsed, p.blkNum)
+	log.Infof("Commit latency: %d ms for block %d.\n", elapsed, p.blkNum)
 }
 
 func byte32(s []byte) (a *[32]byte) {

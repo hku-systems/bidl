@@ -23,3 +23,5 @@ else
     echo "Invalid argument."
     exit 1
 fi
+
+docker stop $(docker ps -aq --filter name="bidl_client"); docker rm $(docker ps -aq --filter name="bidl_client")

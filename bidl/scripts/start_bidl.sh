@@ -1,4 +1,6 @@
-#!/bin/bash -e
+#!/bin/bash
+set -u
+
 if [ "$#" -lt 4 ]; then
     echo "Usage: bash ./bidl/scripts/start_bidl.sh <1. num of consensus nodes> <2. num of normal nodes> <3. peak throughput> <4. benchmark> <5. benchmark parameters*>"
     exit 1
@@ -72,15 +74,13 @@ echo "######################################################"
 i=0
 for host in `cat $base_dir/scripts/servers`; do
     for node in `seq 0 $[${normal_nodes_per_host}-1]`; do
-        echo ${host} ${node}
+        echo ${host} ${i}
         ssh -n ${USER}@${host} "docker run --name normal_node$i --net=host --cap-add NET_ADMIN normal_node /normal_node/server --quiet --tps=$3 --id=$i > logs/normal_${i}.log 2>&1 &"
         let i=$i+1
     done
 done 
 
-echo "Starting the sequencer..."
-# $sequencer_dir/sequencer $3 &> sequencer.log &
-docker run --name sequencer --net=host sequencer:latest /sequencer/sequencer $3 > logs/sequencer.log 2>&1 &
+docker run --name sequencer --net=host sequencer:latest /sequencer/sequencer $3 > /home/${USER}/logs/sequencer.log 2>&1 &
 
 echo "benchmarking..."
 cd $normal_node_dir

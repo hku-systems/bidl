@@ -1,20 +1,20 @@
 #!/bin/bash 
 set -u
 default_peers=4
-default_tput=60
-# bash ./bidl/scripts/kill_all.sh
+default_tput=50
+bash ./bidl/scripts/kill_all.sh
 # bash ./bidl/scripts/deploy_bidl.sh $default_peers
 
 if [ $1 == "performance" ]; then 
     rst_dir=./logs/bidl/performance
     rst_file=$rst_dir/performance.log
-    # rm -rf $rst_dir
-    # mkdir -p $rst_dir
-    # touch $rst_file
+    rm -rf $rst_dir
+    mkdir -p $rst_dir
+    touch $rst_file
     for tput_cap in 20 40 60; do
         echo "Transaction submission rate: $tput_cap kTxns/s"
         # run benchmark
-        # bash ./bidl/scripts/start_bidl.sh 4 50 $tput_cap performance
+        bash ./bidl/scripts/start_bidl.sh 4 50 $tput_cap performance
         # obtain throughput data
         echo -n "rate $tput_cap throughput " >> $rst_file
         cat /home/$USER/logs/normal_0.log | grep "BIDL transaction commit throughput:" | python3 ./bidl/scripts/bidl_tput.py $tput_cap >> $rst_file
@@ -29,7 +29,7 @@ if [ $1 == "performance" ]; then
         echo -n "rate $tput_cap commit latency " >> $rst_file
         cat /home/$USER/logs/normal_0.log | grep "Commit latency" | python3 ./bidl/scripts/bidl_latency.py >> $rst_file
     done
-    source $base_dir/scripts/kill_all.sh
+    bash ./bidl/scripts/kill_all.sh
     exit 0
 elif [ $1 == "nd" ]; then 
     rst_dir=./logs/bidl/nondeterminism
@@ -45,7 +45,7 @@ elif [ $1 == "nd" ]; then
         echo -n "rate $nondeterminism_rate throughput " >> $rst_file
         cat /home/$USER/logs/normal_0.log | grep "BIDL transaction commit throughput" | python3 ./bidl/scripts/bidl_tput.py $default_tput >> $rst_file
     done
-    source $base_dir/scripts/kill_all.sh
+    bash ./bidl/scripts/kill_all.sh
     exit 0
 elif [ $1 == "contention" ]; then 
     rst_dir=./logs/bidl/contention
@@ -58,10 +58,10 @@ elif [ $1 == "contention" ]; then
         # run benchmark
         bash ./bidl/scripts/start_bidl.sh 4 50 $default_tput contention $contention_rate 
         # obtain throughput data
-        echo -n "rate $tput_cap throughput " >> $rst_file
+        echo -n "rate $contention_rate throughput " >> $rst_file
         cat /home/$USER/logs/normal_0.log | grep "BIDL transaction commit throughput" | python3 ./bidl/scripts/bidl_tput.py $default_tput >> $rst_file
     done
-    source $base_dir/scripts/kill_all.sh
+    bash ./bidl/scripts/kill_all.sh
     exit 0
 elif [ $1 == "scalability" ]; then 
     rst_dir=./logs/bidl/scalability
@@ -70,13 +70,13 @@ elif [ $1 == "scalability" ]; then
     mkdir -p $rst_dir
     touch $rst_file
     # generate config file for all settings
-    for org in 4 25 49; do 
+    for org in 4 7 13 25 49; do 
         bash ./bidl/scripts/gen_host_conf.sh $org
         cp ./bidl/consensus_node/bftsmart/config/hosts.config ./bidl/scripts/configs/hosts_$org.config
     done
     bash ./bidl/scripts/copy_smart_config.sh
 
-    for org in 4 25 49; do 
+    for org in 4 7 13 25 49; do 
         echo "Number of organizations = $org"
         # run benchmark
         bash ./bidl/scripts/start_bidl_scalability.sh $org $org $default_tput scalability
@@ -99,18 +99,16 @@ elif [ $1 == "malicious" ]; then
     rm -rf $rst_dir
     mkdir -p $rst_dir
     touch $rst_file
-    bash ./bidl/scripts/start_local_test.sh $peers $default_tput malicious
+    bash ./bidl/scripts/start_bidl_only_normal.sh 50 $default_tput
+    bash ./bidl/scripts/start_local_only_consensus.sh $default_peers $default_tput malicious
     send_num=260000
-    # send_num=510000
     for view in 0; do # misbehave
-        # kill client
-        docker stop $(docker ps -aq --filter name="bidl_client"); docker rm $(docker ps -aq --filter name="bidl_client")
-
-        # run benchmarking
+        # run benchmark
         bash ./bidl/scripts/benchmark.sh 50 malicious $(( $send_num * $view )) 
 
+        # view change
         new_view=$(( $view + 1 ))
-        nodeID=$(( $new_view % $peers ))
+        nodeID=$(( $new_view % $default_peers ))
         echo "The new leader for the next view $new_view is node $nodeID"
         while true; do
             wait=$( cat ./bidl/logs/consensus_${nodeID}.log | grep "I'm the new leader for regency ${new_view}" | wc -l)
@@ -123,14 +121,11 @@ elif [ $1 == "malicious" ]; then
         sleep 10
     done
     for view in 1; do 
-        # kill client
-        docker stop $(docker ps -aq --filter name="bidl_client"); docker rm $(docker ps -aq --filter name="bidl_client")
-
-        # run benchmarking
+        # run benchmark
         bash ./bidl/scripts/benchmark.sh 50 performance $(( $send_num * $view )) 
 
         new_view=$(( $view + 1 ))
-        nodeID=$(( $new_view % $peers ))
+        nodeID=$(( $new_view % $default_peers ))
         echo "The new leader for the next view $new_view is node $nodeID"
         while true; do
             wait=$( cat ./bidl/logs/consensus_${nodeID}.log | grep "I'm the new leader for regency ${new_view}" | wc -l)
@@ -143,14 +138,11 @@ elif [ $1 == "malicious" ]; then
         sleep 10
     done
     for view in 2 3 4; do # misbehave
-        # kill client
-        docker stop $(docker ps -aq --filter name="bidl_client"); docker rm $(docker ps -aq --filter name="bidl_client")
-
-        # run benchmarking
+        # run benchmark
         bash ./bidl/scripts/benchmark.sh 50 malicious $(( $send_num * $view )) 
 
         new_view=$(( $view + 1 ))
-        nodeID=$(( $new_view % $peers ))
+        nodeID=$(( $new_view % $default_peers ))
         echo "The new leader for the next view $new_view is node $nodeID"
         while true; do
             wait=$( cat ./bidl/logs/consensus_${nodeID}.log | grep "I'm the new leader for regency ${new_view}" | wc -l)

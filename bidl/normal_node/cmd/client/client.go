@@ -75,10 +75,6 @@ func main() {
 		txnsTransfer := GenerateTransferWorkload(accNum, opts.Orgs, opts.Num, opts.Conflict)
 		txns = append(txnsCreate, txnsTransfer...)
 	} else {
-		// accNum := 1000
-		// txnsCreate := GenerateCreateWorkload(accNum, opts.Orgs, 0)
-		// txnsTransfer := GenerateTransferWorkload(accNum, opts.Orgs, opts.Num, 0)
-		// txns = append(txnsCreate, txnsTransfer...)
 		accNum := int(opts.Num / opts.Orgs)    // number of accounts for each organization
 		txns = GenerateCreateWorkload(accNum, opts.Orgs, 0)
 		Shuffle(txns)
@@ -87,14 +83,13 @@ func main() {
 	// submit transactions to the sequencer
 	client.Seq = uint64(opts.StartSeq)
 	if opts.Malicious {
-		log.Infof("Start sending %d malicious transactions.", opts.Num)
+		log.Infof("Start sending %d malicious transactions and %d non-malicious transactions.", opts.Num, opts.Num)
 		for i := 0; i < opts.Num; i++ {
 			client.SendTxn(txns[i], opts.Order, true)
 		}
 		log.Infof("Wait...")
 		time.Sleep(time.Duration(10) * time.Second)
 		client.Seq = uint64(opts.StartSeq)
-		log.Infof("Start sending %d non-malicious transactions.", opts.Num)
 		for i := 0; i < opts.Num; i++ {
 			client.SendTxn(txns[i], opts.Order, false)
 		}

@@ -8,7 +8,7 @@ lines = sys.stdin.readlines()
 
 for line in lines:
 	if "Inf" not in line:
-		tput = int(line.split()[-2])
+		tput = int(line.split()[6])
 		bidl_tps_raw.append(tput)
 
 num = len(bidl_tps_raw)

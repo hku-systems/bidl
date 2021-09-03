@@ -16,9 +16,6 @@ for line in sys.stdin:
             tputs.append(tput)
             x.append(tick)
         tick = tick+1
-        # tputs.append(temp[2][:-1])
-# print(tputs[:10])
-
 # t = datetime.datetime.strptime(timestamps[0],"%H:%M:%S.%f")
 # print(t)
 

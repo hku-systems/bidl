@@ -439,7 +439,6 @@ public class ServerConnection {
 										String tempStr = new String(temp);
 										if (BidlFrontend.txMap.containsKey(tempStr)) {
 											byte[] txBytes = BidlFrontend.txMap.get(tempStr);
-											// txByteOutStream.writeBytes(BidlFrontend.txMap.get(tempStr));
 											txByteOutStream.write(BidlFrontend.txMap.get(tempStr));
 											txByteOutStream.write(',');
 											holdNum++;

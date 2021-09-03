@@ -10,7 +10,7 @@ script_dir=$(cd "$(dirname "$0")";pwd)
 source $script_dir/env.sh
 
 echo "Stopping sequencer/client/consensus/normal nodes..."
-bash $script_dir/kill_all_local.sh
+bash $script_dir/kill_all.sh
 
 echo "Generating hosts.config..."
 rm -f $smart_dir/config/hosts.config
@@ -25,7 +25,12 @@ echo "Starting $1 consensus nodes..."
 rm -rf $base_dir/logs
 mkdir $base_dir/logs
 for i in `seq 0 $[${1}-1]`; do
-    docker run --name smart$i --net=host --cap-add NET_ADMIN smart:latest bash /home/runscripts/smartrun.sh bftsmart.demo.microbenchmarks.ThroughputLatencyServer $i 10 0 0 false nosig rwd > $base_dir/logs/consensus_${i}.log 2>&1 &
+	docker run --name smart$i \
+	--mount type=bind,source=$smart_dir/config/hosts.config,destination=/home/config/hosts.config \
+	--mount type=bind,source=$smart_dir/config/system.config,destination=/home/config/system.config \
+	--net=host --cap-add NET_ADMIN \
+	smart bash /home/runscripts/smartrun.sh bftsmart.demo.microbenchmarks.ThroughputLatencyServer $i 10 0 0 false nosig rwd > $base_dir/logs/consensus_${i}.log 2>&1 &
+    # docker run --name smart$i --net=host --cap-add NET_ADMIN smart:latest bash /home/runscripts/smartrun.sh bftsmart.demo.microbenchmarks.ThroughputLatencyServer $i 10 0 0 false nosig rwd > $base_dir/logs/consensus_${i}.log 2>&1 &
 done
 
 echo "Starting the sequencer..., tput cap:$2 kTxns/s."
