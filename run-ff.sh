@@ -5,6 +5,8 @@ peers=5
 
 # tput calculation interval
 interval=500
+docker stack rm fabric 
+bash runall.sh "bash clean.sh"
 
 if [ $1 == "performance" ]; then 
     sed -i "10c \  image: hyperledger/fabric-peer:fastfabric-2phase" config-fastfabric.yaml
@@ -13,7 +15,7 @@ if [ $1 == "performance" ]; then
     mkdir -p logs/ff/performance
     round=0
     rm log.log
-    send_rates=(4000 8000 12000 16000 20000 24000 28000 32000)
+    send_rates=(4000 12000 20000 24000 32000)
     len=${#send_rates[@]}
     curi=0
     while [ $curi -lt $len ]; do
@@ -48,6 +50,7 @@ if [ $1 == "performance" ]; then
             docker stack rm fabric 
             bash runall.sh "bash clean.sh"
             echo "something failed, rerun round$round "
+            sleep 10
             continue
         fi
         cli=$(docker ps | grep fabric_cli | awk '{print $1}')
@@ -61,6 +64,7 @@ if [ $1 == "performance" ]; then
             docker stack rm fabric 
             bash runall.sh "bash clean.sh"
             echo "something failed, rerun round$round "
+            sleep 10
             continue
         fi
         # create 50000 accounts
@@ -131,6 +135,7 @@ elif [ $1 == "nd" ]; then
             docker stack fabric 
             bash runall.sh "bash clean.sh"
             echo "something failed, rerun round$round "
+            sleep 10
             continue
         fi
         cli=$(docker ps | grep fabric_cli | awk '{print $1}')
@@ -144,6 +149,7 @@ elif [ $1 == "nd" ]; then
             docker stack rm fabric 
             bash runall.sh "bash clean.sh"
             echo "something failed, rerun round$round "
+            sleep 10
             continue
         fi
         # create $accounts accounts
@@ -205,6 +211,7 @@ elif [ $1 == "contention" ]; then
             docker stack rm fabric 
             bash runall.sh "bash clean.sh"
             echo "something failed, rerun round$round "
+            sleep 10
             continue
         fi 
         cli=$(docker ps | grep fabric_cli | awk '{print $1}')
@@ -218,6 +225,7 @@ elif [ $1 == "contention" ]; then
             docker stack rm fabric 
             bash runall.sh "bash clean.sh"
             echo "something failed, rerun round$round "
+            sleep 10
             continue
         fi
         # create $accounts accounts

@@ -8,7 +8,7 @@
 size=$(grep -ch "^" workload_load.in)
 
 # Benchmark-related parameters
-clients=(2 4 6 8 10 12 14 16 18 20)
+clients=(2 4 6 8 10 12)
 txss=(1)
 
 for tx in "${txss[@]}"; do

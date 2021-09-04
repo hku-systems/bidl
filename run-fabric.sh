@@ -3,12 +3,14 @@
 rm -rf logs/fabric
 mkdir -p logs/fabric
 
+docker stack rm fabric 
+bash runall.sh "bash clean.sh"
 # e2e tps and latency
 bash create_artifact.sh fabric
 all=9
 round=0
 rm log.log
-send_rates=(2000 4000 6000 8000 10000 12000 14000 16000)
+send_rates=(2000 4000 6000 8000 10000 16000)
 len=${#send_rates[@]}
 curi=0
 while [ $curi -lt $len ]; do 
@@ -40,7 +42,8 @@ while [ $curi -lt $len ]; do
     if [ $cnt -eq -1 ]; then 
         docker stack rm fabric 
         bash runall.sh "bash clean.sh"
-            echo "something failed, rerun round$round "
+        echo "something failed, rerun round$round "
+        sleep 10
         continue
     fi 
     sleep 2
@@ -55,6 +58,7 @@ while [ $curi -lt $len ]; do
         docker stack rm fabric 
         bash runall.sh "bash clean.sh"
         echo "something failed, rerun round$round "
+        sleep 10
         continue
     fi
     # create 50000 accounts

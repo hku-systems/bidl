@@ -63,11 +63,10 @@ bash deploy.sh fastfabric-v1.0
 ## deploy streamchain
 cd streamchain/setup
 bash reconfigure.sh 
-cd $cur
-# . config.sh
-# for host in $peers; do
-#     ssh -tt $USER@$host "mkdir -p $bm_path; sudo mount -t tmpfs -o size=8G $bm_path"
-# done 
+. config.sh
+for host in $peers; do
+    ssh -tt $USER@$host "mkdir -p $bm_path; sudo mount -t tmpfs -o size=8G $bm_path"
+done 
 
 ## tape
 cd $cur
