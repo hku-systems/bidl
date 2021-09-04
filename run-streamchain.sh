@@ -1,6 +1,8 @@
 #!/bin/bash
 mkdir -p logs/streamchain
 cd streamchain/setup
+bash teardown.sh 
+bash reconfigure.sh
 bash run_main.sh
 # bash run_batchwrite.sh
 
