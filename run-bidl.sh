@@ -141,7 +141,7 @@ elif [ $1 == "malicious" ]; then
         done
         sleep 10
     done
-    for view in 2 3 4; do # misbehave
+    for view in 2 3; do # misbehave
         # run benchmark
         bash ./bidl/scripts/benchmark.sh 50 malicious $(( $send_num * $view )) 
 
@@ -156,6 +156,11 @@ elif [ $1 == "malicious" ]; then
             echo "Wait 5s for consensus nodes to view change"
             sleep 5
         done
+        sleep 10
+    done
+    for view in 4; do # misbehave
+        # run benchmark
+        bash ./bidl/scripts/benchmark.sh 50 malicious $(( $send_num * $view )) 
         sleep 10
     done
     bash ./bidl/scripts/kill_all_local.sh

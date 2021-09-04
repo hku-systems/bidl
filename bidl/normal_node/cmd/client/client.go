@@ -83,7 +83,7 @@ func main() {
 	// submit transactions to the sequencer
 	client.Seq = uint64(opts.StartSeq)
 	if opts.Malicious {
-		log.Infof("Start sending %d malicious transactions and %d non-malicious transactions.", opts.Num, opts.Num)
+		log.Infof("Start sending malicious transactions and non-malicious transactions.")
 		for i := 0; i < opts.Num; i++ {
 			client.SendTxn(txns[i], opts.Order, true)
 		}
@@ -94,7 +94,7 @@ func main() {
 			client.SendTxn(txns[i], opts.Order, false)
 		}
 	} else {
-		log.Infof("Start sending %d transactions", opts.Num)
+		log.Infof("Start sending transactions")
 		for i := 0; i < opts.Num && i < len(txns); i++ {
 			client.SendTxn(txns[i], opts.Order, false)
 		}

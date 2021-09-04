@@ -85,13 +85,13 @@ docker run --name sequencer --net=host sequencer:latest /sequencer/sequencer $3 
 echo "benchmarking..."
 cd $normal_node_dir
 if [ $4 == "performance" ]; then
-    docker run --name bidl_client --net=host --cap-add NET_ADMIN normal_node /normal_node/client --num=100000 --org=$2
+    docker run --name bidl_client --net=host --cap-add NET_ADMIN normal_node /normal_node/client --num=100000 --org=$2 --quiet
 elif [ $4 == "nd" ]; then 
-    docker run --name bidl_client --net=host --cap-add NET_ADMIN normal_node /normal_node/client --num=100000 --org=$2 --nd=$5
+    docker run --name bidl_client --net=host --cap-add NET_ADMIN normal_node /normal_node/client --num=100000 --org=$2 --nd=$5 --quiet
 elif [ $4 == "contention" ]; then 
-    docker run --name bidl_client --net=host --cap-add NET_ADMIN normal_node /normal_node/client --num=100000 --org=$2 --conflict=$5
+    docker run --name bidl_client --net=host --cap-add NET_ADMIN normal_node /normal_node/client --num=100000 --org=$2 --conflict=$5 --quiet
 elif [ $4 == "scalability" ]; then 
-    docker run --name bidl_client --net=host --cap-add NET_ADMIN normal_node /normal_node/client --num=100000 --org=$2
+    docker run --name bidl_client --net=host --cap-add NET_ADMIN normal_node /normal_node/client --num=100000 --org=$2 --quiet
 else 
     echo "Invalid argument."
     exit 1
