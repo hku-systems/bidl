@@ -5,6 +5,8 @@ peers=5
 
 # tput calculation interval
 interval=500
+docker stack rm fabric 
+bash runall.sh "bash clean.sh"
 
 if [ $1 == "performance" ]; then 
     sed -i "10c \  image: hyperledger/fabric-peer:fastfabric-2phase" config-fastfabric.yaml

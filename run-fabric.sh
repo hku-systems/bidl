@@ -3,6 +3,8 @@
 rm -rf logs/fabric
 mkdir -p logs/fabric
 
+docker stack rm fabric 
+bash runall.sh "bash clean.sh"
 # e2e tps and latency
 bash create_artifact.sh fabric
 all=9
