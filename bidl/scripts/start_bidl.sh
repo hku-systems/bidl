@@ -10,7 +10,7 @@ script_dir=$(cd "$(dirname "$0")";pwd)
 source $script_dir/env.sh
 
 echo "Stoping all BIDL nodes."
-source $base_dir/scripts/kill_all.sh
+bash $base_dir/scripts/kill_all.sh
 
 host_num=`cat $base_dir/scripts/servers|wc -l`
 if [ $host_num -gt $1 ]; then

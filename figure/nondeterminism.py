@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import sys
 
 # FastFabric
-x_ff = [x/10 for x in range(0, 6)]
+x_ff = [x*10 for x in range(0, 6)]
 nd_ff = []
 with open("logs/ff/nondeterminism/log.log") as f:
     for line in f.readlines(): 

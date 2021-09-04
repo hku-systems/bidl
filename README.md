@@ -22,6 +22,7 @@ If otherwise specified, all BIDL's experiments run four consensus nodes and 50 n
 1. Please login to our cluster following [this page](https://github.com/hku-systems/bidl/blob/main/servers.md).
 2. Please go to server 2 (sosp21ae@202.45.128.161) to run all the experiments, where we have set up all necessary environments.
 3. Each experiment will generate a figure in the `./figure` directory. You can download all generated figures to your computer by running `python3 ./tunnel.sh` **on your computer**, which start an ssh tunnel and copy all files in `./figure` to your computer using `scp`.
+4. When the script is running, you may see `END` multiple times. The script is still running; please do not suspend the script.
 
 Please be noted that different evaluators cannot run experiments at the same time. This is because the docker containers started by other evaluators will have the same IP address and container name as yours. You can check whether other evaluators are running the experiments by `docker ps` to see if any running containers are named `fabric`,`normal_node`, `smart`, or `sequencer`.
 
@@ -50,9 +51,8 @@ bash run.sh performance
 
 **Misc:**
 
-When the script is running, you may see `END` multiple times. The script is still running; please do not suspend the script.
 
-#### Experiment 1-2: Scalability of BIDL (3 mins)
+#### Experiment 1-2: Scalability of BIDL (10 mins)
 
 This experiment runs BIDL with the increasing number of organizations; each organization contains one consensus node and one normal node.
 
@@ -72,7 +72,7 @@ bash run.sh scalability
 - BIDL's end-to-end latency first decreases with the number of organizations (the execution workload is amortized among all normal nodes, so the execution latency decreases with the number of organizations);
 - BIDL's end-to-end latency then increases when the number of organizations continues to increase (consensus latency increases with the number of organizations).
 
-### Experiment 2: Performance with different ratios of contended transactions (10 mins)
+### Experiment 2: Performance with different ratios of contended transactions (20 mins)
 
 This experiment runs BIDL and FastFabric (achieves the best performance in Experiment 1) with the default Smallbank workload with different contention ratios of transactions.
 
@@ -92,7 +92,7 @@ bash run.sh contention
 - BIDL's effective throughput shows no obvious decline.
 - FastFabric's effective throughput decreases with the increasing ratio of contented transactions.
 
-### Experiment 3: Performance with different ratios of non-deterministic transactions (10 mins)
+### Experiment 3: Performance with different ratios of non-deterministic transactions (20 mins)
 
 This experiment runs BIDL and FastFabric (achieves the best performance in Experiment 1) with different ratio of non-deterministic transactions.
 
@@ -111,7 +111,7 @@ bash run.sh nd
 
 - The effective throughput of BIDL and FastFabric all drop with the increasing ratio of non-deterministic transactions.
 
-### Experiment 4: Performance with malicious participants (5 mins)
+### Experiment 4: Performance with malicious participants (10 mins)
 
 This experiment runs BIDL with a malicious broadcaster. The malicious broadcaster broadcasts transactions with crafted sequence numbers. These crafted transactions will cause conflicts (with transactions from the sequencer) in nodes' sequence number spaces, causing the consensus throughput to drop. Consensus nodes shepherd the malicious broadcaster, and add the broadcaster to the denylist.
 
@@ -141,7 +141,7 @@ git clone git@github.com:hku-systems/bidl.git
 
 ### Create the docker images
 
-Prerequisite:
+**Prerequisite:**
 
 1. You need to have multiple host machines with LAN networks.
 2. The machines should be able to SSH each other without the password.
@@ -150,7 +150,7 @@ Prerequisite:
 5. The machines should join the same docker swarm cluster. If you haven't done so, you can follow [this Docker official guide](https://docs.docker.com/engine/swarm/swarm-tutorial/).
 6. The machines need to support the IP multicast.
 
-Configurations:
+**Configurations:**
 
 1. Create the docker overlay network with
 
