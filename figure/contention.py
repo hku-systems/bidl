@@ -23,7 +23,7 @@ with open("logs/bidl/contention/contention.log") as f:
             ct_bidl[k] = v
 
 plt.plot(ct_bidl.keys(), ct_bidl.values(), 's-', linewidth=3.0, markersize=10, label=r'Bidl contention')
-plt.plot(x, ct_ff, 'v-', linewidth=2.0, linestyle="--", markersize=10, label=r'FF contention', markerfacecolor='none')
+plt.plot(x, ct_ff, 'v-', linewidth=2.0, linestyle="--", markersize=10, label=r'FastFabric contention', markerfacecolor='none')
 plt.legend(loc="center right")
 plt.xlabel("Contention Ratio (%)")
 plt.ylabel("Throughput (kTxns/s)")

@@ -20,102 +20,116 @@ If otherwise specified, all BIDL's experiments run four consensus nodes and 50 n
 ### Prepare
 
 1. Please login our cluster following [this page](https://github.com/hku-systems/bidl/blob/main/servers.md).
-2. Please go to server 2 (sosp21ae@202.45.128.161) to run the following experiments.
-3. Each experiment will generate a figure, you can download the figure with the following command:
+2. Please go to server 2 (sosp21ae@202.45.128.161) to run the all experiments, where we have setup all necessary environments.
+3. Each experiment will generate a figure in the `./figure` directory, you can download all generated figures to your computer by `python3 tunnel.sh`, which start an ssh tunnel and copy all files in `./figure` to your computer using `scp`.
 
-```shell
-ssh -i [key_file_name] -N -L [local_port]:202.45.128.164:22 sosp21ae@gatekeeper3.cs.hku.hk
-```
-
-- `-N`: Do not execute a remote command. This is useful for just forwarding ports.
-- `-L`: Specifies that the given port on the local (client) host is to be forwarded to the given host and port on the remote side.
-- `-i`: Selects a file from which the identity (private key) for RSA or DSA authentication is read.
-
-Please be noted that different evaluators may not be able to run experiments at the same time. This is because the docker containers started by other evaluators will have the same IP address and container name.
-You can check whether there are other evaluators running the experiments by `docker ps`.
-
-### Experiment 0: Test run
-
-This experiment tests the experimental environment. The following test script benchmarks BIDL/FastFabric and reports the end-to-end performance.
-Please follow [README_GET_STARTED.md](https://github.com/hku-systems/bidl/blob/main/README_GET_STARTED.md).
+Please be noted that different evaluators cannot run experiments at the same time. This is because the docker containers started by other evaluators will have the same IP address and container name with yours. You can check whether other evaluators are running the experiments by `docker ps` to see if there exist any running containers named `fabric`,`normal_node`, `smart`, or `sequencer`.
 
 ### Experiment 1: End-to-end performance
 
-#### Experiment 1-1: Performance of BIDL and baseline systems
+#### Experiment 1-1: Performance of BIDL and baseline systems (50 mins)
 
 This experiment runs BIDL/FastFabric/Hyperledger Fabric/StreamChain with the Smallbank workload and reports the end-to-end throughput vs. latency of each system.
 
-- Command to run:
+**Command to run:**
 
 ```shell
 bash run.sh performance
 ```
 
-- Output: a pdf file named `./figure/performance.pdf`, containing the throughput vs. latency of BIDL and baseline systems.
-- Expected results:
-	- BIDL has higher throughput than all baseline systems;
-	- StreamChain achieves the lowest latency;
-	- BIDL's latency is better than FastFabric and Hyperledger Fabric.
+**Output:**
 
-#### Experiment 1-2: Scalability of BIDL
+- A pdf file named `./figure/performance.pdf`, containing the throughput vs. latency of BIDL and baseline systems.
+- You can find the log file for generating figures in `./logs/[system_name]/performance/`.
+
+**Expected results:**
+
+- BIDL achieves the highest throughput among all systems;
+- StreamChain can achieve the lowest latency;
+- BIDL's latency is better than FastFabric and Hyperledger Fabric.
+
+**Misc:**
+
+When the script is running, you may see `END` for multiple times. The script is still running, please do not suspend the script.
+
+#### Experiment 1-2: Scalability of BIDL (3 mins)
 
 This experiment runs BIDL with different number of organizations, each organization contains one consensus node and one normal node.
 
-- Command to run:
+**Command to run:**
 
 ```shell
 bash run.sh scalability
 ```
 
-- Output: a pdf file named `./figure/scalability.pdf`, containing the end-to-end latency of BIDL.
+**Output:**
 
-- Expected results:
-	- BIDL's end-to-end latency first decrease with the number of organizations (number of transactions executed by node of each organization decreases);
-	- BIDL's end-to-end latency then increase when the number of organizations continue to increase (the consensus latency increases).
+- A pdf file named `./figure/scalability.pdf`, containing the end-to-end latency of BIDL.
+- You can find the log file for generating figures in `./logs/bidl/scalability/`.
 
-### Experiment 2: Performance with different ratio of contended transactions
+**Expected results:**
 
-This experiment runs BIDL and FastFabric (achieves the best performance in Experiment 1) with the default smallbank workload with different contention ratios of transactions.
+- BIDL's end-to-end latency first decrease with the number of organizations (the execution workload is amortized among all normal nodes, so the execution latency decreases with the number of organizations);
+- BIDL's end-to-end latency then increase when the number of organizations continues to increase (consensus latency increases with the number of organizations).
 
-- Command to run:
+### Experiment 2: Performance with different ratio of contended transactions (10 mins)
+
+This experiment runs BIDL and FastFabric (achieves the best performance in Experiment 1) with the default Smallbank workload with different contention ratios of transactions.
+
+**Command to run:**
 
 ```shell
 bash run.sh contention
 ```
 
-- Output: a pdf file named `contention.pdf`, containing the throughput of BIDL and baseline systems under different ratio of contended transactions.
-- Expected results:
-	- BIDL's throughput shows no obvious decline.
-	- FastFabric's effective throughput decreases with the increasing ratio of contented transactions.
+**Output:**
 
-### Experiment 3: Performance with different ratio of non-deterministic transactions
+- A pdf file named `./figure/contention.pdf`, containing the throughput of BIDL and FastFabric with different ratio of contended transactions.
+- You can find the log file for generating figures in `./logs/[system_name]/contention/`.
+
+**Expected results:**
+
+- BIDL's effective throughput shows no obvious decline.
+- FastFabric's effective throughput decreases with the increasing ratio of contented transactions.
+
+### Experiment 3: Performance with different ratio of non-deterministic transactions (10 mins)
 
 This experiment runs BIDL and FastFabric (achieves the best performance in Experiment 1) with different ratio of non-deterministic transactions.
 
-- Command to run:
+**Command to run:**
 
 ```shell
 bash run.sh nd 
 ```
 
-- Output: a pdf file named `./figure/nondeterminism.pdf`, containing the throughput of BIDL and baseline systems under different ratio of non-deterministic transactions.
-- Expected results:
-  - The effective throughput of BIDL and FastFabric all drop with the increasing ratio of non-deterministic transactions.
+**Output:**
 
-### Experiment 4: Performance with malicious participants
+- A pdf file named `./figure/nondeterminism.pdf`, containing the throughput of BIDL and baseline systems under different ratio of non-deterministic transactions.
+- You can find the log file for generating figures in `./logs/[system_name]/non-determinism/`.
+
+**Expected results:**
+
+- The effective throughput of BIDL and FastFabric all drop with the increasing ratio of non-deterministic transactions.
+
+
+### Experiment 4: Performance with malicious participants (5 mins)
 
 This experiment runs BIDL with a malicious broadcaster. The malicious broadcaster broadcasts transactions with crafted sequence numbers. These crafted transactions will cause conflicts (with transactions from the sequencer) in nodes' sequence number spaces, causing the consensus throughput to drop. Consensus nodes shepherd the malicious broadcaster, and add the broadcaster to the denylist.
 
-- Command to run:
+**Command to run:**
 
 ```shell
 bash run.sh malicious
 ```
 
-- Output: a pdf file named `.figure/malicious.pdf`, containing the throughput of BIDL under a malicious broadcaster during five views.
-- Expected results:
-  - BIDL's throughput drops in `view 0` due to the malicious broadcaster's misbehavior.
-  - BIDL's throughput recovers in `view 2`. This is because consensus nodes detect the broadcaster's misbehavior in $f+1$ views (with different leaders) and add the broadcaster to the denylist.
+**Output:**
+- A pdf file named `./figure/malicious.pdf`, containing the throughput of BIDL under a malicious broadcaster during five views.
+- You can find the log file for generating figures in `./logs/bidl/malicious/`.
+
+**Expected results:**
+
+- BIDL's throughput drops in `view 0` due to the malicious broadcaster's misbehavior.
+- BIDL's throughput recovers in `view 2`. This is because consensus nodes detect the broadcaster's misbehavior in $f+1=2$ views (with different leaders) and add the broadcaster to the denylist.
 
 ## Deployment (if you don't use our cluster)
 

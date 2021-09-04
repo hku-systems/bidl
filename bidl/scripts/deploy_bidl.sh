@@ -10,6 +10,8 @@ fi
 script_dir=$(cd "$(dirname "$0")";pwd)
 source $script_dir/env.sh
 
+bash $base_dir/scripts/kill_all.sh
+
 echo "Generating hosts.config"
 host_num=`cat $base_dir/scripts/servers|wc -l`
 if [ $host_num -gt $1 ]; then

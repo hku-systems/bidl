@@ -22,12 +22,11 @@ with open("logs/bidl/nondeterminism/nondeterminism.log") as f:
             v=int(line.split()[-2])
             nd_bidl[k] = v
             
-plt.plot(x_ff, nd_ff, 's-', linewidth=2.0, linestyle="--", markersize=10, label=r'FF non-determinism', markerfacecolor='none')
+plt.plot(x_ff, nd_ff, 's-', linewidth=2.0, linestyle="--", markersize=10, label=r'FastFabric non-determinism', markerfacecolor='none')
 plt.plot(nd_bidl.keys(), nd_bidl.values(), 's-', linewidth=3.0, markersize=10, label=r'Bidl non-determinism')
 plt.legend(loc="upper right")
 plt.xlabel("Non-deterministic Ratio (%)")
 plt.ylabel("Throughput (kTxns/s)")
 plt.ylim(0)
 
-# plt.savefig("figure/nondeterminism.pdf")
 plt.savefig("figure/nondeterminism.pdf")
