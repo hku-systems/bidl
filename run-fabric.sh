@@ -40,7 +40,8 @@ while [ $curi -lt $len ]; do
     if [ $cnt -eq -1 ]; then 
         docker stack rm fabric 
         bash runall.sh "bash clean.sh"
-            echo "something failed, rerun round$round "
+        echo "something failed, rerun round$round "
+        sleep 10
         continue
     fi 
     sleep 2
@@ -55,6 +56,7 @@ while [ $curi -lt $len ]; do
         docker stack rm fabric 
         bash runall.sh "bash clean.sh"
         echo "something failed, rerun round$round "
+        sleep 10
         continue
     fi
     # create 50000 accounts
