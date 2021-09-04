@@ -15,7 +15,7 @@ if [ $1 == "performance" ]; then
     mkdir -p logs/ff/performance
     round=0
     rm log.log
-    send_rates=(4000 8000 12000 16000 20000 24000 28000 32000)
+    send_rates=(4000 12000 20000 24000 32000)
     len=${#send_rates[@]}
     curi=0
     while [ $curi -lt $len ]; do

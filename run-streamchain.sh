@@ -1,4 +1,6 @@
 #!/bin/bash
+export GOPATH=$HOME/go
+rm -rf logs/streamchain
 mkdir -p logs/streamchain
 cd streamchain/setup
 bash teardown.sh 

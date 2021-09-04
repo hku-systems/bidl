@@ -10,7 +10,7 @@ bash create_artifact.sh fabric
 all=9
 round=0
 rm log.log
-send_rates=(2000 4000 6000 8000 10000 12000 14000 16000)
+send_rates=(2000 4000 6000 8000 10000 16000)
 len=${#send_rates[@]}
 curi=0
 while [ $curi -lt $len ]; do 
