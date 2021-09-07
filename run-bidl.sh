@@ -103,7 +103,6 @@ elif [ $1 == "malicious" ]; then
     rm -rf $rst_dir
     mkdir -p $rst_dir
     touch $rst_file
-    bash ./bidl/scripts/start_bidl_only_normal.sh 50 $default_tput
     bash ./bidl/scripts/start_local_only_consensus.sh $default_peers $default_tput malicious
     send_num=260000
     for view in 0; do # misbehave
