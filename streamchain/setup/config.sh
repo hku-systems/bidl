@@ -1,7 +1,7 @@
 # Setup-related parameters
 export event="10.22.1.1"
 export add_events=""
-export peers="10.22.1.1 10.22.1.2 10.22.1.3 10.22.1.4"
+export peers="10.22.1.1 10.22.1.3 10.22.1.4 10.22.1.5"
 export orderers="10.22.1.6"
 export user=$USER
 export goexec="/usr/local/go/bin"
