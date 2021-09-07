@@ -49,9 +49,6 @@ bash run.sh performance
 - StreamChain can achieve the lowest latency;
 - BIDL's latency is better than FastFabric and Hyperledger Fabric.
 
-**Misc:**
-
-
 #### Experiment 1-2: Scalability of BIDL (10 mins)
 
 This experiment runs BIDL with the increasing number of organizations; each organization contains one consensus node and one normal node.
