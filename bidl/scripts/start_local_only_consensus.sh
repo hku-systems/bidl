@@ -10,7 +10,6 @@ script_dir=$(cd "$(dirname "$0")";pwd)
 source $script_dir/env.sh
 
 echo "Stopping sequencer/client/consensus/normal nodes..."
-bash $script_dir/kill_all.sh
 
 echo "Generating hosts.config..."
 rm -f $smart_dir/config/hosts.config
@@ -40,9 +39,14 @@ echo "Starting normal node..."
 docker run --name normal_node0 --net=host --cap-add NET_ADMIN normal_node:latest /normal_node/server --quiet --tps=$2 --id=0 > $base_dir/logs/normal_0.log 2>&1 &
 
 echo "Waiting for consensus node to start..."
+i=0
 while true; do 
 	wait=$( cat $log_dir/consensus_1.log | grep "Ready to process operations" | wc -l)
 	if [ $wait -eq 1 ]; then 
+		break;
+	fi 
+	if [ $i -gt 10 ]; then 
+        echo "reaching maximum wait time, continue."
 		break;
 	fi 
 	echo "wait 5s for consensus nodes to setup"

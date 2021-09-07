@@ -52,6 +52,8 @@ public class BidlFrontend extends Thread {
     private Assembler assember;
     public volatile int totalNum = 0;
     private volatile boolean maliciousFlag = false;
+    private volatile int persistNum = 0;
+    public volatile int blkSize = 500;
 
     BidlFrontend(ServerViewController controller, ExecutionManager executionManager) {
         super("BIDL frontend");
@@ -180,7 +182,7 @@ public class BidlFrontend extends Thread {
             
             txBlockingQueue.add(rcvPktBuf);
             bytebuf.release();
-            if (totalNum % 500 == 0){
+            if (totalNum % blkSize == 0){
                 logger.debug("bidl: received enough transactions. Num:{}", totalNum);
             }
         }
@@ -194,7 +196,6 @@ public class BidlFrontend extends Thread {
         private MessageDigest digest = null;
         private ServiceProxy proxy = null;
         private byte[] signature = null;
-        private int blockSize = 500;
         private Logger logger = LoggerFactory.getLogger(this.getClass());
 
         Assembler() {
@@ -203,9 +204,9 @@ public class BidlFrontend extends Thread {
                 this.digest = MessageDigest.getInstance("SHA-256");
                 this.proxy = new ServiceProxy(1001, controller.getStaticConf().getProcessId());
                 this.signature = new byte[0];
-                this.blockBuffer = ByteBuffer.allocateDirect(this.blockSize * 36 + Integer.BYTES * 2 + Integer.BYTES);
-                this.payloadBuffer = ByteBuffer.allocateDirect(this.blockSize * 36 + Integer.BYTES);
-                logger.debug("The default batch size is {}", this.blockSize);
+                this.blockBuffer = ByteBuffer.allocateDirect(blkSize * 36 + Integer.BYTES * 2 + Integer.BYTES);
+                this.payloadBuffer = ByteBuffer.allocateDirect(blkSize * 36 + Integer.BYTES);
+                logger.debug("The default batch size is {}", blkSize);
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
@@ -264,7 +265,7 @@ public class BidlFrontend extends Thread {
     
                 // if I have collected enough transactions and I am the leader, submit txs to the co-located node
                 
-                if (this.num == this.blockSize) {
+                if (this.num == blkSize) {
                     logger.debug("bidl: collected enough transactions. Num:{}, TotalNum:{}", this.num, totalNum);
                     payloadBuffer.putInt(maxSeqNum);
                     if (execManager.getCurrentLeader() == controller.getStaticConf().getProcessId()) {

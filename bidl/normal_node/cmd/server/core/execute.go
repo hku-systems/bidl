@@ -56,7 +56,7 @@ func NewProcessor(blkSize int, id int, net *network.Network) *Processor {
 		panic(err)
 	}
 
-	return &Processor{
+	return &Processor {
 		Persists:  	make(map[[32]byte]int),
 		TXPool:    	make(map[uint64]common.Envelop),
 		Envelops: 	make(map[[32]byte]common.Envelop),
@@ -340,6 +340,7 @@ func (p *Processor) ExchangeExecResult(env *common.Envelop) {
 }
 
 // broadcast execution results
+var persistBuf = common.MagicNumExecResult
 func (p *Processor) PersistExecResult(env *common.Envelop) {
 	result := &common.Result {
 		Org:  env.SeqTransaction.Transaction.Org,
@@ -348,9 +349,13 @@ func (p *Processor) PersistExecResult(env *common.Envelop) {
 		TxnHash: env.SeqTransaction.Hash,
 	}
 	buf, _ := msgpack.Marshal(result)
-	buf = append(common.MagicNumExecResult, buf...)
-	log.Debugf("Persisting execution result for transaction %d", env.SeqTransaction.Seq)
-	p.Net.Multicast(buf)
+	persistBuf = append(persistBuf, buf...)
+	if p.txnNum % 500==0 {
+		log.Infof("Persisting execution result, length %d", len(persistBuf))
+		// buf = append(common.MagicNumExecResult, buf...)
+		p.Net.Multicast(persistBuf)
+		persistBuf = common.MagicNumExecResult
+	}
 }
 
 func (p *Processor) ProcessPersist(data []byte) {
