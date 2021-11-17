@@ -3,11 +3,13 @@ FROM ubuntu:18.04
 
 # install and source ansible
 RUN apt-get update && apt-get install -y \
-    libssl-dev libuv1-dev net-tools \
+    libssl-dev libuv1-dev net-tools libjpeg-dev zlib1g-dev \
     autoconf libtool ssh rsync tcpdump \
     git cmake make vim build-essential \
-    python3-pip && \
-    pip3 install ansible numpy matplotlib
+    python3-pip
+
+ENV LANG C.UTF-8
+RUN pip3 install ansible numpy matplotlib
     # software-properties-common && \
     # apt-add-repository --yes --update ppa:ansible/ansible && \ 
     # apt install -y ansible
