@@ -16,14 +16,7 @@ struct sockaddr_in    localSock;
 struct ip_mreq        group;
 int                   reuse=1;
 
-// testing listener function on a sender process.
-int multicast_setup(int& sd) {
-    // sd = socket(AF_INET, SOCK_DGRAM, 0);
-    // if (sd < 0) {
-    //     perror("opening datagram socket");
-    //     exit(1);
-    // }
-
+void multicast_setup_recv(int& sd) {
     if (setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, (char *)&reuse, sizeof(reuse)) < 0) {
         perror("setting SO_REUSEADDR");
         close(sd);
@@ -49,18 +42,9 @@ int multicast_setup(int& sd) {
         close(sd);
         exit(1);
     }
-
-    return sd;
 }
 
-int main (int argc, char *argv[])
-{
-    sd = socket(AF_INET, SOCK_DGRAM, 0);
-    if (sd < 0) {
-        perror("opening datagram socket");
-        exit(1);
-    }
-
+void multicast_setup_send(int& sd) {
     // Initialize the group sockaddr structure with a group address of 225.1.1.1 and port 5555.
     memset((char *) &group_addr, 0, sizeof(group_addr));
     group_addr.sin_family = AF_INET;
@@ -82,29 +66,34 @@ int main (int argc, char *argv[])
         close(sd);
         exit(1);
     }
+}
+
+int main (int argc, char *argv[])
+{
+    sd = socket(AF_INET, SOCK_DGRAM, 0);
+    if (sd < 0) {
+        perror("opening datagram socket");
+        exit(1);
+    }
+
+    multicast_setup_send(sd);
 
     struct sockaddr_in client_addr;
     socklen_t  socklen;
     char recv_buff[50];
-    //int listen_fd = multicast_setup(sd);
-    multicast_setup(sd);
+    multicast_setup_recv(sd);
 
-    // Send a message to the multicast group
+    // send a message to the multicast group
     if (sendto(sd, send_buff, strlen(send_buff), 0, (struct sockaddr*)& group_addr, sizeof(group_addr)) < 0) {
         perror("sending datagram message");
     }
 
+    // receive a message from the multicast group
     recvfrom(sd, recv_buff, sizeof(recv_buff), 0,(struct sockaddr *)&client_addr, &socklen);
-    // if (read(listen_fd, recv_buff, sizeof(recv_buff)) < 0) {
-    //     perror("reading datagram message");
-    //     close(sd);
-    //     exit(1);
-    // }
 
     int client_port = ntohs(client_addr.sin_port);
     printf("recv client from %s:%d, same port : %d \n", (char *)inet_ntoa(client_addr.sin_addr), client_port, 1);
     printf("message = %s\n", recv_buff);
 
-    //close(listen_fd);
     close(sd);
 }
