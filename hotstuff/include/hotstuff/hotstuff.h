@@ -68,13 +68,21 @@ struct MsgReqBlock {
     MsgReqBlock(DataStream &&s);
 };
 
-
 struct MsgRespBlock {
     static const opcode_t opcode = 0x3;
     DataStream serialized;
     std::vector<block_t> blks;
     MsgRespBlock(const std::vector<block_t> &blks);
     MsgRespBlock(DataStream &&s): serialized(std::move(s)) {}
+    void postponed_parse(HotStuffCore *hsc);
+};
+
+struct MsgRetransRequest {
+    static const opcode_t opcode = 0x10;
+    DataStream serialized;
+    RetransRequest request;
+    MsgRetransRequest(const RetransRequest &);
+    MsgRetransRequest(DataStream &&s): serialized(std::move(s)) {}
     void postponed_parse(HotStuffCore *hsc);
 };
 
@@ -154,6 +162,7 @@ class HotStuffBase: public HotStuffCore {
     BlockProfiler blk_profiler;
 #endif
     pacemaker_bt pmaker;
+
     /* queues for async tasks */
     std::unordered_map<const uint256_t, BlockFetchContext> blk_fetch_waiting;
     std::unordered_map<const uint256_t, BlockDeliveryContext> blk_delivery_waiting;
@@ -186,10 +195,12 @@ class HotStuffBase: public HotStuffCore {
     inline void propose_handler(MsgPropose &&, const Net::conn_t &);
     /** deliver consensus message: <vote> */
     inline void vote_handler(MsgVote &&, const Net::conn_t &);
-    /** fetches full block data */
+    /** fetches full block data, input : blk_hashes, output : MsgRespBlock(blks) */
     inline void req_blk_handler(MsgReqBlock &&, const Net::conn_t &);
-    /** receives a block */
+    /** receives a block, on_fetch_blk all blocks */
     inline void resp_blk_handler(MsgRespBlock &&, const Net::conn_t &);
+    /** receives a retransmit request,  */
+    inline void retrans_request_handler(MsgRetransRequest &&, const Net::conn_t &);
 
     inline bool conn_handler(const salticidae::ConnPool::conn_t &, bool);
 
@@ -197,6 +208,9 @@ class HotStuffBase: public HotStuffCore {
     void do_vote(ReplicaID, const Vote &) override;
     void do_decide(Finality &&) override;
     void do_consensus(const block_t &blk) override;
+    void do_retransmit_prop(ReplicaID, const Proposal &) override;
+
+    void on_request(ReplicaID , const RetransRequest &) override;
 
     protected:
 
@@ -206,13 +220,14 @@ class HotStuffBase: public HotStuffCore {
 
     public:
     HotStuffBase(uint32_t blk_size,
-            ReplicaID rid,
-            privkey_bt &&priv_key,
-            NetAddr listen_addr,
-            pacemaker_bt pmaker,
-            EventContext ec,
-            size_t nworker,
-            const Net::Config &netconfig);
+        ReplicaID rid,
+        privkey_bt &&priv_key,
+        NetAddr listen_addr,
+        NetAddr multicast_addr,
+        pacemaker_bt pmaker,
+        EventContext ec,
+        size_t nworker,
+        const Net::Config &netconfig);
 
     ~HotStuffBase();
 
@@ -276,39 +291,47 @@ class HotStuff: public HotStuffBase {
     }
 
     public:
-    HotStuff(uint32_t blk_size,
-            ReplicaID rid,
-            const bytearray_t &raw_privkey,
-            NetAddr listen_addr,
-            pacemaker_bt pmaker,
-            EventContext ec = EventContext(),
-            size_t nworker = 4,
-            const Net::Config &netconfig = Net::Config()):
-        HotStuffBase(blk_size,
-                    rid,
-                    new PrivKeyType(raw_privkey),
-                    listen_addr,
-                    std::move(pmaker),
-                    ec,
-                    nworker,
-                    netconfig) {}
+    HotStuff(
+        uint32_t blk_size,
+        ReplicaID rid,
+        const bytearray_t &raw_privkey,
+        NetAddr listen_addr,
+        NetAddr multicast_addr,
+        pacemaker_bt pmaker,
+        EventContext ec = EventContext(),
+        size_t nworker = 4,
+        const Net::Config &netconfig = Net::Config()):
+            HotStuffBase(
+                blk_size,
+                rid,
+                new PrivKeyType(raw_privkey),
+                listen_addr,
+                multicast_addr,
+                std::move(pmaker),
+                ec,
+                nworker,
+                netconfig
+            ) 
+        {}
 
     void start(const std::vector<std::tuple<NetAddr, bytearray_t, bytearray_t>> &replicas, bool ec_loop = false) {
         std::vector<std::tuple<NetAddr, pubkey_bt, uint256_t>> reps;
+        
         for (auto &r: replicas)
             reps.push_back(
                 std::make_tuple(
                     std::get<0>(r),
                     new PubKeyType(std::get<1>(r)),
                     uint256_t(std::get<2>(r))
-                ));
+                )
+            );
+
         HotStuffBase::start(std::move(reps), ec_loop);
     }
 };
 
 using HotStuffNoSig = HotStuff<>;
-using HotStuffSecp256k1 = HotStuff<PrivKeySecp256k1, PubKeySecp256k1,
-                                    PartCertSecp256k1, QuorumCertSecp256k1>;
+using HotStuffSecp256k1 = HotStuff<PrivKeySecp256k1, PubKeySecp256k1, PartCertSecp256k1, QuorumCertSecp256k1>;
 
 template<EntityType ent_type>
 FetchContext<ent_type>::FetchContext(FetchContext && other):
@@ -340,14 +363,12 @@ inline void FetchContext<ENT_TYPE_BLK>::timeout_cb(TimerEvent &) {
 }
 
 template<EntityType ent_type>
-FetchContext<ent_type>::FetchContext(
-                                const uint256_t &ent_hash, HotStuffBase *hs):
-            promise_t([](promise_t){}),
-            hs(hs), ent_hash(ent_hash) {
+FetchContext<ent_type>::FetchContext(const uint256_t &ent_hash, HotStuffBase *hs):
+    promise_t([](promise_t){}),
+    hs(hs), ent_hash(ent_hash) 
+{
     fetch_msg = std::vector<uint256_t>{ent_hash};
-
-    timeout = TimerEvent(hs->ec,
-            std::bind(&FetchContext::timeout_cb, this, _1));
+    timeout = TimerEvent(hs->ec, std::bind(&FetchContext::timeout_cb, this, _1));
     reset_timeout();
 }
 

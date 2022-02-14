@@ -62,6 +62,7 @@ bool HotStuffCore::on_deliver_blk(const block_t &blk) {
         LOG_WARN("attempt to deliver a block twice");
         return false;
     }
+
     blk->parents.clear();
     for (const auto &hash: blk->parent_hashes)
         blk->parents.push_back(get_delivered_blk(hash));
@@ -80,32 +81,36 @@ bool HotStuffCore::on_deliver_blk(const block_t &blk) {
 
     blk->delivered = true;
     LOG_DEBUG("deliver %s", std::string(*blk).c_str());
+    
     return true;
 }
 
 void HotStuffCore::update_hqc(const block_t &_hqc, const quorum_cert_bt &qc) {
-    if (_hqc->height > hqc.first->height)
-    {
+    if (_hqc->height > hqc.first->height) {
         hqc = std::make_pair(_hqc, qc->clone());
         on_hqc_update();
     }
 }
 
 void HotStuffCore::update(const block_t &nblk) {
-    /* nblk = b*, blk2 = b'', blk1 = b', blk = b */
+    // nblk = b*, blk2 = b'', blk1 = b', blk = b
 #ifndef HOTSTUFF_TWO_STEP
     /* three-step HotStuff */
+
+    // PRE-COMMIT Phase
     const block_t &blk2 = nblk->qc_ref;
     if (blk2 == nullptr) return;
     /* decided blk could possible be incomplete due to pruning */
     if (blk2->decision) return;
-    update_hqc(blk2, nblk->qc);
+    update_hqc(blk2, nblk->qc); // genericQC
 
+    // COMMIT Phase
     const block_t &blk1 = blk2->qc_ref;
     if (blk1 == nullptr) return;
     if (blk1->decision) return;
     if (blk1->height > b_lock->height) b_lock = blk1;
 
+    // DECIDE Phase
     const block_t &blk = blk1->qc_ref;
     if (blk == nullptr) return;
     if (blk->decision) return;
@@ -130,95 +135,115 @@ void HotStuffCore::update(const block_t &nblk) {
     /* otherwise commit */
     std::vector<block_t> commit_queue;
     block_t b;
-    for (b = blk; b->height > b_exec->height; b = b->parents[0])
-    { /* TODO: also commit the uncles/aunts */
+
+    for (b = blk; b->height > b_exec->height; b = b->parents[0]) {
         commit_queue.push_back(b);
     }
+
     if (b != b_exec)
-        throw std::runtime_error("safety breached :( " +
-                                std::string(*blk) + " " +
-                                std::string(*b_exec));
-    for (auto it = commit_queue.rbegin(); it != commit_queue.rend(); it++)
-    {
+        throw std::runtime_error("safety breached :( " + std::string(*blk) + " " + std::string(*b_exec));
+
+    for (auto it = commit_queue.rbegin(); it != commit_queue.rend(); it++) {
         const block_t &blk = *it;
         blk->decision = 1;
+
         do_consensus(blk);
         LOG_PROTO("commit %s", std::string(*blk).c_str());
+
         for (size_t i = 0; i < blk->cmds.size(); i++)
-            do_decide(Finality(id, 1, i, blk->height,
-                                blk->cmds[i], blk->get_hash()));
+            do_decide(Finality(id, 1, i, blk->height, blk->cmds[i], blk->get_hash()));
     }
+
     b_exec = blk;
 }
 
-block_t HotStuffCore::on_propose(const std::vector<uint256_t> &cmds,
-                            const std::vector<block_t> &parents,
-                            bytearray_t &&extra) {
-    if (parents.empty())
-        throw std::runtime_error("empty parents");
+block_t HotStuffCore::on_propose(const std::vector<uint256_t> &cmds, const std::vector<block_t> &parents, bytearray_t &&extra, const uint64_t &pmaker_count) {
+    if (parents.empty()) throw std::runtime_error("empty parents");
+
     for (const auto &_: parents) tails.erase(_);
+
     /* create the new block */
     block_t bnew = storage->add_blk(
         new Block(parents, cmds,
-            hqc.second->clone(), std::move(extra),
+            hqc.second->clone(), 
+            std::move(extra),
             parents[0]->height + 1,
             hqc.first,
             nullptr
-        ));
+        )
+    );
+
+    if (pmaker_count != 0) {
+        LOG_PROTO("Add to storage <%d, %s>", pmaker_count, std::string(*bnew).c_str());
+        storage->add_blk(bnew, pmaker_count);
+    }
+
     const uint256_t bnew_hash = bnew->get_hash();
     bnew->self_qc = create_quorum_cert(bnew_hash);
-    on_deliver_blk(bnew);
+
+    on_deliver_blk(bnew); // mark the block is ready to be handled
+
     update(bnew);
+
     Proposal prop(id, bnew, nullptr);
+
     LOG_PROTO("propose %s", std::string(*bnew).c_str());
+
     if (bnew->height <= vheight)
         throw std::runtime_error("new block should be higher than vheight");
+
     /* self-receive the proposal (no need to send it through the network) */
     on_receive_proposal(prop);
-    on_propose_(prop);
+    on_propose_(prop); // mark the proposal as resolved
+
     /* boradcast to other replicas */
     do_broadcast_proposal(prop);
+
     return bnew;
 }
 
 void HotStuffCore::on_receive_proposal(const Proposal &prop) {
     LOG_PROTO("got %s", std::string(prop).c_str());
+
     bool self_prop = prop.proposer == get_id();
+
     block_t bnew = prop.blk;
-    if (!self_prop)
-    {
+
+    if (!self_prop) {
         sanity_check_delivered(bnew);
         update(bnew);
     }
+
     bool opinion = false;
-    if (bnew->height > vheight)
-    {
-        if (bnew->qc_ref && bnew->qc_ref->height > b_lock->height)
-        {
-            opinion = true; // liveness condition
+    // safety check
+    if (bnew->height > vheight) {
+        if (bnew->qc_ref && bnew->qc_ref->height > b_lock->height) {
+            opinion = true;
             vheight = bnew->height;
         }
-        else
-        {   // safety condition (extend the locked branch)
+        else {   // safety condition (extend the locked branch)
             block_t b;
-            for (b = bnew;
+            for (
+                b = bnew;
                 b->height > b_lock->height;
-                b = b->parents[0]);
-            if (b == b_lock) /* on the same branch */
-            {
+                b = b->parents[0]
+            );
+            if (b == b_lock) { /* on the same branch */
                 opinion = true;
                 vheight = bnew->height;
             }
         }
     }
-    LOG_PROTO("now state: %s", std::string(*this).c_str());
+    //LOG_PROTO("now state: %s", std::string(*this).c_str());
+    
     if (!self_prop && bnew->qc_ref)
-        on_qc_finish(bnew->qc_ref);
+        on_qc_finish(bnew->qc_ref); // remove from qc_waiting
+
     on_receive_proposal_(prop);
-    if (opinion && !vote_disabled)
-        do_vote(prop.proposer,
-            Vote(id, bnew->get_hash(),
-                create_part_cert(*priv_key, bnew->get_hash()), this));
+
+    if (opinion && !vote_disabled) {
+        do_vote(prop.proposer, Vote(id, bnew->get_hash(), create_part_cert(*priv_key, bnew->get_hash()), this));
+    }
 }
 
 void HotStuffCore::on_receive_vote(const Vote &vote) {
@@ -226,27 +251,46 @@ void HotStuffCore::on_receive_vote(const Vote &vote) {
     LOG_PROTO("now state: %s", std::string(*this).c_str());
     block_t blk = get_delivered_blk(vote.blk_hash);
     assert(vote.cert);
+
     size_t qsize = blk->voted.size();
+
     if (qsize >= config.nmajority) return;
-    if (!blk->voted.insert(vote.voter).second)
-    {
+
+    if (!blk->voted.insert(vote.voter).second) {
         LOG_WARN("duplicate vote for %s from %d", get_hex10(vote.blk_hash).c_str(), vote.voter);
         return;
     }
+
     auto &qc = blk->self_qc;
-    if (qc == nullptr)
-    {
+    if (qc == nullptr) {
         LOG_WARN("vote for block not proposed by itself");
         qc = create_quorum_cert(blk->get_hash());
     }
+
     qc->add_part(vote.voter, *vote.cert);
-    if (qsize + 1 == config.nmajority)
-    {
+
+    if (qsize + 1 == config.nmajority) {
         qc->compute();
         update_hqc(blk, qc);
-        on_qc_finish(blk);
+        on_qc_finish(blk); // resolve blk from qc_waiting
     }
 }
+
+void HotStuffCore::on_receive_retrans_request(const RetransRequest &request) {
+    LOG_PROTO("on_receive_retrans_request %s", std::string(request).c_str());
+
+    block_t blk = storage->find_blk(request.pmaker_count);
+
+    if (blk != nullptr) {
+        LOG_PROTO("on_receive_retrans_request : sending proposal to %d", request.requester);
+        Proposal prop(id, blk, nullptr);
+        do_retransmit_prop(request.requester, prop);
+    }
+    else {
+        LOG_PROTO("on_receive_retrans_request : no block with id = %d", request.pmaker_count);
+    }
+}
+
 /*** end HotStuff protocol logic ***/
 void HotStuffCore::on_init(uint32_t nfaulty) {
     config.nmajority = config.nreplicas - nfaulty;
@@ -280,10 +324,8 @@ void HotStuffCore::prune(uint32_t staleness) {
     }
 }
 
-void HotStuffCore::add_replica(ReplicaID rid, const PeerId &peer_id,
-                                pubkey_bt &&pub_key) {
-    config.add_replica(rid,
-            ReplicaInfo(rid, peer_id, std::move(pub_key)));
+void HotStuffCore::add_replica(ReplicaID rid, const PeerId &peer_id, pubkey_bt &&pub_key) {
+    config.add_replica(rid, ReplicaInfo(rid, peer_id, std::move(pub_key)));
     b0->voted.insert(rid);
 }
 
@@ -291,17 +333,18 @@ promise_t HotStuffCore::async_qc_finish(const block_t &blk) {
     if (blk->voted.size() >= config.nmajority)
         return promise_t([](promise_t &pm) {
             pm.resolve();
-        });
+    });
+
     auto it = qc_waiting.find(blk);
     if (it == qc_waiting.end())
         it = qc_waiting.insert(std::make_pair(blk, promise_t())).first;
-    return it->second;
+
+    return it->second; // resolve on_qc_finish
 }
 
 void HotStuffCore::on_qc_finish(const block_t &blk) {
-    auto it = qc_waiting.find(blk);
-    if (it != qc_waiting.end())
-    {
+    auto it = qc_waiting.find(blk); // <block, promise>
+    if (it != qc_waiting.end()) {
         it->second.resolve();
         qc_waiting.erase(it);
     }
@@ -321,7 +364,7 @@ promise_t HotStuffCore::async_wait_receive_proposal() {
 
 promise_t HotStuffCore::async_hqc_update() {
     return hqc_update_waiting.then([this]() {
-        return hqc.first;
+        return hqc.first; // <block, QC>
     });
 }
 
@@ -331,6 +374,7 @@ void HotStuffCore::on_propose_(const Proposal &prop) {
     t.resolve(prop);
 }
 
+// mark the waiting proposal as resolved
 void HotStuffCore::on_receive_proposal_(const Proposal &prop) {
     auto t = std::move(receive_proposal_waiting);
     receive_proposal_waiting = promise_t();

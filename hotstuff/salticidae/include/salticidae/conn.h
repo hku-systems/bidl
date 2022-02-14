@@ -76,24 +76,33 @@ class ConnPool {
         std::atomic<bool> terminated;
         size_t recv_chunk_size;
         size_t max_recv_buff_size;
-        int fd;
+        int fd_tcp;
+        int fd_udp;
         Worker *worker;
         ConnPool *cpool;
         ConnMode mode;
-        NetAddr addr;
+        NetAddr addr_tcp;
+        sockaddr_in group_sock;   // Multicast Group Socket IP and Port, used in sendto()
 
-        MPSCWriteBuffer send_buffer;
-        SegBuffer recv_buffer;
+        MPSCWriteBuffer send_buffer_tcp;
+
+        SegBuffer recv_buffer_tcp;
+        SegBuffer recv_buffer_udp;
+
+        int recv_type;
 
         /* initialized and destroyed by the dispatcher */
         TimedFdEvent ev_connect;
         /* initialized and destroyed by the worker */
-        FdEvent ev_socket;
+        FdEvent ev_socket_tcp;
+        FdEvent ev_socket_udp;
         /** does not need to wait if true */
-        bool ready_send;
-        bool ready_recv;
+        bool ready_send_tcp;
+        bool ready_recv_tcp;
+        bool ready_send_udp;
+        bool ready_recv_udp; 
 
-        typedef void (socket_io_func)(const conn_t &, int, int);
+        typedef void (socket_io_func)(const conn_t &, int, int, int);
         socket_io_func *send_data_func;
         socket_io_func *recv_data_func;
         BoxObj<TLS> tls;
@@ -112,11 +121,14 @@ class ConnPool {
         Conn(): terminated(false),
             // recv_chunk_size initialized later
             // max_recv_buff_size initialized later
-            fd(-1),
+            fd_tcp(-1),
+            fd_udp(-1),
+            recv_type(ConnPool::SendType::TCP),
             worker(nullptr),
             cpool(nullptr),
             mode(ConnMode::PASSIVE),
-            ready_send(false), ready_recv(false),
+            ready_send_tcp(false), ready_recv_tcp(false),
+            ready_send_udp(false), ready_recv_udp(false),
             send_data_func(nullptr), recv_data_func(nullptr),
             tls(nullptr), peer_cert(nullptr) {}
         Conn(const Conn &) = delete;
@@ -135,15 +147,23 @@ class ConnPool {
         }
 
         operator std::string() const;
-        const NetAddr &get_addr() const { return addr; }
+        const NetAddr &get_addr() const { return addr_tcp; }
         const X509 *get_peer_cert() const { return peer_cert.get(); }
         ConnMode get_mode() const { return mode; }
         ConnPool *get_pool() const { return cpool; }
+        const int get_fd_udp() const { return fd_udp; }
 
         /** Write data to the connection (non-blocking). The data will be sent
          * whenever I/O is available. */
-        bool write(bytearray_t &&data) {
-            return send_buffer.push(std::move(data), !cpool->max_send_buff_size);
+        bool write(bytearray_t &&data, const bool dummy = false) {
+            bool ret;
+
+            // if (dummy) {
+            //     ret = send_buffer_udp.push(std::move(data), !cpool->max_send_buff_size);
+            // }
+            ret = send_buffer_tcp.push(std::move(data), !cpool->max_send_buff_size);
+            
+            return ret;
         }
     };
 
@@ -154,15 +174,23 @@ class ConnPool {
     ThreadCall* disp_tcall;
     BoxObj<ThreadCall> user_tcall;
     RcObj<const X509> tls_cert;
+    MPSCWriteBuffer send_buffer_udp;
 
     using worker_error_callback_t = std::function<void(const std::exception_ptr err)>;
     worker_error_callback_t disp_error_cb;
     worker_error_callback_t worker_error_cb;
     std::atomic<uint16_t> async_id;
 
-    int32_t gen_async_id() { return async_id.fetch_add(1, std::memory_order_relaxed); }
+    int _create_fd_tcp();
+    int _create_fd_udp(const bool recv_only = true);
+    sockaddr_in _create_group_sock(); // for UDP Multicast sendto()
+    void _multicast_setup_recv_fd(int& fd_udp);
+    void _multicast_setup_send_fd(int& fd_udp);
     conn_t _connect(const NetAddr &addr);
     void _listen(NetAddr listen_addr);
+    void init_cpool_fd_udp();
+
+    int32_t gen_async_id() { return async_id.fetch_add(1, std::memory_order_relaxed); }
     void recoverable_error(const std::exception_ptr err, int32_t id) const {
         user_tcall->async_call([this, err, id](ThreadCall::Handle &) {
             if (error_cb) error_cb(err, false, id);
@@ -177,7 +205,7 @@ class ConnPool {
     /** Should be implemented by derived class to return a new Conn object. */
     virtual Conn *create_conn() = 0;
     /** Called when new data is available. */
-    virtual void on_read(const conn_t &) {}
+    virtual void on_read(const conn_t&) {}
     /** Called when the underlying connection is established. */
     virtual void on_worker_setup(const conn_t &) {}
     /** Called when the underlying connection is established. */
@@ -186,8 +214,9 @@ class ConnPool {
     virtual void on_worker_teardown(const conn_t &conn) {
         if (conn->worker) conn->worker->unfeed();
         if (conn->tls) conn->tls->shutdown();
-        conn->ev_socket.clear();
-        conn->send_buffer.get_queue().unreg_handler();
+        conn->ev_socket_tcp.clear();
+        conn->ev_socket_udp.clear();
+        conn->send_buffer_tcp.get_queue().unreg_handler();
     }
     /** Called when the underlying connection breaks. */
     virtual void on_dispatcher_teardown(const conn_t &) {}
@@ -208,28 +237,30 @@ class ConnPool {
     std::unordered_map<int, conn_t> pool;
     int listen_fd;  /**< for accepting new network connections */
 
-    void update_conn(const conn_t &conn, bool connected) {
-        user_tcall->async_call([this, conn, connected](ThreadCall::Handle &) {
+    void update_conn(const conn_t &conn, bool connected, bool is_peer_to_peer) {
+        user_tcall->async_call([this, conn, connected, is_peer_to_peer](ThreadCall::Handle &) {
             bool ret = !conn_cb || conn_cb(conn, connected);
-            if (connected)
-            {
-                if (enable_tls)
-                {
+            if (connected) { 
+                if (enable_tls) {
                     conn->worker->get_tcall()->async_call([this, conn, ret](ThreadCall::Handle &) {
                         if (conn->is_terminated()) return;
                         if (ret)
                         {
                             conn->recv_data_func = Conn::_recv_data_tls;
-                            conn->ev_socket.del();
-                            conn->ev_socket.add(FdEvent::READ | FdEvent::WRITE);
+                            conn->ev_socket_tcp.del();
+                            conn->ev_socket_tcp.add(FdEvent::READ | FdEvent::WRITE);
                         }
                         else worker_terminate(conn);
                     });
                 }
                 else
-                    conn->worker->get_tcall()->async_call([conn](ThreadCall::Handle &) {
+                    conn->worker->get_tcall()->async_call([conn, is_peer_to_peer](ThreadCall::Handle &) {
                         if (conn->is_terminated()) return;
-                        conn->ev_socket.add(FdEvent::READ | FdEvent::WRITE);
+
+                        conn->ev_socket_tcp.add(FdEvent::READ | FdEvent::WRITE);
+
+                        if (is_peer_to_peer)
+                            conn->ev_socket_udp.add(FdEvent::READ | FdEvent::WRITE);
                     });
             }
         });
@@ -267,69 +298,100 @@ class ConnPool {
             });
         }
 
-        void enable_send_buffer(const conn_t &conn, int client_fd) {
-            conn->send_buffer.get_queue()
-                    .reg_handler(this->ec, [conn, client_fd]
-                                (MPSCWriteBuffer::queue_t &) {
-                if (conn->ready_send)
+        void enable_send_buffer_tcp(const conn_t &conn, int client_fd) {
+            conn->send_buffer_tcp.get_queue().reg_handler(this->ec, [conn, client_fd] (MPSCWriteBuffer::queue_t &) {
+                if (conn->ready_send_tcp)
                 {
-                    conn->ev_socket.del();
-                    conn->ev_socket.add((conn->ready_recv ? 0 : FdEvent::READ) |
-                                        FdEvent::WRITE);
-                    conn->send_data_func(conn, client_fd, FdEvent::WRITE);
+                    conn->ev_socket_tcp.del();
+                    conn->ev_socket_tcp.add((conn->ready_recv_tcp ? 0 : FdEvent::READ) | FdEvent::WRITE);
+                    conn->send_data_func(conn, client_fd, FdEvent::WRITE, ConnPool::SendType::TCP);
                 }
                 return false;
             });
         }
 
-        void feed(const conn_t &conn, int client_fd) {
+        // void enable_send_buffer_udp(const conn_t &conn, int client_fd) {
+        //     conn->send_buffer_udp.get_queue().reg_handler(this->ec, [conn, client_fd] (MPSCWriteBuffer::queue_t &) {
+        //         if (conn->ready_send_udp)
+        //         {
+        //             conn->ev_socket_udp.del();
+        //             conn->ev_socket_udp.add((conn->ready_recv_udp ? 0 : FdEvent::READ) | FdEvent::WRITE);
+        //             conn->send_data_func(conn, client_fd, FdEvent::WRITE, ConnPool::SendType::UDP);
+        //         }
+        //         return false;
+        //     });
+        // }
+
+        void feed(const conn_t &conn, int client_fd, const bool is_peer_to_peer) {
             /* the caller should finalize all the preparation */
-            tcall.async_call([this, conn, client_fd](ThreadCall::Handle &) {
+            tcall.async_call([this, conn, client_fd, is_peer_to_peer](ThreadCall::Handle &) {
                 try {
-                    conn->ev_socket = FdEvent(ec, client_fd, [this, conn](int fd, int what) {
+                    conn->ev_socket_tcp = FdEvent(ec, client_fd, [this, conn](int fd_tcp, int what) {
                         try {
                             if (what & FdEvent::READ)
-                                conn->recv_data_func(conn, fd, what);
+                                conn->recv_data_func(conn, fd_tcp, what, ConnPool::SendType::TCP);
                             else
-                                conn->send_data_func(conn, fd, what);
+                                conn->send_data_func(conn, fd_tcp, what, ConnPool::SendType::TCP);
                         } catch (...) {
                             conn->cpool->recoverable_error(std::current_exception(), -1);
                             conn->cpool->worker_terminate(conn);
                         }
                     });
+
+                    if (is_peer_to_peer) {
+                        conn->ev_socket_udp = FdEvent(ec, conn->fd_udp, [this, conn](int fd_udp, int what) {
+                            try {
+                                if (what & FdEvent::READ)
+                                    conn->recv_data_func(conn, fd_udp, what, ConnPool::SendType::UDP);
+                                else
+                                    conn->send_data_func(conn, fd_udp, what, ConnPool::SendType::UDP);
+                            } catch (...) {
+                                conn->cpool->recoverable_error(std::current_exception(), -1);
+                                conn->cpool->worker_terminate(conn);
+                            }
+                        });
+
+                        SALTICIDAE_LOG_DEBUG("conn->ev_socket_udp created");
+                    }
+
                     auto cpool = conn->cpool;
                     if (cpool->enable_tls)
                     {
-                        conn->tls = new TLS(
-                                cpool->tls_ctx, client_fd,
-                                conn->mode == Conn::ConnMode::PASSIVE);
+                        conn->tls = new TLS(cpool->tls_ctx, client_fd, conn->mode == Conn::ConnMode::PASSIVE);
                         conn->send_data_func = Conn::_send_data_tls_handshake;
                         conn->recv_data_func = Conn::_recv_data_tls_handshake;
-                        conn->ev_socket.add(FdEvent::READ | FdEvent::WRITE);
+                        conn->ev_socket_tcp.add(FdEvent::READ | FdEvent::WRITE);
                     }
                     else
                     {
+                        SALTICIDAE_LOG_DEBUG("cpool->enable_tls = false");
                         conn->send_data_func = Conn::_send_data;
                         conn->recv_data_func = Conn::_recv_data;
-                        enable_send_buffer(conn, client_fd);
+
+                        enable_send_buffer_tcp(conn, client_fd);
+
                         cpool->on_worker_setup(conn);
-                        cpool->disp_tcall->async_call([cpool, conn](ThreadCall::Handle &) {
+                        cpool->disp_tcall->async_call([cpool, conn, is_peer_to_peer](ThreadCall::Handle &) {
                             try {
                                 cpool->on_dispatcher_setup(conn);
-                                cpool->update_conn(conn, true);
+                                cpool->update_conn(conn, true, is_peer_to_peer);
                             } catch (...) {
                                 cpool->recoverable_error(std::current_exception(), -1);
                                 cpool->disp_terminate(conn);
                             }
                         });
                     }
-                    assert(conn->fd != -1);
+                    assert(conn->fd_tcp != -1);
+                    if (is_peer_to_peer) assert(conn->fd_udp != -1);
                     assert(conn->worker == this);
-                    SALTICIDAE_LOG_DEBUG("worker %x got %s",
-                            std::this_thread::get_id(),
-                            std::string(*conn).c_str());
+                    SALTICIDAE_LOG_DEBUG("worker %x got %s",std::this_thread::get_id(),std::string(*conn).c_str());
+
                     nconn++;
-                } catch (...) { on_fatal_error(std::current_exception()); }
+
+                } 
+                catch (...) { 
+                    on_fatal_error(std::current_exception()); 
+                }
             });
         }
 
@@ -361,6 +423,9 @@ class ConnPool {
     size_t nworker;
     salticidae::BoxObj<Worker[]> workers;
 
+    int cpool_fd_udp;
+    sockaddr_in group_socket;
+
     void accept_client(int, int);
     void conn_server(const conn_t &conn, int, int);
     conn_t add_conn(const conn_t &conn);
@@ -384,6 +449,19 @@ class ConnPool {
 
     public:
     const bool enable_tls;
+
+    // Multicast Group IP and Port
+    NetAddr multicast_addr;
+    // Interface to join Multicast Group and receive data
+    NetAddr local_interface;
+    bool is_peer_to_peer;
+
+    enum SendType {
+        TCP,
+        UDP
+    };
+
+    void multicast_data(bytearray_t &msg);
 
     class Config {
         friend class ConnPool;
@@ -484,17 +562,19 @@ class ConnPool {
     };
 
     ConnPool(const EventContext &ec, const Config &config):
-            system_state(0), ec(ec),
-            async_id(0),
-            max_listen_backlog(config._max_listen_backlog),
-            conn_server_timeout(config._conn_server_timeout),
-            recv_chunk_size(config._recv_chunk_size),
-            max_recv_buff_size(config._max_recv_buff_size),
-            max_send_buff_size(config._max_send_buff_size),
-            tls_ctx(nullptr),
-            listen_fd(-1),
-            nworker(config._nworker),
-            enable_tls(config._enable_tls) {
+        system_state(0), ec(ec),
+        async_id(0),
+        max_listen_backlog(config._max_listen_backlog),
+        conn_server_timeout(config._conn_server_timeout),
+        recv_chunk_size(config._recv_chunk_size),
+        max_recv_buff_size(config._max_recv_buff_size),
+        max_send_buff_size(config._max_send_buff_size),
+        tls_ctx(nullptr),
+        listen_fd(-1), cpool_fd_udp(-1),
+        nworker(config._nworker),
+        enable_tls(config._enable_tls),
+        is_peer_to_peer(false)
+    {
         if (enable_tls)
         {
             tls_ctx = new TLSContext();
@@ -517,6 +597,7 @@ class ConnPool {
         disp_tcall = workers[0].get_tcall();
         workers[0].set_dispatcher();
         disp_error_cb = [this](const std::exception_ptr err) {
+            if (cpool_fd_udp != -1) close(cpool_fd_udp);
             workers[0].stop_tcall();
             user_tcall->async_call([this, err](ThreadCall::Handle &) {
                 for (size_t i = 1; i < nworker; i++)
@@ -531,8 +612,8 @@ class ConnPool {
                 disp_error_cb(err);
             });
         };
-        for (size_t i = 0; i < nworker; i++)
-        {
+
+        for (size_t i = 0; i < nworker; i++) {
             auto &worker = workers[i];
             if (worker.is_dispatcher())
                 worker.set_error_callback(disp_error_cb);
@@ -546,12 +627,15 @@ class ConnPool {
     ConnPool(const ConnPool &) = delete;
     ConnPool(ConnPool &&) = delete;
 
-    void start() {
+    void start(bool is_client = true) {
         std::atomic_thread_fence(std::memory_order_acq_rel);
         if (system_state) return;
         SALTICIDAE_LOG_INFO("starting all threads...");
         for (size_t i = 0; i < nworker; i++)
             workers[i].start();
+
+        if (!is_client) init_cpool_fd_udp();
+        
         system_state = 1;
     }
 
@@ -580,10 +664,13 @@ class ConnPool {
 
     void stop() {
         stop_workers();
-        if (listen_fd != -1)
-        {
+        if (listen_fd != -1) {
             close(listen_fd);
             listen_fd = -1;
+        }
+        if (cpool_fd_udp != -1) {
+            close(cpool_fd_udp);
+            cpool_fd_udp = -1;
         }
     }
 
@@ -613,8 +700,9 @@ class ConnPool {
 
 
     /** Listen for passive connections (connection initiated from remote).
-     * Does not need to be called if do not want to accept any passive
-     * connections. */
+     *  Does not need to be called if do not want to accept any passive connections. 
+     *  Only called by ClientWork
+     * */
     void listen(NetAddr listen_addr) {
         disp_tcall->call([this, listen_addr](ThreadCall::Handle &) {
             _listen(listen_addr);

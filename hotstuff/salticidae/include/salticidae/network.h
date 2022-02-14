@@ -132,14 +132,13 @@ class MsgNetwork: public ConnPool {
     protected:
     const uint32_t msg_magic;
     ConnPool::Conn *create_conn() override { return new Conn(); }
-    void on_read(const ConnPool::conn_t &) override;
+    void on_read(const ConnPool::conn_t&) override;
 
     void on_worker_setup(const ConnPool::conn_t &_conn) override {
         auto conn = static_pointer_cast<Conn>(_conn);
         conn->ev_enqueue_poll = TimerEvent(conn->worker->get_ec(),
             [this, conn](TimerEvent &) {
-                if (!incoming_msgs.enqueue(std::make_pair(conn->msg, conn), false))
-                {
+                if (!incoming_msgs.enqueue(std::make_pair(conn->msg, conn), false)) {
                     conn->msg_sleep = true;
                     conn->ev_enqueue_poll.add(0);
                     return;
@@ -210,13 +209,10 @@ class MsgNetwork: public ConnPool {
                 auto &conn = item.second;
                 auto it = handler_map.find(msg.get_opcode());
                 if (it == handler_map.end())
-                    SALTICIDAE_LOG_WARN("unknown opcode: %s",
-                                        get_hex(msg.get_opcode()).c_str());
+                    SALTICIDAE_LOG_WARN("unknown opcode: %s", get_hex(msg.get_opcode()).c_str());
                 else /* call the handler */
                 {
-                    SALTICIDAE_LOG_DEBUG("got message %s from %s",
-                            std::string(msg).c_str(),
-                            std::string(*conn).c_str());
+                    SALTICIDAE_LOG_DEBUG("got %s from %s",std::string(msg).c_str(), std::string(*conn).c_str());
 #ifdef SALTICIDAE_MSG_STAT
                     conn->nrecv++;
                     conn->nrecvb += msg.get_length();
@@ -649,22 +645,24 @@ template<typename OpcodeType>
 void MsgNetwork<OpcodeType>::on_read(const ConnPool::conn_t &_conn) {
     auto conn = static_pointer_cast<Conn>(_conn);
     if (conn->msg_sleep) return;
+
     ConnPool::on_read(_conn);
-    auto &recv_buffer = conn->recv_buffer;
+
+    bool is_tcp = conn->recv_type == ConnPool::SendType::TCP;
+
+    auto& recv_buffer = (is_tcp) ? conn->recv_buffer_tcp : conn->recv_buffer_udp;
+
     auto &msg = conn->msg;
     auto &msg_state = conn->msg_state;
-    while (true)
-    {
-        if (msg_state == Conn::HEADER)
-        {
+
+    while (true) {
+        if (msg_state == Conn::HEADER) {
             if (recv_buffer.size() < Msg::header_size) break;
+
             /* new header available */
             msg = Msg(recv_buffer.pop(Msg::header_size));
-            if (msg.get_length() > max_msg_size)
-            {
-                SALTICIDAE_LOG_WARN(
-                        "oversized message from %s, terminating the connection",
-                        std::string(*conn).c_str());
+            if (msg.get_length() > max_msg_size) {
+                SALTICIDAE_LOG_WARN("oversized message from %s, terminating the connection", std::string(*conn).c_str());
                 throw MsgNetworkError(SALTI_ERROR_CONN_OVERSIZED_MSG);
             }
             msg_state = Conn::PAYLOAD;
@@ -683,21 +681,26 @@ void MsgNetwork<OpcodeType>::on_read(const ConnPool::conn_t &_conn) {
                 break;
             }
 #endif
-            if (!incoming_msgs.enqueue(std::make_pair(msg, conn), false))
-            {
+            if (!incoming_msgs.enqueue(std::make_pair(msg, conn), false)) {
                 conn->msg_sleep = true;
                 conn->ev_enqueue_poll.add(0);
                 return;
             }
         }
     }
-    if (conn->ready_recv && recv_buffer.len() < conn->max_recv_buff_size)
-    {
-        /* resume reading from socket */
-        conn->ev_socket.del();
-        conn->ev_socket.add(FdEvent::READ |
-                            (conn->ready_send ? 0: FdEvent::WRITE));
-        conn->recv_data_func(conn, conn->fd, FdEvent::READ);
+
+    // resume reading from socket
+    if (recv_buffer.len() < conn->max_recv_buff_size) {
+        if (is_tcp && conn->ready_recv_tcp) {
+            conn->ev_socket_tcp.del();
+            conn->ev_socket_tcp.add(FdEvent::READ | (conn->ready_send_tcp ? 0: FdEvent::WRITE));
+            conn->recv_data_func(conn, conn->fd_tcp, FdEvent::READ, ConnPool::SendType::TCP);
+        }
+        else if (!is_tcp && conn->ready_recv_udp) {
+            conn->ev_socket_udp.del();
+            conn->ev_socket_udp.add(FdEvent::READ | (conn->ready_send_udp ? 0: FdEvent::WRITE));
+            conn->recv_data_func(conn, conn->fd_udp, FdEvent::READ, ConnPool::SendType::UDP);
+        }
     }
 }
 
@@ -729,13 +732,13 @@ inline bool MsgNetwork<OpcodeType>::send_msg(const MsgType &msg, const conn_t &c
 template<typename OpcodeType>
 inline bool MsgNetwork<OpcodeType>::_send_msg(const Msg &msg, const conn_t &conn) {
     bytearray_t msg_data = msg.serialize();
-    SALTICIDAE_LOG_DEBUG("wrote message %s to %s",
-                std::string(msg).c_str(),
-                std::string(*conn).c_str());
+    SALTICIDAE_LOG_DEBUG("wrote message %s to %s", std::string(msg).c_str(), std::string(*conn).c_str());
+
 #ifdef SALTICIDAE_MSG_STAT
     conn->nsent++;
     conn->nsentb += msg.get_length();
 #endif
+
     return conn->write(std::move(msg_data));
 }
 
@@ -928,7 +931,7 @@ void PeerNetwork<O, _, __>::finish_handshake(Peer *p) {
         assert(p->conn->is_terminated());
         for (;;)
         {
-            bytearray_t buff_seg = old_conn->send_buffer.move_pop();
+            bytearray_t buff_seg = old_conn->send_buffer_tcp.move_pop();
             if (!buff_seg.size()) break;
             new_conn->write(std::move(buff_seg));
         }
@@ -983,8 +986,10 @@ void PeerNetwork<O, _, __>::start_active_conn(Peer *p) {
 template<typename O, O _, O __>
 inline typename PeerNetwork<O, _, __>::conn_t PeerNetwork<O, _, __>::_get_peer_conn(const PeerId &pid) const {
     auto it = known_peers.find(pid);
-    if (it == known_peers.end())
+    if (it == known_peers.end()) {
+        SALTICIDAE_LOG_INFO("_get_peer_conn throw error !!!!!!!!!!!");
         throw PeerNetworkError(SALTI_ERROR_PEER_NOT_EXIST);
+    }
     return it->second->conn;
 }
 /* end: functions invoked by the dispatcher */
@@ -1156,6 +1161,8 @@ template<typename O, O _, O __>
 void PeerNetwork<O, _, __>::listen(NetAddr _listen_addr) {
     this->disp_tcall->call([this, _listen_addr](ThreadCall::Handle &) {
         MsgNet::_listen(_listen_addr);
+
+
         listen_addr = _listen_addr;
         auto my_cert = this->tls_cert;
         id = _get_peer_id(my_cert ? my_cert.get() : nullptr, listen_addr);
@@ -1259,8 +1266,10 @@ int32_t PeerNetwork<O, _, __>::del_peer(const PeerId &pid) {
         try {
             pinfo_ulock_t _g(known_peers_lock);
             auto it = known_peers.find(pid);
-            if (it == known_peers.end())
+            if (it == known_peers.end()) {
+                SALTICIDAE_LOG_INFO("del_peer throw error !!!!!!!!!!!");
                 throw PeerNetworkError(SALTI_ERROR_PEER_NOT_EXIST);
+            }
             auto &p = it->second;
             p->conn->peer = nullptr;
             this->disp_terminate(p->conn);
@@ -1284,8 +1293,10 @@ PeerNetwork<O, _, __>::get_peer_conn(const PeerId &pid) const {
         conn_t conn;
         pinfo_slock_t _g(known_peers_lock);
         auto it = known_peers.find(pid);
-        if (it == known_peers.end())
+        if (it == known_peers.end()) {
+            SALTICIDAE_LOG_INFO("get_peer_conn throw error !!!!!!!!!!!");
             throw PeerNetworkError(SALTI_ERROR_PEER_NOT_EXIST);
+        }
         h.set_result(it->second->conn);
     }).get()));
     return ret;
@@ -1348,16 +1359,40 @@ inline int32_t PeerNetwork<O, _, __>::multicast_msg(MsgType &&msg, const std::ve
 template<typename O, O _, O __>
 inline int32_t PeerNetwork<O, _, __>::_multicast_msg(Msg &&msg, const std::vector<PeerId> &pids) {
     auto id = this->gen_async_id();
-    this->disp_tcall->async_call(
-                [this, msg=std::move(msg), pids, id](ThreadCall::Handle &) {
+
+    this->disp_tcall->async_call([this, msg=std::move(msg), pids, id](ThreadCall::Handle &) {
         try {
             pinfo_slock_t _g(known_peers_lock);
             bool succ = true;
-            for (auto &pid: pids)
-                succ &= MsgNet::_send_msg(msg, _get_peer_conn(pid));
+
+            bool is_using_udp_multi = true;
+
+            /* Old Implementation : N TCP send() */
+            if (!is_using_udp_multi) {
+                for (auto &pid: pids)
+                    succ &= MsgNet::_send_msg(msg, _get_peer_conn(pid));              
+            }
+            /* New Implementation : 1 UDP sendto(), multicasting */
+            else {
+                bytearray_t msg_data = msg.serialize();
+                ConnPool::multicast_data(msg_data);
+            }
+
+#ifdef SALTICIDAE_MSG_STAT
+            for (auto &pid: pids) {
+                const conn_t& conn = _get_peer_conn(pid);
+                conn->nsent++;
+                conn->nsentb += msg.get_length();
+#endif             
+            }
+
             if (!succ) throw PeerNetworkError(SALTI_ERROR_CONN_NOT_READY);
-        } catch (...) { this->recoverable_error(std::current_exception(), id); }
+        } 
+        catch (...) { 
+            this->recoverable_error(std::current_exception(), id); 
+        }
     });
+
     return id;
 }
 
