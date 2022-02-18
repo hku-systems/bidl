@@ -21,7 +21,7 @@ If otherwise specified, all BIDL's experiments run four consensus nodes and 50 n
 
 1. Please login to our cluster following [this page](https://github.com/hku-systems/bidl/blob/main/servers.md).
 2. Please login to server 2 (sosp21ae@202.45.128.161) and go to `/home/sosp21ae/bidl/` to run all the experiments, where we have set up all necessary environments.
-3. Each experiment will generate a figure in the `./figure` directory. You can download all generated figures to your computer by running `python3 ./tunnel.sh` **on your computer**, which start an ssh tunnel and copy all files in `./figure` to your computer using `scp`.
+3. Each experiment will generate a figure in the `./figure` directory. You can download all generated figures to your computer by running `python3 ./tunnel.sh [private_key]` **on your computer**, which start an ssh tunnel and copy all files in `./figure` to your computer using `scp`.
 4. When the script is running, you may see `END` multiple times. The script is still running; please do not suspend the script.
 
 Please be noted that different evaluators cannot run experiments at the same time. This is because the docker containers started by other evaluators will have the same IP address and container name as yours. You can check whether other evaluators are running the experiments by `docker ps` to see if any running containers are named `fabric`,`normal_node`, `smart`, or `sequencer`.

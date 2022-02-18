@@ -221,14 +221,7 @@ public class BidlFrontend extends Thread {
             while (true) {
                 byte[] rcvPktBuf = null;
                 try {
-                    if (execManager.getCurrentLeader() == controller.getStaticConf().getProcessId() && maliciousFlag == false) {
-                    // if (execManager.getCurrentLeader() == controller.getStaticConf().getProcessId()) {
-                        if (totalNum > 50000) {
-                            rcvPktBuf = BidlFrontend.txBlockingQueue.take();
-                        } else {
-                            continue;
-                        }
-                    } else {
+                    if (execManager.getCurrentLeader() == controller.getStaticConf().getProcessId()) {
                         rcvPktBuf = BidlFrontend.txBlockingQueue.take();
                     }
                 } catch (InterruptedException e) {
