@@ -23,23 +23,24 @@ import (
 )
 
 type Processor struct {
-	Persists  map[[32]byte]int  // persist num
-	TXPool    map[uint64]common.Envelop // index transactions by sequence number
-	Envelops  map[[32]byte]common.Envelop // index transactions by hashes
-	DB        *leveldb.DB
-	TempState map[int]int // temp execution state
-	txnNum    int  // total number of transactions received
-	execNum   int  // total number of transactions executed
-	blkNum    int  // total number of block received
-	mutex     sync.Mutex
-	BlkSize   int  // default block size
-	ID        int  // node id
-	Net       *network.Network
+	Persists   map[[32]byte]int            // persist num
+	TXPool     map[uint64]common.Envelop   // index transactions by sequence number
+	Envelops   map[[32]byte]common.Envelop // index transactions by hashes
+	DB         *leveldb.DB
+	TempState  map[int]int // temp execution state
+	txnNum     int         // total number of transactions received
+	execNum    int         // total number of transactions executed
+	blkNum     int         // total number of block received
+	mutex      sync.Mutex
+	BlkSize    int // default block size
+	ID         int // node id
+	Net        *network.Network
 	privateKey *ecdsa.PrivateKey
 }
 
 var startExecBlk time.Time
 var elapsedBlk time.Duration
+
 func NewProcessor(blkSize int, id int, net *network.Network) *Processor {
 	log.Debugf("Transaction processor initialized")
 	dbFile := "state.db"
@@ -57,17 +58,17 @@ func NewProcessor(blkSize int, id int, net *network.Network) *Processor {
 	}
 
 	return &Processor{
-		Persists:  	make(map[[32]byte]int),
-		TXPool:    	make(map[uint64]common.Envelop),
-		Envelops: 	make(map[[32]byte]common.Envelop),
-		DB:       	database,
-		TempState: 	make(map[int]int),
-		txnNum:    	0,
-		execNum:   	0,
-		blkNum:    	0,
-		BlkSize:   	blkSize,
-		ID:        	id,
-		Net:       	net,
+		Persists:   make(map[[32]byte]int),
+		TXPool:     make(map[uint64]common.Envelop),
+		Envelops:   make(map[[32]byte]common.Envelop),
+		DB:         database,
+		TempState:  make(map[int]int),
+		txnNum:     0,
+		execNum:    0,
+		blkNum:     0,
+		BlkSize:    blkSize,
+		ID:         id,
+		Net:        net,
 		privateKey: privatekey,
 	}
 }
@@ -115,7 +116,7 @@ func (p *Processor) ProcessTxn(txn *common.SequencedTransaction) {
 	p.ExecuteTxn(txn)
 	elapsedTxn := time.Since(startExecTxn) / time.Microsecond // duration in us
 	elapsedBlk += elapsedTxn
-	if p.txnNum % p.BlkSize == 0 {
+	if p.txnNum%p.BlkSize == 0 {
 		log.Infof("Execution latency: %d ms, for executing %d transactions.\n", elapsedBlk/1e3, p.execNum)
 		elapsedBlk = 0
 		p.execNum = 0
@@ -123,7 +124,7 @@ func (p *Processor) ProcessTxn(txn *common.SequencedTransaction) {
 }
 
 func (p *Processor) ExecuteTxn(txn *common.SequencedTransaction) {
-	related := p.Related(txn.Transaction.Org) 
+	related := p.Related(txn.Transaction.Org)
 	payload := strings.Split(string(txn.Transaction.Payload), ":")
 	var env common.Envelop
 	nd := false
@@ -157,10 +158,7 @@ func (p *Processor) ExecuteTxn(txn *common.SequencedTransaction) {
 		signature := r.Bytes()
 		signature = append(signature, s.Bytes()...)
 		env.Signature = signature
-		time.Sleep(5 * time.Microsecond)
-		if p.txnNum % 500 == 0 {
-			p.PersistExecResult(&env)
-		}
+		p.PersistExecResult(&env)
 	} else {
 		balance := 0
 		if len(payload) == 2 {
@@ -175,13 +173,13 @@ func (p *Processor) ExecuteTxn(txn *common.SequencedTransaction) {
 		if balance == -1 {
 			nd = true
 		}
-		env = common.Envelop {
+		env = common.Envelop{
 			SeqTransaction: txn,
-			WSet: make(map[int]int),
-			ND: nd,
+			WSet:           make(map[int]int),
+			ND:             nd,
 		}
 	}
-	
+
 	p.Envelops[txn.Hash] = env
 	p.TXPool[txn.Seq] = env
 }
@@ -203,11 +201,11 @@ func (p *Processor) ExecCreateTxn(account int, balance int, txn *common.Sequence
 	}
 	buf, _ := msgpack.Marshal(wset)
 	execHash := sha256.Sum256(buf)
-	env := common.Envelop {
+	env := common.Envelop{
 		SeqTransaction: txn,
-		WSet: wset,
-		ExecHash: execHash,
-		ND: nd,
+		WSet:           wset,
+		ExecHash:       execHash,
+		ND:             nd,
 	}
 	return env
 }
@@ -242,9 +240,9 @@ func (p *Processor) ExecTransferTxn(from int, to int, balance int, txn *common.S
 	execHash := sha256.Sum256(buf)
 	env := common.Envelop{
 		SeqTransaction: txn,
-		WSet: wset,
-		ExecHash: execHash,
-		ND: false,
+		WSet:           wset,
+		ExecHash:       execHash,
+		ND:             false,
 	}
 	return env
 }
@@ -257,7 +255,7 @@ func (p *Processor) ProcessBlock(block []byte) {
 	// the last eight bytes is two ints indicating the maximum sequence number and the signature length (0)
 	payload := block[4 : len(block)-8]
 	hashNum := len(payload) / 36
-	if len(payload) % 36 != 0 {
+	if len(payload)%36 != 0 {
 		log.Errorf("The block is badly formed, block length: %d.", len(payload))
 		return
 	}
@@ -301,7 +299,7 @@ func (p *Processor) ProcessBlock(block []byte) {
 	p.blkNum++
 	p.commitTxn(hashes)
 	p.commitBlock(block)
-	elapsed := 	time.Since(startBlkCommit) / time.Millisecond // duration in ms
+	elapsed := time.Since(startBlkCommit) / time.Millisecond // duration in ms
 	// fmt.Printf("Commit latency: %d ms for block %d.\n", elapsed, p.blkNum)
 	log.Infof("Commit latency: %d ms for block %d.\n", elapsed, p.blkNum)
 }
@@ -327,10 +325,10 @@ func (p *Processor) ExchangeExecResult(env *common.Envelop) {
 	buf, _ := msgpack.Marshal(env.WSet)
 	execHash := sha256.Sum256(buf)
 	result := &common.Result{
-		Org:  env.SeqTransaction.Transaction.Org,
-		Seq:  env.SeqTransaction.Seq,
+		Org:      env.SeqTransaction.Transaction.Org,
+		Seq:      env.SeqTransaction.Seq,
 		ExecHash: execHash,
-		TxnHash: env.ExecHash,
+		TxnHash:  env.ExecHash,
 	}
 	buf, _ = msgpack.Marshal(result)
 	buf = append(common.MagicNumExecExchange, buf...)
@@ -341,11 +339,11 @@ func (p *Processor) ExchangeExecResult(env *common.Envelop) {
 
 // broadcast execution results
 func (p *Processor) PersistExecResult(env *common.Envelop) {
-	result := &common.Result {
-		Org:  env.SeqTransaction.Transaction.Org,
-		Seq:  env.SeqTransaction.Seq,
+	result := &common.Result{
+		Org:      env.SeqTransaction.Transaction.Org,
+		Seq:      env.SeqTransaction.Seq,
 		ExecHash: env.ExecHash,
-		TxnHash: env.SeqTransaction.Hash,
+		TxnHash:  env.SeqTransaction.Hash,
 	}
 	buf, _ := msgpack.Marshal(result)
 	buf = append(common.MagicNumExecResult, buf...)
@@ -370,4 +368,3 @@ func (p *Processor) ProcessPersist(data []byte) {
 		log.Debugf("Transaction execution result persisted, seq: %d", result.Seq)
 	}
 }
-
