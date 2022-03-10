@@ -169,7 +169,6 @@ class FdEvent {
     operator bool() const { return ev_fd != nullptr; }
 };
 
-
 class TimerEvent {
     public:
     using callback_t = std::function<void(TimerEvent &)>;
@@ -610,19 +609,22 @@ class MPSCQueueEventDriven: public MPSCQueue<T> {
 
     template<typename Func>
     void reg_handler(const EventContext &ec, Func &&func) {
-        ev = FdEvent(ec, nfd.read_fd(),
-                    [this, func=std::forward<Func>(func)](int, int) {
-                    nfd.reset();
-                    // the only undesirable case is there are some new items
-                    // enqueued before recovering wait_sig to true, so the consumer
-                    // won't be notified. In this case, no enqueuing thread will
-                    // get to write(fd). Then store(true) must happen after all exchange(false),
-                    // since all enqueue operations are finalized, the dequeue should be able
-                    // to see those enqueued values in func()
-                    wait_sig.exchange(true, std::memory_order_acq_rel);
-                    if (func(*this))
-                        nfd.notify();
-                });
+        ev = FdEvent(ec, nfd.read_fd(), [this, func=std::forward<Func>(func)](int, int) {
+            nfd.reset(); // read nfd
+        
+            // the only undesirable case is there are some new items
+            // enqueued before recovering wait_sig to true, so the consumer
+            // won't be notified. In this case, no enqueuing thread will
+            // get to write(fd). Then store(true) must happen after all exchange(false),
+            // since all enqueue operations are finalized, the dequeue should be able
+            // to see those enqueued values in func()
+
+            wait_sig.exchange(true, std::memory_order_acq_rel);
+
+            if (func(*this))
+                nfd.notify();
+        });
+        
         ev.add(FdEvent::READ);
     }
 

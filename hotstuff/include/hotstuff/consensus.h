@@ -32,25 +32,29 @@ namespace hotstuff {
 struct Proposal;
 struct Vote;
 struct Finality;
+struct RetransRequest;
 
 /** Abstraction for HotStuff protocol state machine (without network implementation). */
 class HotStuffCore {
-    block_t b0;                                  /** the genesis block */
+    block_t b0;                                 /** the genesis block */
     /* === state variables === */
     /** block containing the QC for the highest block having one */
-    std::pair<block_t, quorum_cert_bt> hqc;   /**< highest QC */
-    block_t b_lock;                            /**< locked block */
-    block_t b_exec;                            /**< last executed block */
-    uint32_t vheight;          /**< height of the block last voted for */
+    std::pair<block_t, quorum_cert_bt> hqc;     /**< highest QC */
+    block_t b_lock;                             /**< locked block */
+    block_t b_exec;                             /**< last executed block */
+    uint32_t vheight;                           /**< height of the block last voted for */
+
     /* === auxilliary variables === */
-    privkey_bt priv_key;            /**< private key for signing votes */
-    std::set<block_t> tails;   /**< set of tail blocks */
-    ReplicaConfig config;                   /**< replica configuration */
+    privkey_bt priv_key;                        /**< private key for signing votes */
+    std::set<block_t> tails;                    /**< set of tail blocks */
+    ReplicaConfig config;                       /**< replica configuration */
+
     /* === async event queues === */
     std::unordered_map<block_t, promise_t> qc_waiting;
     promise_t propose_waiting;
     promise_t receive_proposal_waiting;
     promise_t hqc_update_waiting;
+
     /* == feature switches == */
     /** always vote negatively, useful for some PaceMakers */
     bool vote_disabled;
@@ -75,19 +79,16 @@ class HotStuffCore {
         b0->qc_ref = nullptr;
     }
 
-    /* Inputs of the state machine triggered by external events, should called
-     * by the class user, with proper invariants. */
+    /* Inputs of the state machine triggered by external events, should called by the class user, with proper invariants. */
 
-    /** Call to initialize the protocol, should be called once before all other
-     * functions. */
+    /** Call to initialize the protocol, should be called once before all other functions. */
     void on_init(uint32_t nfaulty);
 
     /* TODO: better name for "delivery" ? */
     /** Call to inform the state machine that a block is ready to be handled.
      * A block is only delivered if itself is fetched, the block for the
      * contained qc is fetched and all parents are delivered. The user should
-     * always ensure this invariant. The invalid blocks will be dropped by this
-     * function.
+     * always ensure this invariant. The invalid blocks will be dropped by this function.
      * @return true if valid */
     bool on_deliver_blk(const block_t &blk);
 
@@ -99,34 +100,51 @@ class HotStuffCore {
      * The block mentioned in the message should be already delivered. */
     void on_receive_vote(const Vote &vote);
 
+    /**
+     * @brief Call upon the reception of retransmission request
+     * Receiver : Leader
+     * Sender : Peer
+     */
+    void on_receive_retrans_request(const RetransRequest &request);
+
+
     /** Call to submit new commands to be decided (executed). "Parents" must
      * contain at least one block, and the first block is the actual parent,
      * while the others are uncles/aunts */
-    block_t on_propose(const std::vector<uint256_t> &cmds,
-                    const std::vector<block_t> &parents,
-                    bytearray_t &&extra = bytearray_t());
+    block_t on_propose(
+        const std::vector<uint256_t> &cmds, 
+        const std::vector<block_t> &parents, 
+        bytearray_t &&extra = bytearray_t(),
+        const uint64_t &pamker_count = 0
+    );
 
-    /* Functions required to construct concrete instances for abstract classes.
-     * */
+    /** Called upon peer sending a proposal retransmission request to last proposer
+     *  This method is invoked by a timer in pacemaker when timeout.
+     *  Timer is started when a proposal is broadcasted, stopped when proposal is received
+     */
+    virtual void on_request(ReplicaID last_proposer, const RetransRequest &request) = 0;
 
-    /* Outputs of the state machine triggering external events.  The virtual
-     * functions should be implemented by the user to specify the behavior upon
-     * the events. */
+    /* Functions required to construct concrete instances for abstract classes. */
+
+    /* Outputs of the state machine triggering external events.
+     * The virtual functions should be implemented by the user to specify the behavior upon the events. */
     protected:
     /** Called by HotStuffCore upon the decision being made for cmd. */
     virtual void do_decide(Finality &&fin) = 0;
     virtual void do_consensus(const block_t &blk) = 0;
+
     /** Called by HotStuffCore upon broadcasting a new proposal.
-     * The user should send the proposal message to all replicas except for
-     * itself. */
+     *  The user should send the proposal message to all replicas except for itself. */
     virtual void do_broadcast_proposal(const Proposal &prop) = 0;
-    /** Called upon sending out a new vote to the next proposer.  The user
-     * should send the vote message to a *good* proposer to have good liveness,
-     * while safety is always guaranteed by HotStuffCore. */
+
+    virtual void do_retransmit_prop(ReplicaID requester, const Proposal &prop) = 0;
+
+    /** Called upon sending out a new vote to the next proposer.
+     *  The user should send the vote message to a *good* proposer to have good liveness,
+     *  while safety is always guaranteed by HotStuffCore. */
     virtual void do_vote(ReplicaID last_proposer, const Vote &vote) = 0;
 
-    /* The user plugs in the detailed instances for those
-     * polymorphic data types. */
+    /* The user plugs in the detailed instances for those polymorphic data types. */
     public:
     /** Create a partial certificate that proves the vote for a block. */
     virtual part_cert_bt create_part_cert(const PrivKey &priv_key, const uint256_t &blk_hash) = 0;
@@ -140,14 +158,13 @@ class HotStuffCore {
     //virtual command_t parse_cmd(DataStream &s) = 0;
 
     public:
-    /** Add a replica to the current configuration. This should only be called
-     * before running HotStuffCore protocol. */
+    /** Add a replica to the current configuration.
+     *  This should only be called before running HotStuffCore protocol. */
     void add_replica(ReplicaID rid, const PeerId &peer_id, pubkey_bt &&pub_key);
     /** Try to prune blocks lower than last committed height - staleness. */
     void prune(uint32_t staleness);
 
-    /* PaceMaker can use these functions to monitor the core protocol state
-     * transition */
+    /* PaceMaker can use these functions to monitor the core protocol state transition */
     /** Get a promise resolved when the block gets a QC. */
     promise_t async_qc_finish(const block_t &blk);
     /** Get a promise resolved when a new block is proposed. */
@@ -177,15 +194,12 @@ struct Proposal: public Serializable {
     HotStuffCore *hsc;
 
     Proposal(): blk(nullptr), hsc(nullptr) {}
-    Proposal(ReplicaID proposer,
-            const block_t &blk,
-            HotStuffCore *hsc):
+    Proposal(ReplicaID proposer, const block_t &blk, HotStuffCore *hsc):
         proposer(proposer),
         blk(blk), hsc(hsc) {}
 
     void serialize(DataStream &s) const override {
-        s << proposer
-          << *blk;
+        s << proposer << *blk;
     }
 
     void unserialize(DataStream &s) override {
@@ -217,13 +231,15 @@ struct Vote: public Serializable {
     HotStuffCore *hsc;
 
     Vote(): cert(nullptr), hsc(nullptr) {}
-    Vote(ReplicaID voter,
+    Vote(
+        ReplicaID voter,
         const uint256_t &blk_hash,
         part_cert_bt &&cert,
         HotStuffCore *hsc):
-        voter(voter),
-        blk_hash(blk_hash),
-        cert(std::move(cert)), hsc(hsc) {}
+            voter(voter),
+            blk_hash(blk_hash),
+            cert(std::move(cert)), hsc(hsc) 
+        {}
 
     Vote(const Vote &other):
         voter(other.voter),
@@ -307,6 +323,47 @@ struct Finality: public Serializable {
           << "cmd_height=" << std::to_string(cmd_height) << " "
           << "cmd=" << get_hex10(cmd_hash) << " "
           << "blk=" << get_hex10(blk_hash) << ">";
+        return s;
+    }
+};
+
+/** Abstraction for restransmission request messages. */
+struct RetransRequest: public Serializable {
+    ReplicaID requester;
+
+    uint64_t pmaker_count;
+
+    /** handle of the core object to allow polymorphism. The user should use
+     * a pointer to the object of the class derived from HotStuffCore */
+    HotStuffCore *hsc;
+
+    RetransRequest(): pmaker_count(0) {}
+    RetransRequest(ReplicaID requester, const uint64_t pmaker_count, HotStuffCore *hsc) :
+        requester(requester), 
+        pmaker_count(pmaker_count), 
+        hsc(hsc) {}
+
+    RetransRequest(const RetransRequest &other): 
+        requester(other.requester), 
+        pmaker_count(other.pmaker_count), 
+        hsc(other.hsc) {}
+
+    RetransRequest(RetransRequest &&other) = default;
+
+    void serialize(DataStream &s) const override {
+        s << requester << pmaker_count;
+    }
+
+    void unserialize(DataStream &s) override {
+        assert(hsc != nullptr);
+        s >> requester >> pmaker_count;
+    }
+
+    operator std::string () const {
+        DataStream s;
+        s << "<request "
+          << "rid=" << std::to_string(requester) << " "
+          << "pmaker_count=" << std::to_string(pmaker_count) << ">";
         return s;
     }
 };

@@ -1,0 +1,11 @@
+#ifndef _HOTSTUFF_CONFIG_H
+#define _HOTSTUFF_CONFIG_H
+
+/* #undef HOTSTUFF_DEBUG_LOG */
+#define HOTSTUFF_NORMAL_LOG
+/* #undef HOTSTUFF_PROTO_LOG */
+#define HOTSTUFF_MSG_STAT
+/* #undef HOTSTUFF_BLK_PROFILE */
+/* #undef HOTSTUFF_TWO_STEP */
+
+#endif
