@@ -266,6 +266,8 @@ int main(int argc, char **argv) {
 
     repnet_config.burst_size(opt_repburst->get()).nworker(opt_repnworker->get());
     clinet_config.burst_size(opt_cliburst->get()).nworker(opt_clinworker->get());
+    HOTSTUFF_LOG_INFO("Replica Burst = %d, Client Burst = %d", opt_repburst->get(), opt_cliburst->get());
+    HOTSTUFF_LOG_INFO("nworker = %d, clinworker = %d, repnworker = %d", opt_nworker->get(), opt_clinworker->get(), opt_repnworker->get());
 
     papp = new HotStuffApp(
         opt_blk_size->get(),

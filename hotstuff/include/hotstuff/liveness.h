@@ -497,7 +497,7 @@ struct PaceMakerRR: public PMHighTail, public PMRoundRobinProposer {
         PMHighTail(ec, parent_limit),
         PMRoundRobinProposer(ec, base_timeout, prop_delay) 
     {
-        is_using_udp_multi = true;
+        is_using_udp_multi = false;
 
         if (is_using_udp_multi) {
             timer_recv_prop = TimerEvent(ec, [this](TimerEvent &){ 
