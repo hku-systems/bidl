@@ -82,9 +82,11 @@ class ConnPool {
         ConnPool *cpool;
         ConnMode mode;
         NetAddr addr_tcp;
+        NetAddr addr_udp;
         sockaddr_in group_sock;   // Multicast Group Socket IP and Port, used in sendto()
 
         MPSCWriteBuffer send_buffer_tcp;
+        MPSCWriteBuffer send_buffer_udp;
 
         SegBuffer recv_buffer_tcp;
         SegBuffer recv_buffer_udp;
@@ -100,7 +102,10 @@ class ConnPool {
         bool ready_send_tcp;
         bool ready_recv_tcp;
         bool ready_send_udp;
-        bool ready_recv_udp; 
+        bool ready_recv_udp;
+
+        // if it is conn_udp, it can only do UDP send
+        bool is_udp_conn;
 
         typedef void (socket_io_func)(const conn_t &, int, int, int);
         socket_io_func *send_data_func;
@@ -130,6 +135,7 @@ class ConnPool {
             ready_send_tcp(false), ready_recv_tcp(false),
             ready_send_udp(false), ready_recv_udp(false),
             send_data_func(nullptr), recv_data_func(nullptr),
+            is_udp_conn(false),
             tls(nullptr), peer_cert(nullptr) {}
         Conn(const Conn &) = delete;
         Conn(Conn &&other) = delete;
@@ -153,18 +159,20 @@ class ConnPool {
         ConnPool *get_pool() const { return cpool; }
         const int get_fd_udp() const { return fd_udp; }
 
-        /** Write data to the connection (non-blocking). The data will be sent
-         * whenever I/O is available. */
-        bool write(bytearray_t &&data, const bool dummy = false) {
+        /** Write data to the connection (non-blocking). The data will be sent whenever I/O is available. */
+        bool write(bytearray_t &&data, const bool is_prop = false) {
             bool ret;
 
-            // if (dummy) {
-            //     ret = send_buffer_udp.push(std::move(data), !cpool->max_send_buff_size);
-            // }
-            ret = send_buffer_tcp.push(std::move(data), !cpool->max_send_buff_size);
-            
+            if (is_prop) {
+                ret = send_buffer_udp.push(std::move(data), !cpool->max_send_buff_size);
+            }
+            else {
+                ret = send_buffer_tcp.push(std::move(data), !cpool->max_send_buff_size);
+            }
+
             return ret;
         }
+
     };
 
     protected:
@@ -174,7 +182,6 @@ class ConnPool {
     ThreadCall* disp_tcall;
     BoxObj<ThreadCall> user_tcall;
     RcObj<const X509> tls_cert;
-    MPSCWriteBuffer send_buffer_udp;
 
     using worker_error_callback_t = std::function<void(const std::exception_ptr err)>;
     worker_error_callback_t disp_error_cb;
@@ -182,7 +189,7 @@ class ConnPool {
     std::atomic<uint16_t> async_id;
 
     int _create_fd_tcp();
-    int _create_fd_udp(const bool recv_only = true);
+    int _create_fd_udp(const bool recv_only = true, const bool send_only = false);
     sockaddr_in _create_group_sock(); // for UDP Multicast sendto()
     void _multicast_setup_recv_fd(int& fd_udp);
     void _multicast_setup_send_fd(int& fd_udp);
@@ -216,6 +223,7 @@ class ConnPool {
         if (conn->tls) conn->tls->shutdown();
         conn->ev_socket_tcp.clear();
         conn->ev_socket_udp.clear();
+        conn->send_buffer_udp.get_queue().unreg_handler();
         conn->send_buffer_tcp.get_queue().unreg_handler();
     }
     /** Called when the underlying connection breaks. */
@@ -263,17 +271,21 @@ class ConnPool {
                             conn->ev_socket_udp.add(FdEvent::READ | FdEvent::WRITE);
                     });
             }
+
+
+
         });
     }
 
     protected:
     class Worker {
+        friend ConnPool;
         EventContext ec;
         ThreadCall tcall;
         BoxObj<ThreadCall> exit_tcall; /** only used by the dispatcher thread */
         std::thread handle;
         bool disp_flag;
-        std::atomic<size_t> nconn;
+        std::atomic<size_t> nconn; // number of connections that the worker is serving
         ConnPool::worker_error_callback_t on_fatal_error;
 
         public:
@@ -300,6 +312,7 @@ class ConnPool {
 
         void enable_send_buffer_tcp(const conn_t &conn, int client_fd) {
             conn->send_buffer_tcp.get_queue().reg_handler(this->ec, [conn, client_fd] (MPSCWriteBuffer::queue_t &) {
+                // SALTICIDAE_LOG_INFO("send_buffer_TCP callback");
                 if (conn->ready_send_tcp)
                 {
                     conn->ev_socket_tcp.del();
@@ -310,17 +323,18 @@ class ConnPool {
             });
         }
 
-        // void enable_send_buffer_udp(const conn_t &conn, int client_fd) {
-        //     conn->send_buffer_udp.get_queue().reg_handler(this->ec, [conn, client_fd] (MPSCWriteBuffer::queue_t &) {
-        //         if (conn->ready_send_udp)
-        //         {
-        //             conn->ev_socket_udp.del();
-        //             conn->ev_socket_udp.add((conn->ready_recv_udp ? 0 : FdEvent::READ) | FdEvent::WRITE);
-        //             conn->send_data_func(conn, client_fd, FdEvent::WRITE, ConnPool::SendType::UDP);
-        //         }
-        //         return false;
-        //     });
-        // }
+        void enable_send_buffer_udp(const conn_t &conn, int client_fd) {
+            conn->send_buffer_udp.get_queue().reg_handler(this->ec, [conn, client_fd] (MPSCWriteBuffer::queue_t &) {
+                // SALTICIDAE_LOG_INFO("send_buffer_UDP callback");
+                if (conn->ready_send_udp)
+                {
+                    conn->ev_socket_udp.del();
+                    conn->ev_socket_udp.add((conn->ready_recv_udp ? 0 : FdEvent::READ) | FdEvent::WRITE);
+                    conn->send_data_func(conn, client_fd, FdEvent::WRITE, ConnPool::SendType::UDP);
+                }
+                return false;
+            });
+        }
 
         void feed(const conn_t &conn, int client_fd, const bool is_peer_to_peer) {
             /* the caller should finalize all the preparation */
@@ -337,21 +351,22 @@ class ConnPool {
                             conn->cpool->worker_terminate(conn);
                         }
                     });
-
+                    
                     if (is_peer_to_peer) {
+                        // Event Socket for UDP fd, handle message received from UDP fd
                         conn->ev_socket_udp = FdEvent(ec, conn->fd_udp, [this, conn](int fd_udp, int what) {
+                            // SALTICIDAE_LOG_INFO("ev_socket_udp callback event = %d", what);
                             try {
-                                if (what & FdEvent::READ)
+                                if (what & FdEvent::READ) // 1 & 1 = 1
                                     conn->recv_data_func(conn, fd_udp, what, ConnPool::SendType::UDP);
-                                else
+                                else // 0 & 1 = 0
                                     conn->send_data_func(conn, fd_udp, what, ConnPool::SendType::UDP);
-                            } catch (...) {
+                            } 
+                            catch (...) {
                                 conn->cpool->recoverable_error(std::current_exception(), -1);
                                 conn->cpool->worker_terminate(conn);
                             }
                         });
-
-                        SALTICIDAE_LOG_DEBUG("conn->ev_socket_udp created");
                     }
 
                     auto cpool = conn->cpool;
@@ -364,13 +379,15 @@ class ConnPool {
                     }
                     else
                     {
-                        SALTICIDAE_LOG_DEBUG("cpool->enable_tls = false");
                         conn->send_data_func = Conn::_send_data;
                         conn->recv_data_func = Conn::_recv_data;
 
                         enable_send_buffer_tcp(conn, client_fd);
+                        if (is_peer_to_peer)
+                            enable_send_buffer_udp(conn, conn->fd_udp);
 
                         cpool->on_worker_setup(conn);
+
                         cpool->disp_tcall->async_call([cpool, conn, is_peer_to_peer](ThreadCall::Handle &) {
                             try {
                                 cpool->on_dispatcher_setup(conn);
@@ -381,13 +398,13 @@ class ConnPool {
                             }
                         });
                     }
+
                     assert(conn->fd_tcp != -1);
                     if (is_peer_to_peer) assert(conn->fd_udp != -1);
                     assert(conn->worker == this);
                     SALTICIDAE_LOG_DEBUG("worker %x got %s",std::this_thread::get_id(),std::string(*conn).c_str());
 
                     nconn++;
-
                 } 
                 catch (...) { 
                     on_fatal_error(std::current_exception()); 
@@ -413,6 +430,7 @@ class ConnPool {
             disp_flag = true;
             exit_tcall = new ThreadCall(ec);
         }
+
         bool is_dispatcher() const { return disp_flag; }
         size_t get_nconn() { return nconn; }
         void stop_tcall() { tcall.stop(); }
@@ -432,6 +450,7 @@ class ConnPool {
     void del_conn(const conn_t &conn);
     void release_conn(const conn_t &conn);
 
+    // select the worker with the least nconn
     Worker &select_worker() {
         size_t idx = 0;
         size_t best = workers[idx].get_nconn();
@@ -455,6 +474,7 @@ class ConnPool {
     // Interface to join Multicast Group and receive data
     NetAddr local_interface;
     bool is_peer_to_peer;
+    conn_t conn_udp;
 
     enum SendType {
         TCP,
@@ -634,7 +654,10 @@ class ConnPool {
         for (size_t i = 0; i < nworker; i++)
             workers[i].start();
 
-        if (!is_client) init_cpool_fd_udp();
+        if (!is_client) {
+            init_cpool_fd_udp();
+            SALTICIDAE_LOG_INFO("cpool_fd_udp = %d", cpool_fd_udp);
+        }
         
         system_state = 1;
     }
@@ -697,7 +720,6 @@ class ConnPool {
         });
         return id;
     }
-
 
     /** Listen for passive connections (connection initiated from remote).
      *  Does not need to be called if do not want to accept any passive connections. 

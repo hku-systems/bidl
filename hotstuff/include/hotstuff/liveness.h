@@ -109,15 +109,14 @@ class PMHighTail: public virtual PaceMaker {
     void reg_receive_proposal() {
         // when a proposal is received, then set hqc_tail
         hsc->async_wait_receive_proposal().then([this](const Proposal &prop) {
-            if (is_using_udp_multi) {
-                timer_recv_prop.del();
-                HOTSTUFF_LOG_INFO("Pacemaker : STOP RECEIVE Timer %d", count++);
-
-                if (count % 4 != 1) {
-                    timer_recv_prop.add(recv_timeout);
-                    HOTSTUFF_LOG_INFO("Pacemaker : QC LOOP - Start RECEIVE Timer %d", count);
-                }
-            }
+            // if (is_using_udp_multi) {
+            //     timer_recv_prop.del();
+            //     HOTSTUFF_LOG_INFO("Pacemaker : STOP RECEIVE Timer %d", count++);
+            //     if (count % 4 != 1) {
+            //         timer_recv_prop.add(recv_timeout);
+            //         HOTSTUFF_LOG_INFO("Pacemaker : QC LOOP - Start RECEIVE Timer %d", count);
+            //     }
+            // }
 
             const auto &hqc = hsc->get_hqc();
 
@@ -341,7 +340,7 @@ class PMRoundRobinProposer: virtual public PaceMaker {
 
     void on_exp_timeout(TimerEvent &) {
         if (is_using_udp_multi) {
-            timer_recv_prop.add(recv_timeout);
+            //timer_recv_prop.add(recv_timeout);
             HOTSTUFF_LOG_INFO("Pacemaker : ROOT - START RECEIVE Timer %d", count);
         }
 
@@ -414,7 +413,7 @@ class PMRoundRobinProposer: virtual public PaceMaker {
                     cmds.push_back(p.first);
 
                 if(is_using_udp_multi) {
-                    timer_recv_prop.add(recv_timeout);
+                    //timer_recv_prop.add(recv_timeout);
                     HOTSTUFF_LOG_INFO("Pacemaker : PENDING DECISION & REPROPOSE - START RECEIVE Timer %d", count);
                 }
 
@@ -428,7 +427,7 @@ class PMRoundRobinProposer: virtual public PaceMaker {
                 if (!pending.size() || saved_count != count) return;
 
                 if(is_using_udp_multi) {
-                    timer_recv_prop.add(recv_timeout);
+                    //timer_recv_prop.add(recv_timeout);
                     HOTSTUFF_LOG_INFO("Pacemaker : PENDING DECISION & REPROPOSE - START RECEIVE Timer %d", count);
                 }
 
@@ -499,16 +498,17 @@ struct PaceMakerRR: public PMHighTail, public PMRoundRobinProposer {
     {
         is_using_udp_multi = true;
 
+
         if (is_using_udp_multi) {
             timer_recv_prop = TimerEvent(ec, [this](TimerEvent &){ 
-                ReplicaID proposer = get_proposer();
-                ReplicaID requester = hsc->get_id();
-                RetransRequest request = RetransRequest(requester, count, hsc);
+                // ReplicaID proposer = get_proposer();
+                // ReplicaID requester = hsc->get_id();
+                // RetransRequest request = RetransRequest(requester, count, hsc);
 
-                HOTSTUFF_LOG_PROTO("Pacemaker : TIMEOUT! : sending %s to Proposer %d", std::string(request).c_str(), proposer);
+                // HOTSTUFF_LOG_PROTO("Pacemaker : TIMEOUT! : sending %s to Proposer %d", std::string(request).c_str(), proposer);
 
-                if (proposer != requester)
-                    hsc->on_request(proposer, request);
+                // if (proposer != requester)
+                //     hsc->on_request(proposer, request);
             });;
 
             recv_timeout = 3.0 / 1000;

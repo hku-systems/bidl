@@ -67,16 +67,20 @@ void ConnPool::Conn::_send_data(const conn_t &conn, int fd, int events, int send
         return;
     }
     ssize_t ret = conn->recv_chunk_size;
+    bool is_udp = send_type == ConnPool::SendType::UDP;
 
-    auto& send_buffer = conn->send_buffer_tcp;
+    auto& send_buffer = (is_udp) ? conn->send_buffer_udp : conn->send_buffer_tcp ;
 
+    // if (is_udp) 
+    //     SALTICIDAE_LOG_INFO("UDP now sending");
+    
     for (;;) {
         bytearray_t buff_seg = send_buffer.move_pop();
 
         ssize_t size = buff_seg.size();
         if (!size) break;
         
-        if (send_type == ConnPool::SendType::TCP) 
+        if (!is_udp) 
             ret = send(fd, buff_seg.data(), size, 0);
         else
             ret = sendto(fd, buff_seg.data(), size, 0, (struct sockaddr*)& conn->group_sock, sizeof(conn->group_sock));
@@ -112,7 +116,7 @@ void ConnPool::Conn::_send_data(const conn_t &conn, int fd, int events, int send
     }
     /* the send_buffer is empty though the kernel buffer is still available, so
      * temporarily mask the WRITE event and mark the `ready_send` flag */
-    if (send_type == ConnPool::SendType::TCP) {
+    if (!is_udp) {
         conn->ev_socket_tcp.del();
         conn->ev_socket_tcp.add(conn->ready_recv_tcp ? 0 : FdEvent::READ);
         conn->ready_send_tcp = true;
@@ -342,7 +346,7 @@ int ConnPool::_create_fd_tcp() {
     return _fd_tcp;
 }
 
-int ConnPool::_create_fd_udp(const bool recv_only) {
+int ConnPool::_create_fd_udp(const bool recv_only, const bool send_only) {
     int _fd_udp = -1;
 
     if ((_fd_udp = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
@@ -351,7 +355,7 @@ int ConnPool::_create_fd_udp(const bool recv_only) {
         throw ConnPoolError(SALTI_ERROR_CONNECT, errno);
 
     _multicast_setup_recv_fd(_fd_udp);
-    if (!recv_only) _multicast_setup_send_fd(_fd_udp);
+    _multicast_setup_send_fd(_fd_udp);
 
     return _fd_udp;
 }
@@ -549,6 +553,7 @@ ConnPool::conn_t ConnPool::_connect(const NetAddr &addr_tcp) {
     if(is_peer_to_peer) {
         conn->fd_udp = _create_fd_udp();
         conn->group_sock = _create_group_sock();
+        conn->send_buffer_udp.set_capacity(max_send_buff_size);
     }
 
     add_conn(conn);

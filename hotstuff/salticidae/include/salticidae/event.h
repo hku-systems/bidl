@@ -611,7 +611,7 @@ class MPSCQueueEventDriven: public MPSCQueue<T> {
     void reg_handler(const EventContext &ec, Func &&func) {
         ev = FdEvent(ec, nfd.read_fd(), [this, func=std::forward<Func>(func)](int, int) {
             nfd.reset(); // read nfd
-        
+
             // the only undesirable case is there are some new items
             // enqueued before recovering wait_sig to true, so the consumer
             // won't be notified. In this case, no enqueuing thread will
@@ -637,7 +637,7 @@ class MPSCQueueEventDriven: public MPSCQueue<T> {
         // memory barrier here, so any load/store in enqueue must be finialized
         if (wait_sig.exchange(false, std::memory_order_acq_rel))
         {
-            //SALTICIDAE_LOG_DEBUG("mpsc notify");
+            SALTICIDAE_LOG_DEBUG("mpsc notify");
             nfd.notify();
         }
         return true;

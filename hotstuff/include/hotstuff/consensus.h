@@ -72,6 +72,11 @@ class HotStuffCore {
     ReplicaID id;                  /**< identity of the replica itself */
 
     public:
+    // timer for broadcast and receive proposal 
+    TimerEvent timer_recv_prop;
+    double recv_timeout;
+    uint64_t count;
+
     BoxObj<EntityStorage> storage;
 
     HotStuffCore(ReplicaID id, privkey_bt &&priv_key);
