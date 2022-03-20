@@ -67,12 +67,10 @@ void ConnPool::Conn::_send_data(const conn_t &conn, int fd, int events, int send
         return;
     }
     ssize_t ret = conn->recv_chunk_size;
+
     bool is_udp = send_type == ConnPool::SendType::UDP;
 
     auto& send_buffer = (is_udp) ? conn->send_buffer_udp : conn->send_buffer_tcp ;
-
-    // if (is_udp) 
-    //     SALTICIDAE_LOG_INFO("UDP now sending");
     
     for (;;) {
         bytearray_t buff_seg = send_buffer.move_pop();
@@ -84,8 +82,9 @@ void ConnPool::Conn::_send_data(const conn_t &conn, int fd, int events, int send
             ret = send(fd, buff_seg.data(), size, 0);
         else
             ret = sendto(fd, buff_seg.data(), size, 0, (struct sockaddr*)& conn->group_sock, sizeof(conn->group_sock));
-
-        SALTICIDAE_LOG_DEBUG("send_type = %d, socket(%d) sent %zd bytes", send_type, fd, ret);
+        
+        if (is_udp) 
+            SALTICIDAE_LOG_DEBUG("send_type = %d, socket(%d) sent %zd bytes", send_type, fd, ret);
 
         size -= ret;
 
@@ -106,7 +105,7 @@ void ConnPool::Conn::_send_data(const conn_t &conn, int fd, int events, int send
             }
 
             /* wait for the next write callback */
-            if (send_type == ConnPool::SendType::TCP)
+            if (!is_udp)
                 conn->ready_send_tcp = false;
             else
                 conn->ready_send_udp = false;
@@ -138,10 +137,11 @@ void ConnPool::Conn::_recv_data(const conn_t &conn, int fd, int events, int recv
     ssize_t ret = recv_chunk_size;
 
     conn->recv_type = recv_type;
+    bool is_udp = recv_type == ConnPool::SendType::UDP;
 
     while (ret == (ssize_t)recv_chunk_size) {
         /* if recv_buffer is full, temporarily mask the READ event */
-        if (recv_type == ConnPool::SendType::TCP) {
+        if (!is_udp) {
             if (conn->recv_buffer_tcp.len() >= conn->max_recv_buff_size) {
                 conn->ev_socket_tcp.del();
                 conn->ev_socket_tcp.add(conn->ready_send_tcp ? 0 : FdEvent::WRITE);
@@ -160,9 +160,12 @@ void ConnPool::Conn::_recv_data(const conn_t &conn, int fd, int events, int recv
         buff_seg.resize(recv_chunk_size);
 
         ret = read(fd, buff_seg.data(), recv_chunk_size);
-        SALTICIDAE_LOG_DEBUG("recv_type = %d, socket(%d) read %zd bytes", recv_type, fd, ret);
+        
+        if (is_udp)
+            SALTICIDAE_LOG_DEBUG("recv_type = %d, socket(%d) read %zd bytes", recv_type, fd, ret);
 
         if (ret < 0) {
+            SALTICIDAE_LOG_INFO("ret < 0 - %d", errno == EWOULDBLOCK);
             if (errno == EWOULDBLOCK) break;
             SALTICIDAE_LOG_INFO("recv(%d) failure: %s", fd, strerror(errno));
             /* connection err or half-opened connection */
@@ -177,14 +180,14 @@ void ConnPool::Conn::_recv_data(const conn_t &conn, int fd, int events, int recv
 
         buff_seg.resize(ret);
 
-        if (recv_type == ConnPool::SendType::TCP)
+        if (!is_udp)
             conn->recv_buffer_tcp.push(std::move(buff_seg));
         else
             conn->recv_buffer_udp.push(std::move(buff_seg));
     }
 
     /* wait for the next read callback */
-    if (recv_type == ConnPool::SendType::TCP) {
+    if (!is_udp) {
         conn->ready_recv_tcp = false;
         conn->cpool->on_read(conn);
     }

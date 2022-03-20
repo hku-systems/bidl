@@ -30,18 +30,20 @@ namespace hotstuff {
 
 /* The core logic of HotStuff, is fairly simple :). */
 /*** begin HotStuff protocol logic ***/
-HotStuffCore::HotStuffCore(ReplicaID id,
-                            privkey_bt &&priv_key):
-        b0(new Block(true, 1)),
-        b_lock(b0),
-        b_exec(b0),
-        vheight(0),
-        priv_key(std::move(priv_key)),
-        tails{b0},
-        vote_disabled(false),
-        id(id),
-        storage(new EntityStorage()) {
+HotStuffCore::HotStuffCore(ReplicaID id, privkey_bt &&priv_key):
+    b0(new Block(true, 1)),
+    b_lock(b0),
+    b_exec(b0),
+    vheight(0),
+    priv_key(std::move(priv_key)),
+    tails{b0},
+    vote_disabled(false),
+    id(id),
+    storage(new EntityStorage()) 
+{
     storage->add_blk(b0);
+    pmaker_count = 0;
+    recv_timeout = 20.0 / 1000;
 }
 
 void HotStuffCore::sanity_check_delivered(const block_t &blk) {
@@ -157,7 +159,7 @@ void HotStuffCore::update(const block_t &nblk) {
     b_exec = blk;
 }
 
-block_t HotStuffCore::on_propose(const std::vector<uint256_t> &cmds, const std::vector<block_t> &parents, bytearray_t &&extra, const uint64_t &pmaker_count) {
+block_t HotStuffCore::on_propose(const std::vector<uint256_t> &cmds, const std::vector<block_t> &parents, bytearray_t &&extra) {
     if (parents.empty()) throw std::runtime_error("empty parents");
 
     for (const auto &_: parents) tails.erase(_);
@@ -173,10 +175,8 @@ block_t HotStuffCore::on_propose(const std::vector<uint256_t> &cmds, const std::
         )
     );
 
-    if (pmaker_count != 0) {
-        LOG_PROTO("Add to storage <%d, %s>", pmaker_count, std::string(*bnew).c_str());
-        storage->add_blk(bnew, pmaker_count);
-    }
+    //LOG_PROTO("Add to storage <%d, %s>", pmaker_count, std::string(*bnew).c_str());
+    storage->add_blk(bnew, pmaker_count);
 
     const uint256_t bnew_hash = bnew->get_hash();
     bnew->self_qc = create_quorum_cert(bnew_hash);
@@ -187,7 +187,7 @@ block_t HotStuffCore::on_propose(const std::vector<uint256_t> &cmds, const std::
 
     Proposal prop(id, bnew, nullptr);
 
-    LOG_PROTO("propose %s", std::string(*bnew).c_str());
+    LOG_PROTO("propose %s pmaker_count = %d", std::string(*bnew).c_str(), pmaker_count);
 
     if (bnew->height <= vheight)
         throw std::runtime_error("new block should be higher than vheight");
@@ -203,7 +203,9 @@ block_t HotStuffCore::on_propose(const std::vector<uint256_t> &cmds, const std::
 }
 
 void HotStuffCore::on_receive_proposal(const Proposal &prop) {
-    LOG_PROTO("got %s", std::string(prop).c_str());
+    timer_recv_prop.del();
+    LOG_PROTO("got %s, Stop Timer = %d", std::string(prop).c_str(), pmaker_count);
+    pmaker_count++;
 
     bool self_prop = prop.proposer == get_id();
 
@@ -248,7 +250,7 @@ void HotStuffCore::on_receive_proposal(const Proposal &prop) {
 
 void HotStuffCore::on_receive_vote(const Vote &vote) {
     LOG_PROTO("got %s", std::string(vote).c_str());
-    LOG_PROTO("now state: %s", std::string(*this).c_str());
+    // LOG_PROTO("now state: %s", std::string(*this).c_str());
     block_t blk = get_delivered_blk(vote.blk_hash);
     assert(vote.cert);
 

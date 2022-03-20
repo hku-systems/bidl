@@ -681,7 +681,11 @@ void MsgNetwork<OpcodeType>::on_read(const ConnPool::conn_t &_conn) {
                 break;
             }
 #endif
+            // if (msg.get_opcode() == 0x0)
+            //     SALTICIDAE_LOG_INFO("incoming_msgs enqueue PROPOSAL");
+
             if (!incoming_msgs.enqueue(std::make_pair(msg, conn), false)) {
+                SALTICIDAE_LOG_WARN("incoming_msgs enqueue retry ...");
                 conn->msg_sleep = true;
                 conn->ev_enqueue_poll.add(0);
                 return;

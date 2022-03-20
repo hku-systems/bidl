@@ -165,6 +165,7 @@ class ConnPool {
 
             if (is_prop) {
                 ret = send_buffer_udp.push(std::move(data), !cpool->max_send_buff_size);
+                //SALTICIDAE_LOG_INFO("send_buffer_udp PUSH");
             }
             else {
                 ret = send_buffer_tcp.push(std::move(data), !cpool->max_send_buff_size);
@@ -325,7 +326,7 @@ class ConnPool {
 
         void enable_send_buffer_udp(const conn_t &conn, int client_fd) {
             conn->send_buffer_udp.get_queue().reg_handler(this->ec, [conn, client_fd] (MPSCWriteBuffer::queue_t &) {
-                // SALTICIDAE_LOG_INFO("send_buffer_UDP callback");
+                //SALTICIDAE_LOG_INFO("send_buffer_udp callback");
                 if (conn->ready_send_udp)
                 {
                     conn->ev_socket_udp.del();
@@ -503,8 +504,8 @@ class ConnPool {
         Config():
             _max_listen_backlog(10),
             _conn_server_timeout(2),
-            _recv_chunk_size(4096),
-            _max_recv_buff_size(4096),
+            _recv_chunk_size(4096 * 2),
+            _max_recv_buff_size(4096 * 2),
             _max_send_buff_size(0),
             _nworker(1),
             _enable_tls(false),
@@ -654,10 +655,10 @@ class ConnPool {
         for (size_t i = 0; i < nworker; i++)
             workers[i].start();
 
-        if (!is_client) {
-            init_cpool_fd_udp();
-            SALTICIDAE_LOG_INFO("cpool_fd_udp = %d", cpool_fd_udp);
-        }
+        // if (!is_client) {
+        //     init_cpool_fd_udp();
+        //     SALTICIDAE_LOG_INFO("cpool_fd_udp = %d", cpool_fd_udp);
+        // }
         
         system_state = 1;
     }
