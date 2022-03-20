@@ -681,7 +681,11 @@ void MsgNetwork<OpcodeType>::on_read(const ConnPool::conn_t &_conn) {
                 break;
             }
 #endif
+            // if (msg.get_opcode() == 0x0)
+            //     SALTICIDAE_LOG_INFO("incoming_msgs enqueue PROPOSAL");
+
             if (!incoming_msgs.enqueue(std::make_pair(msg, conn), false)) {
+                SALTICIDAE_LOG_WARN("incoming_msgs enqueue retry ...");
                 conn->msg_sleep = true;
                 conn->ev_enqueue_poll.add(0);
                 return;
@@ -734,12 +738,17 @@ inline bool MsgNetwork<OpcodeType>::_send_msg(const Msg &msg, const conn_t &conn
     bytearray_t msg_data = msg.serialize();
     SALTICIDAE_LOG_DEBUG("wrote message %s to %s", std::string(msg).c_str(), std::string(*conn).c_str());
 
+    bool is_prop = msg.get_opcode() == 0x0;
+    // if (is_prop)
+    //     SALTICIDAE_LOG_INFO("sending msg opcode = %d", msg.get_opcode());
+
+
 #ifdef SALTICIDAE_MSG_STAT
     conn->nsent++;
     conn->nsentb += msg.get_length();
 #endif
 
-    return conn->write(std::move(msg_data));
+    return conn->write(std::move(msg_data), is_prop);
 }
 
 template<typename O, O _, O __>
@@ -787,11 +796,7 @@ template<typename O, O _, O __>
 void PeerNetwork<O, _, __>::on_dispatcher_setup(const ConnPool::conn_t &_conn) {
     MsgNet::on_dispatcher_setup(_conn);
     auto conn = static_pointer_cast<Conn>(_conn);
-    SALTICIDAE_LOG_INFO("%s%s%s: setup connection %s",
-            tty_secondary_color,
-            id_hex.c_str(),
-            tty_reset_color,
-            std::string(*conn).c_str());
+    SALTICIDAE_LOG_INFO("%s%s%s: setup connection %s",tty_secondary_color,id_hex.c_str(),tty_reset_color,std::string(*conn).c_str());
     tcall_reset_timeout(conn->worker, conn, conn_timeout);
     if (conn->get_mode() == Conn::ConnMode::ACTIVE)
     {
@@ -1374,8 +1379,7 @@ inline int32_t PeerNetwork<O, _, __>::_multicast_msg(Msg &&msg, const std::vecto
             }
             /* New Implementation : 1 UDP sendto(), multicasting */
             else {
-                bytearray_t msg_data = msg.serialize();
-                ConnPool::multicast_data(msg_data);
+                succ &= MsgNet::_send_msg(msg, _get_peer_conn(pids[0]));
             }
 
 #ifdef SALTICIDAE_MSG_STAT

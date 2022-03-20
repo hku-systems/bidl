@@ -72,6 +72,11 @@ class HotStuffCore {
     ReplicaID id;                  /**< identity of the replica itself */
 
     public:
+    // timer for broadcast and receive proposal 
+    TimerEvent timer_recv_prop;
+    double recv_timeout;
+    uint64_t pmaker_count; // represents the Proposal sequence number, +1 monolithically increasing per UDP multicast
+
     BoxObj<EntityStorage> storage;
 
     HotStuffCore(ReplicaID id, privkey_bt &&priv_key);
@@ -114,8 +119,7 @@ class HotStuffCore {
     block_t on_propose(
         const std::vector<uint256_t> &cmds, 
         const std::vector<block_t> &parents, 
-        bytearray_t &&extra = bytearray_t(),
-        const uint64_t &pamker_count = 0
+        bytearray_t &&extra = bytearray_t()
     );
 
     /** Called upon peer sending a proposal retransmission request to last proposer
