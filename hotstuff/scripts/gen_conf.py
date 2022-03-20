@@ -14,12 +14,14 @@ if __name__ == "__main__":
     parser.add_argument('--tls-keygen', type=str, default='./hotstuff-tls-keygen')
     parser.add_argument('--nodes', type=str, default='nodes.txt')
     parser.add_argument('--block-size', type=int, default=1)
-    parser.add_argument('--pace-maker', type=str, default='dummy')
+    parser.add_argument('--pace-maker', type=str, default='rr')
     parser.add_argument('--nworker', type=int, default=4)
     parser.add_argument('--repnworker', type=int, default=4)
     parser.add_argument('--clinworker', type=int, default=4)
     parser.add_argument('--repburst', type=int, default=1000)
     parser.add_argument('--cliburst', type=int, default=1000)
+    parser.add_argument('--multicast_addr', type=str, default="230.1.1.1:30000")
+    parser.add_argument('--prop-delay', type=float, default=5.0)
     args = parser.parse_args()
 
 
@@ -48,20 +50,34 @@ if __name__ == "__main__":
     tls_p = subprocess.Popen([tls_keygen_bin, '--num', str(len(replicas))],
                         stdout=subprocess.PIPE, stderr=open(os.devnull, 'w'))
     tls_keys = [[t[4:] for t in l.decode('ascii').split()] for l in tls_p.stdout]
+
     if args.block_size is not None:
         main_conf.write("block-size = {}\n".format(args.block_size))
+
     if args.nworker is not None:
         main_conf.write("nworker = {}\n".format(args.nworker))
+
     if args.repnworker is not None:
         main_conf.write("repnworker = {}\n".format(args.repnworker))
+
     if args.clinworker is not None:
         main_conf.write("clinworker = {}\n".format(args.clinworker))
+
     if args.repburst is not None:
         main_conf.write("repburst = {}\n".format(args.repburst))
+
     if args.cliburst is not None:
         main_conf.write("cliburst = {}\n".format(args.cliburst))
-    if not (args.pace_maker is None):
+
+    if args.pace_maker is not None:
         main_conf.write("pace-maker = {}\n".format(args.pace_maker))
+
+    if args.multicast_addr is not None:
+        main_conf.write("multicast_addr = {}\n".format(args.multicast_addr))
+
+    if args.prop_delay is not None:
+        main_conf.write("prop-delay = {}\n".format(args.prop_delay))
+
     for r in zip(replicas, keys, tls_keys, itertools.count(0)):
         main_conf.write("replica = {}, {}, {}\n".format(r[0], r[1][0], r[2][2]))
         r_conf_name = "{}-sec{}.conf".format(prefix, r[3])

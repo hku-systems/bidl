@@ -239,7 +239,7 @@ int main(int argc, char **argv) {
     auto parent_limit = opt_parent_limit->get();
     hotstuff::pacemaker_bt pmaker;
     if (opt_pace_maker->get() == "dummy")
-        pmaker = new hotstuff::PaceMakerDummyFixed(ec, opt_fixed_proposer->get(), parent_limit);
+        pmaker = new hotstuff::PaceMakerDummyFixed(opt_fixed_proposer->get(), parent_limit);
     else
         pmaker = new hotstuff::PaceMakerRR(ec, parent_limit, opt_base_timeout->get(), opt_prop_delay->get());
 
@@ -266,6 +266,8 @@ int main(int argc, char **argv) {
 
     repnet_config.burst_size(opt_repburst->get()).nworker(opt_repnworker->get());
     clinet_config.burst_size(opt_cliburst->get()).nworker(opt_clinworker->get());
+    HOTSTUFF_LOG_INFO("Replica Burst = %d, Client Burst = %d", opt_repburst->get(), opt_cliburst->get());
+    HOTSTUFF_LOG_INFO("nworker = %d, clinworker = %d, repnworker = %d", opt_nworker->get(), opt_clinworker->get(), opt_repnworker->get());
 
     papp = new HotStuffApp(
         opt_blk_size->get(),
