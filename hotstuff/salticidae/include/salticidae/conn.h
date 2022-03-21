@@ -196,7 +196,6 @@ class ConnPool {
     void _multicast_setup_send_fd(int& fd_udp);
     conn_t _connect(const NetAddr &addr);
     void _listen(NetAddr listen_addr);
-    void init_cpool_fd_udp();
 
     int32_t gen_async_id() { return async_id.fetch_add(1, std::memory_order_relaxed); }
     void recoverable_error(const std::exception_ptr err, int32_t id) const {
@@ -654,11 +653,6 @@ class ConnPool {
         SALTICIDAE_LOG_INFO("starting all threads...");
         for (size_t i = 0; i < nworker; i++)
             workers[i].start();
-
-        // if (!is_client) {
-        //     init_cpool_fd_udp();
-        //     SALTICIDAE_LOG_INFO("cpool_fd_udp = %d", cpool_fd_udp);
-        // }
         
         system_state = 1;
     }

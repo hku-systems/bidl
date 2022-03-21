@@ -82,11 +82,6 @@ class PMHighTail: public virtual PaceMaker {
                 if (check_ancestry(hqc, tail) && tail->get_height() > hqc_tail->get_height())
                     hqc_tail = tail;
 
-            if (do_new_consen_prop_count != 0) {
-                hsc->timer_recv_prop.add(hsc->recv_timeout);
-                HOTSTUFF_LOG_INFO("Pacemaker : repeat %d Start Timer %d", do_new_consen_prop_count--, this->hsc->pmaker_count);
-            }
-
             reg_hqc_update();
         });
     }
@@ -302,12 +297,12 @@ class PMRoundRobinProposer: virtual public PaceMaker {
         if (proposer == hsc->get_id())
             do_new_consensus(0, std::vector<uint256_t>{});
 
-        timer = TimerEvent(ec, [this](TimerEvent &){ rotate(); });
-        timer.add(prop_delay);
-
         do_new_consen_prop_count = 3;
         hsc->timer_recv_prop.add(hsc->recv_timeout);
         HOTSTUFF_LOG_INFO("Pacemaker : Start Timer %d", this->hsc->pmaker_count);
+
+        timer = TimerEvent(ec, [this](TimerEvent &){ rotate(); });
+        timer.add(prop_delay);
     }
 
     /* role transitions */
@@ -371,7 +366,6 @@ class PMRoundRobinProposer: virtual public PaceMaker {
                 HOTSTUFF_LOG_PROTO("reproposing pending commands");
                 hsc->timer_recv_prop.add(hsc->recv_timeout);
                 HOTSTUFF_LOG_INFO("Pacemaker : Start Timer %d", this->hsc->pmaker_count);
-
             });
         }
     }

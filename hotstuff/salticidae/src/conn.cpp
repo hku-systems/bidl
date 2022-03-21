@@ -421,21 +421,6 @@ void ConnPool::_multicast_setup_send_fd(int &fd_udp) {
 
 }
 
-void ConnPool::init_cpool_fd_udp() {
-    SALTICIDAE_LOG_INFO("init_cpool_fd_udp");
-    this->cpool_fd_udp = _create_fd_udp(false);
-    this->group_socket = _create_group_sock();
-}
-
-void ConnPool::multicast_data(bytearray_t &msg) {
-    SALTICIDAE_LOG_DEBUG("fd_udp = %d : Multicast Proposal", cpool_fd_udp);
-
-    if (sendto(this->cpool_fd_udp, msg.data(), msg.size(), 0, (struct sockaddr*)& this->group_socket, sizeof(this->group_socket)) < 0) {
-        SALTICIDAE_LOG_INFO("send(%d) failure: %s", cpool_fd_udp, strerror(errno));
-    }
-
-}
-
 void ConnPool::disp_terminate(const conn_t &conn) {
     auto worker = conn->worker;
     if (worker)
