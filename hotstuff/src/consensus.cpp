@@ -42,7 +42,7 @@ HotStuffCore::HotStuffCore(ReplicaID id, privkey_bt &&priv_key):
     storage(new EntityStorage()) 
 {
     storage->add_blk(b0);
-    pmaker_count = 0;
+    pmaker_count = 1;
     recv_timeout = 20.0 / 1000;
 }
 
@@ -206,6 +206,13 @@ void HotStuffCore::on_receive_proposal(const Proposal &prop) {
     timer_recv_prop.del();
     LOG_PROTO("got %s, Stop Timer = %d", std::string(prop).c_str(), pmaker_count);
     pmaker_count++;
+    if (pmaker_count % 5 != 0) {
+        timer_recv_prop.add(recv_timeout);
+        HOTSTUFF_LOG_INFO("Pacemaker : repeat Start Timer %d", pmaker_count);
+    }
+    else {
+        pmaker_count = 1;
+    }
 
     bool self_prop = prop.proposer == get_id();
 
