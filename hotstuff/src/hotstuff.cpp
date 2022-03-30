@@ -111,8 +111,7 @@ bool HotStuffBase::on_deliver_blk(const block_t &blk) {
         assert(storage->is_blk_delivered(p));
     if ((valid = HotStuffCore::on_deliver_blk(blk)))
     {
-        LOG_DEBUG("block %.10s delivered",
-                get_hex(blk_hash).c_str());
+        LOG_DEBUG("block %.10s delivered", get_hex(blk_hash).c_str());
         part_parent_size += blk->get_parent_hashes().size();
         part_delivered++;
         delivered++;
@@ -217,7 +216,7 @@ void HotStuffBase::propose_handler(MsgPropose &&msg, const Net::conn_t &conn) {
     }
 
     if (peer != get_config().get_peer_id(prop.proposer)) {
-        LOG_WARN("invalid proposal from %d, conn fd_udp = %d", prop.proposer, conn->get_fd_udp());
+        LOG_WARN("invalid proposal conn fd_udp = %d", conn->get_fd_udp());
         return;
     }
 
@@ -490,9 +489,9 @@ void HotStuffBase::start(std::vector<std::tuple<NetAddr, pubkey_bt, uint256_t>> 
             /* Following Operations are done by Peer */
 
             cmd_pending_buffer.push(cmd_hash);
-            // printf("dd: cmd_pending_buffer_size=%d\n", cmd_pending_buffer.size());
 
             if (cmd_pending_buffer.size() >= blk_size) {
+                HOTSTUFF_LOG_INFO("cmd_pending_buffer_size = %d >= block size %d", cmd_pending_buffer.size(), blk_size);
                 std::vector<uint256_t> cmds;
 
                 for (uint32_t i = 0; i < blk_size; i++) {
@@ -507,7 +506,6 @@ void HotStuffBase::start(std::vector<std::tuple<NetAddr, pubkey_bt, uint256_t>> 
 #ifdef HOTSTUFF_CMD_REQSIZE    
                         int n = cmds.size();
                         int length_of_propose = n * HOTSTUFF_CMD_REQSIZE;
-                        HOTSTUFF_LOG_INFO("Propose in cmd_pending handler");
 
                         on_propose(cmds, pmaker->get_parents(), bytearray_t(length_of_propose)); 
 #else
