@@ -202,17 +202,17 @@ block_t HotStuffCore::on_propose(const std::vector<uint256_t> &cmds, const std::
 }
 
 void HotStuffCore::on_receive_proposal(const Proposal &prop) {
-    timer_recv_prop.del();
-    LOG_PROTO("got %s, txn = %d, Stop Timer = %d", std::string(prop).c_str(), prop.blk->cmds.size(), pmaker_count);
-    pmaker_count++;
+    // timer_recv_prop.del();
+    // LOG_PROTO("got %s, txn = %d, Stop Timer = %d", std::string(prop).c_str(), prop.blk->cmds.size(), pmaker_count);
+    // pmaker_count++;
 
-    if (pmaker_count % 5 != 0 && prop.blk->cmds.size() != 400) {
-        timer_recv_prop.add(recv_timeout);
-        HOTSTUFF_LOG_INFO("Pacemaker : repeat Start Timer %d", pmaker_count);
-    }
-    else {
-        pmaker_count = 1;
-    }
+    // if (pmaker_count % 5 != 0 && prop.blk->cmds.size() != 400) {
+    //     timer_recv_prop.add(recv_timeout);
+    //     HOTSTUFF_LOG_INFO("Pacemaker : repeat Start Timer %d", pmaker_count);
+    // }
+    // else {
+    //     pmaker_count = 1;
+    // }
 
     bool self_prop = prop.proposer == get_id();
 

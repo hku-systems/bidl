@@ -297,8 +297,8 @@ class PMRoundRobinProposer: virtual public PaceMaker {
         if (proposer == hsc->get_id())
             do_new_consensus(0, std::vector<uint256_t>{});
 
-        hsc->timer_recv_prop.add(hsc->recv_timeout);
-        HOTSTUFF_LOG_INFO("Pacemaker : Start Timer %d", this->hsc->pmaker_count);
+        // hsc->timer_recv_prop.add(hsc->recv_timeout);
+        // HOTSTUFF_LOG_INFO("Pacemaker : Start Timer %d", this->hsc->pmaker_count);
 
         timer = TimerEvent(ec, [this](TimerEvent &){ rotate(); });
         timer.add(prop_delay);
@@ -343,8 +343,8 @@ class PMRoundRobinProposer: virtual public PaceMaker {
 
                 if (!pending.size()) return;
 
-                hsc->timer_recv_prop.add(hsc->recv_timeout);
-                HOTSTUFF_LOG_INFO("Pacemaker : reproposing : Start Timer %d", this->hsc->pmaker_count);
+                // hsc->timer_recv_prop.add(hsc->recv_timeout);
+                // HOTSTUFF_LOG_INFO("Pacemaker : reproposing : Start Timer %d", this->hsc->pmaker_count);
 
                 std::vector<uint256_t> cmds;
                 for (auto &p: pending)
@@ -360,8 +360,8 @@ class PMRoundRobinProposer: virtual public PaceMaker {
 
                 if (!pending.size()) return;
 
-                hsc->timer_recv_prop.add(hsc->recv_timeout);
-                HOTSTUFF_LOG_INFO("Pacemaker : reproposing : Start Timer %d", this->hsc->pmaker_count);
+                // hsc->timer_recv_prop.add(hsc->recv_timeout);
+                // HOTSTUFF_LOG_INFO("Pacemaker : reproposing : Start Timer %d", this->hsc->pmaker_count);
             });
         }
     }

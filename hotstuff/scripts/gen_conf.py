@@ -21,7 +21,7 @@ if __name__ == "__main__":
     parser.add_argument('--repburst', type=int, default=1000)
     parser.add_argument('--cliburst', type=int, default=1000)
     parser.add_argument('--multicast_addr', type=str, default="230.1.1.1:30000")
-    parser.add_argument('--prop-delay', type=float, default=5.0)
+    parser.add_argument('--prop-delay', type=float, default=1.0)
     args = parser.parse_args()
 
 
