@@ -486,12 +486,11 @@ void HotStuffBase::start(std::vector<std::tuple<NetAddr, pubkey_bt, uint256_t>> 
                 e.second(Finality(id, 0, 0, 0, cmd_hash, uint256_t()));
 
             if (proposer != get_id()) continue;
-            /* Following Operations are done by Peer */
+            /* Following Operations are done by Leader only */
 
             cmd_pending_buffer.push(cmd_hash);
 
             if (cmd_pending_buffer.size() >= blk_size) {
-                HOTSTUFF_LOG_INFO("cmd_pending_buffer_size = %d >= block size %d", cmd_pending_buffer.size(), blk_size);
                 std::vector<uint256_t> cmds;
 
                 for (uint32_t i = 0; i < blk_size; i++) {
@@ -512,6 +511,9 @@ void HotStuffBase::start(std::vector<std::tuple<NetAddr, pubkey_bt, uint256_t>> 
                         on_propose(cmds, pmaker->get_parents(), bytearray_t()); 
 #endif
                     }
+                    // timer_recv_prop.add(recv_timeout);
+                    // HOTSTUFF_LOG_INFO("Pacemaker : Form Block, is_leader = %d : Start Timer %d", proposer == get_id(), pmaker_count);
+
                 });
                 return true;
             }
