@@ -657,32 +657,43 @@ void MsgNetwork<OpcodeType>::on_read(const ConnPool::conn_t &_conn) {
 
     while (true) {
         if (msg_state == Conn::HEADER) {
-            if (recv_buffer.size() < Msg::header_size) break;
+            if (recv_buffer.size() < Msg::header_size) {
+                //SALTICIDAE_LOG_INFO("recv_buffer not enough data for Header size");
+                break;
+            }
 
             /* new header available */
             msg = Msg(recv_buffer.pop(Msg::header_size));
+
             if (msg.get_length() > max_msg_size) {
                 SALTICIDAE_LOG_WARN("oversized message from %s, terminating the connection", std::string(*conn).c_str());
                 throw MsgNetworkError(SALTI_ERROR_CONN_OVERSIZED_MSG);
             }
+
             msg_state = Conn::PAYLOAD;
         }
-        if (msg_state == Conn::PAYLOAD)
-        {
-            size_t len = msg.get_length();
-            if (recv_buffer.size() < len) break;
+        if (msg_state == Conn::PAYLOAD) {
+            size_t len = msg.get_length(); // payload size
+
+            if (recv_buffer.size() < len) {
+                SALTICIDAE_LOG_INFO("recv_buffer.size() = %zd < Payload Size %zd", recv_buffer.size(), len);
+                break;
+            }
+
             /* new payload available */
             msg.set_payload(recv_buffer.pop(len));
             msg_state = Conn::HEADER;
+
 #ifndef SALTICIDAE_NOCHECKSUM
-            if (!msg.verify_checksum())
-            {
+            if (!msg.verify_checksum()) {
                 SALTICIDAE_LOG_WARN("checksums do not match, dropping the message");
                 break;
             }
 #endif
             // if (msg.get_opcode() == 0x0)
             //     SALTICIDAE_LOG_INFO("incoming_msgs enqueue PROPOSAL");
+
+            //SALTICIDAE_LOG_INFO("incoming_msgs enqueue");
 
             if (!incoming_msgs.enqueue(std::make_pair(msg, conn), false)) {
                 SALTICIDAE_LOG_WARN("incoming_msgs enqueue retry ...");
@@ -693,14 +704,18 @@ void MsgNetwork<OpcodeType>::on_read(const ConnPool::conn_t &_conn) {
         }
     }
 
+    //SALTICIDAE_LOG_WARN("exit on_read()");
+
     // resume reading from socket
     if (recv_buffer.len() < conn->max_recv_buff_size) {
         if (is_tcp && conn->ready_recv_tcp) {
+            SALTICIDAE_LOG_INFO("resume TCP");
             conn->ev_socket_tcp.del();
             conn->ev_socket_tcp.add(FdEvent::READ | (conn->ready_send_tcp ? 0: FdEvent::WRITE));
             conn->recv_data_func(conn, conn->fd_tcp, FdEvent::READ, ConnPool::SendType::TCP);
         }
         else if (!is_tcp && conn->ready_recv_udp) {
+            SALTICIDAE_LOG_INFO("resume UDP");
             conn->ev_socket_udp.del();
             conn->ev_socket_udp.add(FdEvent::READ | (conn->ready_send_udp ? 0: FdEvent::WRITE));
             conn->recv_data_func(conn, conn->fd_udp, FdEvent::READ, ConnPool::SendType::UDP);

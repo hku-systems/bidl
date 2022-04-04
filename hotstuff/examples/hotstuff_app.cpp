@@ -108,7 +108,7 @@ class HotStuffApp: public HotStuff {
     void state_machine_execute(const Finality &fin) override {
         reset_imp_timer();
 #ifndef HOTSTUFF_ENABLE_BENCHMARK
-        HOTSTUFF_LOG_INFO("replicated %s", std::string(fin).c_str());
+        //HOTSTUFF_LOG_INFO("replicated %s", std::string(fin).c_str());
 #endif
     }
 
@@ -250,6 +250,7 @@ int main(int argc, char **argv) {
     repnet_config.max_msg_size(opt_max_rep_msg->get());
     clinet_config.max_msg_size(opt_max_cli_msg->get());
 
+    // Disable TLS
     // if (!opt_tls_privkey->get().empty() && !opt_notls->get())
     // {
     //     auto tls_priv_key = new salticidae::PKey(
@@ -359,8 +360,7 @@ void HotStuffApp::client_request_cmd_handler(MsgReqCmd &&msg, const conn_t &conn
     auto cmd = parse_cmd(msg.serialized);
     const auto &cmd_hash = cmd->get_hash();  // dd: get hash
 
-    //HOTSTUFF_LOG_DEBUG("processing %s", std::string(*cmd).c_str());
-    HOTSTUFF_LOG_INFO("processing client cmd %s", std::string(*cmd).c_str());
+    //HOTSTUFF_LOG_INFO("processing client cmd %s", std::string(*cmd).c_str());
 
     exec_command(cmd_hash, [this, addr](Finality fin) {  // dd: put into the queue to be decided
         resp_queue.enqueue(std::make_pair(fin, addr));
@@ -368,13 +368,13 @@ void HotStuffApp::client_request_cmd_handler(MsgReqCmd &&msg, const conn_t &conn
 }
 
 void HotStuffApp::start(const std::vector<std::tuple<NetAddr, bytearray_t, bytearray_t>> &reps) {
-    // ev_stat_timer = TimerEvent(ec, [this](TimerEvent &) {
-    //     HotStuff::print_stat();
-    //     HotStuffApp::print_stat();
-    //     //HotStuffCore::prune(100);
-    //     ev_stat_timer.add(stat_period);
-    // });
-    // ev_stat_timer.add(stat_period);
+    ev_stat_timer = TimerEvent(ec, [this](TimerEvent &) {
+        HotStuff::print_stat();
+        HotStuffApp::print_stat();
+        //HotStuffCore::prune(100);
+        ev_stat_timer.add(stat_period);
+    });
+    ev_stat_timer.add(stat_period);
 
     impeach_timer = TimerEvent(ec, [this](TimerEvent &) {
         if (get_decision_waiting().size()) // insert at cmd_pending handler, erase at do_decide()

@@ -36,7 +36,7 @@ class SegBuffer {
 
     private:
     std::list<buffer_entry_t> buffer;
-    size_t _size;
+    size_t _size; // bytes of stored data
 
     public:
     SegBuffer(): _size(0) {}
@@ -107,8 +107,8 @@ class SegBuffer {
         return res;
     }
     
-    size_t size() const { return _size; }
-    size_t len() const { return buffer.size(); }
+    size_t size() const { return _size; } // bytes of stored data
+    size_t len() const { return buffer.size(); } // number of data 
     bool empty() const { return buffer.empty(); }
     
     void clear() {

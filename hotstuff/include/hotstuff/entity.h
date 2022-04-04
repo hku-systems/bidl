@@ -121,7 +121,7 @@ class Block {
     std::vector<uint256_t> parent_hashes;
     std::vector<uint256_t> cmds;
     quorum_cert_bt qc;
-    bytearray_t extra;
+    bytearray_t extra; // ???
 
     /* the following fields can be derived from above */
     uint256_t hash;
