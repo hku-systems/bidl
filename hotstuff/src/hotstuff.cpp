@@ -512,8 +512,7 @@ void HotStuffBase::start(std::vector<std::tuple<NetAddr, pubkey_bt, uint256_t>> 
 #endif
                     }
                     // timer_recv_prop.add(recv_timeout);
-                    HOTSTUFF_LOG_INFO("Pacemaker : Form Block, block size = 400");
-
+                    HOTSTUFF_LOG_INFO("Pacemaker : Form Block, Start Timer %d", pmaker_count);
                 });
                 return true;
             }

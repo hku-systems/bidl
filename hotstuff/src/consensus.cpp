@@ -43,7 +43,7 @@ HotStuffCore::HotStuffCore(ReplicaID id, privkey_bt &&priv_key):
 {
     storage->add_blk(b0);
     pmaker_count = 1;
-    recv_timeout = 10.0 / 1000;
+    recv_timeout = 500.0 / 1000; // in micro-second
 }
 
 void HotStuffCore::sanity_check_delivered(const block_t &blk) {
@@ -202,6 +202,16 @@ block_t HotStuffCore::on_propose(const std::vector<uint256_t> &cmds, const std::
 }
 
 void HotStuffCore::on_receive_proposal(const Proposal &prop) {
+    bool self_prop = prop.proposer == get_id();
+
+    // if (!self_prop) {
+    //     int random = rand() % 100 + 1;
+    //     if (random <= 10) { 
+    //         LOG_PROTO("Dropping %s, Timer %d", std::string(prop).c_str(), pmaker_count);
+    //         return;
+    //     }
+    // }
+
     // timer_recv_prop.del();
     // LOG_PROTO("got %s, txn = %d, Stop Timer = %d", std::string(prop).c_str(), prop.blk->cmds.size(), pmaker_count);
     // pmaker_count++;
@@ -213,8 +223,6 @@ void HotStuffCore::on_receive_proposal(const Proposal &prop) {
     // else {
     //     pmaker_count = 1;
     // }
-
-    bool self_prop = prop.proposer == get_id();
 
     block_t bnew = prop.blk;
 

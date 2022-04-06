@@ -66,9 +66,16 @@ if __name__ == '__main__':
             cnt = 0
         cnt += 1
     values.append(cnt)
+    
+    print("Throughput : number of txns per second")
     print(values)
+
+    print("Latency in ms")
     print("lat = {:.3f}ms".format(sum(lats) / len(lats) * 1e3))
+
     lats, _ = remove_outliers(lats)
+    print("Latency in ms, removing outliers")
     print("lat = {:.3f}ms".format(sum(lats) / len(lats) * 1e3))
+
     if args.plot:
         plot_thr(args.output)

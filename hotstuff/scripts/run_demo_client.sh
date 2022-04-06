@@ -5,4 +5,9 @@
 # commands should still get through (be replicated) once the new leader becomes
 # stable.
 
-./examples/hotstuff-client --idx 0 --iter -20000 --max-async 175
+for i in {1..2}; 
+do
+    echo "starting client $i"
+    ./examples/hotstuff-client --idx ${i} --iter -20000 --max-async 175 > log_client/clog${i} 2>&1 &
+done
+wait
