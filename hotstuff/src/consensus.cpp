@@ -43,7 +43,8 @@ HotStuffCore::HotStuffCore(ReplicaID id, privkey_bt &&priv_key):
 {
     storage->add_blk(b0);
     pmaker_count = 1;
-    recv_timeout = 500.0 / 1000; // in micro-second
+    default_timeout = 50.0 / 1000;
+    recv_timeout = default_timeout; // in micro-second
 }
 
 void HotStuffCore::sanity_check_delivered(const block_t &blk) {
@@ -175,7 +176,7 @@ block_t HotStuffCore::on_propose(const std::vector<uint256_t> &cmds, const std::
         )
     );
 
-    storage->add_blk(bnew, pmaker_count);
+    storage->add_blk_hash_map(pmaker_count, bnew->get_hash());
 
     const uint256_t bnew_hash = bnew->get_hash();
     bnew->self_qc = create_quorum_cert(bnew_hash);
@@ -212,16 +213,14 @@ void HotStuffCore::on_receive_proposal(const Proposal &prop) {
     //     }
     // }
 
-    // timer_recv_prop.del();
-    // LOG_PROTO("got %s, txn = %d, Stop Timer = %d", std::string(prop).c_str(), prop.blk->cmds.size(), pmaker_count);
-    // pmaker_count++;
+    timer_recv_prop.del();
+    LOG_PROTO("got %s, txn = %d, Stop Timer = %d", std::string(prop).c_str(), prop.blk->cmds.size(), pmaker_count);
+    pmaker_count++;
+    recv_timeout = default_timeout;
 
-    // if (pmaker_count % 5 != 0 && prop.blk->cmds.size() != 400) {
+    // if (prop.blk->cmds.size() != 400 && pmaker_count % 5 != 0) {
     //     timer_recv_prop.add(recv_timeout);
     //     HOTSTUFF_LOG_INFO("Pacemaker : repeat Start Timer %d", pmaker_count);
-    // }
-    // else {
-    //     pmaker_count = 1;
     // }
 
     block_t bnew = prop.blk;

@@ -485,7 +485,7 @@ void HotStuffBase::start(std::vector<std::tuple<NetAddr, pubkey_bt, uint256_t>> 
             else
                 e.second(Finality(id, 0, 0, 0, cmd_hash, uint256_t()));
 
-            if (proposer != get_id()) continue;
+            // if (proposer != get_id()) continue;
             /* Following Operations are done by Leader only */
 
             cmd_pending_buffer.push(cmd_hash);
@@ -511,8 +511,8 @@ void HotStuffBase::start(std::vector<std::tuple<NetAddr, pubkey_bt, uint256_t>> 
                         on_propose(cmds, pmaker->get_parents(), bytearray_t()); 
 #endif
                     }
-                    // timer_recv_prop.add(recv_timeout);
-                    HOTSTUFF_LOG_INFO("Pacemaker : Form Block, Start Timer %d", pmaker_count);
+                    timer_recv_prop.add(recv_timeout);
+                    HOTSTUFF_LOG_INFO("Pacemaker : Form Block : 400 txns, Start Timer %d", pmaker_count);
                 });
                 return true;
             }

@@ -221,8 +221,8 @@ struct BlockHeightCmp {
 };
 
 class EntityStorage {
-    std::unordered_map<const uint256_t, block_t> blk_cache;
-    std::unordered_map<uint64_t, block_t> blk_cache_by_id;
+    std::unordered_map<const uint256_t, block_t> blk_cache; // key = block hash, value = block
+    std::unordered_map<uint64_t, const uint256_t> hash_cache_by_pmaker_count; // key = pmaker_count, value = block hash
     std::unordered_map<const uint256_t, command_t> cmd_cache;
     public:
     bool is_blk_delivered(const uint256_t &blk_hash) {
@@ -240,8 +240,8 @@ class EntityStorage {
         return blk_cache.insert(std::make_pair(blk->get_hash(), blk)).first->second;
     }
 
-    void add_blk(const block_t &blk, const uint64_t &pmaker_count) {
-        blk_cache_by_id.insert(std::make_pair(pmaker_count, blk));
+    void add_blk_hash_map(const uint64_t &pmaker_count, const uint256_t &blk_hash) {
+        hash_cache_by_pmaker_count.insert(std::make_pair(pmaker_count, blk_hash));
     }
 
     const block_t &add_blk(const block_t &blk) {
@@ -254,8 +254,13 @@ class EntityStorage {
     }
 
     block_t find_blk(const uint64_t &pmaker_count) {
-        auto it = blk_cache_by_id.find(pmaker_count);
-        return it == blk_cache_by_id.end() ? nullptr : it->second;
+        auto it = hash_cache_by_pmaker_count.find(pmaker_count); // return block hash
+        if (it == hash_cache_by_pmaker_count.end()) {
+            return nullptr;
+        }
+        else {
+            return find_blk(it->second);
+        }
     }
 
     bool is_cmd_fetched(const uint256_t &cmd_hash) {
