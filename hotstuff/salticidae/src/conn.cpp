@@ -84,7 +84,7 @@ void ConnPool::Conn::_send_data(const conn_t &conn, int fd, int events, int send
             if (!is_udp) 
                 ret = send(fd, buff_seg.data(), size, 0);
             else {
-                SALTICIDAE_LOG_INFO("socket(%d) sending %zd bytes", size);
+                SALTICIDAE_LOG_INFO("socket(%d) sending %zd bytes", fd, size);
                 ret = sendto(fd, buff_seg.data(), size, 0, (struct sockaddr*)& conn->group_addr, sizeof(conn->group_addr));
             }
             
