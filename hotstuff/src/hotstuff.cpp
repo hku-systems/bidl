@@ -209,8 +209,7 @@ void HotStuffBase::propose_handler(MsgPropose &&msg, const Net::conn_t &conn) {
 
     auto &prop = msg.proposal;
 
-    ReplicaID &from_replica = prop.proposer;
-    if (from_replica == get_id() || from_replica != current_leader) {
+    if (prop.proposer == get_id() || prop.proposer != current_leader) {
         LOG_INFO("drop proposal");
         return;
     }
