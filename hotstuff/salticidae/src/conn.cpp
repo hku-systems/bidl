@@ -442,7 +442,7 @@ void ConnPool::_multicast_setup_send_fd(int &fd_udp) {
     // (2) disable loopback data packets
 
     struct in_addr interface;
-    char loopch = 1;
+    char loopch = 0;
 
     // (1) Set local interface for outbound multicast datagrams.
     memset(&interface, 0, sizeof(interface));
