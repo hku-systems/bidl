@@ -517,7 +517,7 @@ void HotStuffBase::start(std::vector<std::tuple<NetAddr, pubkey_bt, uint256_t>> 
                         on_propose(cmds, pmaker->get_parents(), bytearray_t()); 
 #endif
                     }
-                    timer_recv_prop.add(recv_timeout);
+                    // timer_recv_prop.add(recv_timeout);
                     HOTSTUFF_LOG_INFO("Pacemaker : Form Block : 400 txns, Start Timer %d", pmaker_count);
                 });
                 return true;

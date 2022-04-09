@@ -213,7 +213,7 @@ void HotStuffCore::on_receive_proposal(const Proposal &prop) {
     //     }
     // }
 
-    timer_recv_prop.del();
+    // timer_recv_prop.del();
     LOG_PROTO("got %s, txn = %d, Stop Timer = %d", std::string(prop).c_str(), prop.blk->cmds.size(), pmaker_count);
     pmaker_count++;
     recv_timeout = default_timeout;
