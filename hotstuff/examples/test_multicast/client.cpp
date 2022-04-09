@@ -89,23 +89,24 @@ int main (int argc, char *argv[])
 
     multicast_setup_send(sd);
 
-    multicast_setup_recv(sd);
+    // multicast_setup_recv(sd);
 
     // send a message to the multicast group
     if (sendto(sd, send_buff, strlen(send_buff), 0, (struct sockaddr*)& group_addr, sizeof(group_addr)) < 0) {
         perror("sending datagram message");
     }
+    printf("sent message\n");
 
     // receive a message from the multicast group
     // recvfrom(sd, recv_buff, sizeof(recv_buff), 0,(struct sockaddr *)&client_addr, &socklen);
-    if (read(sd, recv_buff, sizeof(recv_buff)) < 0) {
-        perror("reading datagram message");
-        close(sd);
-        exit(1);
-    }
+    // if (read(sd, recv_buff, sizeof(recv_buff)) < 0) {
+    //     perror("reading datagram message");
+    //     close(sd);
+    //     exit(1);
+    // }
 
     //printf("recv client from %s:%d, same port : %d \n", (char *)inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port), 1);
-    printf("message = %s\n", recv_buff);
+    // printf("message = %s\n", recv_buff);
 
     close(sd);
 }

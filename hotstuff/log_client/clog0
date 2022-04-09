@@ -1,0 +1,117 @@
+2022-04-10 01:59:21.616251 [net info] starting all threads...
+2022-04-10 01:59:21.616377 [net warn] ignoring option name in conf file: block-size
+2022-04-10 01:59:21.616390 [net warn] ignoring option name in conf file: nworker
+2022-04-10 01:59:21.616397 [net warn] ignoring option name in conf file: repnworker
+2022-04-10 01:59:21.616402 [net warn] ignoring option name in conf file: clinworker
+2022-04-10 01:59:21.616408 [net warn] ignoring option name in conf file: repburst
+2022-04-10 01:59:21.616413 [net warn] ignoring option name in conf file: cliburst
+2022-04-10 01:59:21.616417 [net warn] ignoring option name in conf file: pace-maker
+2022-04-10 01:59:21.616422 [net warn] ignoring option name in conf file: multicast_addr
+2022-04-10 01:59:21.616427 [net warn] ignoring option name in conf file: prop-delay
+2022-04-10 01:59:21.616436 [net info] loaded configuration from hotstuff.conf
+2022-04-10 01:59:21.616527 [hotstuff info] nfaulty = 1
+2022-04-10 01:59:21.617980 [net info] created <Conn fd_tcp=20 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:20000> addr_udp=<NetAddr 0.0.0.0:0> mode=active>
+2022-04-10 01:59:21.618181 [net info] created <Conn fd_tcp=23 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:20001> addr_udp=<NetAddr 0.0.0.0:0> mode=active>
+2022-04-10 01:59:21.618370 [net info] created <Conn fd_tcp=26 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:20002> addr_udp=<NetAddr 0.0.0.0:0> mode=active>
+2022-04-10 01:59:21.618564 [net info] created <Conn fd_tcp=29 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:20003> addr_udp=<NetAddr 0.0.0.0:0> mode=active>
+2022-04-10 01:59:21.618596 [hotstuff info] send new cmd af5570f5a1
+2022-04-10 01:59:21.618612 [hotstuff info] send new cmd 01acecb507
+2022-04-10 01:59:21.618625 [hotstuff info] send new cmd 2fcd151b82
+2022-04-10 01:59:21.618638 [hotstuff info] send new cmd 9ae4c9d086
+2022-04-10 01:59:21.618662 [net info] connected to remote <Conn fd_tcp=20 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:20000> addr_udp=<NetAddr 0.0.0.0:0> mode=active>
+2022-04-10 01:59:21.618676 [net info] connected to remote <Conn fd_tcp=23 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:20001> addr_udp=<NetAddr 0.0.0.0:0> mode=active>
+2022-04-10 01:59:21.618686 [net info] connected to remote <Conn fd_tcp=26 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:20002> addr_udp=<NetAddr 0.0.0.0:0> mode=active>
+2022-04-10 01:59:21.618695 [net info] connected to remote <Conn fd_tcp=29 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:20003> addr_udp=<NetAddr 0.0.0.0:0> mode=active>
+2022-04-10 01:59:21.622090 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=af5570f5a1 blk=0000000000>, wall: 0.003, cpu: 0.003
+2022-04-10 01:59:21.622117 [hotstuff info] send new cmd 1b03ab083d
+2022-04-10 01:59:21.622138 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=01acecb507 blk=0000000000>, wall: 0.004, cpu: 0.004
+2022-04-10 01:59:21.622150 [hotstuff info] send new cmd 2be2196b9c
+2022-04-10 01:59:21.622168 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=2fcd151b82 blk=0000000000>, wall: 0.004, cpu: 0.004
+2022-04-10 01:59:21.622178 [hotstuff info] send new cmd 20aef0af2b
+2022-04-10 01:59:21.622196 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=9ae4c9d086 blk=0000000000>, wall: 0.004, cpu: 0.004
+2022-04-10 01:59:21.622207 [hotstuff info] send new cmd 4e65285e65
+2022-04-10 01:59:21.622603 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=1b03ab083d blk=0000000000>, wall: 0.000, cpu: 0.000
+2022-04-10 01:59:21.622626 [hotstuff info] send new cmd 7b742c398b
+2022-04-10 01:59:21.622682 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=2be2196b9c blk=0000000000>, wall: 0.001, cpu: 0.000
+2022-04-10 01:59:21.622695 [hotstuff info] send new cmd d8e0873e07
+2022-04-10 01:59:21.622927 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=7b742c398b blk=0000000000>, wall: 0.000, cpu: 0.000
+2022-04-10 01:59:21.622944 [hotstuff info] send new cmd dd73a46975
+2022-04-10 01:59:26.801018 [hotstuff info] got <fin decision=1 cmd_idx=14 cmd_height=5 cmd=d8e0873e07 blk=69a6b6a209>, wall: 5.178, cpu: 0.000
+2022-04-10 01:59:26.801057 [hotstuff info] send new cmd f1d6ff0821
+2022-04-10 01:59:26.802551 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=f1d6ff0821 blk=0000000000>, wall: 0.001, cpu: 0.000
+2022-04-10 01:59:26.802576 [hotstuff info] send new cmd 930abd7018
+2022-04-10 01:59:26.802590 [hotstuff info] got <fin decision=1 cmd_idx=9 cmd_height=5 cmd=20aef0af2b blk=69a6b6a209>, wall: 5.180, cpu: 0.001
+2022-04-10 01:59:26.802601 [hotstuff info] send new cmd 53dd18d822
+2022-04-10 01:59:26.802613 [hotstuff info] got <fin decision=1 cmd_idx=11 cmd_height=5 cmd=4e65285e65 blk=69a6b6a209>, wall: 5.180, cpu: 0.001
+2022-04-10 01:59:26.802623 [hotstuff info] send new cmd ead27b1c86
+2022-04-10 01:59:26.802634 [hotstuff info] got <fin decision=1 cmd_idx=12 cmd_height=5 cmd=dd73a46975 blk=69a6b6a209>, wall: 5.180, cpu: 0.001
+2022-04-10 01:59:26.802644 [hotstuff info] send new cmd 5f1ddbc2fb
+2022-04-10 01:59:26.803266 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=ead27b1c86 blk=0000000000>, wall: 0.001, cpu: 0.000
+2022-04-10 01:59:26.803289 [hotstuff info] send new cmd 48443c868f
+2022-04-10 01:59:26.803304 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=5f1ddbc2fb blk=0000000000>, wall: 0.001, cpu: 0.000
+2022-04-10 01:59:26.803314 [hotstuff info] send new cmd 9c8616c455
+2022-04-10 01:59:26.803802 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=48443c868f blk=0000000000>, wall: 0.000, cpu: 0.000
+2022-04-10 01:59:26.803822 [hotstuff info] send new cmd db182aa591
+2022-04-10 01:59:26.803836 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=9c8616c455 blk=0000000000>, wall: 0.001, cpu: 0.000
+2022-04-10 01:59:26.803846 [hotstuff info] send new cmd 1bcca6c039
+2022-04-10 01:59:26.804207 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=db182aa591 blk=0000000000>, wall: 0.000, cpu: 0.000
+2022-04-10 01:59:26.804246 [hotstuff info] send new cmd f83bb221d5
+2022-04-10 01:59:26.804265 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=1bcca6c039 blk=0000000000>, wall: 0.000, cpu: 0.000
+2022-04-10 01:59:26.804278 [hotstuff info] send new cmd a44c4438cf
+2022-04-10 01:59:26.804630 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=930abd7018 blk=0000000000>, wall: 0.002, cpu: 0.001
+2022-04-10 01:59:26.804650 [hotstuff info] send new cmd 2fadf4ab76
+2022-04-10 01:59:26.804664 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=53dd18d822 blk=0000000000>, wall: 0.002, cpu: 0.001
+2022-04-10 01:59:26.804676 [hotstuff info] send new cmd 3fbaba3c5b
+2022-04-10 01:59:26.804692 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=f83bb221d5 blk=0000000000>, wall: 0.000, cpu: 0.000
+2022-04-10 01:59:26.804704 [hotstuff info] send new cmd c63761c39f
+2022-04-10 01:59:26.804716 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=a44c4438cf blk=0000000000>, wall: 0.000, cpu: 0.000
+2022-04-10 01:59:26.804728 [hotstuff info] send new cmd 9779c6fff1
+2022-04-10 01:59:38.828656 [hotstuff info] got <fin decision=1 cmd_idx=0 cmd_height=13 cmd=9779c6fff1 blk=525a82e846>, wall: 12.024, cpu: 0.000
+2022-04-10 01:59:38.828684 [hotstuff info] send new cmd 67e4f26e84
+2022-04-10 01:59:38.828699 [hotstuff info] got <fin decision=1 cmd_idx=1 cmd_height=13 cmd=3fbaba3c5b blk=525a82e846>, wall: 12.024, cpu: 0.000
+2022-04-10 01:59:38.828709 [hotstuff info] send new cmd 5db43ae74c
+2022-04-10 01:59:38.828722 [hotstuff info] got <fin decision=1 cmd_idx=4 cmd_height=13 cmd=2fadf4ab76 blk=525a82e846>, wall: 12.024, cpu: 0.000
+2022-04-10 01:59:38.828731 [hotstuff info] send new cmd 31dba5fca7
+2022-04-10 01:59:38.828743 [hotstuff info] got <fin decision=1 cmd_idx=7 cmd_height=13 cmd=c63761c39f blk=525a82e846>, wall: 12.024, cpu: 0.000
+2022-04-10 01:59:38.828752 [hotstuff info] send new cmd 90d3cc4af3
+2022-04-10 01:59:50.843454 [hotstuff info] got <fin decision=1 cmd_idx=3 cmd_height=21 cmd=90d3cc4af3 blk=57416e2a2c>, wall: 12.015, cpu: 0.000
+2022-04-10 01:59:50.843483 [hotstuff info] send new cmd 5eab1e29e4
+2022-04-10 01:59:50.843499 [hotstuff info] got <fin decision=1 cmd_idx=4 cmd_height=21 cmd=31dba5fca7 blk=57416e2a2c>, wall: 12.015, cpu: 0.000
+2022-04-10 01:59:50.843513 [hotstuff info] send new cmd 3786b5685d
+2022-04-10 01:59:50.843526 [hotstuff info] got <fin decision=1 cmd_idx=5 cmd_height=21 cmd=5db43ae74c blk=57416e2a2c>, wall: 12.015, cpu: 0.000
+2022-04-10 01:59:50.843536 [hotstuff info] send new cmd f976b84a67
+2022-04-10 01:59:50.843547 [hotstuff info] got <fin decision=1 cmd_idx=9 cmd_height=21 cmd=67e4f26e84 blk=57416e2a2c>, wall: 12.015, cpu: 0.000
+2022-04-10 01:59:50.843557 [hotstuff info] send new cmd c59a297409
+2022-04-10 01:59:50.844719 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=f976b84a67 blk=0000000000>, wall: 0.001, cpu: 0.000
+2022-04-10 01:59:50.844745 [hotstuff info] send new cmd c854c8f56f
+2022-04-10 01:59:50.844760 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=c59a297409 blk=0000000000>, wall: 0.001, cpu: 0.000
+2022-04-10 01:59:50.844772 [hotstuff info] send new cmd e1eb586829
+2022-04-10 01:59:50.844785 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=5eab1e29e4 blk=0000000000>, wall: 0.001, cpu: 0.000
+2022-04-10 01:59:50.844797 [hotstuff info] send new cmd 7c2f21ce5c
+2022-04-10 01:59:50.844809 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=3786b5685d blk=0000000000>, wall: 0.001, cpu: 0.000
+2022-04-10 01:59:50.844821 [hotstuff info] send new cmd bb2f4bcd51
+2022-04-10 01:59:50.845321 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=c854c8f56f blk=0000000000>, wall: 0.001, cpu: 0.000
+2022-04-10 01:59:50.845569 [hotstuff info] send new cmd 66ee151dbf
+2022-04-10 02:00:02.859932 [hotstuff info] got <fin decision=1 cmd_idx=4 cmd_height=29 cmd=66ee151dbf blk=90b66bd6e5>, wall: 12.014, cpu: 0.000
+2022-04-10 02:00:02.859961 [hotstuff info] send new cmd 547c34decb
+2022-04-10 02:00:02.859976 [hotstuff info] got <fin decision=1 cmd_idx=5 cmd_height=29 cmd=7c2f21ce5c blk=90b66bd6e5>, wall: 12.015, cpu: 0.001
+2022-04-10 02:00:02.860006 [hotstuff info] send new cmd 04164f6252
+2022-04-10 02:00:02.860025 [hotstuff info] got <fin decision=1 cmd_idx=6 cmd_height=29 cmd=bb2f4bcd51 blk=90b66bd6e5>, wall: 12.015, cpu: 0.001
+2022-04-10 02:00:02.860036 [hotstuff info] send new cmd be84dc21f3
+2022-04-10 02:00:02.860049 [hotstuff info] got <fin decision=1 cmd_idx=7 cmd_height=29 cmd=e1eb586829 blk=90b66bd6e5>, wall: 12.015, cpu: 0.001
+2022-04-10 02:00:02.860058 [hotstuff info] send new cmd 25ab3aa916
+2022-04-10 02:00:02.861129 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=be84dc21f3 blk=0000000000>, wall: 0.001, cpu: 0.000
+2022-04-10 02:00:02.861154 [hotstuff info] send new cmd 2544f2559d
+2022-04-10 02:00:02.861170 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=547c34decb blk=0000000000>, wall: 0.001, cpu: 0.000
+2022-04-10 02:00:02.861180 [hotstuff info] send new cmd 0dd443f367
+2022-04-10 02:00:02.861193 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=04164f6252 blk=0000000000>, wall: 0.001, cpu: 0.000
+2022-04-10 02:00:02.861203 [hotstuff info] send new cmd 7067b4ef8a
+2022-04-10 02:00:02.861660 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=2544f2559d blk=0000000000>, wall: 0.000, cpu: 0.000
+2022-04-10 02:00:02.861680 [hotstuff info] send new cmd 4d93be036c
+2022-04-10 02:00:02.861695 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=0dd443f367 blk=0000000000>, wall: 0.001, cpu: 0.000
+2022-04-10 02:00:02.861705 [hotstuff info] send new cmd 42f0c08faf
+2022-04-10 02:00:02.861718 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=7067b4ef8a blk=0000000000>, wall: 0.001, cpu: 0.000
+2022-04-10 02:00:02.861727 [hotstuff info] send new cmd 982258dda3
+2022-04-10 02:00:02.862017 [hotstuff info] got <fin decision=0 cmd_idx=0 cmd_height=0 cmd=4d93be036c blk=0000000000>, wall: 0.000, cpu: 0.000
+2022-04-10 02:00:02.862068 [hotstuff info] send new cmd 51335e1808
+2022-04-10 02:00:03.793056 [net info] stopping all threads...

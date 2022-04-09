@@ -202,12 +202,18 @@ promise_t HotStuffBase::async_deliver_blk(const uint256_t &blk_hash, const PeerI
 }
 
 void HotStuffBase::propose_handler(MsgPropose &&msg, const Net::conn_t &conn) {
-    const PeerId &peer = conn->get_peer_id();
-    if (peer.is_null()) return;
+    // const PeerId &peer = conn->get_peer_id();
+    // if (peer.is_null()) return;
     
     msg.postponed_parse(this);
 
     auto &prop = msg.proposal;
+
+    ReplicaID &from_replica = prop.proposer;
+    if (from_replica == get_id() || from_replica != current_leader) {
+        LOG_INFO("drop proposal");
+        return;
+    }
 
     block_t blk = prop.blk;
 
@@ -215,12 +221,12 @@ void HotStuffBase::propose_handler(MsgPropose &&msg, const Net::conn_t &conn) {
         return;
     }
 
-    if (peer != get_config().get_peer_id(prop.proposer)) {
-        LOG_WARN("invalid proposal conn fd_udp = %d", conn->get_fd_udp());
-        return;
-    }
+    // if (peer != get_config().get_peer_id(prop.proposer)) {
+    //     LOG_WARN("invalid proposal conn fd_udp = %d", conn->get_fd_udp());
+    //     return;
+    // }
 
-    promise::all(std::vector<promise_t>{async_deliver_blk(blk->get_hash(), peer)})
+    promise::all(std::vector<promise_t>{async_deliver_blk(blk->get_hash(), get_config().get_peer_id(prop.proposer))})
     .then([this, prop = std::move(prop)]() {
         on_receive_proposal(prop);
     });

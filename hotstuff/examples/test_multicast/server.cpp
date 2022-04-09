@@ -14,39 +14,30 @@ int                     datalen;
 char                    databuf[1024];
 int                     reuse=1;
 
-int main (int argc, char *argv[]) {
-    sd = socket(AF_INET, SOCK_DGRAM, 0);
-    if (sd < 0) {
-        perror("opening datagram socket");
-        exit(1);
-    }
 
-    /*
-    * Enable SO_REUSEADDR to allow multiple instances of this
-    * application to receive copies of the multicast datagrams.
-    */
-
+// (1) allow multiple processes receive data packets using the same local port
+// (2) bind socket to INADDR_ANY:5555
+// (3) join the multicast group 225.1.1.1 on the local 127.0.0.1 interface
+void multicast_setup_recv(int& sd) {
+    // (1) allow multiple processes receive data packets using the same local port
     if (setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, (char *)&reuse, sizeof(reuse)) < 0) {
         perror("setting SO_REUSEADDR");
         close(sd);
         exit(1);
     }
 
-    /*
-    * Bind to the proper port number with the IP address specified as INADDR_ANY.
-    */
+    // (2) bind socket to INADDR_ANY:5555
     memset((char *) &localSock, 0, sizeof(localSock));
     localSock.sin_family = AF_INET;
-    localSock.sin_port = htons(5555);;
     localSock.sin_addr.s_addr = INADDR_ANY;
-
+    localSock.sin_port = htons(5555);
     if (bind(sd, (struct sockaddr*)&localSock, sizeof(localSock))) {
         perror("binding datagram socket");
         close(sd);
         exit(1);
     }
 
-    // Join the multicast group 225.1.1.1 on the local 127.0.0.1 interface.  
+    // (3) join the multicast group 225.1.1.1 on the local 127.0.0.1 interface
     group.imr_multiaddr.s_addr = inet_addr("225.1.1.1");
     group.imr_interface.s_addr = inet_addr("127.0.0.1");
     if (setsockopt(sd, IPPROTO_IP, IP_ADD_MEMBERSHIP, (char *)&group, sizeof(group)) < 0) {
@@ -54,6 +45,15 @@ int main (int argc, char *argv[]) {
         close(sd);
         exit(1);
     }
+}
+
+int main (int argc, char *argv[]) {
+    sd = socket(AF_INET, SOCK_DGRAM, 0);
+    if (sd < 0) {
+        perror("opening datagram socket");
+        exit(1);
+    }
+    multicast_setup_recv(sd);
 
     datalen = sizeof(databuf);
     if (read(sd, databuf, datalen) < 0) {

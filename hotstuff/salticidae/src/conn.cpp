@@ -48,7 +48,8 @@ ConnPool::Conn::operator std::string() const {
     s << "<Conn "
       << "fd_tcp=" << std::to_string(fd_tcp) << " "
       << "fd_udp=" << std::to_string(fd_udp) << " "
-      << "addr=" << std::string(addr_tcp) << " "
+      << "addr_tcp=" << std::string(addr_tcp) << " "
+      << "addr_udp=" << std::string(addr_udp) << " "
       << "mode=";
     switch (mode)
     {
@@ -62,59 +63,66 @@ ConnPool::Conn::operator std::string() const {
 /* the following functions are executed by exactly one worker per Conn object */
 
 void ConnPool::Conn::_send_data(const conn_t &conn, int fd, int events, int send_type) {
+    bool is_udp = send_type == ConnPool::SendType::UDP;
+    
     if (events & FdEvent::ERROR) {
+        SALTICIDAE_LOG_INFO("fd_udp %d error !!! exits _send_data, events = %d", fd, events);
         conn->cpool->worker_terminate(conn);
         return;
     }
     ssize_t ret = conn->recv_chunk_size;
 
-    bool is_udp = send_type == ConnPool::SendType::UDP;
-
     auto& send_buffer = (is_udp) ? conn->send_buffer_udp : conn->send_buffer_tcp ;
 
-    for (;;) {
-        bytearray_t buff_seg = send_buffer.move_pop(); // extract all data from send_buffer, since it has size 0
-        ssize_t size = buff_seg.size();
-        
-        if (!size) break;
-        
-        if (!is_udp) 
-            ret = send(fd, buff_seg.data(), size, 0);
-        else
-            ret = sendto(fd, buff_seg.data(), size, 0, (struct sockaddr*)& conn->group_sock, sizeof(conn->group_sock));
-        
-        if (is_udp) 
-            SALTICIDAE_LOG_INFO("socket(%d) sent %zd bytes", fd, ret);
+    try {
+        for (;;) {
+            bytearray_t buff_seg = send_buffer.move_pop(); // extract all data from send_buffer, since it has size 0
+            ssize_t size = buff_seg.size();
+            
+            if (!size) break;
 
-        size -= ret;
+            if (!is_udp) 
+                ret = send(fd, buff_seg.data(), size, 0);
+            else {
+                ret = sendto(fd, buff_seg.data(), size, 0, (struct sockaddr*)& conn->group_addr, sizeof(conn->group_addr));
+            }
+            
+            if (is_udp) 
+                SALTICIDAE_LOG_INFO("socket(%d) sent %zd bytes", fd, ret);
 
-        if (size > 0) {
-            if (ret < 1) { /* nothing is sent */
-                    
-                /* rewind the whole buff_seg */
-                send_buffer.rewind(std::move(buff_seg));
-                SALTICIDAE_LOG_INFO("send ret < 1");
+            size -= ret;
 
-                if (ret < 0 && errno != EWOULDBLOCK)
-                {
-                    SALTICIDAE_LOG_INFO("send(%d) failure: %s", fd, strerror(errno));
-                    conn->cpool->worker_terminate(conn);
-                    return;
+            if (size > 0) {
+                if (ret < 1) { /* nothing is sent */
+                        
+                    /* rewind the whole buff_seg */
+                    send_buffer.rewind(std::move(buff_seg));
+                    SALTICIDAE_LOG_INFO("send ret < 1");
+
+                    if (ret < 0 && errno != EWOULDBLOCK)
+                    {
+                        SALTICIDAE_LOG_INFO("send(%d) failure: %s", fd, strerror(errno));
+                        conn->cpool->worker_terminate(conn);
+                        return;
+                    }
                 }
-            }
-            else { /* rewind the leftover */
-                SALTICIDAE_LOG_INFO("send rewind");
-                send_buffer.rewind(bytearray_t(buff_seg.begin() + ret, buff_seg.end()));
-            }
+                else { /* rewind the leftover */
+                    SALTICIDAE_LOG_INFO("send rewind");
+                    send_buffer.rewind(bytearray_t(buff_seg.begin() + ret, buff_seg.end()));
+                }
 
-            /* wait for the next write callback */
-            if (!is_udp)
-                conn->ready_send_tcp = false;
-            else
-                conn->ready_send_udp = false;
+                /* wait for the next write callback */
+                if (!is_udp)
+                    conn->ready_send_tcp = false;
+                else
+                    conn->ready_send_udp = false; // original false
 
-            return;
+                return;
+            }
         }
+    }
+    catch (...) {
+        SALTICIDAE_LOG_INFO("send error");
     }
     /* the send_buffer is empty though the kernel buffer is still available, so
      * temporarily mask the WRITE event and mark the `ready_send` flag */
@@ -190,8 +198,6 @@ void ConnPool::Conn::_recv_data(const conn_t &conn, int fd, int events, int recv
         else
             conn->recv_buffer_udp.push(std::move(buff_seg));
     }
-
-    //SALTICIDAE_LOG_INFO("exit to on_read()");
 
     /* wait for the next read callback */
     if (!is_udp) {
@@ -310,7 +316,7 @@ void ConnPool::Conn::_recv_data_tls_handshake(const conn_t &conn, int, int, int)
         cpool->disp_tcall->async_call([cpool, conn](ThreadCall::Handle &) {
             try {
                 cpool->on_dispatcher_setup(conn);
-                cpool->update_conn(conn, true, false);
+                cpool->update_conn(conn, true);
             } catch (...) {
                 cpool->recoverable_error(std::current_exception(), -1);
                 cpool->disp_terminate(conn);
@@ -344,33 +350,49 @@ int ConnPool::_create_fd_tcp() {
     int _fd_tcp;
     int one = 1;
 
-    if ((_fd_tcp = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0) 
+    if ((_fd_tcp = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0) {
+        SALTICIDAE_LOG_INFO("_create_fd_tcp create socket problem");
         throw ConnPoolError(SALTI_ERROR_CONNECT, errno);
-    if (setsockopt(_fd_tcp, SOL_SOCKET, SO_REUSEADDR, (const char *)&one, sizeof(one)) < 0)
+    }
+    if (setsockopt(_fd_tcp, SOL_SOCKET, SO_REUSEADDR, (const char *)&one, sizeof(one)) < 0) {
+        SALTICIDAE_LOG_INFO("_create_fd_tcp SO_REUSEADDR problem");
         throw ConnPoolError(SALTI_ERROR_CONNECT, errno);
-    if (setsockopt(_fd_tcp, SOL_TCP, TCP_NODELAY, (const char *)&one, sizeof(one)) < 0)
+    }
+    if (setsockopt(_fd_tcp, SOL_TCP, TCP_NODELAY, (const char *)&one, sizeof(one)) < 0) {
+        SALTICIDAE_LOG_INFO("_create_fd_tcp TCP_NODELAY problem");
         throw ConnPoolError(SALTI_ERROR_CONNECT, errno);
-    if (fcntl(_fd_tcp, F_SETFL, O_NONBLOCK) == -1) // Non-blocking read / write fd
+    }
+    if (fcntl(_fd_tcp, F_SETFL, O_NONBLOCK) == -1) { // Non-blocking read / write fd
+        SALTICIDAE_LOG_INFO("_create_fd_tcp O_NONBLOCK problem");
         throw ConnPoolError(SALTI_ERROR_CONNECT, errno);
+    }
 
     return _fd_tcp;
 }
 
-int ConnPool::_create_fd_udp(const bool recv_only, const bool send_only) {
+int ConnPool::_create_fd_udp(const bool is_sender) {
     int _fd_udp = -1;
 
-    if ((_fd_udp = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
+    if ((_fd_udp = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+        SALTICIDAE_LOG_INFO("_create_fd_udp create socket problem");
         throw ConnPoolError(SALTI_ERROR_CONNECT, errno);
-    if (fcntl(_fd_udp, F_SETFL, O_NONBLOCK) == -1) // Non-blocking read / write fd
+    }
+    if (fcntl(_fd_udp, F_SETFL, O_NONBLOCK) == -1) { // Non-blocking read / write fd
+        SALTICIDAE_LOG_INFO("_create_fd_udp O_NONBLOCK problem");
         throw ConnPoolError(SALTI_ERROR_CONNECT, errno);
+    }
 
-    _multicast_setup_recv_fd(_fd_udp);
-    _multicast_setup_send_fd(_fd_udp);
+    if (is_sender)
+        _multicast_setup_send_fd(_fd_udp);
+    else
+        _multicast_setup_recv_fd(_fd_udp);
+    // _multicast_setup_send_fd(_fd_udp);
+    // _multicast_setup_recv_fd(_fd_udp);
 
     return _fd_udp;
 }
 
-sockaddr_in ConnPool::_create_group_sock() {
+sockaddr_in ConnPool::_set_group_addr() {
     struct sockaddr_in _group_sock;
 
     memset((char *) &_group_sock, 0, sizeof(_group_sock));
@@ -390,22 +412,28 @@ void ConnPool::_multicast_setup_recv_fd(int &fd_udp) {
     int reuse = 1;
 
     // (1) allow multiple processes receive data packets using the same local port
-    if (setsockopt(fd_udp, SOL_SOCKET, SO_REUSEADDR, (char *)&reuse, sizeof(reuse)) < 0)
+    if (setsockopt(fd_udp, SOL_SOCKET, SO_REUSEADDR, (char *)&reuse, sizeof(reuse)) < 0) {
+        SALTICIDAE_LOG_INFO("_multicast_setup_recv_fd SO_REUSEADDR problem");
         throw ConnPoolError(SALTI_ERROR_CONNECT, errno);
+    }
 
     // (2) bind socket to INADDR_ANY:Port
     memset((char *) &multicast_sock, 0, sizeof(multicast_sock));
     multicast_sock.sin_family = AF_INET;
     multicast_sock.sin_addr.s_addr = INADDR_ANY;
     multicast_sock.sin_port = multicast_addr.port;
-    if (bind(fd_udp, (struct sockaddr*)&multicast_sock, sizeof(multicast_sock)))
+    if (bind(fd_udp, (struct sockaddr*)&multicast_sock, sizeof(multicast_sock))) {
+        SALTICIDAE_LOG_INFO("_multicast_setup_recv_fd bind problem");
         throw ConnPoolError(SALTI_ERROR_CONNECT, errno);
+    }
 
     // (3) join the multicast group on the local interface
     multicast_group.imr_multiaddr.s_addr = multicast_addr.ip;
     multicast_group.imr_interface.s_addr = local_interface.ip;
-    if (setsockopt(fd_udp, IPPROTO_IP, IP_ADD_MEMBERSHIP, (char *)&multicast_group, sizeof(multicast_group)) < 0)
+    if (setsockopt(fd_udp, IPPROTO_IP, IP_ADD_MEMBERSHIP, (char *)&multicast_group, sizeof(multicast_group)) < 0) {
+        SALTICIDAE_LOG_INFO("_multicast_setup_recv_fd IP_ADD_MEMBERSHIP problem");
         throw ConnPoolError(SALTI_ERROR_CONNECT, errno);
+    }
 
 }
 
@@ -414,18 +442,61 @@ void ConnPool::_multicast_setup_send_fd(int &fd_udp) {
     // (2) disable loopback data packets
 
     struct in_addr interface;
-    char loopch = 0;
+    char loopch = 1;
 
     // (1) Set local interface for outbound multicast datagrams.
     memset(&interface, 0, sizeof(interface));
     interface.s_addr = local_interface.ip;
-    if (setsockopt(fd_udp, IPPROTO_IP, IP_MULTICAST_IF, (char *)&interface, sizeof(interface)) < 0)
+    if (setsockopt(fd_udp, IPPROTO_IP, IP_MULTICAST_IF, (char *)&interface, sizeof(interface)) < 0) {
+        SALTICIDAE_LOG_INFO("_multicast_setup_send_fd IP_MULTICAST_IF problem");
         throw ConnPoolError(SALTI_ERROR_CONNECT, errno);
+    }
 
     // (2) Disable loopback data packets
-    if (setsockopt(fd_udp, IPPROTO_IP, IP_MULTICAST_LOOP, (char *)&loopch, sizeof(loopch)) < 0)
+    if (setsockopt(fd_udp, IPPROTO_IP, IP_MULTICAST_LOOP, (char *)&loopch, sizeof(loopch)) < 0) {
+        SALTICIDAE_LOG_INFO("_multicast_setup_send_fd IP_MULTICAST_LOOP problem");
         throw ConnPoolError(SALTI_ERROR_CONNECT, errno);
+    }
 
+}
+
+void ConnPool::_set_main_udp() {
+    udp_conn_set = true;
+    SALTICIDAE_LOG_INFO("set_main_udp");
+
+    // Send Thread - Main Conn Send 
+    main_conn_send = create_conn();
+    main_conn_send->send_buffer_udp.set_capacity(max_send_buff_size);
+    main_conn_send->recv_chunk_size = recv_chunk_size;
+    main_conn_send->max_recv_buff_size = max_recv_buff_size;
+    main_conn_send->cpool = this;
+    main_conn_send->mode = Conn::ACTIVE;
+    main_conn_send->fd_udp = _create_fd_udp(true);
+    main_conn_send->group_addr = _set_group_addr();
+    main_conn_send->addr_udp = multicast_addr;
+
+    auto &worker_send = get_worker_udp(1);
+    main_conn_send->worker = &worker_send;
+    worker_send.feed_udp(main_conn_send, main_conn_send->fd_udp, true); // is_sender = true
+
+    add_conn(main_conn_send);
+
+    // Recv Thread - Main Conn Recv 
+    main_conn_recv = create_conn();
+    main_conn_send->send_buffer_udp.set_capacity(max_send_buff_size);
+    main_conn_recv->recv_chunk_size = recv_chunk_size;
+    main_conn_recv->max_recv_buff_size = max_recv_buff_size;
+    main_conn_recv->cpool = this;
+    main_conn_recv->mode = Conn::PASSIVE;
+    main_conn_recv->fd_udp = _create_fd_udp(false);
+    main_conn_recv->group_addr = _set_group_addr();
+    main_conn_recv->addr_udp= multicast_addr;
+
+    auto &worker_recv = get_worker_udp(2);
+    main_conn_recv->worker = &worker_recv;
+    worker_recv.feed_udp(main_conn_recv, main_conn_recv->fd_udp, false); // is_sender = false
+
+    add_conn(main_conn_recv);
 }
 
 void ConnPool::disp_terminate(const conn_t &conn) {
@@ -441,7 +512,7 @@ void ConnPool::disp_terminate(const conn_t &conn) {
         });
 }
 
-void ConnPool::accept_client(int fd, int) {
+void ConnPool::accept_client(int fd, int, const bool is_p2p) {
     int client_fd_tcp;
     struct sockaddr client_addr;
     int one = 1;
@@ -473,10 +544,7 @@ void ConnPool::accept_client(int fd, int) {
             conn->addr_tcp = addr_tcp;
 
             // set up UDP fd
-            if (is_peer_to_peer) {
-                conn->fd_udp = _create_fd_udp();
-                conn->group_sock = _create_group_sock();
-            }
+            if (!udp_conn_set && is_p2p) _set_main_udp();
 
             add_conn(conn);
 
@@ -484,7 +552,7 @@ void ConnPool::accept_client(int fd, int) {
             auto &worker = select_worker();
             conn->worker = &worker;
 
-            worker.feed(conn, client_fd_tcp, is_peer_to_peer);
+            worker.feed(conn, client_fd_tcp);
         }
     } catch (...) { recoverable_error(std::current_exception(), -1); }
 }
@@ -497,15 +565,19 @@ void ConnPool::conn_server(const conn_t &conn, int fd, int events) {
             SALTICIDAE_LOG_INFO("connected to remote %s", std::string(*conn).c_str());
             auto &worker = select_worker();
             conn->worker = &worker;
-            worker.feed(conn, fd, is_peer_to_peer);
+            worker.feed(conn, fd);
         }
         else
         {
             if (events & TimedFdEvent::TIMEOUT)
                 SALTICIDAE_LOG_INFO("%s connect timeout", std::string(*conn).c_str());
+
+            SALTICIDAE_LOG_INFO("conn_server fd = %d problem", fd);
+
             throw SalticidaeError(SALTI_ERROR_CONNECT, errno);
         }
-    } catch (...) {
+    } 
+    catch (...) {
         disp_terminate(conn);
         recoverable_error(std::current_exception(), -1);
     }
@@ -529,8 +601,7 @@ void ConnPool::_listen(NetAddr listen_addr) {
         throw ConnPoolError(SALTI_ERROR_LISTEN, errno);
     if (::listen(listen_fd, max_listen_backlog) < 0)
         throw ConnPoolError(SALTI_ERROR_LISTEN, errno);
-    ev_listen = FdEvent(disp_ec, listen_fd,
-                std::bind(&ConnPool::accept_client, this, _1, _2));
+    ev_listen = FdEvent(disp_ec, listen_fd, std::bind(&ConnPool::accept_client, this, _1, _2, is_peer_to_peer));
     ev_listen.add(FdEvent::READ);
     SALTICIDAE_LOG_INFO("listening to %u, P2P = %d", ntohs(listen_addr.port), is_peer_to_peer);
 }
@@ -545,11 +616,7 @@ ConnPool::conn_t ConnPool::_connect(const NetAddr &addr_tcp) {
     conn->mode = Conn::ACTIVE;
     conn->addr_tcp = addr_tcp;
 
-    if(is_peer_to_peer) {
-        conn->fd_udp = _create_fd_udp();
-        conn->group_sock = _create_group_sock();
-        conn->send_buffer_udp.set_capacity(max_send_buff_size);
-    }
+    if (!udp_conn_set && is_peer_to_peer) _set_main_udp();
 
     add_conn(conn);
 
@@ -579,7 +646,7 @@ void ConnPool::del_conn(const conn_t &conn) {
     auto it = pool.find(conn->fd_tcp);
     assert(it != pool.end());
     pool.erase(it);
-    update_conn(conn, false, is_peer_to_peer);
+    update_conn(conn, false);
     release_conn(conn);
 }
 
@@ -590,8 +657,8 @@ void ConnPool::release_conn(const conn_t &conn) {
     conn->ev_socket_udp.clear();
     on_dispatcher_teardown(conn);
     ::close(conn->fd_tcp);
-    if (is_peer_to_peer) 
-        ::close(conn->fd_udp);
+
+    if (conn->fd_udp != -1) ::close(conn->fd_udp);
 }
 
 ConnPool::conn_t ConnPool::add_conn(const conn_t &conn) {

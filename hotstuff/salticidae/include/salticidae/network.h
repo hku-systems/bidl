@@ -136,16 +136,15 @@ class MsgNetwork: public ConnPool {
 
     void on_worker_setup(const ConnPool::conn_t &_conn) override {
         auto conn = static_pointer_cast<Conn>(_conn);
-        conn->ev_enqueue_poll = TimerEvent(conn->worker->get_ec(),
-            [this, conn](TimerEvent &) {
-                if (!incoming_msgs.enqueue(std::make_pair(conn->msg, conn), false)) {
-                    conn->msg_sleep = true;
-                    conn->ev_enqueue_poll.add(0);
-                    return;
-                }
-                conn->msg_sleep = false;
-                on_read(conn);
-            });
+        conn->ev_enqueue_poll = TimerEvent(conn->worker->get_ec(),[this, conn](TimerEvent &) {
+            if (!incoming_msgs.enqueue(std::make_pair(conn->msg, conn), false)) {
+                conn->msg_sleep = true;
+                conn->ev_enqueue_poll.add(0);
+                return;
+            }
+            conn->msg_sleep = false;
+            on_read(conn);
+        });
     }
 
     void on_worker_teardown(const ConnPool::conn_t &_conn) override {
@@ -289,7 +288,7 @@ class ClientNetwork: public MsgNetwork<OpcodeType> {
 
     protected:
     ConnPool::Conn *create_conn() override { return new Conn(); }
-    void on_dispatcher_setup(const ConnPool::conn_t &) override;
+    void on_dispatcher_setup(const ConnPool::conn_t &, const bool is_udp = false) override;
     void on_dispatcher_teardown(const ConnPool::conn_t &) override;
 
     public:
@@ -522,15 +521,14 @@ class PeerNetwork: public MsgNetwork<OpcodeType> {
     void finish_handshake(Peer *peer);
     void replace_pending_conn(const conn_t &conn);
     void start_active_conn(Peer *peer);
-    static void tcall_reset_timeout(ConnPool::Worker *worker,
-                                    const conn_t &conn, double timeout);
+    static void tcall_reset_timeout(ConnPool::Worker *worker, const conn_t &conn, double timeout);
     inline conn_t _get_peer_conn(const PeerId &peer) const;
 
     protected:
     ConnPool::Conn *create_conn() override { return new Conn(); }
     void on_worker_setup(const ConnPool::conn_t &) override;
     void on_worker_teardown(const ConnPool::conn_t &) override;
-    void on_dispatcher_setup(const ConnPool::conn_t &) override;
+    void on_dispatcher_setup(const ConnPool::conn_t &, const bool is_udp = false) override;
     void on_dispatcher_teardown(const ConnPool::conn_t &) override;
 
     PeerId _get_peer_id(const X509 *cert, const NetAddr &addr) {
@@ -648,9 +646,9 @@ void MsgNetwork<OpcodeType>::on_read(const ConnPool::conn_t &_conn) {
 
     ConnPool::on_read(_conn);
 
-    bool is_tcp = conn->recv_type == ConnPool::SendType::TCP;
+    bool is_udp = conn->recv_type == ConnPool::SendType::UDP;
 
-    auto& recv_buffer = (is_tcp) ? conn->recv_buffer_tcp : conn->recv_buffer_udp;
+    auto& recv_buffer = (is_udp) ? conn->recv_buffer_udp : conn->recv_buffer_tcp;
 
     auto &msg = conn->msg;
     auto &msg_state = conn->msg_state;
@@ -658,7 +656,7 @@ void MsgNetwork<OpcodeType>::on_read(const ConnPool::conn_t &_conn) {
     while (true) {
         if (msg_state == Conn::HEADER) {
             if (recv_buffer.size() < Msg::header_size) {
-                //SALTICIDAE_LOG_INFO("recv_buffer not enough data for Header size");
+                // SALTICIDAE_LOG_INFO("recv_buffer not enough data for Header size");
                 break;
             }
 
@@ -693,8 +691,6 @@ void MsgNetwork<OpcodeType>::on_read(const ConnPool::conn_t &_conn) {
             // if (msg.get_opcode() == 0x0)
             //     SALTICIDAE_LOG_INFO("incoming_msgs enqueue PROPOSAL");
 
-            //SALTICIDAE_LOG_INFO("incoming_msgs enqueue");
-
             if (!incoming_msgs.enqueue(std::make_pair(msg, conn), false)) {
                 SALTICIDAE_LOG_WARN("incoming_msgs enqueue retry ...");
                 conn->msg_sleep = true;
@@ -704,17 +700,18 @@ void MsgNetwork<OpcodeType>::on_read(const ConnPool::conn_t &_conn) {
         }
     }
 
-    //SALTICIDAE_LOG_WARN("exit on_read()");
+    // if (is_udp)
+    //     SALTICIDAE_LOG_WARN("exit on_read()");
 
     // resume reading from socket
     if (recv_buffer.len() < conn->max_recv_buff_size) {
-        if (is_tcp && conn->ready_recv_tcp) {
+        if (!is_udp && conn->ready_recv_tcp) {
             SALTICIDAE_LOG_INFO("resume TCP");
             conn->ev_socket_tcp.del();
             conn->ev_socket_tcp.add(FdEvent::READ | (conn->ready_send_tcp ? 0: FdEvent::WRITE));
             conn->recv_data_func(conn, conn->fd_tcp, FdEvent::READ, ConnPool::SendType::TCP);
         }
-        else if (!is_tcp && conn->ready_recv_udp) {
+        else if (is_udp && conn->ready_recv_udp) {
             SALTICIDAE_LOG_INFO("resume UDP");
             conn->ev_socket_udp.del();
             conn->ev_socket_udp.add(FdEvent::READ | (conn->ready_send_udp ? 0: FdEvent::WRITE));
@@ -763,12 +760,14 @@ inline bool MsgNetwork<OpcodeType>::_send_msg(const Msg &msg, const conn_t &conn
     conn->nsentb += msg.get_length();
 #endif
 
-    return conn->write(std::move(msg_data), is_prop);
+    if (is_prop)
+        return main_conn_send->write(std::move(msg_data), is_prop);
+    else
+        return conn->write(std::move(msg_data));
 }
 
 template<typename O, O _, O __>
-void PeerNetwork<O, _, __>::tcall_reset_timeout(ConnPool::Worker *worker,
-                                    const conn_t &conn, double timeout) {
+void PeerNetwork<O, _, __>::tcall_reset_timeout(ConnPool::Worker *worker, const conn_t &conn, double timeout) {
     worker->get_tcall()->async_call([worker, conn, t=timeout](ThreadCall::Handle &) {
         try {
             if (!conn->ev_timeout) return;
@@ -788,12 +787,12 @@ void PeerNetwork<O, _, __>::on_worker_setup(const ConnPool::conn_t &_conn) {
     assert(!ev_timeout);
     ev_timeout = TimerEvent(worker->get_ec(), [=](TimerEvent &) {
         try {
-            SALTICIDAE_LOG_INFO("%s%s%s: peer ping-pong timeout",
-                tty_secondary_color,
-                id_hex.c_str(),
-                tty_reset_color);
+            SALTICIDAE_LOG_INFO("%s%s%s: peer ping-pong timeout",tty_secondary_color,id_hex.c_str(),tty_reset_color);
             this->worker_terminate(conn);
-        } catch (...) { worker->error_callback(std::current_exception()); }
+        } 
+        catch (...) { 
+            worker->error_callback(std::current_exception()); 
+        }
     });
 }
 
@@ -808,11 +807,12 @@ void PeerNetwork<O, _, __>::on_worker_teardown(const ConnPool::conn_t &_conn) {
 
 /* the initial ping-pong to set up the connection */
 template<typename O, O _, O __>
-void PeerNetwork<O, _, __>::on_dispatcher_setup(const ConnPool::conn_t &_conn) {
-    MsgNet::on_dispatcher_setup(_conn);
+void PeerNetwork<O, _, __>::on_dispatcher_setup(const ConnPool::conn_t &_conn, const bool is_udp) {
+    MsgNet::on_dispatcher_setup(_conn, is_udp);
     auto conn = static_pointer_cast<Conn>(_conn);
     SALTICIDAE_LOG_INFO("%s%s%s: setup connection %s",tty_secondary_color,id_hex.c_str(),tty_reset_color,std::string(*conn).c_str());
     tcall_reset_timeout(conn->worker, conn, conn_timeout);
+    // if I _connect, then I send PING
     if (conn->get_mode() == Conn::ConnMode::ACTIVE)
     {
         auto pid = get_peer_id(conn, conn->get_addr());
@@ -827,9 +827,7 @@ void PeerNetwork<O, _, __>::on_dispatcher_setup(const ConnPool::conn_t &_conn) {
         else
         {
             pinfo_slock_t _g(known_peers_lock);
-            send_msg(MsgPing(
-                listen_addr,
-                it->second->get_nonce()), conn);
+            send_msg(MsgPing(listen_addr, it->second->get_nonce()), conn);
         }
     }
     else
@@ -1418,8 +1416,8 @@ inline int32_t PeerNetwork<O, _, __>::_multicast_msg(Msg &&msg, const std::vecto
 /* end: functions invoked by the user loop */
 
 template<typename OpcodeType>
-void ClientNetwork<OpcodeType>::on_dispatcher_setup(const ConnPool::conn_t &_conn) {
-    MsgNet::on_dispatcher_setup(_conn);
+void ClientNetwork<OpcodeType>::on_dispatcher_setup(const ConnPool::conn_t &_conn, const bool is_udp) {
+    MsgNet::on_dispatcher_setup(_conn, is_udp);
     auto conn = static_pointer_cast<Conn>(_conn);
     assert(conn->get_mode() == Conn::PASSIVE);
     const auto &addr = conn->get_addr();

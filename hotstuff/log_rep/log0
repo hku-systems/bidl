@@ -1,0 +1,232 @@
+2022-04-10 01:59:14.791224 [net info] loaded configuration from hotstuff.conf
+2022-04-10 01:59:14.791277 [net info] loading extra configuration from ./hotstuff-sec0.conf
+2022-04-10 01:59:14.791321 [hotstuff info] Pacemaker Base Timeout = 1.000000, Proposer Delay = 1.000000
+2022-04-10 01:59:14.791332 [hotstuff info] Replica Burst = 1000, Client Burst = 1000
+2022-04-10 01:59:14.791337 [hotstuff info] nworker = 6, clinworker = 6, repnworker = 6
+2022-04-10 01:59:14.793737 [hotstuff info] PeerNetwork Multicast Address = <NetAddr 230.1.1.1:30000>
+2022-04-10 01:59:14.793798 [hotstuff info] PeerNetwork Local Interface = <NetAddr 127.0.0.1:10000>
+2022-04-10 01:59:14.793820 [net info] starting all threads...
+2022-04-10 01:59:14.794007 [net info] listening to 10000, P2P = 1
+2022-04-10 01:59:14.796338 [net info] starting all threads...
+2022-04-10 01:59:14.796540 [net info] listening to 20000, P2P = 0
+2022-04-10 01:59:14.796738 [hotstuff info] ** starting the system with parameters **
+2022-04-10 01:59:14.796767 [hotstuff info] blk_size = 400
+2022-04-10 01:59:14.796772 [hotstuff info] conns = 0
+2022-04-10 01:59:14.796793 [hotstuff info] ** starting the event loop...
+2022-04-10 01:59:14.796861 [hotstuff proto] Pacemaker: stop rotation at 0
+2022-04-10 01:59:14.797444 [net info] set_main_udp
+2022-04-10 01:59:14.797869 [net info] created <Conn fd_tcp=130 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:10001> addr_udp=<NetAddr 0.0.0.0:0> mode=active>
+2022-04-10 01:59:14.798093 [net info] created <Conn fd_tcp=139 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:10002> addr_udp=<NetAddr 0.0.0.0:0> mode=active>
+2022-04-10 01:59:14.798287 [net info] created <Conn fd_tcp=142 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:10003> addr_udp=<NetAddr 0.0.0.0:0> mode=active>
+2022-04-10 01:59:14.798310 [net info] connected to remote <Conn fd_tcp=130 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:10001> addr_udp=<NetAddr 0.0.0.0:0> mode=active>
+2022-04-10 01:59:14.798320 [net info] connected to remote <Conn fd_tcp=139 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:10002> addr_udp=<NetAddr 0.0.0.0:0> mode=active>
+2022-04-10 01:59:14.798328 [net info] connected to remote <Conn fd_tcp=142 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:10003> addr_udp=<NetAddr 0.0.0.0:0> mode=active>
+2022-04-10 01:59:14.798355 [net info] 5d46afd81d: setup connection <Conn fd_tcp=130 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:10001> addr_udp=<NetAddr 0.0.0.0:0> mode=active>
+2022-04-10 01:59:14.798525 [net info] 5d46afd81d: setup connection <Conn fd_tcp=139 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:10002> addr_udp=<NetAddr 0.0.0.0:0> mode=active>
+2022-04-10 01:59:14.798547 [net info] 5d46afd81d: setup connection <Conn fd_tcp=142 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:10003> addr_udp=<NetAddr 0.0.0.0:0> mode=active>
+2022-04-10 01:59:14.798690 [net info] !!! UDP worker sender ?(1) 4136c700 got <Conn fd_tcp=-1 fd_udp=133 addr_tcp=<NetAddr 0.0.0.0:0> addr_udp=<NetAddr 230.1.1.1:30000> mode=active>
+2022-04-10 01:59:14.798734 [net info] !!! UDP worker sender ?(0) 4156d700 got <Conn fd_tcp=-1 fd_udp=136 addr_tcp=<NetAddr 0.0.0.0:0> addr_udp=<NetAddr 230.1.1.1:30000> mode=passive>
+2022-04-10 01:59:14.798923 [net info] accepted <Conn fd_tcp=143 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:34418> addr_udp=<NetAddr 0.0.0.0:0> mode=passive>
+2022-04-10 01:59:14.802506 [net info] accepted <Conn fd_tcp=146 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:34422> addr_udp=<NetAddr 0.0.0.0:0> mode=passive>
+2022-04-10 01:59:14.802548 [net info] 5d46afd81d: setup connection <Conn fd_tcp=143 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:34418> addr_udp=<NetAddr 0.0.0.0:0> mode=passive>
+2022-04-10 01:59:14.802727 [net info] accepted <Conn fd_tcp=149 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:34430> addr_udp=<NetAddr 0.0.0.0:0> mode=passive>
+2022-04-10 01:59:14.803219 [net info] 5d46afd81d: lost connection <Conn fd_tcp=139 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:10002> addr_udp=<NetAddr 0.0.0.0:0> mode=active>
+2022-04-10 01:59:14.803370 [net info] 5d46afd81d: lost connection <Conn fd_tcp=143 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:34418> addr_udp=<NetAddr 0.0.0.0:0> mode=passive>
+2022-04-10 01:59:14.803688 [net info] 5d46afd81d: setup connection <Conn fd_tcp=146 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:34422> addr_udp=<NetAddr 0.0.0.0:0> mode=passive>
+2022-04-10 01:59:14.803733 [net info] 5d46afd81d: setup connection <Conn fd_tcp=149 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:34430> addr_udp=<NetAddr 0.0.0.0:0> mode=passive>
+2022-04-10 01:59:14.804020 [net info] established 5d46afd81d <---> b110160655 (via <Conn fd_tcp=130 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:10001> addr_udp=<NetAddr 0.0.0.0:0> mode=active>)
+2022-04-10 01:59:14.804096 [net info] 5d46afd81d: ping from <Conn fd_tcp=130 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:10001> addr_udp=<NetAddr 0.0.0.0:0> mode=active>
+2022-04-10 01:59:14.804303 [net info] 5d46afd81d: lost connection <Conn fd_tcp=146 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:34422> addr_udp=<NetAddr 0.0.0.0:0> mode=passive>
+2022-04-10 01:59:14.804431 [net info] established 5d46afd81d <---> 09386f4d8a (via <Conn fd_tcp=149 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:34430> addr_udp=<NetAddr 0.0.0.0:0> mode=passive>)
+2022-04-10 01:59:14.804872 [net info] 5d46afd81d: ping from <Conn fd_tcp=149 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:34430> addr_udp=<NetAddr 0.0.0.0:0> mode=passive>
+2022-04-10 01:59:14.813756 [net info] established 5d46afd81d <---> cd50981188 (via <Conn fd_tcp=142 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:10003> addr_udp=<NetAddr 0.0.0.0:0> mode=active>)
+2022-04-10 01:59:14.813778 [net info] 5d46afd81d: ping from <Conn fd_tcp=142 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:10003> addr_udp=<NetAddr 0.0.0.0:0> mode=active>
+2022-04-10 01:59:21.615959 [net info] accepted <Conn fd_tcp=122 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:36132> addr_udp=<NetAddr 0.0.0.0:0> mode=passive>
+2022-04-10 01:59:21.616969 [net info] accepted <Conn fd_tcp=125 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:36134> addr_udp=<NetAddr 0.0.0.0:0> mode=passive>
+2022-04-10 01:59:21.618130 [net info] accepted <Conn fd_tcp=137 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:36142> addr_udp=<NetAddr 0.0.0.0:0> mode=passive>
+2022-04-10 01:59:21.621286 [net info] accepted <Conn fd_tcp=143 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:36154> addr_udp=<NetAddr 0.0.0.0:0> mode=passive>
+2022-04-10 01:59:25.792353 [hotstuff proto] Pacemaker: rotate to 1
+2022-04-10 01:59:26.793361 [hotstuff info] Pacemaker : new consensus : Start Timer 1
+2022-04-10 01:59:26.793602 [net info] socket(136) read 103 bytes
+2022-04-10 01:59:26.793766 [hotstuff proto] got <proposal rid=1 blk=75431f5230>, txn = 0, Stop Timer = 1
+2022-04-10 01:59:26.794245 [net info] socket(136) read 295 bytes
+2022-04-10 01:59:26.794741 [hotstuff proto] got <proposal rid=1 blk=0532ee15b8>, txn = 0, Stop Timer = 2
+2022-04-10 01:59:26.795297 [net info] socket(136) read 295 bytes
+2022-04-10 01:59:26.795960 [hotstuff proto] got <proposal rid=1 blk=5d8e4376cb>, txn = 0, Stop Timer = 3
+2022-04-10 01:59:26.796082 [net info] socket(136) read 295 bytes
+2022-04-10 01:59:26.796443 [net info] socket(136) read 807 bytes
+2022-04-10 01:59:26.797249 [hotstuff proto] got <proposal rid=1 blk=f871d2fed6>, txn = 0, Stop Timer = 4
+2022-04-10 01:59:26.797284 [hotstuff proto] Pacemaker: stop rotation at 1
+2022-04-10 01:59:26.797307 [hotstuff proto] commit <block id=75431f5230 txs=0 height=1 parent=6b7d92eaae qc_ref=6b7d92eaae>
+2022-04-10 01:59:26.797423 [hotstuff proto] got <proposal rid=1 blk=69a6b6a209>, txn = 16, Stop Timer = 5
+2022-04-10 01:59:26.797506 [hotstuff info] Pacemaker : reproposing : Start Timer 6
+2022-04-10 01:59:26.798583 [net info] socket(136) read 295 bytes
+2022-04-10 01:59:26.799242 [hotstuff proto] got <proposal rid=1 blk=6748c96163>, txn = 0, Stop Timer = 6
+2022-04-10 01:59:26.799766 [net info] socket(136) read 295 bytes
+2022-04-10 01:59:26.800466 [hotstuff proto] got <proposal rid=1 blk=b493e6f9f6>, txn = 0, Stop Timer = 7
+2022-04-10 01:59:26.801258 [net info] socket(136) read 295 bytes
+2022-04-10 01:59:26.801606 [hotstuff proto] got <proposal rid=1 blk=b8ebb6de58>, txn = 0, Stop Timer = 8
+2022-04-10 01:59:26.801630 [hotstuff proto] commit <block id=0532ee15b8 txs=0 height=2 parent=75431f5230 qc_ref=75431f5230>
+2022-04-10 01:59:26.801645 [hotstuff proto] commit <block id=5d8e4376cb txs=0 height=3 parent=0532ee15b8 qc_ref=0532ee15b8>
+2022-04-10 01:59:26.801662 [hotstuff proto] commit <block id=f871d2fed6 txs=0 height=4 parent=5d8e4376cb qc_ref=5d8e4376cb>
+2022-04-10 01:59:26.801675 [hotstuff proto] commit <block id=69a6b6a209 txs=16 height=5 parent=f871d2fed6 qc_ref=5d8e4376cb>
+2022-04-10 01:59:37.805371 [hotstuff proto] Pacemaker: rotate to 2
+2022-04-10 01:59:38.806470 [hotstuff info] Pacemaker : new consensus : Start Timer 9
+2022-04-10 01:59:38.806895 [net info] socket(136) read 295 bytes
+2022-04-10 01:59:38.808087 [hotstuff proto] got <proposal rid=2 blk=75934494a2>, txn = 0, Stop Timer = 9
+2022-04-10 01:59:38.809626 [net info] socket(136) read 295 bytes
+2022-04-10 01:59:38.813990 [hotstuff proto] got <proposal rid=2 blk=c30e0c0337>, txn = 0, Stop Timer = 10
+2022-04-10 01:59:38.815106 [net info] socket(136) read 295 bytes
+2022-04-10 01:59:38.816191 [hotstuff proto] got <proposal rid=2 blk=602d651702>, txn = 0, Stop Timer = 11
+2022-04-10 01:59:38.818687 [net info] socket(136) read 295 bytes
+2022-04-10 01:59:38.818717 [net info] socket(136) read 615 bytes
+2022-04-10 01:59:38.820560 [hotstuff proto] got <proposal rid=2 blk=af621f09a9>, txn = 0, Stop Timer = 12
+2022-04-10 01:59:38.820590 [hotstuff proto] commit <block id=6748c96163 txs=0 height=6 parent=69a6b6a209 qc_ref=69a6b6a209>
+2022-04-10 01:59:38.820604 [hotstuff proto] commit <block id=b493e6f9f6 txs=0 height=7 parent=6748c96163 qc_ref=6748c96163>
+2022-04-10 01:59:38.820617 [hotstuff proto] commit <block id=b8ebb6de58 txs=0 height=8 parent=b493e6f9f6 qc_ref=b493e6f9f6>
+2022-04-10 01:59:38.820689 [hotstuff proto] Pacemaker: stop rotation at 2
+2022-04-10 01:59:38.820712 [hotstuff proto] commit <block id=75934494a2 txs=0 height=9 parent=b8ebb6de58 qc_ref=b493e6f9f6>
+2022-04-10 01:59:38.820791 [hotstuff proto] got <proposal rid=2 blk=525a82e846>, txn = 10, Stop Timer = 13
+2022-04-10 01:59:38.820852 [hotstuff info] Pacemaker : reproposing : Start Timer 14
+2022-04-10 01:59:38.824105 [net info] socket(136) read 295 bytes
+2022-04-10 01:59:38.824461 [hotstuff proto] got <proposal rid=2 blk=c41a15f86b>, txn = 0, Stop Timer = 14
+2022-04-10 01:59:38.825813 [net info] socket(136) read 295 bytes
+2022-04-10 01:59:38.826386 [hotstuff proto] got <proposal rid=2 blk=d99b267440>, txn = 0, Stop Timer = 15
+2022-04-10 01:59:38.827907 [net info] socket(136) read 295 bytes
+2022-04-10 01:59:38.828179 [hotstuff proto] got <proposal rid=2 blk=4e698a7150>, txn = 0, Stop Timer = 16
+2022-04-10 01:59:38.828204 [hotstuff proto] commit <block id=c30e0c0337 txs=0 height=10 parent=75934494a2 qc_ref=75934494a2>
+2022-04-10 01:59:38.828219 [hotstuff proto] commit <block id=602d651702 txs=0 height=11 parent=c30e0c0337 qc_ref=c30e0c0337>
+2022-04-10 01:59:38.828232 [hotstuff proto] commit <block id=af621f09a9 txs=0 height=12 parent=602d651702 qc_ref=602d651702>
+2022-04-10 01:59:38.828245 [hotstuff proto] commit <block id=525a82e846 txs=10 height=13 parent=af621f09a9 qc_ref=602d651702>
+2022-04-10 01:59:47.776753 [net info] 5d46afd81d: ping from <Conn fd_tcp=149 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:34430> addr_udp=<NetAddr 0.0.0.0:0> mode=passive>
+2022-04-10 01:59:49.828436 [hotstuff proto] Pacemaker: rotate to 3
+2022-04-10 01:59:50.829727 [hotstuff info] Pacemaker : new consensus : Start Timer 17
+2022-04-10 01:59:50.830026 [net info] socket(136) read 295 bytes
+2022-04-10 01:59:50.830392 [hotstuff proto] got <proposal rid=3 blk=8518c1abb5>, txn = 0, Stop Timer = 17
+2022-04-10 01:59:50.831449 [net info] socket(136) read 295 bytes
+2022-04-10 01:59:50.831769 [hotstuff proto] got <proposal rid=3 blk=921e7fadd5>, txn = 0, Stop Timer = 18
+2022-04-10 01:59:50.832713 [net info] socket(136) read 295 bytes
+2022-04-10 01:59:50.833015 [hotstuff proto] got <proposal rid=3 blk=f091bad1d6>, txn = 0, Stop Timer = 19
+2022-04-10 01:59:50.834603 [net info] socket(136) read 295 bytes
+2022-04-10 01:59:50.835376 [hotstuff proto] got <proposal rid=3 blk=16263db4d3>, txn = 0, Stop Timer = 20
+2022-04-10 01:59:50.835426 [hotstuff proto] commit <block id=c41a15f86b txs=0 height=14 parent=525a82e846 qc_ref=525a82e846>
+2022-04-10 01:59:50.835505 [hotstuff proto] commit <block id=d99b267440 txs=0 height=15 parent=c41a15f86b qc_ref=c41a15f86b>
+2022-04-10 01:59:50.835523 [hotstuff proto] commit <block id=4e698a7150 txs=0 height=16 parent=d99b267440 qc_ref=d99b267440>
+2022-04-10 01:59:50.835528 [hotstuff proto] Pacemaker: stop rotation at 3
+2022-04-10 01:59:50.835543 [hotstuff proto] commit <block id=8518c1abb5 txs=0 height=17 parent=4e698a7150 qc_ref=d99b267440>
+2022-04-10 01:59:50.835611 [hotstuff info] Pacemaker : reproposing : Start Timer 21
+2022-04-10 01:59:50.835785 [net info] socket(136) read 903 bytes
+2022-04-10 01:59:50.836507 [hotstuff proto] got <proposal rid=3 blk=57416e2a2c>, txn = 19, Stop Timer = 21
+2022-04-10 01:59:50.837058 [net info] socket(136) read 295 bytes
+2022-04-10 01:59:50.837967 [hotstuff proto] got <proposal rid=3 blk=431e523672>, txn = 0, Stop Timer = 22
+2022-04-10 01:59:50.840168 [net info] socket(136) read 295 bytes
+2022-04-10 01:59:50.840978 [hotstuff proto] got <proposal rid=3 blk=6cebbecfe9>, txn = 0, Stop Timer = 23
+2022-04-10 01:59:50.842597 [net info] socket(136) read 295 bytes
+2022-04-10 01:59:50.843540 [hotstuff proto] got <proposal rid=3 blk=048e9959fb>, txn = 0, Stop Timer = 24
+2022-04-10 01:59:50.843564 [hotstuff proto] commit <block id=921e7fadd5 txs=0 height=18 parent=8518c1abb5 qc_ref=8518c1abb5>
+2022-04-10 01:59:50.843578 [hotstuff proto] commit <block id=f091bad1d6 txs=0 height=19 parent=921e7fadd5 qc_ref=921e7fadd5>
+2022-04-10 01:59:50.843591 [hotstuff proto] commit <block id=16263db4d3 txs=0 height=20 parent=f091bad1d6 qc_ref=f091bad1d6>
+2022-04-10 01:59:50.843603 [hotstuff proto] commit <block id=57416e2a2c txs=19 height=21 parent=16263db4d3 qc_ref=f091bad1d6>
+2022-04-10 01:59:56.789072 [net info] 5d46afd81d: ping from <Conn fd_tcp=142 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:10003> addr_udp=<NetAddr 0.0.0.0:0> mode=active>
+2022-04-10 01:59:58.479168 [net info] 5d46afd81d: ping from <Conn fd_tcp=130 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:10001> addr_udp=<NetAddr 0.0.0.0:0> mode=active>
+2022-04-10 02:00:01.847380 [hotstuff proto] Pacemaker: rotate to 0
+2022-04-10 02:00:02.848473 [hotstuff proto] propose <block id=4a2d5d3a66 txs=0 height=25 parent=048e9959fb qc_ref=6cebbecfe9> pmaker_count = 25
+2022-04-10 02:00:02.848492 [hotstuff proto] got <proposal rid=0 blk=4a2d5d3a66>, txn = 0, Stop Timer = 25
+2022-04-10 02:00:02.848557 [hotstuff proto] got <vote rid=0 blk=4a2d5d3a66>
+2022-04-10 02:00:02.848620 [hotstuff info] Pacemaker : new consensus : Start Timer 26
+2022-04-10 02:00:02.848730 [net info] socket(133) sent 295 bytes
+2022-04-10 02:00:02.848736 [net info] socket(136) read 295 bytes
+2022-04-10 02:00:02.848799 [hotstuff info] drop proposal
+2022-04-10 02:00:02.849338 [hotstuff proto] got <vote rid=3 blk=4a2d5d3a66>
+2022-04-10 02:00:02.849586 [hotstuff proto] got <vote rid=2 blk=4a2d5d3a66>
+2022-04-10 02:00:02.849602 [hotstuff proto] Pacemaker: got QC for block 0
+2022-04-10 02:00:02.849621 [hotstuff proto] propose <block id=69507359e3 txs=0 height=26 parent=4a2d5d3a66 qc_ref=4a2d5d3a66> pmaker_count = 26
+2022-04-10 02:00:02.849630 [hotstuff proto] got <proposal rid=0 blk=69507359e3>, txn = 0, Stop Timer = 26
+2022-04-10 02:00:02.849686 [hotstuff proto] got <vote rid=0 blk=69507359e3>
+2022-04-10 02:00:02.849727 [net info] socket(133) sent 295 bytes
+2022-04-10 02:00:02.849730 [net info] socket(136) read 295 bytes
+2022-04-10 02:00:02.849800 [hotstuff info] drop proposal
+2022-04-10 02:00:02.850721 [hotstuff proto] got <vote rid=1 blk=4a2d5d3a66>
+2022-04-10 02:00:02.850741 [hotstuff proto] got <vote rid=1 blk=69507359e3>
+2022-04-10 02:00:02.850914 [hotstuff proto] got <vote rid=3 blk=69507359e3>
+2022-04-10 02:00:02.850930 [hotstuff proto] Pacemaker: got QC for block 1
+2022-04-10 02:00:02.850949 [hotstuff proto] propose <block id=b2ae1b037a txs=0 height=27 parent=69507359e3 qc_ref=69507359e3> pmaker_count = 27
+2022-04-10 02:00:02.850959 [hotstuff proto] got <proposal rid=0 blk=b2ae1b037a>, txn = 0, Stop Timer = 27
+2022-04-10 02:00:02.851028 [hotstuff proto] got <vote rid=0 blk=b2ae1b037a>
+2022-04-10 02:00:02.851083 [hotstuff proto] got <vote rid=2 blk=69507359e3>
+2022-04-10 02:00:02.851098 [net info] socket(133) sent 295 bytes
+2022-04-10 02:00:02.851101 [net info] socket(136) read 295 bytes
+2022-04-10 02:00:02.851825 [hotstuff info] drop proposal
+2022-04-10 02:00:02.852184 [hotstuff proto] got <vote rid=2 blk=b2ae1b037a>
+2022-04-10 02:00:02.852203 [hotstuff proto] got <vote rid=3 blk=b2ae1b037a>
+2022-04-10 02:00:02.852222 [hotstuff proto] Pacemaker: got QC for block 2
+2022-04-10 02:00:02.852242 [hotstuff proto] commit <block id=431e523672 txs=0 height=22 parent=57416e2a2c qc_ref=57416e2a2c>
+2022-04-10 02:00:02.852256 [hotstuff proto] commit <block id=6cebbecfe9 txs=0 height=23 parent=431e523672 qc_ref=431e523672>
+2022-04-10 02:00:02.852269 [hotstuff proto] commit <block id=048e9959fb txs=0 height=24 parent=6cebbecfe9 qc_ref=6cebbecfe9>
+2022-04-10 02:00:02.852292 [hotstuff proto] Pacemaker: stop rotation at 0
+2022-04-10 02:00:02.852313 [hotstuff proto] commit <block id=4a2d5d3a66 txs=0 height=25 parent=048e9959fb qc_ref=6cebbecfe9>
+2022-04-10 02:00:02.852344 [hotstuff proto] propose <block id=e1457804eb txs=0 height=28 parent=b2ae1b037a qc_ref=b2ae1b037a> pmaker_count = 28
+2022-04-10 02:00:02.852374 [hotstuff proto] got <proposal rid=0 blk=e1457804eb>, txn = 0, Stop Timer = 28
+2022-04-10 02:00:02.852435 [hotstuff proto] got <vote rid=0 blk=e1457804eb>
+2022-04-10 02:00:02.852478 [hotstuff proto] got <vote rid=1 blk=b2ae1b037a>
+2022-04-10 02:00:02.852494 [hotstuff info] Pacemaker : reproposing : Start Timer 29
+2022-04-10 02:00:02.852500 [net info] socket(133) sent 295 bytes
+2022-04-10 02:00:02.852505 [net info] socket(136) read 295 bytes
+2022-04-10 02:00:02.852524 [hotstuff proto] propose <block id=90b66bd6e5 txs=18 height=29 parent=e1457804eb qc_ref=b2ae1b037a> pmaker_count = 29
+2022-04-10 02:00:02.852536 [hotstuff proto] got <proposal rid=0 blk=90b66bd6e5>, txn = 18, Stop Timer = 29
+2022-04-10 02:00:02.852591 [hotstuff proto] got <vote rid=0 blk=90b66bd6e5>
+2022-04-10 02:00:02.852632 [hotstuff info] drop proposal
+2022-04-10 02:00:02.852651 [net info] socket(133) sent 871 bytes
+2022-04-10 02:00:02.852654 [net info] socket(136) read 871 bytes
+2022-04-10 02:00:02.854852 [hotstuff info] drop proposal
+2022-04-10 02:00:02.855585 [hotstuff proto] got <vote rid=2 blk=e1457804eb>
+2022-04-10 02:00:02.855608 [hotstuff proto] got <vote rid=2 blk=90b66bd6e5>
+2022-04-10 02:00:02.855620 [hotstuff proto] got <vote rid=3 blk=e1457804eb>
+2022-04-10 02:00:02.855634 [hotstuff proto] got <vote rid=3 blk=90b66bd6e5>
+2022-04-10 02:00:02.855641 [hotstuff proto] Pacemaker: got QC for block 0
+2022-04-10 02:00:02.855659 [hotstuff proto] propose <block id=827703f2e5 txs=0 height=30 parent=90b66bd6e5 qc_ref=90b66bd6e5> pmaker_count = 30
+2022-04-10 02:00:02.855668 [hotstuff proto] got <proposal rid=0 blk=827703f2e5>, txn = 0, Stop Timer = 30
+2022-04-10 02:00:02.855723 [hotstuff proto] got <vote rid=0 blk=827703f2e5>
+2022-04-10 02:00:02.855766 [hotstuff proto] got <vote rid=1 blk=e1457804eb>
+2022-04-10 02:00:02.855781 [hotstuff proto] got <vote rid=1 blk=90b66bd6e5>
+2022-04-10 02:00:02.855787 [net info] socket(133) sent 295 bytes
+2022-04-10 02:00:02.855791 [net info] socket(136) read 295 bytes
+2022-04-10 02:00:02.855828 [hotstuff info] drop proposal
+2022-04-10 02:00:02.856532 [hotstuff proto] got <vote rid=2 blk=827703f2e5>
+2022-04-10 02:00:02.856715 [hotstuff proto] got <vote rid=1 blk=827703f2e5>
+2022-04-10 02:00:02.856729 [hotstuff proto] Pacemaker: got QC for block 1
+2022-04-10 02:00:02.856747 [hotstuff proto] propose <block id=0b726b0ed4 txs=0 height=31 parent=827703f2e5 qc_ref=827703f2e5> pmaker_count = 31
+2022-04-10 02:00:02.856755 [hotstuff proto] got <proposal rid=0 blk=0b726b0ed4>, txn = 0, Stop Timer = 31
+2022-04-10 02:00:02.856809 [hotstuff proto] got <vote rid=0 blk=0b726b0ed4>
+2022-04-10 02:00:02.856850 [hotstuff proto] got <vote rid=3 blk=827703f2e5>
+2022-04-10 02:00:02.856902 [net info] socket(133) sent 295 bytes
+2022-04-10 02:00:02.856905 [net info] socket(136) read 295 bytes
+2022-04-10 02:00:02.857312 [hotstuff info] drop proposal
+2022-04-10 02:00:02.857777 [hotstuff proto] got <vote rid=2 blk=0b726b0ed4>
+2022-04-10 02:00:02.857870 [hotstuff proto] got <vote rid=1 blk=0b726b0ed4>
+2022-04-10 02:00:02.857883 [hotstuff proto] Pacemaker: got QC for block 2
+2022-04-10 02:00:02.857902 [hotstuff proto] commit <block id=69507359e3 txs=0 height=26 parent=4a2d5d3a66 qc_ref=4a2d5d3a66>
+2022-04-10 02:00:02.857934 [hotstuff proto] commit <block id=b2ae1b037a txs=0 height=27 parent=69507359e3 qc_ref=69507359e3>
+2022-04-10 02:00:02.857969 [hotstuff proto] commit <block id=e1457804eb txs=0 height=28 parent=b2ae1b037a qc_ref=b2ae1b037a>
+2022-04-10 02:00:02.858005 [hotstuff proto] commit <block id=90b66bd6e5 txs=18 height=29 parent=e1457804eb qc_ref=b2ae1b037a>
+2022-04-10 02:00:02.858046 [hotstuff proto] propose <block id=b8f9fa30c8 txs=0 height=32 parent=0b726b0ed4 qc_ref=0b726b0ed4> pmaker_count = 32
+2022-04-10 02:00:02.858060 [hotstuff proto] got <proposal rid=0 blk=b8f9fa30c8>, txn = 0, Stop Timer = 32
+2022-04-10 02:00:02.858114 [hotstuff proto] got <vote rid=0 blk=b8f9fa30c8>
+2022-04-10 02:00:02.859421 [net info] socket(133) sent 295 bytes
+2022-04-10 02:00:02.859425 [net info] socket(136) read 295 bytes
+2022-04-10 02:00:02.860355 [hotstuff info] drop proposal
+2022-04-10 02:00:02.861768 [hotstuff proto] got <vote rid=3 blk=0b726b0ed4>
+2022-04-10 02:00:02.862434 [hotstuff proto] got <vote rid=2 blk=b8f9fa30c8>
+2022-04-10 02:00:02.862454 [hotstuff proto] got <vote rid=3 blk=b8f9fa30c8>
+2022-04-10 02:00:02.862463 [hotstuff proto] Pacemaker: got QC for block 3
+2022-04-10 02:00:02.862587 [hotstuff proto] got <vote rid=1 blk=b8f9fa30c8>
+2022-04-10 02:00:04.508508 [net info] elapsed: 49.717 (wall) 49.736 (cpu)
+2022-04-10 02:00:04.508650 [net info] stopping all threads...
+2022-04-10 02:00:04.510497 [net info] stopping all threads...
+2022-04-10 02:00:04.511863 [net info] 5d46afd81d: lost connection <Conn fd_tcp=149 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:34430> addr_udp=<NetAddr 0.0.0.0:0> mode=passive>
+2022-04-10 02:00:04.511909 [net info] ended 5d46afd81d <-/-> 09386f4d8a (via <Conn fd_tcp=149 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:34430> addr_udp=<NetAddr 0.0.0.0:0> mode=passive>)
+2022-04-10 02:00:04.511945 [net info] 5d46afd81d: lost connection <Conn fd_tcp=142 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:10003> addr_udp=<NetAddr 0.0.0.0:0> mode=active>
+2022-04-10 02:00:04.511954 [net info] ended 5d46afd81d <-/-> cd50981188 (via <Conn fd_tcp=142 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:10003> addr_udp=<NetAddr 0.0.0.0:0> mode=active>)
+2022-04-10 02:00:04.511975 [net info] 5d46afd81d: lost connection <Conn fd_tcp=130 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:10001> addr_udp=<NetAddr 0.0.0.0:0> mode=active>
+2022-04-10 02:00:04.511983 [net info] ended 5d46afd81d <-/-> b110160655 (via <Conn fd_tcp=130 fd_udp=-1 addr_tcp=<NetAddr 127.0.0.1:10001> addr_udp=<NetAddr 0.0.0.0:0> mode=active>)
+2022-04-10 02:00:04.512000 [net info] 5d46afd81d: lost connection <Conn fd_tcp=-1 fd_udp=133 addr_tcp=<NetAddr 0.0.0.0:0> addr_udp=<NetAddr 230.1.1.1:30000> mode=active>
