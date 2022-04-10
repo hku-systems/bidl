@@ -303,7 +303,7 @@ class PMRoundRobinProposer: virtual public PaceMaker {
         // HOTSTUFF_LOG_INFO("Pacemaker : new consensus : Start Timer %d", this->hsc->pmaker_count);
 
         timer = TimerEvent(ec, [this](TimerEvent &){ rotate(); });
-        timer.add(prop_delay);
+        timer.add(prop_delay); // if after prop_delay second and no consensus reach, rotate to next leader
     }
 
     /* role transitions */
@@ -343,7 +343,7 @@ class PMRoundRobinProposer: virtual public PaceMaker {
             hs->get_tcall().async_call([this, hs](salticidae::ThreadCall::Handle &) {
                 auto &pending = hs->get_decision_waiting();
 
-                if (!pending.size() || pending.size() > blk_size) return;
+                if (!pending.size()) return;
 
                 // hsc->timer_recv_prop.add(hsc->recv_timeout);
                 // HOTSTUFF_LOG_INFO("Pacemaker : reproposing : Start Timer %d", this->hsc->pmaker_count);
@@ -351,10 +351,9 @@ class PMRoundRobinProposer: virtual public PaceMaker {
                 std::vector<uint256_t> cmds;
                 for (auto &p: pending)
                     cmds.push_back(p.first);
-
-                do_new_consensus(0, cmds);
+                HOTSTUFF_LOG_INFO("Pacemaker : reproposing cmds = %d", cmds.size());
                 
-                HOTSTUFF_LOG_INFO("Pacemaker : reproposing");
+                do_new_consensus(0, cmds);
             });
         }
         // else {
