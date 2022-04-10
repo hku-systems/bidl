@@ -384,8 +384,6 @@ int ConnPool::_create_fd_udp(const bool is_sender) {
         _multicast_setup_send_fd(_fd_udp);
     else
         _multicast_setup_recv_fd(_fd_udp);
-    // _multicast_setup_send_fd(_fd_udp);
-    // _multicast_setup_recv_fd(_fd_udp);
 
     return _fd_udp;
 }
@@ -465,8 +463,6 @@ void ConnPool::_set_main_udp() {
     // Send Thread - Main Conn Send 
     main_conn_send = create_conn();
     main_conn_send->send_buffer_udp.set_capacity(max_send_buff_size);
-    main_conn_send->recv_chunk_size = recv_chunk_size;
-    main_conn_send->max_recv_buff_size = max_recv_buff_size;
     main_conn_send->cpool = this;
     main_conn_send->mode = Conn::ACTIVE;
     main_conn_send->fd_udp = _create_fd_udp(true);
@@ -481,13 +477,11 @@ void ConnPool::_set_main_udp() {
 
     // Recv Thread - Main Conn Recv 
     main_conn_recv = create_conn();
-    // main_conn_send->send_buffer_udp.set_capacity(max_send_buff_size);
-    main_conn_recv->recv_chunk_size = recv_chunk_size;
-    main_conn_recv->max_recv_buff_size = max_recv_buff_size;
+    main_conn_recv->recv_chunk_size = recv_chunk_size * 16; // 64KB
+    main_conn_recv->max_recv_buff_size = max_recv_buff_size * 16; // 64KB
     main_conn_recv->cpool = this;
     main_conn_recv->mode = Conn::PASSIVE;
     main_conn_recv->fd_udp = _create_fd_udp(false);
-    // main_conn_recv->group_addr = _set_group_addr();
     main_conn_recv->addr_udp= multicast_addr;
 
     auto &worker_recv = get_worker_udp(2);
