@@ -160,8 +160,8 @@ class ConnPool {
             bool ret;
 
             if (is_prop) {
+                // SALTICIDAE_LOG_INFO("send_buffer_udp PUSH %zd bytes", data.size());
                 ret = send_buffer_udp.push(std::move(data), !cpool->max_send_buff_size);
-                //SALTICIDAE_LOG_INFO("send_buffer_udp PUSH to main_conn_send");
             }
             else {
                 ret = send_buffer_tcp.push(std::move(data), !cpool->max_send_buff_size);

@@ -70,14 +70,14 @@ void ConnPool::Conn::_send_data(const conn_t &conn, int fd, int events, int send
         conn->cpool->worker_terminate(conn);
         return;
     }
-    ssize_t ret = conn->recv_chunk_size;
+    ssize_t ret;
 
     auto& send_buffer = (is_udp) ? conn->send_buffer_udp : conn->send_buffer_tcp ;
 
     try {
         for (;;) {
             bytearray_t buff_seg = send_buffer.move_pop(); // extract all data from send_buffer, since it has size 0
-            ssize_t size = buff_seg.size();
+            ssize_t size = buff_seg.size(); // total remaining
             
             if (!size) break;
 
@@ -87,9 +87,6 @@ void ConnPool::Conn::_send_data(const conn_t &conn, int fd, int events, int send
                 SALTICIDAE_LOG_INFO("socket(%d) sending %zd bytes", fd, size);
                 ret = sendto(fd, buff_seg.data(), size, 0, (struct sockaddr*)& conn->group_addr, sizeof(conn->group_addr));
             }
-            
-            // if (is_udp) 
-            //     SALTICIDAE_LOG_INFO("socket(%d) sent %zd bytes", fd, ret);
 
             size -= ret;
 
@@ -484,13 +481,13 @@ void ConnPool::_set_main_udp() {
 
     // Recv Thread - Main Conn Recv 
     main_conn_recv = create_conn();
-    main_conn_send->send_buffer_udp.set_capacity(max_send_buff_size);
+    // main_conn_send->send_buffer_udp.set_capacity(max_send_buff_size);
     main_conn_recv->recv_chunk_size = recv_chunk_size;
     main_conn_recv->max_recv_buff_size = max_recv_buff_size;
     main_conn_recv->cpool = this;
     main_conn_recv->mode = Conn::PASSIVE;
     main_conn_recv->fd_udp = _create_fd_udp(false);
-    main_conn_recv->group_addr = _set_group_addr();
+    // main_conn_recv->group_addr = _set_group_addr();
     main_conn_recv->addr_udp= multicast_addr;
 
     auto &worker_recv = get_worker_udp(2);

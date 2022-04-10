@@ -167,7 +167,9 @@ block_t HotStuffCore::on_propose(const std::vector<uint256_t> &cmds, const std::
 
     /* create the new block */
     block_t bnew = storage->add_blk(
-        new Block(parents, cmds,
+        new Block(
+            parents, 
+            cmds,
             hqc.second->clone(), 
             std::move(extra),
             parents[0]->height + 1,

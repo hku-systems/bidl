@@ -77,8 +77,7 @@ class HotStuffCore {
     double default_timeout;
     double recv_timeout;
     uint64_t pmaker_count; // represents the Proposal sequence number, +1 monolithically increasing per UDP multicast
-    ReplicaID current_leader;
-
+ 
     BoxObj<EntityStorage> storage;
 
     HotStuffCore(ReplicaID id, privkey_bt &&priv_key);
