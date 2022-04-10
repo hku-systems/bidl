@@ -31,12 +31,14 @@ class PaceMaker {
     protected:
     HotStuffCore *hsc;
     public:
+    size_t blk_size;
 
     virtual ~PaceMaker() = default;
     /** Initialize the PaceMaker. A derived class should also call the
      * default implementation to set `hsc`. */
-    virtual void init(HotStuffCore *_hsc) { 
+    virtual void init(HotStuffCore *_hsc, size_t _blk_size) { 
         hsc = _hsc; 
+        blk_size = _blk_size;
     }
     /** Get a promise resolved when the pace maker thinks it is a *good* time
      * to issue new commands. When promise is resolved, the replica should
@@ -186,8 +188,8 @@ class PMWaitQC: public virtual PaceMaker {
 struct PaceMakerDummy: public PMHighTail, public PMWaitQC {
     PaceMakerDummy(int32_t parent_limit):
         PMHighTail(parent_limit), PMWaitQC() {}
-    void init(HotStuffCore *hsc) override {
-        PaceMaker::init(hsc);
+    void init(HotStuffCore *hsc, size_t blk_size) override {
+        PaceMaker::init(hsc, blk_size);
         PMHighTail::init();
         PMWaitQC::init();
     }
@@ -341,8 +343,7 @@ class PMRoundRobinProposer: virtual public PaceMaker {
             hs->get_tcall().async_call([this, hs](salticidae::ThreadCall::Handle &) {
                 auto &pending = hs->get_decision_waiting();
 
-                if (!pending.size()) return;
-                // HOTSTUFF_LOG_INFO("Pacemaker : reproposing");
+                if (!pending.size() || pending.size() > blk_size) return;
 
                 // hsc->timer_recv_prop.add(hsc->recv_timeout);
                 // HOTSTUFF_LOG_INFO("Pacemaker : reproposing : Start Timer %d", this->hsc->pmaker_count);
@@ -352,20 +353,22 @@ class PMRoundRobinProposer: virtual public PaceMaker {
                     cmds.push_back(p.first);
 
                 do_new_consensus(0, cmds);
+                
+                HOTSTUFF_LOG_INFO("Pacemaker : reproposing");
             });
         }
-        else {
-            auto hs = static_cast<hotstuff::HotStuffBase *>(hsc);
-            hs->get_tcall().async_call([this, hs](salticidae::ThreadCall::Handle &) {
-                auto &pending = hs->get_decision_waiting();
+        // else {
+        //     auto hs = static_cast<hotstuff::HotStuffBase *>(hsc);
+        //     hs->get_tcall().async_call([this, hs](salticidae::ThreadCall::Handle &) {
+        //         auto &pending = hs->get_decision_waiting();
 
-                if (!pending.size()) return;
-                // HOTSTUFF_LOG_INFO("Pacemaker : reproposing");
+        //         if (!pending.size()) return;
+        //         // HOTSTUFF_LOG_INFO("Pacemaker : reproposing");
 
-                // hsc->timer_recv_prop.add(hsc->recv_timeout);
-                // HOTSTUFF_LOG_INFO("Pacemaker : reproposing : Start Timer %d", this->hsc->pmaker_count);
-            });
-        }
+        //         // hsc->timer_recv_prop.add(hsc->recv_timeout);
+        //         // HOTSTUFF_LOG_INFO("Pacemaker : reproposing : Start Timer %d", this->hsc->pmaker_count);
+        //     });
+        // }
     }
 
     protected:
@@ -426,8 +429,8 @@ struct PaceMakerRR: public PMHighTail, public PMRoundRobinProposer {
         PMHighTail(parent_limit),
         PMRoundRobinProposer(ec, base_timeout, prop_delay) {}
 
-    void init(HotStuffCore *hsc) override {
-        PaceMaker::init(hsc);
+    void init(HotStuffCore *hsc, size_t blk_size) override {
+        PaceMaker::init(hsc, blk_size);
         PMHighTail::init();
         PMRoundRobinProposer::init();
 

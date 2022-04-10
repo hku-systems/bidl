@@ -472,7 +472,7 @@ void HotStuffBase::start(std::vector<std::tuple<NetAddr, pubkey_bt, uint256_t>> 
         LOG_WARN("too few replicas in the system to tolerate any failure");
     on_init(nfaulty);
     
-    pmaker->init(this);
+    pmaker->init(this, blk_size);
 
     if (ec_loop)
         ec.dispatch();
