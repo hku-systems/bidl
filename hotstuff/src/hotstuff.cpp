@@ -209,8 +209,12 @@ void HotStuffBase::propose_handler(MsgPropose &&msg, const Net::conn_t &conn) {
 
     auto &prop = msg.proposal;
 
-    if (prop.proposer == get_id() || prop.proposer != pmaker->get_proposer()) {
-        LOG_INFO("drop proposal");
+    if (prop.proposer == get_id()) {
+        LOG_INFO("drop proposal from myself");
+        return;
+    }
+    else if (prop.proposer != pmaker->get_proposer()) {
+        LOG_INFO("drop proposal from invalid proposer %d", prop.proposer);
         return;
     }
 
