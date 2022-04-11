@@ -384,7 +384,8 @@ HotStuffBase::HotStuffBase(
         part_gened(0),
         part_delivery_time(0),
         part_delivery_time_min(double_inf),
-        part_delivery_time_max(0)
+        part_delivery_time_max(0),
+        cmd_pending_count(0)
 {
     /* register the handlers for msg from replicas */
     pn.reg_handler(salticidae::generic_bind(&HotStuffBase::propose_handler, this, _1, _2));
@@ -490,7 +491,16 @@ void HotStuffBase::start(std::vector<std::tuple<NetAddr, pubkey_bt, uint256_t>> 
             else
                 e.second(Finality(id, 0, 0, 0, cmd_hash, uint256_t()));
 
-            if (proposer != get_id()) continue;
+            if (proposer != get_id()) {
+                cmd_pending_count++;
+
+                if (cmd_pending_count >= blk_size) {
+                    timer_recv_prop.add(recv_timeout);
+                    HOTSTUFF_LOG_INFO("Pacemaker : Recv : Form Block : 400 txns, Start Timer %d", pmaker_count);
+                    cmd_pending_count -= blk_size;
+                }
+                continue;
+            }
             /* Following Operations are done by Leader only */
 
             cmd_pending_buffer.push(cmd_hash);
@@ -502,6 +512,7 @@ void HotStuffBase::start(std::vector<std::tuple<NetAddr, pubkey_bt, uint256_t>> 
                     cmds.push_back(cmd_pending_buffer.front());
                     cmd_pending_buffer.pop();
                 }
+
                 
                 // when pacemaker think HotStuff is ready to issue new cmds
                 pmaker->beat().then([this, cmds = std::move(cmds)](ReplicaID proposer) {
@@ -513,12 +524,11 @@ void HotStuffBase::start(std::vector<std::tuple<NetAddr, pubkey_bt, uint256_t>> 
 
                         on_propose(cmds, pmaker->get_parents(), bytearray_t(length_of_propose)); 
 #else
-                        HOTSTUFF_LOG_INFO("Form Block : txns = %d", cmds.size());
                         on_propose(cmds, pmaker->get_parents(), bytearray_t()); 
 #endif
                     }
-                    // timer_recv_prop.add(recv_timeout);
-                    // HOTSTUFF_LOG_INFO("Pacemaker : Form Block : 400 txns, Start Timer %d", pmaker_count);
+                    timer_recv_prop.add(recv_timeout);
+                    HOTSTUFF_LOG_INFO("Pacemaker : Send : Form Block : 400 txns, Start Timer %d", pmaker_count);
                 });
                 return true;
             }

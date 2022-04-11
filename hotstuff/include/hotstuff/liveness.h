@@ -302,8 +302,8 @@ class PMRoundRobinProposer: virtual public PaceMaker {
         if (proposer == hsc->get_id())
             do_new_consensus(0, std::vector<uint256_t>{});
 
-        // hsc->timer_recv_prop.add(hsc->recv_timeout);
-        // HOTSTUFF_LOG_INFO("Pacemaker : new consensus : Start Timer %d", this->hsc->pmaker_count);
+        hsc->timer_recv_prop.add(hsc->recv_timeout);
+        HOTSTUFF_LOG_INFO("Pacemaker : new consensus : Start Timer %d", this->hsc->pmaker_count);
 
         timer = TimerEvent(ec, [this](TimerEvent &){ rotate(); });
         timer.add(prop_delay); // if after prop_delay second and no consensus reach, rotate to next leader
@@ -347,30 +347,29 @@ class PMRoundRobinProposer: virtual public PaceMaker {
                 auto &pending = hs->get_decision_waiting();
 
                 if (!pending.size()) return;
-
-                // hsc->timer_recv_prop.add(hsc->recv_timeout);
-                // HOTSTUFF_LOG_INFO("Pacemaker : reproposing : Start Timer %d", this->hsc->pmaker_count);
-
+                
                 std::vector<uint256_t> cmds;
                 for (auto &p: pending)
                     cmds.push_back(p.first);
-                HOTSTUFF_LOG_INFO("Pacemaker : reproposing cmds = %d", cmds.size());
+
+                hsc->timer_recv_prop.add(hsc->recv_timeout);
+                HOTSTUFF_LOG_INFO("Pacemaker : reproposing cmds = %d : Start Timer %d", cmds.size(), this->hsc->pmaker_count);
                 
                 do_new_consensus(0, cmds);
             });
         }
-        // else {
-        //     auto hs = static_cast<hotstuff::HotStuffBase *>(hsc);
-        //     hs->get_tcall().async_call([this, hs](salticidae::ThreadCall::Handle &) {
-        //         auto &pending = hs->get_decision_waiting();
+        else {
+            auto hs = static_cast<hotstuff::HotStuffBase *>(hsc);
+            hs->get_tcall().async_call([this, hs](salticidae::ThreadCall::Handle &) {
+                auto &pending = hs->get_decision_waiting();
 
-        //         if (!pending.size()) return;
-        //         // HOTSTUFF_LOG_INFO("Pacemaker : reproposing");
+                if (!pending.size()) return;
+                // HOTSTUFF_LOG_INFO("Pacemaker : reproposing");
 
-        //         // hsc->timer_recv_prop.add(hsc->recv_timeout);
-        //         // HOTSTUFF_LOG_INFO("Pacemaker : reproposing : Start Timer %d", this->hsc->pmaker_count);
-        //     });
-        // }
+                hsc->timer_recv_prop.add(hsc->recv_timeout);
+                HOTSTUFF_LOG_INFO("Pacemaker : reproposing : Start Timer %d", this->hsc->pmaker_count);
+            });
+        }
     }
 
     protected:
@@ -436,18 +435,18 @@ struct PaceMakerRR: public PMHighTail, public PMRoundRobinProposer {
         PMHighTail::init();
         PMRoundRobinProposer::init();
 
-        // hsc->timer_recv_prop = TimerEvent(this->ec, [this](TimerEvent &){ 
-        //     ReplicaID proposer = get_proposer();
-        //     ReplicaID requester = this->hsc->get_id();
-        //     RetransRequest request = RetransRequest(requester, this->hsc->pmaker_count, this->hsc);
+        hsc->timer_recv_prop = TimerEvent(this->ec, [this](TimerEvent &){ 
+            ReplicaID proposer = get_proposer();
+            ReplicaID requester = this->hsc->get_id();
+            RetransRequest request = RetransRequest(requester, this->hsc->pmaker_count, this->hsc);
 
-        //     if (proposer != requester) {
-        //         this->hsc->on_request(proposer, request);
-        //         HOTSTUFF_LOG_PROTO("Pacemaker : TIMEOUT! : sending %s to Proposer %d", std::string(request).c_str(), proposer);
-        //     }
+            if (proposer != requester) {
+                this->hsc->on_request(proposer, request);
+                HOTSTUFF_LOG_PROTO("Pacemaker : TIMEOUT! : sending %s to Proposer %d", std::string(request).c_str(), proposer);
+            }
 
-        //     this->hsc->recv_timeout = this->hsc->recv_timeout * 2; // Exponential Backoff
-        // });
+            this->hsc->recv_timeout = this->hsc->recv_timeout * 2; // Exponential Backoff
+        });
 
     }
 };
