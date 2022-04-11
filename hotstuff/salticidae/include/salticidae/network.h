@@ -752,7 +752,7 @@ inline bool MsgNetwork<OpcodeType>::_send_msg(const Msg &msg, const conn_t &conn
 
     bool is_prop = msg.get_opcode() == 0x0;
     // if (is_prop)
-    //     SALTICIDAE_LOG_INFO("sending msg opcode = %d", msg.get_opcode());
+    //     SALTICIDAE_LOG_INFO("multicasting proposal = %s", std::string(msg).c_str());
 
 
 #ifdef SALTICIDAE_MSG_STAT
