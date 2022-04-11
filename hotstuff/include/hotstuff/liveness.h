@@ -237,6 +237,8 @@ class PMRoundRobinProposer: virtual public PaceMaker {
     promise_t pm_wait_propose;
     promise_t pm_qc_manual;
 
+
+    // now I am leader, record my proposed block
     void reg_proposal() {
         hsc->async_wait_proposal().then([this](const Proposal &prop) {
             auto &pblk = prop_blk[hsc->get_id()];
@@ -245,6 +247,7 @@ class PMRoundRobinProposer: virtual public PaceMaker {
         });
     }
 
+    // I am a receiver, record the received block
     void reg_receive_proposal() {
         hsc->async_wait_receive_proposal().then([this](const Proposal &prop) {
             auto &pblk = prop_blk[prop.proposer];
@@ -413,7 +416,7 @@ class PMRoundRobinProposer: virtual public PaceMaker {
         else
             return promise_t([proposer=proposer](promise_t &pm) {
                 pm.resolve(proposer);
-            });
+        });
     }
 
     promise_t beat_resp(ReplicaID last_proposer) override {

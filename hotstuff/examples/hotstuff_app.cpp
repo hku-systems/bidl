@@ -169,9 +169,9 @@ int main(int argc, char **argv) {
     auto opt_base_timeout = Config::OptValDouble::create(1);
     auto opt_prop_delay = Config::OptValDouble::create(1);
     auto opt_imp_timeout = Config::OptValDouble::create(11);
-    auto opt_nworker = Config::OptValInt::create(1);
-    auto opt_repnworker = Config::OptValInt::create(1);
-    auto opt_repburst = Config::OptValInt::create(100);
+    auto opt_nworker = Config::OptValInt::create(1); // threads for verification pool 
+    auto opt_repnworker = Config::OptValInt::create(1);  // threads for replica send and recv
+    auto opt_repburst = Config::OptValInt::create(100); // threads for client send and recv
     auto opt_clinworker = Config::OptValInt::create(8);
     auto opt_cliburst = Config::OptValInt::create(1000);
     auto opt_notls = Config::OptValFlag::create(false);
