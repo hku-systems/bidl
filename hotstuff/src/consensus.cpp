@@ -43,7 +43,7 @@ HotStuffCore::HotStuffCore(ReplicaID id, privkey_bt &&priv_key):
 {
     storage->add_blk(b0);
     pmaker_count = 1;
-    default_timeout = 50.0 / 1000;
+    default_timeout = 100.0 / 1000;
     recv_timeout = default_timeout; // in micro-second
 }
 
@@ -300,7 +300,7 @@ void HotStuffCore::on_receive_retrans_request(const RetransRequest &request) {
     block_t blk = storage->find_blk(request.pmaker_count);
 
     if (blk != nullptr) {
-        LOG_PROTO("on_receive_retrans_request : sending proposal to %d", request.requester);
+        LOG_PROTO("on_receive_retrans_request : mutlicast again");
         Proposal prop(id, blk, nullptr);
         do_retransmit_prop(request.requester, prop);
     }

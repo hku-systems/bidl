@@ -220,6 +220,14 @@ void HotStuffBase::propose_handler(MsgPropose &&msg, const Net::conn_t &conn) {
         return;
     }
 
+    if (storage->is_blk_received(blk->get_hash())) {
+        LOG_INFO("drop proposal received");
+        return;
+    }
+    else {
+        storage->add_blk_recv(blk->get_hash());
+    }
+
     // if (peer != get_config().get_peer_id(prop.proposer)) {
     //     LOG_WARN("invalid proposal conn fd_udp = %d", conn->get_fd_udp());
     //     return;
