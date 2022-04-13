@@ -673,6 +673,7 @@ void MsgNetwork<OpcodeType>::on_read(const ConnPool::conn_t &_conn) {
         if (msg_state == Conn::PAYLOAD) {
             size_t len = msg.get_length(); // payload size
 
+            // if there is data packet loss
             if (recv_buffer.size() < len) {
                 SALTICIDAE_LOG_INFO("recv_buffer.size() = %zd < Payload Size %zd", recv_buffer.size(), len);
                 break;

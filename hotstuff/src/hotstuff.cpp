@@ -374,8 +374,10 @@ HotStuffBase::HotStuffBase(
     pacemaker_bt pmaker,
     EventContext ec,
     size_t nworker,
-    const Net::Config &netconfig):
-        HotStuffCore(rid, std::move(priv_key)),
+    const Net::Config &netconfig,
+    double recv_timeout
+    ):
+        HotStuffCore(rid, std::move(priv_key), recv_timeout),
         listen_addr(listen_addr),
         blk_size(blk_size),
         ec(ec),

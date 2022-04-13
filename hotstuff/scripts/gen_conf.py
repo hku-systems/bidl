@@ -20,8 +20,10 @@ if __name__ == "__main__":
     parser.add_argument('--clinworker', type=int, default=4)
     parser.add_argument('--repburst', type=int, default=1000)
     parser.add_argument('--cliburst', type=int, default=1000)
-    parser.add_argument('--multicast_addr', type=str, default="230.1.1.1:30000")
+    parser.add_argument('--multicast_addr', type=str, default="230.1.1.1:10000")
     parser.add_argument('--prop-delay', type=float, default=1.0)
+    parser.add_argument('--recv-timeout', type=float, default=100)
+
     args = parser.parse_args()
 
 
@@ -77,6 +79,9 @@ if __name__ == "__main__":
 
     if args.prop_delay is not None:
         main_conf.write("prop-delay = {}\n".format(args.prop_delay))
+    
+    if args.recv_timeout is not None:
+        main_conf.write("recv-timeout = {}\n".format(args.recv_timeout))
 
     for r in zip(replicas, keys, tls_keys, itertools.count(0)):
         main_conf.write("replica = {}, {}, {}\n".format(r[0], r[1][0], r[2][2]))

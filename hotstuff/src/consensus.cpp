@@ -30,7 +30,7 @@ namespace hotstuff {
 
 /* The core logic of HotStuff, is fairly simple :). */
 /*** begin HotStuff protocol logic ***/
-HotStuffCore::HotStuffCore(ReplicaID id, privkey_bt &&priv_key):
+HotStuffCore::HotStuffCore(ReplicaID id, privkey_bt &&priv_key, double _recv_timeout):
     b0(new Block(true, 1)),
     b_lock(b0),
     b_exec(b0),
@@ -39,12 +39,14 @@ HotStuffCore::HotStuffCore(ReplicaID id, privkey_bt &&priv_key):
     tails{b0},
     vote_disabled(false),
     id(id),
-    storage(new EntityStorage()) 
+    storage(new EntityStorage()),
+    default_timeout(_recv_timeout) 
 {
     storage->add_blk(b0);
     pmaker_count = 1;
-    default_timeout = 100.0 / 1000;
     recv_timeout = default_timeout; // in micro-second
+    LOG_WARN("default_timeout = %.2lf", default_timeout);
+
 }
 
 void HotStuffCore::sanity_check_delivered(const block_t &blk) {

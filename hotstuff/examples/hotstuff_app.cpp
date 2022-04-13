@@ -131,7 +131,8 @@ class HotStuffApp: public HotStuff {
         const EventContext &ec,
         size_t nworker,
         const Net::Config &repnet_config,
-        const ClientNetwork<opcode_t>::Config &clinet_config
+        const ClientNetwork<opcode_t>::Config &clinet_config,
+        double recv_timeout
     );
 
     void start(const std::vector<std::tuple<NetAddr, bytearray_t, bytearray_t>> &reps);
@@ -168,6 +169,7 @@ int main(int argc, char **argv) {
     auto opt_fixed_proposer = Config::OptValInt::create(1);
     auto opt_base_timeout = Config::OptValDouble::create(1);
     auto opt_prop_delay = Config::OptValDouble::create(1);
+    auto opt_recv_timeout = Config::OptValDouble::create(50 / 1000);
     auto opt_imp_timeout = Config::OptValDouble::create(11);
     auto opt_nworker = Config::OptValInt::create(1); // threads for verification pool 
     auto opt_repnworker = Config::OptValInt::create(1);  // threads for replica send and recv
@@ -192,6 +194,7 @@ int main(int argc, char **argv) {
     config.add_opt("proposer", opt_fixed_proposer, Config::SET_VAL, 'l', "set the fixed proposer (for dummy)");
     config.add_opt("base-timeout", opt_base_timeout, Config::SET_VAL, 't', "set the initial timeout for the Round-Robin Pacemaker");
     config.add_opt("prop-delay", opt_prop_delay, Config::SET_VAL, 't', "set the delay that follows the timeout for the Round-Robin Pacemaker");
+    config.add_opt("recv-timeout", opt_recv_timeout, Config::SET_VAL, 't', "set the timeout value for a peer waiting for a proposal");
     config.add_opt("imp-timeout", opt_imp_timeout, Config::SET_VAL, 'u', "set impeachment timeout (for sticky)");
     config.add_opt("nworker", opt_nworker, Config::SET_VAL, 'n', "the number of threads for verification");
     config.add_opt("repnworker", opt_repnworker, Config::SET_VAL, 'm', "the number of threads for replica network");
@@ -243,7 +246,9 @@ int main(int argc, char **argv) {
     else
         pmaker = new hotstuff::PaceMakerRR(ec, parent_limit, opt_base_timeout->get(), opt_prop_delay->get());
 
-    HOTSTUFF_LOG_INFO("Pacemaker Base Timeout = %f, Proposer Delay = %f", opt_base_timeout->get(), opt_prop_delay->get());
+    HOTSTUFF_LOG_INFO("Pacemaker Base Timeout = %.2lf, Proposer Delay = %.2lf, Recv Timeout = %.2lf", 
+        opt_base_timeout->get(), opt_prop_delay->get(), opt_recv_timeout->get() / 1000
+    );
 
     HotStuffApp::Net::Config repnet_config;
     ClientNetwork<opcode_t>::Config clinet_config;
@@ -283,7 +288,8 @@ int main(int argc, char **argv) {
         ec,
         opt_nworker->get(),
         repnet_config,
-        clinet_config
+        clinet_config,
+        opt_recv_timeout->get() / 1000 // millisecond
     );
 
 
@@ -321,8 +327,9 @@ HotStuffApp::HotStuffApp(
     const EventContext &ec,
     size_t nworker,
     const Net::Config &repnet_config,
-    const ClientNetwork<opcode_t>::Config &clinet_config):
-        HotStuff(blk_size, idx, raw_privkey, plisten_addr, multicast_addr, std::move(pmaker), ec, nworker, repnet_config),
+    const ClientNetwork<opcode_t>::Config &clinet_config,
+    double recv_timeout):
+        HotStuff(blk_size, idx, raw_privkey, plisten_addr, multicast_addr, std::move(pmaker), ec, nworker, repnet_config, recv_timeout),
         stat_period(stat_period),
         impeach_timeout(impeach_timeout),
         ec(ec),

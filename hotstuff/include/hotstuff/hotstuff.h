@@ -228,7 +228,8 @@ class HotStuffBase: public HotStuffCore {
         pacemaker_bt pmaker,
         EventContext ec,
         size_t nworker,
-        const Net::Config &netconfig);
+        const Net::Config &netconfig,
+        double recv_timeout);
 
     ~HotStuffBase();
 
@@ -300,7 +301,9 @@ class HotStuff: public HotStuffBase {
         pacemaker_bt pmaker,
         EventContext ec = EventContext(),
         size_t nworker = 4,
-        const Net::Config &netconfig = Net::Config()):
+        const Net::Config &netconfig = Net::Config(),
+        double recv_timeout = 0.1
+    ):
             HotStuffBase(
                 blk_size,
                 rid,
@@ -310,7 +313,8 @@ class HotStuff: public HotStuffBase {
                 std::move(pmaker),
                 ec,
                 nworker,
-                netconfig
+                netconfig,
+                recv_timeout
             ) 
         {}
 
