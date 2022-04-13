@@ -302,9 +302,14 @@ void HotStuffCore::on_receive_retrans_request(const RetransRequest &request) {
     block_t blk = storage->find_blk(request.pmaker_count);
 
     if (blk != nullptr) {
+        int count = storage->add_retrans_count(blk->get_hash());
+        if (count == -1) {
+            LOG_PROTO("on_receive_retrans_request : mutlicast reject");
+            return;
+        }
         Proposal prop(id, blk, nullptr);
         do_retransmit_prop(request.requester, prop);
-        LOG_PROTO("on_receive_retrans_request : mutlicast again %s", std::string(prop).c_str());
+        LOG_PROTO("on_receive_retrans_request : mutlicast again %d, %s", count, std::string(prop).c_str());
     }
     else {
         LOG_PROTO("on_receive_retrans_request : no block with id = %d", request.pmaker_count);

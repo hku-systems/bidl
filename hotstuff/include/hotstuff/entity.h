@@ -225,6 +225,8 @@ class EntityStorage {
     std::unordered_map<const uint256_t, bool> recv_blk_cache; // key = block hash, value = block
     std::unordered_map<uint64_t, const uint256_t> hash_cache_by_pmaker_count; // key = pmaker_count, value = block hash
     std::unordered_map<const uint256_t, command_t> cmd_cache;
+    std::unordered_map<const uint256_t, bool> retrans_count_cache; // key = block hash, value = retransmission count 
+
     public:
     bool is_blk_delivered(const uint256_t &blk_hash) {
         auto it = blk_cache.find(blk_hash);
@@ -243,6 +245,19 @@ class EntityStorage {
     block_t add_blk(Block &&_blk, const ReplicaConfig &/*config*/) {
         block_t blk = new Block(std::move(_blk));
         return blk_cache.insert(std::make_pair(blk->get_hash(), blk)).first->second;
+    }
+
+    int find_retrans_count(const uint256_t &blk_hash) {
+        auto it = retrans_count_cache.find(blk_hash);
+        return it == retrans_count_cache.end() ? 0 : it->second;
+    }
+
+    int add_retrans_count(const uint256_t &blk_hash) {
+        auto it = retrans_count_cache.find(blk_hash);
+        if (it != retrans_count_cache.end())
+            return -1;
+        retrans_count_cache.insert(std::make_pair(blk_hash, true));;
+        return 0;
     }
 
     void add_blk_hash_map(const uint64_t &pmaker_count, const uint256_t &blk_hash) {
