@@ -221,9 +221,7 @@ public class BidlFrontend extends Thread {
             while (true) {
                 byte[] rcvPktBuf = null;
                 try {
-                    if (execManager.getCurrentLeader() == controller.getStaticConf().getProcessId()) {
-                        rcvPktBuf = BidlFrontend.txBlockingQueue.take();
-                    }
+                      rcvPktBuf = BidlFrontend.txBlockingQueue.take();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -236,7 +234,6 @@ public class BidlFrontend extends Thread {
                 }
                 maxSeqNum = seqNum > maxSeqNum ? seqNum : maxSeqNum;
                 logger.debug("bidl: sequence Number of current transaction is {}, maximum:{}", seqNum, maxSeqNum);
-    
     
                 // get sha256 of the transaction bytes
                 byte[] hash = this.digest.digest(rcvPktBuf);
